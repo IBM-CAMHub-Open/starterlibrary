@@ -1,0 +1,79 @@
+ {
+    "name": "Virtual Server with SSH key",
+    "description": "A sample cloud resource template that creates a Debian virtual server and ssh key.",
+    "version": "1.0.0.0",
+    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
+    "image": "tp_WAS_standalone.png",
+    "type": "prebuilt",
+    "status": "active",
+    "manifest": {
+      "template_type": "Terraform",
+      "template_format": "HCL",
+      "template_provider": "IBM Cloud",
+      "template": {
+        "templateData": "",
+        "templateVariables": "",
+        "templateOutput": ""
+      },
+      "template_source": {
+        "githubRepoUrl": "",
+        "githubAccessToken": "",
+        "relativePathToTemplateFolder": "BlueMix/terraform/hcl/scenario1/",
+        "templateFileName": "scenario1.tf"
+      }
+    },
+    "metadata": {
+      "displayName": "1 Virtual Server with SSH Key",
+      "providerDisplayName": "IBM",
+      "longDescription": "Use this cloud resource template to quickly provision a Debian 7 64 bit virtual server with ssh key in a datacenter of your choice.",
+      "bullets": [
+       {
+         "title": "Clouds",
+         "description": "IBM Cloud/Softlayer"
+       },
+       {
+         "title": "Template version",
+         "description": "V1.0"
+       },
+       {
+         "title": "Operating systems supported",
+         "description": "IBM Cloud: Debian 7"
+       },
+       {
+         "title": "Topology",
+         "description": "IBM Cloud: 1 virtual machine"
+       },
+       {
+         "title": "Default virtual machine settings",
+         "description": "<ul><li>IBM Cloud:<ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 1, Memory = 1GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Computed</li></ul></li></ul>"
+       },
+       {
+         "title": "Usage and special notes",
+         "description": "<ul><li>1. Creates a virtual server with an ssh key provided by the user in a datacenter specified by the user.</li><li>2. Deployment takes approximately 5 minutes to complete.</li></ul>"
+       }
+     ],
+      "featuredImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
+      "imageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
+      "mediumImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_32.png",
+      "smallImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_24.png",
+      "documentationUrl": "https://console.stage1.ng.bluemix.net/docs/services/CloudAutomationManager/index.html",
+      "termsUrl": "http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm-7448-01",
+      "media": [
+        {
+          "type": "image",
+          "thumbnailUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_1.png",
+          "url": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_1_large.png",
+          "caption": ""
+        },
+        {
+          "type": "image",
+          "thumbnailUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_2.png",
+          "url": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_2_large.png",
+          "caption": ""
+        }
+      ]
+    },
+    "toolchain": {
+      "git": "https://github.com/ibmcam/cam-toolchain"
+    }
+  }

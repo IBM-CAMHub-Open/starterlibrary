@@ -1,0 +1,83 @@
+{
+   "name": "MEAN stack deployment (hybrid-cloud)",
+   "description": "MEAN - A simple and scalable starting point for full stack JavaScript web development.",
+   "version": "1.0.0.0",
+   "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
+   "image": "tp_WAS_standalone.png",
+   "type": "prebuilt",
+   "status": "active",
+   "manifest": {
+     "template_type": "Terraform",
+     "template_format": "HCL",
+     "template_provider": "IBM Cloud",
+     "template": {
+       "templateData": "",
+       "templateVariables": "",
+       "templateOutput": ""
+     },
+     "template_source": {
+       "githubRepoUrl": "",
+       "githubAccessToken": "",
+       "relativePathToTemplateFolder": "BlueMix/terraform/hcl/meanstack-hybrid/",
+       "templateFileName": "cross_cloud_meanstack_two_tiers.tf"
+     }
+   },
+   "metadata": {
+     "displayName": "MEAN stack deployment (hybrid-cloud)",
+     "providerDisplayName": "IBM",
+     "longDescription": "Deploys a hybrid cloud MEAN stack (Mongo, Express, Angular, Node) across AWS and IBM Cloud providing a complete development environment. This deployment also deploys a simple sample application to validate the stack is operational.",
+     "bullets": [
+       {
+         "title": "Clouds",
+         "description": "<ul style=\"list-style-type: disc; margin-left: 12px;\"><li>Amazon Web Services (AWS)</li><li>IBM Cloud/Softlayer</li></ul>"
+       },
+       {
+         "title": "Template version",
+         "description": "V1.0"
+       },
+       {
+         "title": "Operating systems supported",
+         "description": "<ul style=\"list-style-type: disc; margin-left: 12px;\"><li>AWS: Ubuntu 16.04</li><li>IBM Cloud: CentOS 7</li></ul>"
+       },
+       {
+         "title": "Topology",
+         "description": "Hybrid: 2 virtual machines: <ul><li>- AWS with Node.js, Angular.js, Express.js;</li><li>- IBM Cloud with MongoDB</li></ul>"
+       },
+       {
+         "title": "Software deployed",
+         "description": "<table style=\"width:100%\"><tr><td width=\"22%\" valign=\"top\">1. MongoDB:</td><td>a NoSQL database</td></tr><tr><td>2. Express.js:</td><td>a web application framework that runs on Node.js</td></tr><tr><td>3. Angular.js:</td><td>a JavaScript MVC framework that runs in browser JavaScript engines</td></tr><tr><td>4. Node.js:</td><td>an execution environment for event-driven server-side and networking applications</td></tr></table>"
+       },
+       {
+         "title": "Default virtual machine settings",
+         "description": "<ul><li>AWS:<ul style=\"margin-left: 20px;\"><li>Flavor: Size = t2.medium,</li><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cores = 2, Memory = 4GB, Storage = EBS Only</li><li>Network: Private IP - in 10.0.1.0/24, Public IP - Computed</li><li>Firewall:<ul style=\"margin-left: 20px;\"><li>Ingress - Only allows SSH, ICMP, TCP 8443 for all sources;</li><li>Egress - All</li></ul></li></ul></li><li>IBM Cloud:<ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 1, Memory = 1GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Computed</li><li>Firewall: Not enabled</li></ul></li></ul>"
+       },
+       {
+         "title": "Usage and special notes",
+         "description": "<ul><li>1. Downloads latest releases of software.</li><li>2. Deployment takes approximately 10 minutes to complete.</li><li>3. To access the application and virtual machines, please see the instructions in the output log.</li><li>4. The sample application in this deployment is from the open source project <a href=\"https://github.com/meanjs/mean\">https://github.com/meanjs/mean</a> and more details can be found in <a href=\"http://mean.io/\">http://mean.io/</a>.</li></ul>"
+       }
+     ],
+     "featuredImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
+     "imageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
+     "mediumImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_32.png",
+     "smallImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_24.png",
+     "documentationUrl": "https://console.stage1.ng.bluemix.net/docs/services/CloudAutomationManager/index.html",
+     "termsUrl": "http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm-7448-01",
+     "media": [
+       {
+         "type": "image",
+         "thumbnailUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_1.png",
+         "url": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_1_large.png",
+         "caption": ""
+       },
+       {
+         "type": "image",
+         "thumbnailUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_2.png",
+         "url": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_2_large.png",
+         "caption": ""
+       }
+     ]
+   },
+   "toolchain": {
+     "git": "https://github.com/ibmcam/cam-toolchain"
+   }
+ }

@@ -1,0 +1,85 @@
+[
+    {
+        "description": "AWS region to launch servers", 
+        "hidden": false, 
+        "immutable": false, 
+        "label": "AWS Region", 
+        "name": "aws_region", 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "options": [
+          {
+              "value": "us-east-1",
+              "label": "US East (N. Virginia)",
+              "default": "true"
+          },
+          {
+              "value": "us-east-2",
+              "label": "US East (Ohio)"
+          },
+          {
+              "value": "us-west-1",
+              "label": "US West (N. California)"
+          },
+          {
+              "value": "us-west-2",
+              "label": "US West (Oregon)"
+          }
+        ]
+    }, 
+    {
+        "default": "opencontent-meanstack",
+        "description": "The prefix of names for VPC, Gateway, Subnet and Security Group", 
+        "hidden": false, 
+        "immutable": false, 
+        "label": "Network Name Prefix", 
+        "name": "network_name_prefix", 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "default": "cam-public-key-meanstack",
+        "description": "Name of the public SSH key used to connect to the virtual guests", 
+        "hidden": false, 
+        "immutable": false, 
+        "label": "Public SSH Key Name", 
+        "name": "public_ssh_key_name", 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "description": "Public SSH key used to connect to the virtual guest", 
+        "hidden": false, 
+        "immutable": false, 
+        "label": "Public SSH Key", 
+        "name": "public_ssh_key", 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "default": "meanstack-db",
+        "description": "The hostname of server with mongo", 
+        "hidden": false, 
+        "immutable": false, 
+        "label": "Hostname of MongoDB Server", 
+        "name": "hostname-db", 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    }, 
+    {
+        "default": "meanstack-nodejs",
+        "description": "The hostname of server with nodejs", 
+        "hidden": false, 
+        "immutable": false, 
+        "label": "Hostname of Node.js Server", 
+        "name": "hostname-nodejs", 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    }
+]

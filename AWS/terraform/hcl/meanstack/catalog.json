@@ -1,0 +1,83 @@
+{
+   "name": "MEAN stack deployment",
+   "description": "MEAN - A simple and scalable starting point for full stack JavaScript web development.",
+   "version": "1.0.0.0",
+   "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
+   "image": "tp_WAS_standalone.png",
+   "type": "prebuilt",
+   "status": "active",
+   "manifest": {
+     "template_type": "Terraform",
+     "template_format": "HCL",
+     "template_provider": "Amazon EC2",
+     "template": {
+       "templateData": "",
+       "templateVariables": "",
+       "templateOutput": ""
+     },
+     "template_source": {
+       "githubRepoUrl": "",
+       "githubAccessToken": "",
+       "relativePathToTemplateFolder": "AWS/terraform/hcl/meanstack/",
+       "templateFileName": "meanstack_two_tiers.tf"
+     }
+   },
+   "metadata": {
+     "displayName": "MEAN stack deployment",
+     "providerDisplayName": "IBM",
+     "longDescription": "Deploys a MEAN stack (Mongo, Express, Angular, Node) in AWS providing a complete development environment. This deployment also deploys a simple sample application to validate the stack is operational.",
+     "bullets": [
+       {
+         "title": "Clouds",
+         "description": "Amazon Web Services (AWS)"
+       },
+       {
+         "title": "Template version",
+         "description": "V1.0"
+       },
+       {
+         "title": "Operating systems supported",
+         "description": "AWS: Ubuntu 16.04"
+       },
+       {
+         "title": "Topology",
+         "description": "AWS: 2 virtual machines: <ul><li>- Node.js, Angular.js, Express.js;</li><li>- MongoDB</li></ul>"
+       },
+       {
+         "title": "Software deployed",
+         "description": "<table style=\"width:100%\"><tr><td width=\"22%\" valign=\"top\">1. MongoDB:</td><td>a NoSQL database</td></tr><tr><td>2. Express.js:</td><td>a web application framework that runs on Node.js</td></tr><tr><td>3. Angular.js:</td><td>a JavaScript MVC framework that runs in browser JavaScript engines</td></tr><tr><td>4. Node.js:</td><td>an execution environment for event-driven server-side and networking applications</td></tr></table>"
+       },
+       {
+         "title": "Default virtual machine settings",
+         "description": "<ul><li>AWS:<ul style=\"margin-left: 20px;\"><li>Flavor: Size = t2.medium,</li><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cores = 2, Memory = 4GB, Storage = EBS Only</li><li>Network: Private IP - in 10.0.1.0/24, Public IP - Computed</li><li>Firewall:<ul style=\"margin-left: 20px;\"><li>Mongo:<ul style=\"margin-left: 20px;\"><li>Ingress - Only allows SSH and ICMP for all sources, and TCP 27017 for 10.0.1.0/24 only;</li><li>Egress - All</li></ul><li><li>Front end:<ul style=\"margin-left: 20px;\"><li>Ingress - Only allows SSH, ICMP, TCP 8443 for all sources;</li><li>Egress - All</li></ul><li></ul></li></ul></li></ul>"
+       },
+       {
+         "title": "Usage and special notes",
+         "description": "<ul><li>1. Downloads latest releases of software.</li><li>2. Deployment takes approximately 5 minutes to complete.</li><li>3. To access the application and virtual machines, please see the instructions in the output log.</li><li>4. The sample application in this deployment is from the open source project <a href=\"https://github.com/meanjs/mean\">https://github.com/meanjs/mean</a> and more details can be found in <a href=\"http://mean.io/\">http://mean.io/</a>.</li></ul>"
+       }
+     ],
+     "featuredImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
+     "imageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
+     "mediumImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_32.png",
+     "smallImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_24.png",
+     "documentationUrl": "https://console.stage1.ng.bluemix.net/docs/services/CloudAutomationManager/index.html",
+     "termsUrl": "http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm-7448-01",
+     "media": [
+       {
+         "type": "image",
+         "thumbnailUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_1.png",
+         "url": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_1_large.png",
+         "caption": ""
+       },
+       {
+         "type": "image",
+         "thumbnailUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_2.png",
+         "url": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_2_large.png",
+         "caption": ""
+       }
+     ]
+   },
+   "toolchain": {
+     "git": "https://github.com/ibmcam/cam-toolchain"
+   }
+ }

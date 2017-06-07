@@ -1,0 +1,83 @@
+{
+   "name": "LAMP stack deployment (hybrid-cloud)",
+   "description": "LAMP - A fully-integrated environment for full stack PHP web development.",
+   "version": "1.0.0.0",
+   "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
+   "image": "tp_WAS_standalone.png",
+   "type": "prebuilt",
+   "status": "active",
+   "manifest": {
+     "template_type": "Terraform",
+     "template_format": "HCL",
+     "template_provider": "IBM Cloud",
+     "template": {
+       "templateData": "",
+       "templateVariables": "",
+       "templateOutput": ""
+     },
+     "template_source": {
+       "githubRepoUrl": "",
+       "githubAccessToken": "",
+       "relativePathToTemplateFolder": "BlueMix/terraform/hcl/lamp-hybrid/",
+       "templateFileName": "mainHybrid.tf"
+     }
+   },
+   "metadata": {
+     "displayName": "LAMP stack deployment (hybrid-cloud)",
+     "providerDisplayName": "IBM",
+     "longDescription": "Deploys a hybrid cloud LAMP Stack (Linux, Apache, MySQL, PHP) across AWS and IBM Cloud providing a complete development environment. This deployment also deploys a simple sample application to validate the stack is operational.",
+     "bullets": [
+       {
+         "title": "Clouds",
+         "description": "<ul style=\"list-style-type: disc; margin-left: 12px;\"><li>Amazon Web Services (AWS)</li><li>IBM Cloud/Softlayer</li></ul>"
+       },
+       {
+         "title": "Template version",
+         "description": "V1.0"
+       },
+       {
+         "title": "Operating systems supported",
+         "description": "<ul style=\"list-style-type: disc; margin-left: 12px;\"><li>AWS: Underlying operating system for database instance</li><li>IBM Cloud: Ubuntu 16.04</li></ul>"
+       },
+       {
+         "title": "Topology",
+         "description": "Hybrid: 2 virtual machines: <ul><li>- IBM Cloud with Apache and PHP;</li><li>- AWS with MySQL</li></ul>"
+       },
+       {
+         "title": "Software deployed",
+         "description": "<table style=\"width:100%\"><tr><td width=\"18%\" valign=\"top\">1. Apache:</td><td>a secure, efficient and extensible open-source HTTP server</td></tr><tr><td>2. MySQL:</td><td>a multithreaded, multi-user, SQL database management system (DBMS)</td></tr><tr><td>3. PHP:</td><td>a server-side scripting language designed for web development</td></tr></table>"
+       },
+       {
+         "title": "Default virtual machine settings",
+         "description": "<ul><li>AWS:<ul style=\"margin-left: 20px;\"><li>Flavor: Size = db.t2.micro, Storage = 10GB</li><li>Network: Private IP - in 10.0.1.0/24, Public IP - Computed</li><li>Firewall:<ul style=\"margin-left: 20px;\"><li>Ingress - Only allows SSH, ICMP, TCP 3306 for all sources;</li><li>Egress - All</li></ul></li></ul></li><li>IBM Cloud:<ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 1, Memory = 1GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Computed</li><li>Firewall: Not enabled</li></ul></li></ul>"
+       },
+       {
+         "title": "Usage and special notes",
+         "description": "<ul><li>1. Downloads latest releases of software.</li><li>2. Deployment takes approximately 10 minutes to complete.</li><li>3. To access the application and virtual machines, please see the instructions in the output log.</li><li>4. More details of software can be found in <a href=\"https://httpd.apache.org/\">https://httpd.apache.org/</a>, <a href=\"https://www.mysql.com/\">https://www.mysql.com/</a> and <a href=\"https://secure.php.net/\">https://secure.php.net/</a>.</li></ul>"
+       }
+     ],
+     "featuredImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
+     "imageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
+     "mediumImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_32.png",
+     "smallImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_24.png",
+     "documentationUrl": "https://console.stage1.ng.bluemix.net/docs/services/CloudAutomationManager/index.html",
+     "termsUrl": "http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm-7448-01",
+     "media": [
+       {
+         "type": "image",
+         "thumbnailUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_1.png",
+         "url": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_1_large.png",
+         "caption": ""
+       },
+       {
+         "type": "image",
+         "thumbnailUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_2.png",
+         "url": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_2_large.png",
+         "caption": ""
+       }
+     ]
+   },
+   "toolchain": {
+     "git": "https://github.com/ibmcam/cam-toolchain"
+   }
+ }

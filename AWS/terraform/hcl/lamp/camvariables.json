@@ -1,0 +1,106 @@
+[
+    {
+        "description": "AWS region to launch servers", 
+        "hidden": false, 
+        "immutable": false, 
+        "label": "AWS Region", 
+        "name": "aws_region", 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "options": [
+          {
+              "value": "us-east-1",
+              "label": "US East (N. Virginia)",
+              "default": "true"
+          },
+          {
+              "value": "us-east-2",
+              "label": "US East (Ohio)"
+          },
+          {
+              "value": "us-west-1",
+              "label": "US West (N. California)"
+          },
+          {
+              "value": "us-west-2",
+              "label": "US West (Oregon)"
+          }
+        ]
+    },
+    {
+        "default": "lampPhp",
+        "description": "The hostname of server with php", 
+        "hidden": false, 
+        "immutable": false, 
+        "label": "Hostname of PHP Server", 
+        "name": "php_instance_name", 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    }, 
+    {
+        "default": "lampDb",
+        "description": "The hostname of server with mysql", 
+        "hidden": false, 
+        "immutable": false, 
+        "label": "Hostname of MySQL Server", 
+        "name": "db_instance_name", 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },         
+    {
+        "default": "opencontent-lamp",
+        "description": "The prefix of names for VPC, Gateway, Subnet and Security Group", 
+        "hidden": false, 
+        "immutable": false, 
+        "label": "Network Name Prefix", 
+        "name": "network_name_prefix", 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "default": "cam-public-key-lamp",
+        "description": "Name of the public SSH key used to connect to the virtual guests", 
+        "hidden": false, 
+        "immutable": false, 
+        "label": "Public SSH Key Name", 
+        "name": "public_key_name", 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "description": "Public SSH key used to connect to the virtual guest", 
+        "hidden": false, 
+        "immutable": false, 
+        "label": "Public SSH Key", 
+        "name": "public_key", 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "default": "camuser",
+        "description": "User to be added into db and sshed into servers", 
+        "hidden": false, 
+        "immutable": false, 
+        "label": "User for SSH and MySQL", 
+        "name": "cam_user", 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "description": "Password for cam user (minimal length is 8)", 
+        "hidden": false, 
+        "immutable": false, 
+        "label": "User Password for SSH and MySQL", 
+        "name": "cam_pwd", 
+        "required": true, 
+        "secured": true, 
+        "type": "string"
+    }          
+]
