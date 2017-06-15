@@ -1,0 +1,150 @@
+[
+    {
+        "name": "name", 
+        "label": "Hostname", 
+        "description": "Name of the Virtual Machine", 
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "folder", 
+        "label": "Folder", 
+        "description": "Target vSphere folder for Virtual Machine", 
+        "default": "",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "datacenter", 
+        "label": "Datacenter", 
+        "description": "Target vSphere datacenter for Virtual Machine creation",
+        "default": "", 
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "vcpu", 
+        "label": "VCPU", 
+        "description": "Number of Virtual CPU for the Virtual Machine",
+        "default": "1", 
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "memory", 
+        "label": "Memory", 
+        "description": "Memory for Virtual Machine in MBs",
+        "default": "1024", 
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "cluster", 
+        "label": "Cluster", 
+        "description": "Target vSphere Cluster to host the Virtual Machine",
+        "default": "", 
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "network_label", 
+        "label": "Network label", 
+        "description": "vSphere Port Group or Network label for Virtual Machine's vNIC",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "ipv4_address", 
+        "label": "IPv4 Address", 
+        "description": "IPv4 address for vNIC configuration",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "ipv4_gateway", 
+        "label": "IPv4 Gateway", 
+        "description": "IPv4 gateway for vNIC configuration",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "ipv4_prefix_length", 
+        "label": "IPv4 prefix length", 
+        "description": "IPv4 Prefix length for vNIC configuration",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "storage", 
+        "label": "Storage", 
+        "description": "Data store or storage cluster name for target VMs disks",
+        "default": "",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "vm_template", 
+        "label": "VM Template", 
+        "description": "Source VM or Template label for cloning",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "create_vm_folder", 
+        "label": "Create VM folder", 
+        "description": "A vSphere folder need to be create or it is precreated",
+        "default": "false",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "allow_selfsigned_cert", 
+        "label": "Allow selfsigned certificate", 
+        "description": "Communication with vsphere server with self signed certificate",
+        "default": "false",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    }
+]
