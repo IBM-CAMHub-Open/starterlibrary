@@ -42,7 +42,7 @@ resource "ibmcloud_infra_virtual_guest" "debian_small_virtual_guest" {
     cores = 1
     memory = 1024
     user_metadata = "{\"value\":\"newvalue\"}"
-    dedicated_acct_host_only = true
+    dedicated_acct_host_only = false
     local_disk = false
     ssh_key_ids = ["${ibmcloud_infra_ssh_key.orpheus_public_key.id}"]
 }
@@ -59,7 +59,7 @@ resource "ibmcloud_infra_virtual_guest" "debian_medium_virtual_guest" {
     cores = 2
     memory = 4096
     user_metadata = "{\"value\":\"newvalue\"}"
-    dedicated_acct_host_only = true
+    dedicated_acct_host_only = false
     local_disk = false
     ssh_key_ids = ["${ibmcloud_infra_ssh_key.orpheus_public_key.id}"]
 }

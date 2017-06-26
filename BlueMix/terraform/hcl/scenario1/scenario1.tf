@@ -35,7 +35,7 @@ resource "ibmcloud_infra_virtual_guest" "debian_small_virtual_guest" {
     memory = 1024
     disks = [25, 10, 20]
     user_metadata = "{\"value\":\"newvalue\"}"
-    dedicated_acct_host_only = true
+    dedicated_acct_host_only = false
     local_disk = false
     ssh_key_ids = ["${ibmcloud_infra_ssh_key.orpheus_public_key.id}"]
 }
