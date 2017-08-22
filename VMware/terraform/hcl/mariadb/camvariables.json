@@ -1,0 +1,263 @@
+[
+    {
+        "name": "name", 
+        "label": "Hostname", 
+        "description": "Name of the Virtual Machine; Allow 1 to 80 alphanumeric characters with special characters in [.- _]", 
+        "default": "mariadb-vm",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "regex": "^[A-Za-z0-9._-]{1,80}$"
+    },
+    {
+        "name": "folder", 
+        "label": "Folder", 
+        "description": "Target vSphere folder for Virtual Machine", 
+        "default": "",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "datacenter", 
+        "label": "Datacenter", 
+        "description": "Target vSphere datacenter for Virtual Machine creation",
+        "default": "", 
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "vcpu", 
+        "label": "vCPU", 
+        "description": "Number of Virtual CPU for the Virtual Machine",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+		"options": [
+         	{
+            	"value" : "1",
+              	"label": "1 Core"
+          	},
+         	{
+            	"value" : "2",
+              	"label": "2 Cores"
+          	},
+         	{
+            	"value" : "4",
+              	"label": "4 Cores"
+          	},
+         	{
+            	"value" : "8",
+              	"label": "8 Cores"
+          	},          	
+         	{
+            	"value" : "12",
+              	"label": "12 Cores"
+          	},
+         	{
+            	"value" : "16",
+              	"label": "16 Cores"
+          	},
+         	{
+            	"value" : "32",
+              	"label": "32 Cores"
+          	} 
+        ]
+    },
+    {
+        "name": "memory", 
+        "label": "Memory", 
+        "description": "Memory for Virtual Machine in GBs",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+		"options": [
+         	{
+            	"value" : "1",
+              	"label": "1 GB"
+          	},
+         	{
+            	"value" : "2",
+              	"label": "2 GB"
+          	},
+         	{
+            	"value" : "4",
+              	"label": "4 GB"
+          	},
+         	{
+            	"value" : "6",
+              	"label": "6 GB"
+          	},
+         	{
+            	"value" : "8",
+              	"label": "8 GB"
+          	},
+         	{
+            	"value" : "12",
+              	"label": "12 GB"
+          	},
+         	{
+            	"value" : "16",
+              	"label": "16 GB"
+          	},
+         	{
+            	"value" : "32",
+              	"label": "32 GB"
+          	},
+         	{
+            	"value" : "48",
+              	"label": "48 GB"
+          	},          	
+         	{
+            	"value" : "64",
+              	"label": "64 GB"
+          	},
+         	{
+            	"value" : "128",
+              	"label": "128 GB"
+          	}
+        ]
+    },
+    {
+        "name": "cluster", 
+        "label": "Cluster", 
+        "description": "Target vSphere Cluster to host the Virtual Machine",
+        "default": "", 
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "dns_suffixes", 
+        "label": "DNS Suffixes", 
+        "description": "Name resolution suffixes for the virtual network adapter",
+        "default": [], 
+        "hidden": false, 
+        "immutable": false, 
+        "required": false, 
+        "secured": false, 
+        "type": "list"
+    },
+    {
+        "name": "dns_servers", 
+        "label": "DNS Servers", 
+        "description": "DNS servers for the virtual network adapter; Allow 0.0.0.0 to 255.255.255.255",
+        "default": [], 
+        "hidden": false, 
+        "immutable": false, 
+        "required": false, 
+        "secured": false, 
+        "type": "list",
+        "regex": "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"
+    },
+    {
+        "name": "network_label", 
+        "label": "Network Label", 
+        "description": "vSphere Port Group or Network label for Virtual Machine's vNIC",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "ipv4_address", 
+        "label": "IPv4 Address", 
+        "description": "IPv4 address for vNIC configuration; Allow 0.0.0.0 to 255.255.255.255",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "regex": "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"
+    },
+    {
+        "name": "ipv4_gateway", 
+        "label": "IPv4 Gateway", 
+        "description": "IPv4 gateway for vNIC configuration; Allow 0.0.0.0 to 255.255.255.255",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "regex": "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"
+    },
+    {
+        "name": "ipv4_prefix_length", 
+        "label": "IPv4 Prefix Length", 
+        "description": "IPv4 Prefix length for vNIC configuration; Allow numbers between 8 and 32",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "regex": "^([8-9]|[1-2][0-9]|3[0-2])$"
+    },
+    {
+        "name": "storage", 
+        "label": "Storage", 
+        "description": "Data store or storage cluster name for target VMs disks",
+        "default": "",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "vm_template", 
+        "label": "VM Template", 
+        "description": "Source VM or Template label for cloning",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "ssh_user", 
+        "label": "SSH User", 
+        "description": "The user for ssh connection, which is default in template",
+        "default": "root",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "ssh_user_password", 
+        "label": "SSH User Password", 
+        "description": "The user password for ssh connection, which is default in template",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": true, 
+        "type": "string"
+    },
+    {
+        "name": "user_public_key", 
+        "label": "User Public Key", 
+        "description": "User-provided public SSH key used to connect to the virtual machine; Allow 'None' or the openSSH format key with optional comment (with optional email)",
+        "default": "None",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "regex": "^None$|^ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}( [^@]+@[^@]+| [^@]+){0,1}$"
+    }
+]

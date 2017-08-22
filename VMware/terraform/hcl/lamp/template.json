@@ -1,0 +1,50 @@
+{
+   "name": "LAMP stack deployment",
+   "description": "LAMP - A fully-integrated environment for full stack PHP web development.",
+   "version": "1.0.0.0",
+   "type": "prebuilt",
+   "manifest": {
+     "template_type": "Terraform",
+     "template_format": "HCL",
+     "template_provider": "VMware vSphere",
+     "template": {
+       "templateData": "",
+       "templateVariables": "",
+       "templateOutput": ""
+     }
+   },
+   "metadata": {
+     "displayName": "LAMP stack deployment",
+     "longDescription": "Deploys a LAMP Stack (Linux, Apache, MariaDB, PHP) in VMware providing a complete development environment. This deployment also deploys a simple sample application to validate the stack is operational.",
+     "bullets": [
+       {
+         "title": "Clouds",
+         "description": "VMware"
+       },
+       {
+         "title": "Template version",
+         "description": "V1.0"
+       },
+       {
+         "title": "Operating systems supported",
+         "description": "Red Hat Enterprise Linux 7"
+       },
+       {
+         "title": "Topology",
+         "description": "VMware: 2 virtual machines: <ul><li>- Apache and PHP;</li><li>- MariaDB</li></ul>"
+       },
+       {
+         "title": "Software deployed",
+         "description": "<table style=\"width:100%\"><tr><td width=\"18%\" valign=\"top\">1. Apache:</td><td>a secure, efficient and extensible open-source HTTP server</td></tr><tr><td>2. MariaDB:</td><td>an open source software as a relational database providing an SQL interface for accessing data.</td></tr><tr><td>3. PHP:</td><td>a server-side scripting language designed for web development</td></tr></table>"
+       },
+       {
+         "title": "Default virtual machine settings",
+         "description": "<ul><li>VMware:<ul style=\"margin-left: 20px;\"><li>Flavor:<ul style=\"margin-left: 20px;\"><li>MariaDB:<ul style=\"margin-left: 20px;\"><li>Cores - 1</li><li>Memory - 1GB</li><li>Storage - Depends on Image</li></ul></li><li>Front end:<ul style=\"margin-left: 20px;\"><li>Cores - 1</li><li>Memory - 1GB</li><li>Storage - Depends on Image</li></ul></li></ul></li><li>Network:<ul style=\"margin-left: 20px;\"><li>Private IP:<ul style=\"margin-left: 20px;\"><li>Availability - Customer Provided</li><li>Ingress - Via VPN</li><li>Egress - Not required</li></ul></li><li>Public IP:<ul style=\"margin-left: 20px;\"><li>Availability - None</li></ul></li></ul></li><li>Firewall:<ul style=\"margin-left: 20px;\"><li>MariaDB:<ul style=\"margin-left: 20px;\"><li>Ingress - Allows SSH, and TCP 3306 from all sources</li><li>Egress - All</li></ul></li><li>Front end:<ul style=\"margin-left: 20px;\"><li>Ingress - Allows SSH, and HTTP from all sources</li><li>Egress - All</li></ul></li></ul></li></ul></li></ul>"
+       },
+       {
+         "title": "Usage and special notes",
+         "description": "<ul><li>1. Downloads latest releases of software.</li><li>2. To access the application and virtual machines, please see the instructions in the output log.</li><li>3. More details of software can be found in <a href=\"https://httpd.apache.org/\">https://httpd.apache.org/</a>, <a href=\"https://mariadb.org/\">https://mariadb.org/</a> and <a href=\"https://secure.php.net/\">https://secure.php.net/</a>.</li></ul>"
+       }
+     ]
+   }
+ }

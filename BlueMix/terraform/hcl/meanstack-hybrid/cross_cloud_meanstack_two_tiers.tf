@@ -30,8 +30,7 @@ provider "aws" {
 #########################################################
 # Define the ibmcloud provider
 #########################################################
-
-provider "ibmcloud" {
+provider "ibm" {
 }
 
 #########################################################
@@ -48,6 +47,18 @@ variable "aws_secret_key" {
 variable "aws_region" {
   description = "AWS region to launch servers"
   default     = "us-east-1"
+}
+
+# Ubuntu 16.04, https://cloud-images.ubuntu.com/locator/
+variable "aws_ami" {
+  type        = "map"
+  description = "loop up ami using aws region"
+  default = {
+    us-west-1 = "ami-539ac933"
+    us-west-2 = "ami-7c803d1c"
+    us-east-1 = "ami-6edd3078"
+    us-east-2 = "ami-e0b59085"
+  }
 }
 
 variable "network_name_prefix" {
@@ -79,105 +90,372 @@ variable "softlayer_datacenter" {
 }
 
 #########################################################
-# Define the modules to find resources
+# Build network
 #########################################################
-module "find_ami" {
-  source     = "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=master//aws/resources/ami"
-  aws_region = "${var.aws_region}"
+resource "aws_vpc" "default" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_hostnames = true
+  tags {
+    Name = "${var.network_name_prefix}-vpc"
+  }
 }
 
-#########################################################
-# Define the modules to build network
-#########################################################
-module "build_network" {
-  source                                = "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=master//aws/network/meanstack"
-  network_name_prefix                   = "${var.network_name_prefix}"
-  create_meanstack_mongo_security_group = false
+resource "aws_internet_gateway" "default" {
+  vpc_id = "${aws_vpc.default.id}"
+  tags {
+    Name = "${var.network_name_prefix}-gateway"
+  }
+}
+
+resource "aws_subnet" "default" {
+  vpc_id     = "${aws_vpc.default.id}"
+  cidr_block = "10.0.1.0/24"
+  tags {
+    Name = "${var.network_name_prefix}-subnet"
+  }
+}
+
+resource "aws_route_table" "default" {
+  vpc_id = "${aws_vpc.default.id}"
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = "${aws_internet_gateway.default.id}"
+  }
+  tags {
+    Name = "${var.network_name_prefix}-route-table"
+  }
+}
+
+resource "aws_route_table_association" "default" {
+  subnet_id      = "${aws_subnet.default.id}"
+  route_table_id = "${aws_route_table.default.id}"
+}
+
+resource "aws_security_group" "meanstack_nodejs" {
+  name        = "${var.network_name_prefix}-security-group-meanstack-nodejs"
+  description = "Security group which applies to meanstack servers with nodejs/angular/express installed "
+  vpc_id      = "${aws_vpc.default.id}"
+  ingress {
+    from_port   = 8443
+    to_port     = 8443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags {
+    Name = "${var.network_name_prefix}-security-group-meanstack-nodejs"
+  }
 }
 
 ##############################################################
-# Create user-specified public key in AWS
+# Create user-specified public key
 ##############################################################
-resource "aws_key_pair" "cam_meanstack_public_key" {
+resource "aws_key_pair" "cam_public_key" {
   key_name   = "${var.public_ssh_key_name}"
   public_key = "${var.public_ssh_key}"
 }
 
-##############################################################
-# Create user-specified public key in SoftLayer
-##############################################################
-resource "ibmcloud_infra_ssh_key" "cam_meanstack_public_key" {
-    label      = "${var.public_ssh_key_name}"
-    public_key = "${var.public_ssh_key}"
+resource "ibm_compute_ssh_key" "cam_public_key" {
+  label      = "${var.public_ssh_key_name}"
+  public_key = "${var.public_ssh_key}"
 }
 
 ##############################################################
-# Create temp public key for ssh connection in SoftLayer
+# Create temp public key for ssh connection
 ##############################################################
 resource "tls_private_key" "ssh" {
   algorithm = "RSA"
 }
 
-resource "ibmcloud_infra_ssh_key" "temp_public_key" {
-  label      = "Temp Public Key"
+resource "aws_key_pair" "temp_public_key" {
+  key_name   = "${var.public_ssh_key_name}-temp"
   public_key = "${tls_private_key.ssh.public_key_openssh}"
 }
 
+resource "ibm_compute_ssh_key" "temp_public_key" {
+    label      = "${var.public_ssh_key_name}-temp"
+    public_key = "${tls_private_key.ssh.public_key_openssh}"
+}
+
 ##############################################################
-# Define the module to create a server and install mongo
+# Create a server and install mongo
 ##############################################################
-module "install_meanstack_mongo_ibmcloud" {
-  source                   = "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=master//ibmcloud/virtual_guest"
+resource "ibm_compute_vm_instance" "mongodb_server" {
   hostname                 = "${var.hostname-db}"
-  datacenter               = "${var.softlayer_datacenter}"
-  user_public_key_id       = "${ibmcloud_infra_ssh_key.cam_meanstack_public_key.id}"
-  temp_public_key_id       = "${ibmcloud_infra_ssh_key.temp_public_key.id}"
-  temp_public_key          = "${tls_private_key.ssh.public_key_openssh}"
-  temp_private_key         = "${tls_private_key.ssh.private_key_pem}"
-  module_script            = "files/installMongoDB.sh"
-  module_script_variables  = "false"
   os_reference_code        = "CENTOS_7_64"
   domain                   = "cam.ibm.com"
+  datacenter               = "${var.softlayer_datacenter}"
+  network_speed            = 10
+  hourly_billing           = true
+  private_network_only     = false
   cores                    = 1
   memory                   = 1024
-  disk1                    = 25
+  disks                    = [25]
+  dedicated_acct_host_only = false
+  local_disk               = false
+  ssh_key_ids              = ["${ibm_compute_ssh_key.cam_public_key.id}", "${ibm_compute_ssh_key.temp_public_key.id}"]
+
+  # Specify the ssh connection
+  connection {
+    user        = "root"
+    private_key = "${tls_private_key.ssh.private_key_pem}"
+    host        = "${self.ipv4_address}"
+  }
+  
+  # Create the installation script
+  provisioner "file" {
+    content = <<EOF
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+LOGFILE="/var/log/install_mongodb.log"
+
+#install mongodb
+
+echo "---start installing mongodb---" | tee -a $LOGFILE 2>&1
+mongo_repo=/etc/yum.repos.d/mongodb-org-3.4.repo
+cat <<EOT | tee -a $mongo_repo                                                    >> $LOGFILE 2>&1 || { echo "---Failed to create mongo repo---" | tee -a $LOGFILE; exit 1; }
+[mongodb-org-3.4]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/redhat/\$releasever/mongodb-org/3.4/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
+EOT
+yum install -y mongodb-org                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install mongodb-org---" | tee -a $LOGFILE; exit 1; }
+sed -i -e 's/  bindIp/#  bindIp/g' /etc/mongod.conf                               >> $LOGFILE 2>&1 || { echo "---Failed to configure mongod---" | tee -a $LOGFILE; exit 1; }
+service mongod start                                                              >> $LOGFILE 2>&1 || { echo "---Failed to start mongodb---" | tee -a $LOGFILE; exit 1; }
+echo "---finish installing mongodb---" | tee -a $LOGFILE 2>&1
+
+EOF
+    destination = "/tmp/installation.sh"
+  }
+
+  # Execute the script remotely
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh"
+    ]
+  }
 }
 
-######################################################################################
-# Define the module to create a server and install nodejs and sample application
-######################################################################################
-module "install_meanstack_nodejs_aws" {
-  source                   = "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=master//aws/ami_instance"
-  aws_ami                  = "${module.find_ami.aws_ami}"
-  aws_instance_type        = "t2.medium"
-  aws_subnet_id            = "${module.build_network.subnet_id}"
-  aws_security_group_id    = "${module.build_network.meanstack_nodejs_security_group_id}"
-  aws_cam_public_key_id    = "${aws_key_pair.cam_meanstack_public_key.id}"
-  hostname                 = "${var.hostname-nodejs}"
-  module_script            = "files/installNodeJs.sh"
-  module_script_name       = "installNodeJs.sh"
-  module_script_variable_1 = "${module.install_meanstack_mongo_ibmcloud.public_ip}"
+##############################################################
+# Create a server for node.js, express and angular.js
+##############################################################
+resource "aws_instance" "nodejs_server" {
+  depends_on                  = ["aws_route_table_association.default"]
+  instance_type               = "t2.medium" 
+  ami                         = "${lookup(var.aws_ami, var.aws_region)}"
+  subnet_id                   = "${aws_subnet.default.id}"
+  vpc_security_group_ids      = ["${aws_security_group.meanstack_nodejs.id}"]
+  key_name                    = "${aws_key_pair.temp_public_key.id}"
+  associate_public_ip_address = true
+  tags {
+    Name = "${var.hostname-nodejs}"
+  }
+
+  # Specify the ssh connection
+  connection {
+    user        = "ubuntu"
+    private_key = "${tls_private_key.ssh.private_key_pem}"
+    host        = "${self.public_ip}"
+  }
+
+  provisioner "file" {
+    content = <<EOF
+#!/bin/bash
+
+LOGFILE="/var/log/addkey.log"
+user_public_key=$1
+
+if [ "$user_public_key" != "None" ] ; then
+    echo "---start adding user_public_key----" | tee -a $LOGFILE 2>&1
+    echo "$user_public_key" | tee -a $HOME/.ssh/authorized_keys          >> $LOGFILE 2>&1 || { echo "---Failed to add user_public_key---" | tee -a $LOGFILE; exit 1; }
+    echo "---finish adding user_public_key----" | tee -a $LOGFILE 2>&1
+fi
+
+EOF
+    destination = "/tmp/addkey.sh"
+  }
+
+  # Execute the script remotely
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/addkey.sh; sudo bash /tmp/addkey.sh \"${var.public_ssh_key}\""
+    ]
+  }
 }
 
-#########################################################
-# Check status of application installation
-#########################################################
-module "check_meanstack_app_status" {
-  source           = "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=master//local/app_status"
-  script_variables = "http://${module.install_meanstack_nodejs_aws.public_ip}:8443"
+##############################################################
+# Install Node.js, Express and Angular.js
+##############################################################
+resource "null_resource" "install_nodejs"{
+
+    # Specify the ssh connection
+  connection {
+    user        = "ubuntu"
+    private_key = "${tls_private_key.ssh.private_key_pem}"
+    host        = "${aws_instance.nodejs_server.public_ip}"
+  }
+
+  # Create the installation script
+  provisioner "file" {
+    content = <<EOF
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+LOGFILE="/var/log/install_nodejs.log"
+
+DBADDRESS=$1
+
+echo "---Install nodejs---" | tee -a $LOGFILE 2>&1
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -                                                    >> $LOGFILE 2>&1 || { echo "---Failed to run node script to set up repo---" | tee -a $LOGFILE; exit 1; }
+apt-get install -y nodejs build-essential                                                                         >> $LOGFILE 2>&1 || { echo "---Failed to install nodejs and build essential---" | tee -a $LOGFILE; exit 1; }
+npm install -g bower gulp                                                                                         >> $LOGFILE 2>&1 || { echo "---Failed to install bower and gulp---" | tee -a $LOGFILE; exit 1; }
+
+echo "---Install mean sample application---" | tee -a $LOGFILE 2>&1
+git clone https://github.com/meanjs/mean.git mean                                                                 >> $LOGFILE 2>&1 || { echo "---Failed to clone mean sample project---" | tee -a $LOGFILE; exit 1; }
+cd mean
+npm install                                                                                                       >> $LOGFILE 2>&1 || { echo "---Failed to install node modules---" | tee -a $LOGFILE; exit 1; }
+bower --allow-root --config.interactive=false install                                                             >> $LOGFILE 2>&1 || { echo "---Failed to install bower---" | tee -a $LOGFILE; exit 1; }
+
+PRODCONF=config/env/production.js
+sed -i -e "/    uri: process.env.MONGOHQ_URL/a\ \ \ \ uri: \'mongodb:\/\/"$DBADDRESS":27017/mean\'," $PRODCONF    >> $LOGFILE 2>&1 || { echo "---Failed to update db config---" | tee -a $LOGFILE; exit 1; }
+sed -i -e 's/    uri: process.env.MONGOHQ_URL/\/\/    uri: process.env.MONGOHQ_URL/g' $PRODCONF                   >> $LOGFILE 2>&1 || { echo "---Failed to update db config---" | tee -a $LOGFILE; exit 1; }
+sed -i -e 's/ssl: true/ssl: false/g' $PRODCONF                                                                    >> $LOGFILE 2>&1 || { echo "---Failed to update db config---" | tee -a $LOGFILE; exit 1; }
+
+#make sample application as a service
+SAMPLE_APP_SERVICE_CONF=/etc/systemd/system/nodeserver.service
+cat << EOT > $SAMPLE_APP_SERVICE_CONF
+[Unit]
+Description=Node.js Example Server
+
+[Service]
+ExecStart=/usr/bin/gulp prod --gulpfile $HOME/mean/gulpfile.js
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=nodejs-example
+Environment=NODE_ENV=production PORT=8443
+
+[Install]
+WantedBy=multi-user.target
+EOT
+
+systemctl enable nodeserver.service                                                                               >> $LOGFILE 2>&1 || { echo "---Failed to enable the sample node service---" | tee -a $LOGFILE; exit 1; }
+systemctl start nodeserver.service                                                                                >> $LOGFILE 2>&1 || { echo "---Failed to start the sample node service---" | tee -a $LOGFILE; exit 1; }
+
+echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1 
+
+EOF
+    destination = "/tmp/installation.sh"
+  }
+
+  # Execute the script remotely
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh \"${ibm_compute_vm_instance.mongodb_server.ipv4_address}\""
+    ]
+  }
+}
+
+##############################################################
+# Check status
+##############################################################
+resource "null_resource" "check_status"{
+  depends_on    = ["null_resource.install_nodejs"]
+    
+  # Specify the ssh connection
+  connection {
+    user        = "ubuntu"
+    private_key = "${tls_private_key.ssh.private_key_pem}"
+    host        = "${aws_instance.nodejs_server.public_ip}"
+  }
+  
+  # Create the installation script
+  provisioner "file" {
+    content = <<EOF
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+echo "---check application status---"
+
+APP_URL=$1
+
+TMPFILE=`mktemp tmp.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX` && echo $TMPFILE
+
+StatusCheckMaxCount=120
+StatusCheckCount=0
+
+curl -k -s -o /dev/null -w "%{http_code}" -I -m 5 $APP_URL > $TMPFILE || true
+SERVICE_STATUS=$(cat $TMPFILE)
+
+while [ "$SERVICE_STATUS" != "200" ]; do
+	echo "---application is being started---"
+	sleep 10
+	let StatusCheckCount=StatusCheckCount+1	
+	if [ $StatusCheckCount -eq $StatusCheckMaxCount ]; then
+		echo "---The servce is not up---" 
+		rm -f $TMPFILE
+		exit 1
+	fi	
+	curl -k -s -o /dev/null -w "%{http_code}" -I -m 5 $APP_URL > $TMPFILE || true
+	SERVICE_STATUS=$(cat $TMPFILE)
+done
+rm -f $TMPFILE	
+	
+echo "---application is up---"
+
+EOF
+    destination = "/tmp/checkStatus.sh"
+  }
+
+  # Execute the script remotely
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/checkStatus.sh; sudo bash /tmp/checkStatus.sh http://\"${aws_instance.nodejs_server.public_ip}\":8443"
+    ]
+  } 
 }
 
 #########################################################
 # Output
 #########################################################
 output "Meanstack DB Server IP Address" {
-  value = "${module.install_meanstack_mongo_ibmcloud.public_ip}"
+  value = "${ibm_compute_vm_instance.mongodb_server.ipv4_address}"
 }
 
 output "Meanstack NodeJS Server IP Address" {
-  value = "${module.install_meanstack_nodejs_aws.public_ip}"
+  value = "${aws_instance.nodejs_server.public_ip}"
 }
 
-output "Please wait for 5 minutes and then can access the meanstack sample application" {
-  value = "http://${module.install_meanstack_nodejs_aws.public_ip}:8443"
+output "Please access the meanstack sample application" {
+  value = "http://${aws_instance.nodejs_server.public_ip}:8443"
 }

@@ -137,23 +137,25 @@
         ]
     }, 
     {
-        "description": "Hostname of the virtual instance to be deployed", 
+        "description": "Hostname of the virtual instance to be deployed; Allow 1 to 241 alphanumeric characters and non-consecutive non-leading non-ending at-most-5 dashes", 
         "hidden": false, 
         "immutable": false, 
         "label": "Hostname", 
         "name": "hostname", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^[A-Za-z0-9]{1,241}$|^[A-Za-z0-9]{1,120}-[A-Za-z0-9]{1,120}$|^[A-Za-z0-9]{1,79}(-[A-Za-z0-9]{1,79}){2}$|^[A-Za-z0-9]{1,59}(-[A-Za-z0-9]{1,59}){3}$|^[A-Za-z0-9]{1,47}(-[A-Za-z0-9]{1,47}){4}$|^[A-Za-z0-9]{1,39}(-[A-Za-z0-9]{1,39}){5}$"
     },
     {
-        "description": "Public SSH key used to connect to the virtual guest", 
+        "description": "Public SSH key used to connect to the virtual guest; Allow the openSSH format key with optional comment (with optional email)", 
         "hidden": false, 
         "immutable": false, 
         "label": "Public SSH Key", 
         "name": "public_ssh_key", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}( [^@]+@[^@]+| [^@]+){0,1}$"
     }
 ]

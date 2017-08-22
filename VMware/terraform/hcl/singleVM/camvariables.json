@@ -128,8 +128,8 @@
     {
         "name": "create_vm_folder", 
         "label": "Create VM folder", 
-        "description": "A vSphere folder need to be create or it is precreated",
-        "default": "false",
+        "description": "Set to 1 if a vSphere folder needs to be created and to 0 otherwise (use an existing folder)",
+        "default": "0",
         "hidden": false, 
         "immutable": false, 
         "required": true, 

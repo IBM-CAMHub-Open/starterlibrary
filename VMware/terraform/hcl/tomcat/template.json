@@ -1,0 +1,50 @@
+{
+   "name": "Tomcat on a Single VM",
+   "description": "Tomcat - An Easy starting point for Java web development.",
+   "version": "1.0.0.0",
+   "type": "prebuilt",
+   "manifest": {
+     "template_type": "Terraform",
+     "template_format": "HCL",
+     "template_provider": "VMware vSphere",
+     "template": {
+       "templateData": "",
+       "templateVariables": "",
+       "templateOutput": ""
+     }
+   },
+   "metadata": {
+     "displayName": "Tomcat on a Single VM",
+     "longDescription": "Deploys a single node of Tomcat in VMware for development use, where Tomcat is an open source implementation of the Java Servlet, JavaServer Pages, Java Expression Language and Java WebSocket technologies.",
+     "bullets": [
+       {
+         "title": "Clouds",
+         "description": "VMware"
+       },
+       {
+         "title": "Template version",
+         "description": "V1.0"
+       },
+       {
+         "title": "Operating systems supported",
+         "description": "Red Hat Enterprise Linux 7"
+       },
+       {
+         "title": "Topology",
+         "description": "VMware: 1 virtual machine: Tomcat"
+       },
+       {
+         "title": "Software deployed",
+         "description": "<table style=\"width:100%\"><tr><td width=\"20%\" valign=\"top\">Tomcat:</td><td>an open source implementation of the Java Servlet, JavaServer Pages, Java Expression Language and Java WebSocket technologies</td></tr></table>"
+       },
+       {
+         "title": "Default virtual machine settings",
+         "description": "<ul><li>VMware:<ul style=\"margin-left: 20px;\"><li>Flavor:<ul style=\"margin-left: 20px;\"><li>Cores - 1</li><li>Memory - 1GB</li><li>Storage - Depends on Image</li></ul></li><li>Network:<ul style=\"margin-left: 20px;\"><li>Private IP:<ul style=\"margin-left: 20px;\"><li>Availability - Customer Provided</li><li>Ingress - Via VPN</li><li>Egress - Not required</li></ul></li><li>Public IP:<ul style=\"margin-left: 20px;\"><li>Availability - None</li></ul></li></ul></li><li>Firewall:<ul style=\"margin-left: 20px;\"><li>Ingress - Allows SSH, and TCP 8080 from all sources</li><li>Egress - All</li></ul></li></ul></li></ul>"
+       },
+       {
+         "title": "Usage and special notes",
+         "description": "<ul><li>1. Downloads latest releases of software.</li><li>2. To access the application and virtual machines, please see the instructions in the output log.</li><li>3. More details of software can be found in <a href=\"https://tomcat.apache.org/\">https://tomcat.apache.org/</a>.</li></ul>"
+       }
+     ]
+   }
+ }

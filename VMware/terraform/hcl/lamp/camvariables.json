@@ -1,0 +1,436 @@
+[
+    {
+        "name": "mariadb_server_hostname", 
+        "label": "MariaDB Server Hostname", 
+        "description": "Hostname of the virtual instance (with MariaDB installed) to be deployed; Allow 1 to 80 alphanumeric characters with special characters in [.- _]", 
+        "default": "lamp-mariadb-vm",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "regex": "^[A-Za-z0-9._-]{1,80}$"
+    },
+    {
+        "name": "php_server_hostname", 
+        "label": "PHP Server Hostname", 
+        "description": "Hostname of the virtual instance (with Apache and PHP installed) to be deployed; Allow 1 to 80 alphanumeric characters with special characters in [.- _]", 
+        "default": "lamp-php-vm",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "regex": "^[A-Za-z0-9._-]{1,80}$"
+    },
+    {
+        "name": "cam_user", 
+        "label": "MariaDB User", 
+        "description": "User to be added into db and sshed into servers; Allow 1 to 16 alphanumeric characters with beginning at letters", 
+        "default": "camuser",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "regex": "^[A-Za-z][A-Za-z0-9]{0,15}$"
+    },
+    {
+        "name": "cam_pwd", 
+        "label": "MariaDB User Password", 
+        "description": "User password for cam user; Allow 8 to 16 alphanumeric characters", 
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": true, 
+        "type": "string",
+        "regex": "^[0-9A-Za-z]{8,16}$"
+    },  
+    {
+        "name": "folder", 
+        "label": "Folder", 
+        "description": "Target vSphere folder for Virtual Machine", 
+        "default": "",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "datacenter", 
+        "label": "Datacenter", 
+        "description": "Target vSphere datacenter for Virtual Machine creation",
+        "default": "", 
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "mariadb_server_vcpu", 
+        "label": "MariaDB Server vCPU", 
+        "description": "Number of Virtual CPU for the MariaDB server", 
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+		"options": [
+         	{
+            	"value" : "1",
+              	"label": "1 Core"
+          	},
+         	{
+            	"value" : "2",
+              	"label": "2 Cores"
+          	},
+         	{
+            	"value" : "4",
+              	"label": "4 Cores"
+          	},
+         	{
+            	"value" : "8",
+              	"label": "8 Cores"
+          	},          	
+         	{
+            	"value" : "12",
+              	"label": "12 Cores"
+          	},
+         	{
+            	"value" : "16",
+              	"label": "16 Cores"
+          	},
+         	{
+            	"value" : "32",
+              	"label": "32 Cores"
+          	} 
+        ]
+    },
+    {
+        "name": "mariadb_server_memory", 
+        "label": "MariaDB Server Memory", 
+        "description": "Memory for the MariaDB server in GBs",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+		"options": [
+         	{
+            	"value" : "1",
+              	"label": "1 GB"
+          	},
+         	{
+            	"value" : "2",
+              	"label": "2 GB"
+          	},          	
+         	{
+            	"value" : "4",
+              	"label": "4 GB"
+          	},
+         	{
+            	"value" : "6",
+              	"label": "6 GB"
+          	},
+         	{
+            	"value" : "8",
+              	"label": "8 GB"
+          	},
+         	{
+            	"value" : "12",
+              	"label": "12 GB"
+          	},
+         	{
+            	"value" : "16",
+              	"label": "16 GB"
+          	},
+         	{
+            	"value" : "32",
+              	"label": "32 GB"
+          	},
+         	{
+            	"value" : "48",
+              	"label": "48 GB"
+          	},          	
+         	{
+            	"value" : "64",
+              	"label": "64 GB"
+          	},
+         	{
+            	"value" : "128",
+              	"label": "128 GB"
+          	}
+        ]
+    },
+    {
+        "name": "php_server_vcpu", 
+        "label": "PHP Server vCPU", 
+        "description": "Number of Virtual CPU for the PHP server",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+		"options": [
+         	{
+            	"value" : "1",
+              	"label": "1 Core"
+          	},
+         	{
+            	"value" : "2",
+              	"label": "2 Cores"
+          	},
+         	{
+            	"value" : "4",
+              	"label": "4 Cores"
+          	},
+         	{
+            	"value" : "8",
+              	"label": "8 Cores"
+          	},          	
+         	{
+            	"value" : "12",
+              	"label": "12 Cores"
+          	},
+         	{
+            	"value" : "16",
+              	"label": "16 Cores"
+          	},
+         	{
+            	"value" : "32",
+              	"label": "32 Cores"
+          	} 
+        ]
+    },
+    {
+        "name": "php_server_memory", 
+        "label": "PHP Server Memory", 
+        "description": "Memory for the PHP server in GBs",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+		"options": [
+         	{
+            	"value" : "1",
+              	"label": "1 GB"
+          	},
+         	{
+            	"value" : "2",
+              	"label": "2 GB"
+          	},          	
+         	{
+            	"value" : "4",
+              	"label": "4 GB"
+          	},
+         	{
+            	"value" : "6",
+              	"label": "6 GB"
+          	},
+         	{
+            	"value" : "8",
+              	"label": "8 GB"
+          	},
+         	{
+            	"value" : "12",
+              	"label": "12 GB"
+          	},
+         	{
+            	"value" : "16",
+              	"label": "16 GB"
+          	},
+         	{
+            	"value" : "32",
+              	"label": "32 GB"
+          	},
+         	{
+            	"value" : "48",
+              	"label": "48 GB"
+          	},          	
+         	{
+            	"value" : "64",
+              	"label": "64 GB"
+          	},
+         	{
+            	"value" : "128",
+              	"label": "128 GB"
+          	}
+        ]
+    },
+    {
+        "name": "cluster", 
+        "label": "Cluster", 
+        "description": "Target vSphere Cluster to host the Virtual Machine",
+        "default": "", 
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "dns_suffixes", 
+        "label": "DNS Suffixes", 
+        "description": "Name resolution suffixes for the virtual network adapter",
+        "default": [], 
+        "hidden": false, 
+        "immutable": false, 
+        "required": false, 
+        "secured": false, 
+        "type": "list"
+    },
+    {
+        "name": "dns_servers", 
+        "label": "DNS Servers", 
+        "description": "DNS servers for the virtual network adapter; Allow 0.0.0.0 to 255.255.255.255",
+        "default": [], 
+        "hidden": false, 
+        "immutable": false, 
+        "required": false, 
+        "secured": false, 
+        "type": "list",
+        "regex": "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"
+    },
+    {
+        "name": "network_label", 
+        "label": "Network Label", 
+        "description": "vSphere Port Group or Network label for Virtual Machine's vNIC",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "mariadb_server_ipv4_address", 
+        "label": "MariaDB Server IPv4 Address", 
+        "description": "IPv4 address for vNIC configuration in mariadb server; Allow 0.0.0.0 to 255.255.255.255",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "regex": "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"
+    },
+    {
+        "name": "php_server_ipv4_address", 
+        "label": "PHP Server IPv4 Addresses", 
+        "description": "IPv4 address for vNIC configuration in php server; Allow 0.0.0.0 to 255.255.255.255",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "regex": "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"
+    },    
+    {
+        "name": "ipv4_gateway", 
+        "label": "IPv4 Gateway", 
+        "description": "IPv4 gateway for vNIC configuration; Allow 0.0.0.0 to 255.255.255.255",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "regex": "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"
+    },
+    {
+        "name": "ipv4_prefix_length", 
+        "label": "IPv4 Prefix Length", 
+        "description": "IPv4 Prefix length for vNIC configuration; Allow numbers between 8 and 32",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "regex": "^([8-9]|[1-2][0-9]|3[0-2])$"
+    },
+    {
+        "name": "storage", 
+        "label": "Storage", 
+        "description": "Data store or storage cluster name for target VMs disks",
+        "default": "",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "mariadb_server_vm_template", 
+        "label": "MariaDB Server VM Template", 
+        "description": "Source VM or Template label for cloning to MariaDB server",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "mariadb_server_ssh_user", 
+        "label": "MariaDB Server SSH User", 
+        "description": "The user for ssh connection to MariaDB server, which is default in template",
+        "default": "root",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "mariadb_server_ssh_user_password", 
+        "label": "MariaDB Server SSH User Password", 
+        "description": "The user password for ssh connection to MariaDB server, which is default in template",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": true, 
+        "type": "string"
+    },
+    {
+        "name": "php_server_vm_template", 
+        "label": "PHP Server VM Template", 
+        "description": "Source VM or Template label for cloning to PHP server",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "php_server_ssh_user", 
+        "label": "PHP Server SSH User", 
+        "description": "The user for ssh connection to PHP server, which is default in template",
+        "default": "root",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string"
+    },
+    {
+        "name": "php_server_ssh_user_password", 
+        "label": "PHP Server SSH User Password", 
+        "description": "The user password for ssh connection to PHP server, which is default in template",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": true, 
+        "type": "string"
+    },
+    {
+        "name": "user_public_key", 
+        "label": "User Public Key", 
+        "description": "User-provided public SSH key used to connect to the virtual machine; Allow 'None' or the openSSH format key with optional comment (with optional email)",
+        "default": "None",
+        "hidden": false, 
+        "immutable": false, 
+        "required": true, 
+        "secured": false, 
+        "type": "string",
+        "regex": "^None$|^ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}( [^@]+@[^@]+| [^@]+){0,1}$"
+    }
+]

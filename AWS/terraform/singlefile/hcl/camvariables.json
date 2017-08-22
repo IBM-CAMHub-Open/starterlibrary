@@ -61,6 +61,6 @@
         "name": "aws_amis", 
         "required": true, 
         "secured": false, 
-        "type": "jsonObject"
+        "type": "map"
     }
 ]

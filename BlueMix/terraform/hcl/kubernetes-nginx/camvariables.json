@@ -1,23 +1,25 @@
 [
     {
-        "description": "Cluster name", 
+        "description": "Cluster name; Allow 1 to 241 alphanumeric characters and non-consecutive non-leading non-ending at-most-5 dashes", 
         "hidden": false, 
         "immutable": false, 
         "label": "Cluster Name", 
         "name": "clustername", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^[A-Za-z0-9]{1,241}$|^[A-Za-z0-9]{1,120}-[A-Za-z0-9]{1,120}$|^[A-Za-z0-9]{1,79}(-[A-Za-z0-9]{1,79}){2}$|^[A-Za-z0-9]{1,59}(-[A-Za-z0-9]{1,59}){3}$|^[A-Za-z0-9]{1,47}(-[A-Za-z0-9]{1,47}){4}$|^[A-Za-z0-9]{1,39}(-[A-Za-z0-9]{1,39}){5}$"
     },
     {
-        "description": "Number of managed nodes", 
+        "description": "Number of managed nodes; Allow positive integers", 
         "hidden": false, 
         "immutable": false, 
         "label": "Count", 
         "name": "count", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^[1-9][0-9]*$"
     },
     {
         "description": "Softlayer datacenter where infrastructure resources will be deployed", 
@@ -157,13 +159,14 @@
         ]
     },   
     {
-        "description": "public ssh key to add to each kubernetes host virtual machine", 
+        "description": "public ssh key to add to each kubernetes host virtual machine; Allow the openSSH format key with optional comment (with optional email)", 
         "hidden": false, 
         "immutable": false, 
         "label": "Public SSH Key", 
         "name": "public_ssh_key", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}( [^@]+@[^@]+| [^@]+){0,1}$"
     } 
 ]

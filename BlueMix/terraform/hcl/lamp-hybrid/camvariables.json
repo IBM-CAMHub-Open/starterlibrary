@@ -187,77 +187,84 @@
     },
     {
         "default": "lampPhp",
-        "description": "The hostname of server with php", 
+        "description": "The hostname of server with php; Allow 1 to 241 alphanumeric characters and non-consecutive non-leading non-ending at-most-5 dashes", 
         "hidden": false, 
         "immutable": false, 
         "label": "Hostname of PHP Server", 
         "name": "php_instance_name", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^[A-Za-z0-9]{1,241}$|^[A-Za-z0-9]{1,120}-[A-Za-z0-9]{1,120}$|^[A-Za-z0-9]{1,79}(-[A-Za-z0-9]{1,79}){2}$|^[A-Za-z0-9]{1,59}(-[A-Za-z0-9]{1,59}){3}$|^[A-Za-z0-9]{1,47}(-[A-Za-z0-9]{1,47}){4}$|^[A-Za-z0-9]{1,39}(-[A-Za-z0-9]{1,39}){5}$"
     }, 
     {
         "default": "lampDb",
-        "description": "The hostname of server with mysql", 
+        "description": "The hostname of server with mysql; Allow 1 to 64 alphanumeric characters", 
         "hidden": false, 
         "immutable": false, 
         "label": "Hostname of MySQL Server", 
         "name": "db_instance_name", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^[A-Za-z0-9]{1,64}$"
     },         
     {
         "default": "opencontent-lamp-hybrid",
-        "description": "The prefix of names for VPC, Gateway, Subnet and Security Group", 
+        "description": "The prefix of names for VPC, Gateway, Subnet and Security Group; Allow 0 to 240 alphanumeric characters with special characters in [ +=._:/@-]", 
         "hidden": false, 
         "immutable": false, 
         "label": "Network Name Prefix", 
         "name": "network_name_prefix", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^[A-Za-z0-9 +=._:/@-]{0,240}$"
     },
     {
         "default": "cam-public-key-lamp-hybrid",
-        "description": "Name of the public SSH key used to connect to the virtual guests", 
+        "description": "Name of the public SSH key used to connect to the virtual guests; Allow 1 to 65 printable ASCII characters", 
         "hidden": false, 
         "immutable": false, 
         "label": "Public SSH Key Name", 
         "name": "public_key_name", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^[ -~]{1,65}$"
     },
     {
-        "description": "Public SSH key used to connect to the virtual guest", 
+        "description": "Public SSH key used to connect to the virtual guest; Allow the openSSH format key with optional comment (with optional email)", 
         "hidden": false, 
         "immutable": false, 
         "label": "Public SSH Key", 
         "name": "public_key", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}( [^@]+@[^@]+| [^@]+){0,1}$"
     },
     {
         "default": "camuser",
-        "description": "User to be added into db and sshed into servers", 
+        "description": "User to be added into db and sshed into servers; Allow 1 to 16 alphanumeric characters with beginning at letters", 
         "hidden": false, 
         "immutable": false, 
         "label": "User for SSH and MySQL", 
         "name": "cam_user", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^[A-Za-z][A-Za-z0-9]{0,15}$"
     },
     {
-        "description": "Password for cam user (minimal length is 8)", 
+        "description": "Password for cam user; Allow 8 to 16 alphanumeric characters", 
         "hidden": false, 
         "immutable": false, 
         "label": "User Password for SSH and MySQL", 
         "name": "cam_pwd", 
         "required": true, 
         "secured": true, 
-        "type": "string"
+        "type": "string",
+        "regex": "^[0-9A-Za-z]{8,16}$"
     }          
 ]

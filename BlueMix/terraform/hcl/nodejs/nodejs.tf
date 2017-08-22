@@ -18,14 +18,12 @@
 #########################################################
 # Define the ibmcloud provider
 #########################################################
-
-provider "ibmcloud" {
+provider "ibm" {
 }
 
 #########################################################
 # Define the variables
 #########################################################
-
 variable "datacenter" {
   description = "Softlayer datacenter where infrastructure resources will be deployed"
 }
@@ -41,48 +39,82 @@ variable "public_ssh_key" {
 ##############################################################
 # Create public key in Devices>Manage>SSH Keys in SL console
 ##############################################################
-
-resource "ibmcloud_infra_ssh_key" "cam_public_key" {
-    label = "CAM Public Key"
-    public_key = "${var.public_ssh_key}"
+resource "ibm_compute_ssh_key" "cam_public_key" {
+  label      = "CAM Public Key"
+  public_key = "${var.public_ssh_key}"
 }
 
 ##############################################################
 # Create temp public key for ssh connection
 ##############################################################
-
 resource "tls_private_key" "ssh" {
   algorithm = "RSA"
 }
 
-resource "ibmcloud_infra_ssh_key" "temp_public_key" {
+resource "ibm_compute_ssh_key" "temp_public_key" {
   label = "Temp Public Key"
   public_key = "${tls_private_key.ssh.public_key_openssh}"
 }
 
 ##############################################################
-# Define the module to create a server and install nodejs
+# Create Virtual Machine and install MongoDB
 ##############################################################
-module "install_nodejs_ibmcloud" {
-  source             = "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=master//ibmcloud/virtual_guest"
-  hostname           = "${var.hostname}"
-  datacenter         = "${var.datacenter}"
-  user_public_key_id = "${ibmcloud_infra_ssh_key.cam_public_key.id}"
-  temp_public_key_id = "${ibmcloud_infra_ssh_key.temp_public_key.id}"
-  temp_public_key    = "${tls_private_key.ssh.public_key_openssh}"
-  temp_private_key   = "${tls_private_key.ssh.private_key_pem}"
-  module_script      = "files/installNodeJs.sh"
-  os_reference_code  = "CENTOS_7_64"
-  domain             = "cam.ibm.com"
-  cores              = 1
-  memory             = 1024
-  disk1              = 25
+resource "ibm_compute_vm_instance" "softlayer_virtual_guest" {
+  hostname                 = "${var.hostname}"
+  os_reference_code        = "CENTOS_7_64"
+  domain                   = "cam.ibm.com"
+  datacenter               = "${var.datacenter}"
+  network_speed            = 10
+  hourly_billing           = true
+  private_network_only     = false
+  cores                    = 1
+  memory                   = 1024
+  disks                    = [25]
+  dedicated_acct_host_only = false
+  local_disk               = false
+  ssh_key_ids              = ["${ibm_compute_ssh_key.cam_public_key.id}", "${ibm_compute_ssh_key.temp_public_key.id}"]
+
+  # Specify the ssh connection
+  connection {
+    user        = "root"
+    private_key = "${tls_private_key.ssh.private_key_pem}"
+    host        = "${self.ipv4_address}"
+  }
+  
+  # Create the installation script
+  provisioner "file" {
+    content = <<EOF
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+LOGFILE="/var/log/install_nodejs.log"
+
+echo "---start installing node.js---" | tee -a $LOGFILE 2>&1 
+
+yum install gcc-c++ make -y                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install build tools---" | tee -a $LOGFILE; exit 1; }
+curl -sL https://rpm.nodesource.com/setup_7.x | bash -                             >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
+yum install nodejs -y                                                              >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
+
+echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1 
+
+EOF
+    destination = "/tmp/installation.sh"
+  }
+
+  # Execute the script remotely
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh"
+    ]
+  }
 }
 
 #########################################################
 # Output
 #########################################################
-
 output "The IP address of the VM with NodeJs installed" {
-    value = "${module.install_nodejs_ibmcloud.public_ip}"
+    value = "${ibm_compute_vm_instance.softlayer_virtual_guest.ipv4_address}"    
 }

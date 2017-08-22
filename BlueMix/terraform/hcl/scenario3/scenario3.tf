@@ -1,4 +1,4 @@
-provider "ibmcloud" {
+provider "ibm" {
 }
 
 variable "public_ssh_key" {
@@ -19,21 +19,21 @@ variable "second_hostname" {
   default = "debian-medium"
 }
 
-data "ibmcloud_infra_image_template" "debian_8_6_64" {
+data "ibm_compute_image_template" "debian_8_6_64" {
     name = "100GB - Debian / Debian / 8.0.0-64 Minimal for VSI"
 }
 
 # This will create a new SSH key that will show up under the \
 # Devices>Manage>SSH Keys in the SoftLayer console.
-resource "ibmcloud_infra_ssh_key" "orpheus_public_key" {
+resource "ibm_compute_ssh_key" "orpheus_public_key" {
     label = "Orpheus Public Key"
     public_key = "${var.public_ssh_key}"
 }
 
 # Create a new virtual guest using image "Debian"
-resource "ibmcloud_infra_virtual_guest" "debian_small_virtual_guest" {
+resource "ibm_compute_vm_instance" "debian_small_virtual_guest" {
     hostname = "${var.first_hostname}"
-    image_id = "${data.ibmcloud_infra_image_template.debian_8_6_64.id}"
+    image_id = "${data.ibm_compute_image_template.debian_8_6_64.id}"
     domain = "cam.ibm.com"
     datacenter = "${var.datacenter}"
     network_speed = 10
@@ -44,13 +44,13 @@ resource "ibmcloud_infra_virtual_guest" "debian_small_virtual_guest" {
     user_metadata = "{\"value\":\"newvalue\"}"
     dedicated_acct_host_only = false
     local_disk = false
-    ssh_key_ids = ["${ibmcloud_infra_ssh_key.orpheus_public_key.id}"]
+    ssh_key_ids = ["${ibm_compute_ssh_key.orpheus_public_key.id}"]
 }
 
 # Create a new virtual guest using image "Debian"
-resource "ibmcloud_infra_virtual_guest" "debian_medium_virtual_guest" {
+resource "ibm_compute_vm_instance" "debian_medium_virtual_guest" {
     hostname = "${var.second_hostname}"
-    image_id = "${data.ibmcloud_infra_image_template.debian_8_6_64.id}"
+    image_id = "${data.ibm_compute_image_template.debian_8_6_64.id}"
     domain = "cam.ibm.com"
     datacenter = "${var.datacenter}"
     network_speed = 10
@@ -61,6 +61,6 @@ resource "ibmcloud_infra_virtual_guest" "debian_medium_virtual_guest" {
     user_metadata = "{\"value\":\"newvalue\"}"
     dedicated_acct_host_only = false
     local_disk = false
-    ssh_key_ids = ["${ibmcloud_infra_ssh_key.orpheus_public_key.id}"]
+    ssh_key_ids = ["${ibm_compute_ssh_key.orpheus_public_key.id}"]
 }
 

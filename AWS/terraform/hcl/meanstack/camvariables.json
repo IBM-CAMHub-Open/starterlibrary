@@ -30,56 +30,61 @@
     }, 
     {
         "default": "opencontent-meanstack",
-        "description": "The prefix of names for VPC, Gateway, Subnet and Security Group", 
+        "description": "The prefix of names for VPC, Gateway, Subnet and Security Group; Allow 0 to 240 alphanumeric characters with special characters in [ +=._:/@-]", 
         "hidden": false, 
         "immutable": false, 
         "label": "Network Name Prefix", 
         "name": "network_name_prefix", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^[A-Za-z0-9 +=._:/@-]{0,240}$"
     },
     {
         "default": "cam-public-key-meanstack",
-        "description": "Name of the public SSH key used to connect to the virtual guests", 
+        "description": "Name of the public SSH key used to connect to the virtual guests; Allow 1 to 65 printable ASCII characters", 
         "hidden": false, 
         "immutable": false, 
         "label": "Public SSH Key Name", 
         "name": "public_ssh_key_name", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^[ -~]{1,65}$"
     },
     {
-        "description": "Public SSH key used to connect to the virtual guest", 
+        "description": "Public SSH key used to connect to the virtual guest; Allow the openSSH format key with optional comment (with optional email)", 
         "hidden": false, 
         "immutable": false, 
         "label": "Public SSH Key", 
         "name": "public_ssh_key", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}( [^@]+@[^@]+| [^@]+){0,1}$"
     },
     {
         "default": "meanstack-db",
-        "description": "The hostname of server with mongo", 
+        "description": "The hostname of server with mongo; Allow 0 to 255 alphanumeric characters with special characters in [ +=._:/@-]", 
         "hidden": false, 
         "immutable": false, 
         "label": "Hostname of MongoDB Server", 
         "name": "hostname-db", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^[A-Za-z0-9 +=._:/@-]{0,255}$"
     }, 
     {
         "default": "meanstack-nodejs",
-        "description": "The hostname of server with nodejs", 
+        "description": "The hostname of server with nodejs; Allow 0 to 255 alphanumeric characters with special characters in [ +=._:/@-]", 
         "hidden": false, 
         "immutable": false, 
         "label": "Hostname of Node.js Server", 
         "name": "hostname-nodejs", 
         "required": true, 
         "secured": false, 
-        "type": "string"
+        "type": "string",
+        "regex": "^[A-Za-z0-9 +=._:/@-]{0,255}$"
     }
 ]
