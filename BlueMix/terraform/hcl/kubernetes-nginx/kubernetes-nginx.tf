@@ -136,7 +136,7 @@ echo "---start hostname, ip address setup---" | tee -a $LOGFILE 2>&1
 yum install curl -y                                                   >> $LOGFILE 2>&1 || { echo "---Failed to install curl---" | tee -a $LOGFILE; exit 1; }
 yum install bind-utils -y                                             >> $LOGFILE 2>&1 || { echo "---Failed to install bind-utils---" | tee -a $LOGFILE; exit 1; }
 
-MYIP=$(hostname --ip-address)
+MYIP=$(ip addr show eth1 | grep 'scope global eth1' | tr -s ' ' | cut -d' ' -f 3 | cut -d \/ -f 1)
 echo "---master node ip address is $MYIP---" | tee -a $LOGFILE 2>&1
 
 MYHOSTNAME=$(dig -x $MYIP +short | sed -e 's/.$//')
@@ -257,7 +257,7 @@ echo "---start hostname, ip address setup---" | tee -a $LOGFILE 2>&1
 yum install curl -y                                                   >> $LOGFILE 2>&1 || { echo "---Failed to install curl---" | tee -a $LOGFILE; exit 1; }
 yum install bind-utils -y                                             >> $LOGFILE 2>&1 || { echo "---Failed to install bind-utils---" | tee -a $LOGFILE; exit 1; }
 
-MYIP=$(hostname --ip-address)
+MYIP=$(ip addr show eth1 | grep 'scope global eth1' | tr -s ' ' | cut -d' ' -f 3 | cut -d \/ -f 1)
 echo "---minion node ip address is $MYIP---" | tee -a $LOGFILE 2>&1
 
 MYHOSTNAME=$(dig -x $MYIP +short | sed -e 's/.$//')
