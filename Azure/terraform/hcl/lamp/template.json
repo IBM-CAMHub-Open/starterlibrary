@@ -1,0 +1,50 @@
+{
+   "name": "LAMP stack deployment on Microsoft Azure",
+   "description": "LAMP - A fully-integrated environment for full stack PHP web development.",
+   "version": "1.0.0.0",
+   "type": "prebuilt",
+   "manifest": {
+     "template_type": "Terraform",
+     "template_format": "HCL",
+     "template_provider": "Microsoft Azure - Beta",
+     "template": {
+       "templateData": "",
+       "templateVariables": "",
+       "templateOutput": ""
+     }
+   },
+   "metadata": {
+     "displayName": "LAMP stack deployment on Microsoft Azure",
+     "longDescription": "Deploys a LAMP Stack (Linux, Apache, Microsoft SQL, PHP) in Microsoft Azure providing a complete development environment. This deployment also deploys a simple sample application to validate the stack is operational.",
+     "bullets": [
+       {
+         "title": "Clouds",
+         "description": "Microsoft Azure"
+       },
+       {
+         "title": "Template version",
+         "description": "V1.0"
+       },
+       {
+         "title": "Operating systems supported",
+         "description": "Microsoft Azure: Ubuntu 16.04"
+       },
+       {
+         "title": "Topology",
+         "description": "Microsoft Azure: <ul><li>1 virtual machine - Apache and PHP;</li><li>1 Service - Microsoft SQL Server</li></ul>"
+       },
+       {
+         "title": "Software deployed",
+         "description": "<table style=\"width:100%\"><tr><td width=\"18%\" valign=\"top\">1. Apache:</td><td>a secure, efficient and extensible open-source HTTP server</td></tr><tr><td>2. SQL Server:</td><td>a relational database management system developed by Microsoft</td></tr><tr><td>3. PHP:</td><td>a server-side scripting language designed for web development</td></tr></table>"
+       },
+       {
+         "title": "Default virtual machine settings",
+         "description": "<ul><li>Microsoft Azure:<ul style=\"margin-left: 20px;\"><li>Flavor:<ul style=\"margin-left: 20px;\"><li>SQL Database: S0><ul style=\"margin-left: 20px;\"><li>DTU - 10</li><li>Storage - 250GB</li></ul</li><li>Front end: Standard_A2<ul style=\"margin-left: 20px;\"><li>Cores - 2</li><li>Memory - 3.5GB</li><li>Storage - 60GB</li></ul></li></ul></li><li>Network:<ul style=\"margin-left: 20px;\"><li>SQL Database:<ul style=\"margin-left: 20px;\"><li>Private IP - Azure managed</li><li>Public IP - Computed and output FQDN</li></ul></li><li>Front end:<ul style=\"margin-left: 20px;\"><li>Private IP - In 10.0.1.0/24</li><li>Public IP - Computed</li></ul></li></ul></li><li>Firewall:<ul style=\"margin-left: 20px;\"><li>SQL Database:<ul style=\"margin-left: 20px;\"><li>Ingress - Allows TCP 1433 only from Front-end VM</li><li>Egress - Azure managed</li></ul></li><li>Front end:<ul style=\"margin-left: 20px;\"><li>Ingress - Allows SSH and HTTP from all sources</li><li>Egress - All</li></ul></li></ul></li></ul></li></ul>"
+       },
+       {
+         "title": "Usage and special notes",
+         "description": "<ul><li>1. Downloads latest releases of software.</li><li>2. To access the application and virtual machine, please see the instructions in the output log.</li><li>3. To access the SQL database service, please log into the front-end VM and then use SQL client for operations.</li><li>4. More details of software can be found in <a href=\"https://httpd.apache.org/\">https://httpd.apache.org/</a>, <a href=\"https://azure.microsoft.com/en-us/services/sql-database/\">https://azure.microsoft.com/en-us/services/sql-database/</a> and <a href=\"https://secure.php.net/\">https://secure.php.net/</a>.</li></ul>"
+       }
+     ]
+   }
+ }
