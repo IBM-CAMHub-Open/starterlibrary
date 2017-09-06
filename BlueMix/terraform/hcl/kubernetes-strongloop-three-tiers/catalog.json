@@ -18,7 +18,7 @@
      "template_source": {
        "githubRepoUrl": "",
        "githubAccessToken": "",
-       "relativePathToTemplateFolder": "BlueMix/terraform/hcl/kubernetes-strongloop-three-tiers/",
+       "relativePathToTemplateFolder": "BlueMix/terraform/hcl/kubernetes-strongloop-three-tiers",
        "templateFileName": "kubernetes-strongloop-three-tiers.tf"
      }
    },
