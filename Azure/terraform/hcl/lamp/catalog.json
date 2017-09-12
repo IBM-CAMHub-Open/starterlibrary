@@ -11,6 +11,12 @@
        "templateData": "",
        "templateVariables": "",
        "templateOutput": ""
+     },
+     "template_source": {
+       "githubRepoUrl": "",
+       "githubAccessToken": "",
+       "relativePathToTemplateFolder": "Azure/terraform/hcl/lamp",
+       "templateFileName": "lamp.tf"
      }
    },
    "metadata": {
