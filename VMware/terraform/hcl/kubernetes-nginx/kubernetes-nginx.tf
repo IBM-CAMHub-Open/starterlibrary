@@ -590,7 +590,7 @@ MYIP=$(hostname --ip-address)
 # install the kubernetes-dashboard
 echo "---install the kubernetes-dashboard---" | tee -a $LOGFILE 2>&1
 
-curl -O https://rawgit.com/kubernetes/dashboard/master/src/deploy/kubernetes-dashboard.yaml                                    >> $LOGFILE 2>&1 || { echo "---Failed to download kubernetes dashboard yaml---" | tee -a $LOGFILE; exit 1; }
+curl -O https://raw.githubusercontent.com/kubernetes/dashboard/v1.6.3/src/deploy/kubernetes-dashboard.yaml                     >> $LOGFILE 2>&1 || { echo "---Failed to download kubernetes dashboard yaml---" | tee -a $LOGFILE; exit 1; }
 sed -i "s/# - --apiserver-host=http:\/\/my-address:port/- --apiserver-host=http:\/\/$MYIP:8080/g" kubernetes-dashboard.yaml    >> $LOGFILE 2>&1 || { echo "---Failed to update kubernetes dashboard yaml---" | tee -a $LOGFILE; exit 1; }
 
 kubectl create -f kubernetes-dashboard.yaml --validate=false  || true                                                          >> $LOGFILE 2>&1

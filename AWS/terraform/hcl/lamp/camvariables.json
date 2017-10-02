@@ -30,7 +30,7 @@
     },
     {
         "default": "lampPhp",
-        "description": "The hostname of server with php; Allow 0 to 255 alphanumeric characters with special characters in [ +=._:/@-]", 
+        "description": "The hostname of server with php; Allow 1 to 255 alphanumeric characters and special characters +=._:/@- as tag value that is not starting with aws", 
         "hidden": false, 
         "immutable": false, 
         "label": "Hostname of PHP Server", 
@@ -38,7 +38,7 @@
         "required": true, 
         "secured": false, 
         "type": "string",
-        "regex": "^[A-Za-z0-9 +=._:/@-]{0,255}$"
+        "regex": "^(?![Aa][Ww][Ss])[A-Za-z0-9 +=._:\/@-]{1,255}$"
     }, 
     {
         "default": "lampDb",
@@ -54,7 +54,7 @@
     },         
     {
         "default": "opencontent-lamp",
-        "description": "The prefix of names for VPC, Gateway, Subnet and Security Group; Allow 0 to 240 alphanumeric characters with special characters in [ +=._:/@-]", 
+        "description": "The prefix of names for VPC, Gateway, Subnet and Security Group; Allow 1 to 240 alphanumeric characters and special characters +=._:/@- as tag value that is not starting with aws", 
         "hidden": false, 
         "immutable": false, 
         "label": "Network Name Prefix", 
@@ -62,7 +62,7 @@
         "required": true, 
         "secured": false, 
         "type": "string",
-        "regex": "^[A-Za-z0-9 +=._:/@-]{0,240}$"
+        "regex": "^(?![Aa][Ww][Ss])[A-Za-z0-9 +=._:\/@-]{1,240}$"
     },
     {
         "default": "cam-public-key-lamp",

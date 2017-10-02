@@ -138,7 +138,7 @@
     }, 
     {
         "default": "strongloop-vm",
-        "description": "Hostname of the virtual instance (with Strongloop and NodeJS installed) to be deployed; Allow 1 to 241 alphanumeric characters and non-consecutive non-leading non-ending at-most-5 dashes", 
+        "description": "Hostname of the virtual instance (with Strongloop and NodeJS installed) to be deployed; Allow 1 to 200 alphanumeric characters and non-consecutive non-leading non-ending dashes", 
         "hidden": false, 
         "immutable": false, 
         "label": "Strongloop Server Hostname", 
@@ -146,11 +146,11 @@
         "required": true, 
         "secured": false, 
         "type": "string",
-        "regex": "^[A-Za-z0-9]{1,241}$|^[A-Za-z0-9]{1,120}-[A-Za-z0-9]{1,120}$|^[A-Za-z0-9]{1,79}(-[A-Za-z0-9]{1,79}){2}$|^[A-Za-z0-9]{1,59}(-[A-Za-z0-9]{1,59}){3}$|^[A-Za-z0-9]{1,47}(-[A-Za-z0-9]{1,47}){4}$|^[A-Za-z0-9]{1,39}(-[A-Za-z0-9]{1,39}){5}$"
+        "regex": "^(?!(.*(--)))([A-Za-z0-9]{1,2}|[A-Za-z0-9][A-Za-z0-9-]{1,198}[A-Za-z0-9])$"
     },
     {
         "default": "angularjs-vm",
-        "description": "Hostname of the virtual instance (with AngularJS and NodeJS installed) to be deployed; Allow 1 to 241 alphanumeric characters and non-consecutive non-leading non-ending at-most-5 dashes", 
+        "description": "Hostname of the virtual instance (with AngularJS and NodeJS installed) to be deployed; Allow 1 to 200 alphanumeric characters and non-consecutive non-leading non-ending dashes", 
         "hidden": false, 
         "immutable": false, 
         "label": "Angular Server Hostname", 
@@ -158,11 +158,11 @@
         "required": true, 
         "secured": false, 
         "type": "string",
-        "regex": "^[A-Za-z0-9]{1,241}$|^[A-Za-z0-9]{1,120}-[A-Za-z0-9]{1,120}$|^[A-Za-z0-9]{1,79}(-[A-Za-z0-9]{1,79}){2}$|^[A-Za-z0-9]{1,59}(-[A-Za-z0-9]{1,59}){3}$|^[A-Za-z0-9]{1,47}(-[A-Za-z0-9]{1,47}){4}$|^[A-Za-z0-9]{1,39}(-[A-Za-z0-9]{1,39}){5}$"
+        "regex": "^(?!(.*(--)))([A-Za-z0-9]{1,2}|[A-Za-z0-9][A-Za-z0-9-]{1,198}[A-Za-z0-9])$"
     },
     {
         "default": "mongodb-vm",
-        "description": "Hostname of the virtual instance (with MongoDB installed) to be deployed; Allow 1 to 241 alphanumeric characters and non-consecutive non-leading non-ending at-most-5 dashes", 
+        "description": "Hostname of the virtual instance (with MongoDB installed) to be deployed; Allow 1 to 200 alphanumeric characters and non-consecutive non-leading non-ending dashes", 
         "hidden": false, 
         "immutable": false, 
         "label": "MongoDB Server Hostname", 
@@ -170,7 +170,7 @@
         "required": true, 
         "secured": false, 
         "type": "string",
-        "regex": "^[A-Za-z0-9]{1,241}$|^[A-Za-z0-9]{1,120}-[A-Za-z0-9]{1,120}$|^[A-Za-z0-9]{1,79}(-[A-Za-z0-9]{1,79}){2}$|^[A-Za-z0-9]{1,59}(-[A-Za-z0-9]{1,59}){3}$|^[A-Za-z0-9]{1,47}(-[A-Za-z0-9]{1,47}){4}$|^[A-Za-z0-9]{1,39}(-[A-Za-z0-9]{1,39}){5}$"
+        "regex": "^(?!(.*(--)))([A-Za-z0-9]{1,2}|[A-Za-z0-9][A-Za-z0-9-]{1,198}[A-Za-z0-9])$"
     },    
     {
         "description": "Public SSH key used to connect to the virtual guest; Allow the openSSH format key with optional comment (with optional email)", 
