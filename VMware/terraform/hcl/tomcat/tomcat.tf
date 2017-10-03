@@ -147,7 +147,7 @@ resource "vsphere_virtual_machine" "tomcat_vm" {
   # Specify the ssh connection
   connection {
     user        = "${var.ssh_user}"
-    password    = "${var.ssh_user_password}"    
+    password    = "${var.ssh_user_password}"
 #    private_key = "${base64decode(var.camc_private_ssh_key)}"
     host        = "${self.network_interface.0.ipv4_address}"
   }
@@ -214,8 +214,11 @@ sed -i -e '/\/tomcat-users/i \ \ \<user username="'$USER'" password="'$PWD'" rol
 systemctl start tomcat                                      >> $LOGFILE 2>&1 || { echo "---Failed to start Tomcat---" | tee -a $LOGFILE; exit 1; }
 systemctl enable tomcat                                     >> $LOGFILE 2>&1 || { echo "---Failed to enable Tomcat---" | tee -a $LOGFILE; exit 1; }
 
-firewall-cmd --zone=public --add-port=8080/tcp --permanent  >> $LOGFILE 2>&1 || { echo "---Failed to open port 8080---" | tee -a $LOGFILE; exit 1; }
-firewall-cmd --reload                                       >> $LOGFILE 2>&1 || { echo "---Failed to reload firewall---" | tee -a $LOGFILE; exit 1; }
+firewall-cmd --state >> $LOGFILE 2>&1
+if [ $? -eq 0 ] ; then
+  firewall-cmd --zone=public --add-port=8080/tcp --permanent  >> $LOGFILE 2>&1 || { echo "---Failed to open port 8080---" | tee -a $LOGFILE; exit 1; }
+  firewall-cmd --reload                                       >> $LOGFILE 2>&1 || { echo "---Failed to reload firewall---" | tee -a $LOGFILE; exit 1; }
+fi
 
 echo "---finish installing tomcat---" | tee -a $LOGFILE 2>&1
 
