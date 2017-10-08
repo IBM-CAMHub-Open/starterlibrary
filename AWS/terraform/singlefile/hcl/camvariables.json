@@ -51,6 +51,7 @@
         "type": "string"
     }, 
     {
+        "description": "Region-specific Amazon Ubuntu 14.04.01 images as documented at https://cloud-images.ubuntu.com/releases/14.04/14.04.1/",
         "default": {
             "us-east-1": "ami-b227efda", 
             "us-west-1": "ami-0db4b748"
