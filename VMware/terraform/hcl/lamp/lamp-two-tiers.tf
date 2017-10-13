@@ -165,6 +165,7 @@ resource "vsphere_virtual_machine" "mariadb_vm" {
   cluster      = "${var.cluster}"
   dns_suffixes = "${var.dns_suffixes}"
   dns_servers  = "${var.dns_servers}"
+
   network_interface {
     label              = "${var.network_label}"
     ipv4_gateway       = "${var.ipv4_gateway}"
@@ -180,10 +181,11 @@ resource "vsphere_virtual_machine" "mariadb_vm" {
 
   # Specify the ssh connection
   connection {
-    user        = "${var.mariadb_server_ssh_user}"
-    password    = "${var.mariadb_server_ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${self.network_interface.0.ipv4_address}"
+    user     = "${var.mariadb_server_ssh_user}"
+    password = "${var.mariadb_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${self.network_interface.0.ipv4_address}"
   }
 
   provisioner "file" {
@@ -211,13 +213,14 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\""
+      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
     ]
   }
 }
@@ -231,6 +234,7 @@ resource "vsphere_virtual_machine" "php_vm" {
   cluster      = "${var.cluster}"
   dns_suffixes = "${var.dns_suffixes}"
   dns_servers  = "${var.dns_servers}"
+
   network_interface {
     label              = "${var.network_label}"
     ipv4_gateway       = "${var.ipv4_gateway}"
@@ -246,10 +250,11 @@ resource "vsphere_virtual_machine" "php_vm" {
 
   # Specify the ssh connection
   connection {
-    user        = "${var.php_server_ssh_user}"
-    password    = "${var.php_server_ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${self.network_interface.0.ipv4_address}"
+    user     = "${var.php_server_ssh_user}"
+    password = "${var.php_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${self.network_interface.0.ipv4_address}"
   }
 
   provisioner "file" {
@@ -277,13 +282,14 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\""
+      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
     ]
   }
 }
@@ -291,14 +297,14 @@ EOF
 #########################################################
 # Install LAMP
 #########################################################
-resource "null_resource" "install_mariadb"{
-
+resource "null_resource" "install_mariadb" {
   # Specify the ssh connection
   connection {
-    user        = "${var.mariadb_server_ssh_user}"
-    password    = "${var.mariadb_server_ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${vsphere_virtual_machine.mariadb_vm.network_interface.0.ipv4_address}"
+    user     = "${var.mariadb_server_ssh_user}"
+    password = "${var.mariadb_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.mariadb_vm.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -335,12 +341,16 @@ systemctl enable mariadb                                    >> $LOGFILE 2>&1 || 
 
 mysql -e "CREATE USER '$USER'@'$HOST' IDENTIFIED BY '$PASSWORD'; GRANT ALL PRIVILEGES ON * . * TO '$USER'@'$HOST'; FLUSH PRIVILEGES;"  >> $LOGFILE 2>&1 || { echo "---Failed to add user---" | tee -a $LOGFILE; exit 1; }
 
-firewall-cmd --zone=public --add-port=3306/tcp --permanent  >> $LOGFILE 2>&1 || { echo "---Failed to open port 3306---" | tee -a $LOGFILE; exit 1; }
-firewall-cmd --reload                                       >> $LOGFILE 2>&1 || { echo "---Failed to reload firewall---" | tee -a $LOGFILE; exit 1; }
+firewall-cmd --state >> $LOGFILE 2>&1
+if [ $? -eq 0 ] ; then
+  firewall-cmd --zone=public --add-port=3306/tcp --permanent  >> $LOGFILE 2>&1 || { echo "---Failed to open port 3306---" | tee -a $LOGFILE; exit 1; }
+  firewall-cmd --reload                                       >> $LOGFILE 2>&1 || { echo "---Failed to reload firewall---" | tee -a $LOGFILE; exit 1; }
+fi
 
 echo "---finish installing mariaDB---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
@@ -352,15 +362,16 @@ EOF
   }
 }
 
-resource "null_resource" "install_php"{
+resource "null_resource" "install_php" {
   depends_on = ["null_resource.install_mariadb"]
 
   # Specify the ssh connection
   connection {
-    user        = "${var.php_server_ssh_user}"
-    password    = "${var.php_server_ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${vsphere_virtual_machine.php_vm.network_interface.0.ipv4_address}"
+    user     = "${var.php_server_ssh_user}"
+    password = "${var.php_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.php_vm.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -451,13 +462,14 @@ systemctl restart httpd                                   >> $LOGFILE 2>&1 || { 
 echo "---finish installing php---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.php_vm.network_interface.0.ipv4_address}\" \"${vsphere_virtual_machine.mariadb_vm.network_interface.0.ipv4_address}\" \"${var.cam_user}\" \"${var.cam_pwd}\""
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.php_vm.network_interface.0.ipv4_address}\" \"${vsphere_virtual_machine.mariadb_vm.network_interface.0.ipv4_address}\" \"${var.cam_user}\" \"${var.cam_pwd}\"",
     ]
   }
 }
