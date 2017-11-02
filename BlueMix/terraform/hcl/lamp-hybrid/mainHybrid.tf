@@ -19,6 +19,7 @@
 # Define the AWS provider
 #########################################################
 provider "aws" {
+  version = "~> 1.2"
   region     = "${var.aws_region}"
   access_key = "${var.aws_access_key}"
   secret_key = "${var.aws_secret_key}"
@@ -28,6 +29,7 @@ provider "aws" {
 # Define the ibmcloud provider
 #########################################################
 provider "ibm" {
+  version = "~> 0.5"
 }
 
 #########################################################

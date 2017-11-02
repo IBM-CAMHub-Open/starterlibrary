@@ -20,6 +20,7 @@
 # Define the vsphere provider
 #########################################################
 provider "vsphere" {
+  version = "~> 0.4"
   allow_unverified_ssl = true
 }
 
