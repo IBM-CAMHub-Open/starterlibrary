@@ -26,27 +26,27 @@ provider "ibm" {
 # Define the variables
 #########################################################
 variable "clustername" {
-    description = "Cluster name"
+  description = "Cluster name"
 }
 
 variable "count" {
-    description = "Number of managed nodes"
+  description = "Number of managed nodes"
 }
 
 variable "datacenter" {
-    description = "Softlayer datacenter where infrastructure resources will be deployed"
+  description = "Softlayer datacenter where infrastructure resources will be deployed"
 }
 
 variable "public_ssh_key" {
-    description = "public ssh key to add to each kubernetes host virtual machine"
+  description = "public ssh key to add to each kubernetes host virtual machine"
 }
 
 ##############################################################
 # Create public key in Devices>Manage>SSH Keys in SL console
 ##############################################################
 resource "ibm_compute_ssh_key" "cam_public_key" {
-    label      = "CAM Public Key"
-    public_key = "${var.public_ssh_key}"
+  label      = "CAM Public Key"
+  public_key = "${var.public_ssh_key}"
 }
 
 ##############################################################
@@ -103,13 +103,12 @@ resource "ibm_compute_vm_instance" "kuberentes_node_vm" {
 ##############################################################
 # Install Kuberentes Master
 ##############################################################
-resource "null_resource" "install_kubernetes_master"{
-
+resource "null_resource" "install_kubernetes_master" {
   # Specify the ssh connection
   connection {
     user        = "root"
     private_key = "${tls_private_key.ssh.private_key_pem}"
-	host        = "${ibm_compute_vm_instance.kubernetes_master_vm.ipv4_address}"
+    host        = "${ibm_compute_vm_instance.kubernetes_master_vm.ipv4_address}"
   }
 
   # Create the installation script
@@ -143,7 +142,7 @@ MYHOSTNAME=$(dig -x $MYIP +short | sed -e 's/.$//')
 echo "---master node dns hostname is $MYHOSTNAME---" | tee -a $LOGFILE 2>&1
 
 hostnamectl set-hostname $MYHOSTNAME                                  >> $LOGFILE 2>&1 || { echo "---Failed to set hostname---" | tee -a $LOGFILE; exit 1; }
-echo "---start installing kubernetes master node on $MYHOSTNAME---" | tee -a $LOGFILE 2>&1 
+echo "---start installing kubernetes master node on $MYHOSTNAME---" | tee -a $LOGFILE 2>&1
 
 # install packages
 systemctl disable firewalld                                           >> $LOGFILE 2>&1 || { echo "---Failed to disable firewall---" | tee -a $LOGFILE; exit 1; }
@@ -208,13 +207,14 @@ done
 echo "---kubernetes master node installed successfully---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh"
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
   }
 }
@@ -222,15 +222,15 @@ EOF
 ##############################################################
 # Install Kuberentes Nodes
 ##############################################################
-resource "null_resource" "install_kubernetes_node"{
-  depends_on    = ["null_resource.install_kubernetes_master"]
-  count         = "${var.count}"
+resource "null_resource" "install_kubernetes_node" {
+  depends_on = ["null_resource.install_kubernetes_master"]
+  count      = "${var.count}"
 
   # Specify the ssh connection
   connection {
     user        = "root"
     private_key = "${tls_private_key.ssh.private_key_pem}"
-	host        = "${element(ibm_compute_vm_instance.kuberentes_node_vm.*.ipv4_address,count.index)}"
+    host        = "${element(ibm_compute_vm_instance.kuberentes_node_vm.*.ipv4_address,count.index)}"
   }
 
   # Create the installation script
@@ -268,7 +268,7 @@ hostnamectl set-hostname $MYHOSTNAME                                  >> $LOGFIL
 MASTER=$(dig -x $MASTERIP +short | sed -e 's/.$//')
 echo "---master node hostname is $MASTER---" | tee -a $LOGFILE 2>&1
 
-echo "---start installing kubernetes minion node on $MYHOSTNAME---" | tee -a $LOGFILE 2>&1 
+echo "---start installing kubernetes minion node on $MYHOSTNAME---" | tee -a $LOGFILE 2>&1
 
 # install packages
 systemctl disable firewalld                                           >> $LOGFILE 2>&1 || { echo "---Failed to disable firewall---" | tee -a $LOGFILE; exit 1; }
@@ -316,13 +316,14 @@ done
 echo "---kubernetes minion node installed successfully---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${ibm_compute_vm_instance.kubernetes_master_vm.ipv4_address}\""
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${ibm_compute_vm_instance.kubernetes_master_vm.ipv4_address}\"",
     ]
   }
 }
@@ -330,14 +331,14 @@ EOF
 ##############################################################
 # Install Dashboard
 ##############################################################
-resource "null_resource" "install_dashboard"{
-  depends_on    = ["null_resource.install_kubernetes_node"]
+resource "null_resource" "install_dashboard" {
+  depends_on = ["null_resource.install_kubernetes_node"]
 
   # Specify the ssh connection
   connection {
     user        = "root"
     private_key = "${tls_private_key.ssh.private_key_pem}"
-	host        = "${ibm_compute_vm_instance.kubernetes_master_vm.ipv4_address}"
+    host        = "${ibm_compute_vm_instance.kubernetes_master_vm.ipv4_address}"
   }
 
   # Create the installation script
@@ -379,13 +380,14 @@ done
 echo "---Check $StatusCheckCount: $DashboardPodStatus---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/dashboard-installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/dashboard-installation.sh; bash /tmp/dashboard-installation.sh"
+      "chmod +x /tmp/dashboard-installation.sh; bash /tmp/dashboard-installation.sh",
     ]
   }
 }
@@ -393,14 +395,14 @@ EOF
 ##############################################################
 # Install Nginx
 ##############################################################
-resource "null_resource" "install_nginx"{
-  depends_on    = ["null_resource.install_dashboard"]
+resource "null_resource" "install_nginx" {
+  depends_on = ["null_resource.install_dashboard"]
 
   # Specify the ssh connection
   connection {
     user        = "root"
     private_key = "${tls_private_key.ssh.private_key_pem}"
-	host        = "${ibm_compute_vm_instance.kubernetes_master_vm.ipv4_address}"
+    host        = "${ibm_compute_vm_instance.kubernetes_master_vm.ipv4_address}"
   }
 
   # Create the installation script
@@ -478,6 +480,7 @@ done
 echo "---Check $StatusCheckCount: $NginxPodStatus---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/nginx-installation.sh"
   }
 
@@ -485,7 +488,7 @@ EOF
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/nginx-installation.sh; bash /tmp/nginx-installation.sh \"${var.count}\"",
-      "reboot"
+      "reboot",
     ]
   }
 }
@@ -493,14 +496,14 @@ EOF
 ##############################################################
 # Check status
 ##############################################################
-resource "null_resource" "check_status"{
-  depends_on    = ["null_resource.install_nginx"]
+resource "null_resource" "check_status" {
+  depends_on = ["null_resource.install_nginx"]
 
   # Specify the ssh connection
   connection {
     user        = "root"
     private_key = "${tls_private_key.ssh.private_key_pem}"
-	host        = "${ibm_compute_vm_instance.kubernetes_master_vm.ipv4_address}"
+    host        = "${ibm_compute_vm_instance.kubernetes_master_vm.ipv4_address}"
   }
 
   # Create the installation script
@@ -527,12 +530,12 @@ SERVICE_STATUS=$(cat $TMPFILE)
 while [ "$SERVICE_STATUS" != "200" ]; do
 	echo "---application is being started---"
 	sleep 10
-	let StatusCheckCount=StatusCheckCount+1	
+	let StatusCheckCount=StatusCheckCount+1
 	if [ $StatusCheckCount -eq $StatusCheckMaxCount ]; then
 		echo "---The servce is not up---"
 		rm -f $TMPFILE
 		exit 1
-	fi		
+	fi
 	curl -k -s -o /dev/null -w "%{http_code}" -I -m 5 $APP_URL > $TMPFILE || true
 	SERVICE_STATUS=$(cat $TMPFILE)
 done
@@ -541,13 +544,14 @@ rm -f $TMPFILE
 echo "---application is up---"
 
 EOF
+
     destination = "/tmp/checkStatus.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/checkStatus.sh; bash /tmp/checkStatus.sh http://\"${ibm_compute_vm_instance.kubernetes_master_vm.ipv4_address}\":8080"
+      "chmod +x /tmp/checkStatus.sh; bash /tmp/checkStatus.sh http://\"${ibm_compute_vm_instance.kubernetes_master_vm.ipv4_address}\":8080",
     ]
   }
 }
@@ -556,9 +560,9 @@ EOF
 # Output
 #########################################################
 output "Please access the kubernetes dashboard" {
-    value = "http://${ibm_compute_vm_instance.kubernetes_master_vm.ipv4_address}:8080/ui"
+  value = "http://${ibm_compute_vm_instance.kubernetes_master_vm.ipv4_address}:8080/ui"
 }
 
 output "Please be aware that node's ip addresses" {
-    value = ["${ibm_compute_vm_instance.kuberentes_node_vm.*.ipv4_address}"]
+  value = ["${ibm_compute_vm_instance.kuberentes_node_vm.*.ipv4_address}"]
 }

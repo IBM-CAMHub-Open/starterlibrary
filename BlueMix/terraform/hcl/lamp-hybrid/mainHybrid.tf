@@ -19,6 +19,7 @@
 # Define the AWS provider
 #########################################################
 provider "aws" {
+  version    = "~> 1.2"
   region     = "${var.aws_region}"
   access_key = "${var.aws_access_key}"
   secret_key = "${var.aws_secret_key}"
@@ -28,6 +29,7 @@ provider "aws" {
 # Define the ibmcloud provider
 #########################################################
 provider "ibm" {
+  version = "~> 0.5"
 }
 
 #########################################################
@@ -54,6 +56,7 @@ variable "aws_region" {
 variable "aws_ami" {
   type        = "map"
   description = "loop up ami using aws region"
+
   default = {
     us-west-1 = "ami-539ac933"
     us-west-2 = "ami-7c803d1c"
@@ -101,6 +104,7 @@ variable "cam_pwd" {
 resource "aws_vpc" "default" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
+
   tags {
     Name = "${var.network_name_prefix}-vpc"
   }
@@ -108,6 +112,7 @@ resource "aws_vpc" "default" {
 
 resource "aws_internet_gateway" "default" {
   vpc_id = "${aws_vpc.default.id}"
+
   tags {
     Name = "${var.network_name_prefix}-gateway"
   }
@@ -117,6 +122,7 @@ resource "aws_subnet" "primary" {
   vpc_id            = "${aws_vpc.default.id}"
   cidr_block        = "10.0.1.0/24"
   availability_zone = "${var.aws_region}b"
+
   tags {
     Name = "${var.network_name_prefix}-subnet"
   }
@@ -126,6 +132,7 @@ resource "aws_subnet" "secondary" {
   vpc_id            = "${aws_vpc.default.id}"
   cidr_block        = "10.0.2.0/24"
   availability_zone = "${var.aws_region}c"
+
   tags {
     Name = "${var.network_name_prefix}-subnet2"
   }
@@ -134,6 +141,7 @@ resource "aws_subnet" "secondary" {
 resource "aws_db_subnet_group" "default" {
   name       = "${var.network_name_prefix}-db_subnet"
   subnet_ids = ["${aws_subnet.primary.id}", "${aws_subnet.secondary.id}"]
+
   tags {
     Name = "${var.network_name_prefix}-db_subnet"
   }
@@ -141,10 +149,12 @@ resource "aws_db_subnet_group" "default" {
 
 resource "aws_route_table" "default" {
   vpc_id = "${aws_vpc.default.id}"
+
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.default.id}"
   }
+
   tags {
     Name = "${var.network_name_prefix}-route-table"
   }
@@ -164,30 +174,35 @@ resource "aws_security_group" "database" {
   name        = "${var.network_name_prefix}-security-group-database"
   description = "Security group which applies to lamp mysql db"
   vpc_id      = "${aws_vpc.default.id}"
+
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   ingress {
     from_port   = 3306
     to_port     = 3306
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-  } 
+  }
+
   ingress {
     from_port   = -1
     to_port     = -1
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   tags {
     Name = "${var.network_name_prefix}-security-group-database"
   }
@@ -209,8 +224,8 @@ resource "tls_private_key" "ssh" {
 }
 
 resource "ibm_compute_ssh_key" "temp_public_key" {
-    label      = "${var.public_key_name}-temp"
-    public_key = "${tls_private_key.ssh.public_key_openssh}"
+  label      = "${var.public_key_name}-temp"
+  public_key = "${tls_private_key.ssh.public_key_openssh}"
 }
 
 ##############################################################
@@ -236,7 +251,7 @@ resource "ibm_compute_vm_instance" "php_server" {
 # Create a MySQL instance
 ##############################################################
 resource "aws_db_instance" "mysql" {
-  depends_on             = ["aws_route_table_association.primary","aws_route_table_association.secondary"]
+  depends_on             = ["aws_route_table_association.primary", "aws_route_table_association.secondary"]
   allocated_storage      = "10"
   engine                 = "mysql"
   engine_version         = "5.6.34"
@@ -246,7 +261,7 @@ resource "aws_db_instance" "mysql" {
   password               = "${var.cam_pwd}"
   db_subnet_group_name   = "${aws_db_subnet_group.default.name}"
   parameter_group_name   = "default.mysql5.6"
-  availability_zone	     = "${var.aws_region}b"
+  availability_zone      = "${var.aws_region}b"
   publicly_accessible    = true
   vpc_security_group_ids = ["${aws_security_group.database.id}"]
   skip_final_snapshot    = true
@@ -255,8 +270,7 @@ resource "aws_db_instance" "mysql" {
 ##############################################################
 # Install Apache and PHP
 ##############################################################
-resource "null_resource" "install_php"{
-
+resource "null_resource" "install_php" {
   # Specify the ssh connection
   connection {
     user        = "root"
@@ -285,16 +299,16 @@ hostnamectl set-hostname $PUBLIC_DNS                                  >> $LOGFIL
 
 #update
 
-echo "---update system---" | tee -a $LOGFILE 2>&1 
+echo "---update system---" | tee -a $LOGFILE 2>&1
 apt-get update                                                        >> $LOGFILE 2>&1 || { echo "---Failed to update system---" | tee -a $LOGFILE; exit 1; }
 
-echo "---install apache2---" | tee -a $LOGFILE 2>&1 
+echo "---install apache2---" | tee -a $LOGFILE 2>&1
 apt-get install -y apache2                                            >> $LOGFILE 2>&1 || { echo "---Failed to install apache2---" | tee -a $LOGFILE; exit 1; }
 
-echo "---set keepalive Off---" | tee -a $LOGFILE 2>&1 
+echo "---set keepalive Off---" | tee -a $LOGFILE 2>&1
 sed -i 's/KeepAlive On/KeepAlive Off/' /etc/apache2/apache2.conf      >> $LOGFILE 2>&1 || { echo "---Failed to config apache2---" | tee -a $LOGFILE; exit 1; }
 
-echo "---enable mpm_prefork---" | tee -a $LOGFILE 2>&1 
+echo "---enable mpm_prefork---" | tee -a $LOGFILE 2>&1
 cat << EOT > /etc/apache2/mods-available/mpm_prefork.conf
 <IfModule mpm_prefork_module>
         StartServers            4
@@ -341,7 +355,7 @@ echo "---disable default virtual host and restart apache2---" | tee -a $LOGFILE 
 a2dissite 000-default.conf                                            >> $LOGFILE 2>&1 || { echo "---Failed to disable default virtual host---" | tee -a $LOGFILE; exit 1; }
 systemctl restart apache2                                             >> $LOGFILE 2>&1 || { echo "---Failed to restart apache2---" | tee -a $LOGFILE; exit 1; }
 
-echo "---install php packages---" | tee -a $LOGFILE 2>&1 
+echo "---install php packages---" | tee -a $LOGFILE 2>&1
 apt-get install -y php7.0 php-pear libapache2-mod-php7.0 php7.0-mysql >> $LOGFILE 2>&1 || { echo "---Failed to install php packages---" | tee -a $LOGFILE; exit 1; }
 
 mkdir /var/log/php
@@ -378,13 +392,14 @@ systemctl restart apache2                                             >> $LOGFIL
 echo "---installed apache2 and php successfully---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${aws_db_instance.mysql.address}\" \"${var.cam_user}\" \"${var.cam_pwd}\""
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${aws_db_instance.mysql.address}\" \"${var.cam_user}\" \"${var.cam_pwd}\"",
     ]
   }
 }

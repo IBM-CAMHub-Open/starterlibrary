@@ -20,6 +20,7 @@
 # Define the vsphere provider
 #########################################################
 provider "vsphere" {
+  version              = "~> 0.4"
   allow_unverified_ssl = true
 }
 
@@ -27,17 +28,17 @@ provider "vsphere" {
 # Define the variables
 #########################################################
 variable "kubernetes_master_name" {
-    description = "Name of kubernetes master server; the names of managed nodes are the master name with count index"
-    default     = "kubernetes-vm"
+  description = "Name of kubernetes master server; the names of managed nodes are the master name with count index"
+  default     = "kubernetes-vm"
 }
 
 variable "count" {
-    description = "Number of managed nodes"
-    default     = 1
+  description = "Number of managed nodes"
+  default     = 1
 }
 
 variable "mongodb_user_password" {
-    description = "The password of an user (sampleUser) in mongodb for sample application"
+  description = "The password of an user (sampleUser) in mongodb for sample application"
 }
 
 variable "folder" {
@@ -160,6 +161,7 @@ resource "vsphere_virtual_machine" "kubernetes_master_vm" {
   cluster      = "${var.cluster}"
   dns_suffixes = "${var.dns_suffixes}"
   dns_servers  = "${var.dns_servers}"
+
   network_interface {
     label              = "${var.network_label}"
     ipv4_gateway       = "${var.ipv4_gateway}"
@@ -175,10 +177,11 @@ resource "vsphere_virtual_machine" "kubernetes_master_vm" {
 
   # Specify the ssh connection
   connection {
-    user        = "${var.master_server_ssh_user}"
-    password    = "${var.master_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${self.network_interface.0.ipv4_address}"
+    user     = "${var.master_server_ssh_user}"
+    password = "${var.master_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${self.network_interface.0.ipv4_address}"
   }
 
   provisioner "file" {
@@ -206,13 +209,14 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\""
+      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
     ]
   }
 }
@@ -230,6 +234,7 @@ resource "vsphere_virtual_machine" "kuberentes_node_vm" {
   cluster      = "${var.cluster}"
   dns_suffixes = "${var.dns_suffixes}"
   dns_servers  = "${var.dns_servers}"
+
   network_interface {
     label              = "${var.network_label}"
     ipv4_gateway       = "${var.ipv4_gateway}"
@@ -245,10 +250,11 @@ resource "vsphere_virtual_machine" "kuberentes_node_vm" {
 
   # Specify the ssh connection
   connection {
-    user        = "${var.node_server_ssh_user}"
-    password    = "${var.node_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${self.network_interface.0.ipv4_address}"
+    user     = "${var.node_server_ssh_user}"
+    password = "${var.node_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${self.network_interface.0.ipv4_address}"
   }
 
   provisioner "file" {
@@ -276,13 +282,14 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\""
+      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
     ]
   }
 }
@@ -290,14 +297,14 @@ EOF
 ##############################################################
 # Install Kuberentes Master
 ##############################################################
-resource "null_resource" "install_kubernetes_master"{
-
+resource "null_resource" "install_kubernetes_master" {
   # Specify the ssh connection
   connection {
-    user        = "${var.master_server_ssh_user}"
-    password    = "${var.master_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-	host        = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
+    user     = "${var.master_server_ssh_user}"
+    password = "${var.master_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -415,13 +422,14 @@ done
 echo "---kubernetes master node installed successfully---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh"
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
   }
 }
@@ -429,16 +437,17 @@ EOF
 ##############################################################
 # Install Kuberentes Nodes
 ##############################################################
-resource "null_resource" "install_kubernetes_node"{
-  depends_on    = ["null_resource.install_kubernetes_master"]
-  count         = "${var.count}"
+resource "null_resource" "install_kubernetes_node" {
+  depends_on = ["null_resource.install_kubernetes_master"]
+  count      = "${var.count}"
 
   # Specify the ssh connection
   connection {
-    user        = "${var.node_server_ssh_user}"
-    password    = "${var.node_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-	host        = "${element(vsphere_virtual_machine.kuberentes_node_vm.*.network_interface.0.ipv4_address,count.index)}"
+    user     = "${var.node_server_ssh_user}"
+    password = "${var.node_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${element(vsphere_virtual_machine.kuberentes_node_vm.*.network_interface.0.ipv4_address,count.index)}"
   }
 
   # Create the installation script
@@ -553,6 +562,7 @@ fi
 echo "---kubernetes minion node installed successfully---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
@@ -572,22 +582,22 @@ DBUserPwd=$2
 
 #install node.js
 
-echo "---start installing node.js---" | tee -a $LOGFILE 2>&1 
+echo "---start installing node.js---" | tee -a $LOGFILE 2>&1
 yum install gcc-c++ make -y                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install build tools---" | tee -a $LOGFILE; exit 1; }
 curl -sL https://rpm.nodesource.com/setup_7.x | bash -                             >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
 yum install nodejs -y                                                              >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
-echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1
 
 #install strongloop
 
-echo "---start installing strongloop---" | tee -a $LOGFILE 2>&1 
+echo "---start installing strongloop---" | tee -a $LOGFILE 2>&1
 yum groupinstall 'Development Tools' -y                            >> $LOGFILE 2>&1 || { echo "---Failed to install development tools---" | tee -a $LOGFILE; exit 1; }
 npm install -g strongloop                                          >> $LOGFILE 2>&1 || { echo "---Failed to install strongloop---" | tee -a $LOGFILE; exit 1; }
-echo "---finish installing strongloop---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing strongloop---" | tee -a $LOGFILE 2>&1
 
 #install sample application
 
-echo "---start installing sample application---" | tee -a $LOGFILE 2>&1 
+echo "---start installing sample application---" | tee -a $LOGFILE 2>&1
 
 PROJECT_NAME=sample
 SAMPLE_DIR=$HOME/$PROJECT_NAME
@@ -596,7 +606,7 @@ yum install expect -y                                              >> $LOGFILE 2
 
 #create project
 cd $HOME
-SCRIPT_CREATE_PROJECT=createProject.sh	
+SCRIPT_CREATE_PROJECT=createProject.sh
 cat << EOT > $SCRIPT_CREATE_PROJECT
 #!/usr/bin/expect
 set timeout 20
@@ -618,13 +628,13 @@ chmod 755 $SCRIPT_CREATE_PROJECT                                   >> $LOGFILE 2
 ./$SCRIPT_CREATE_PROJECT                                           >> $LOGFILE 2>&1 || { echo "---Failed to execute script---" | tee -a $LOGFILE; exit 1; }
 rm -f $SCRIPT_CREATE_PROJECT                                       >> $LOGFILE 2>&1 || { echo "---Failed to remove script---" | tee -a $LOGFILE; exit 1; }
 
-#add dependency package 
+#add dependency package
 cd $SAMPLE_DIR
 sed -i -e '/loopback-datasource-juggler/a\ \ \ \ "loopback-connector-mongodb": "^1.18.0",' package.json    >> $LOGFILE 2>&1 || { echo "---Failed to add dependency for loopback-connector-mongo---" | tee -a $LOGFILE; exit 1; }
-	
+
 #install packages in server side
 npm install                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install packages via npm---" | tee -a $LOGFILE; exit 1; }
-	
+
 #create data model
 MODEL_NAME=Todos
 SCRIPT_CREATE_MODEL=createModel.sh
@@ -667,16 +677,17 @@ sed -i -e 's/\ \ }/\ \ },/g' $DATA_SOURCE_FILE                                  
 sed -i -e '/\ \ },/a\ \ "myMongoDB": {\n\ \ \ \ "host": "mongodb-server",\n\ \ \ \ "port": 27017,\n\ \ \ \ "url": "mongodb://sampleUser:sampleUserPwd@mongodb-server:27017/admin",\n\ \ \ \ "database": "Todos",\n\ \ \ \ "password": "sampleUserPwd",\n\ \ \ \ "name": "myMongoDB",\n\ \ \ \ "user": "sampleUser",\n\ \ \ \ "connector": "mongodb"\n\ \ }' $DATA_SOURCE_FILE    >> $LOGFILE 2>&1 || { echo "---Failed to update datasource.json---" | tee -a $LOGFILE; exit 1; }
 sed -i -e "s/mongodb-server/$MongoDB_Server/g" $DATA_SOURCE_FILE                        >> $LOGFILE 2>&1 || { echo "---Failed to update datasource.json---" | tee -a $LOGFILE; exit 1; }
 sed -i -e "s/sampleUserPwd/$DBUserPwd/g" $DATA_SOURCE_FILE                              >> $LOGFILE 2>&1 || { echo "---Failed to update datasource.json---" | tee -a $LOGFILE; exit 1; }
-	
+
 MODEL_CONFIG_FILE=server/model-config.json
 sed -i -e '/Todos/{n;d}' $MODEL_CONFIG_FILE                                             >> $LOGFILE 2>&1 || { echo "---Failed to update model-config.json---" | tee -a $LOGFILE; exit 1; }
 sed -i -e '/Todos/a\ \ \ \ "dataSource": "myMongoDB",' $MODEL_CONFIG_FILE               >> $LOGFILE 2>&1 || { echo "---Failed to update model-config.json---" | tee -a $LOGFILE; exit 1; }
 
 slc run $SAMPLE_DIR &                                                                   >> $LOGFILE 2>&1 || { echo "---Failed to start the application---" | tee -a $LOGFILE; exit 1; }
-		
-echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1 		
+
+echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installStrongloop.sh"
   }
 
@@ -695,23 +706,23 @@ STRONGLOOP_SERVER=$1
 
 #install node.js
 
-echo "---start installing node.js---" | tee -a $LOGFILE 2>&1 
+echo "---start installing node.js---" | tee -a $LOGFILE 2>&1
 yum install gcc-c++ make -y                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install build tools---" | tee -a $LOGFILE; exit 1; }
 curl -sL https://rpm.nodesource.com/setup_7.x | bash -                             >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
 yum install nodejs -y                                                              >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
-echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1
 
 #install angularjs
 
-echo "---start installing angularjs---" | tee -a $LOGFILE 2>&1 
+echo "---start installing angularjs---" | tee -a $LOGFILE 2>&1
 npm install -g grunt-cli bower yo generator-karma generator-angular        >> $LOGFILE 2>&1 || { echo "---Failed to install angular tools---" | tee -a $LOGFILE; exit 1; }
 yum install gcc ruby ruby-devel rubygems make -y                           >> $LOGFILE 2>&1 || { echo "---Failed to install ruby---" | tee -a $LOGFILE; exit 1; }
 gem install compass                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install compass---" | tee -a $LOGFILE; exit 1; }
-echo "---finish installing angularjs---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing angularjs---" | tee -a $LOGFILE 2>&1
 
 #install sample application
 
-echo "---start installing sample application---" | tee -a $LOGFILE 2>&1 
+echo "---start installing sample application---" | tee -a $LOGFILE 2>&1
 
 #create project
 PROJECT_NAME=sample
@@ -749,7 +760,7 @@ cat << EOT > $SERVER_JS_FILE
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var methodOverride = require('method-override'); 
+var methodOverride = require('method-override');
 var http = require('http');
 
 app.use(bodyParser.json());
@@ -766,7 +777,7 @@ app.get('/api/todos', function(req, res) {
         res1.on('data', function(d) {
             res.send(d);
         });
-    }); 
+    });
     reqGet.end();
     reqGet.on('error', function(e) {
         res.send(e);
@@ -776,18 +787,18 @@ app.get('/api/todos', function(req, res) {
 app.post('/api/todos', function(req, res) {
     jsonObject = JSON.stringify({
         "content" : req.body.content
-    });  
+    });
     var postheaders = {
         'Content-Type' : 'application/json',
         'Accept' : 'application/json'
-    }; 
+    };
     var optionspost = {
         host : 'strongloop-server',
         port : 3000,
         path : '/api/Todos',
         method : 'POST',
         headers : postheaders
-    };  
+    };
     var reqPost = http.request(optionspost, function(res1) {
         res1.on('data', function(d) {
         });
@@ -801,8 +812,8 @@ app.post('/api/todos', function(req, res) {
         host : 'strongloop-server',
         port : 3000,
         path : '/api/Todos',
-        method : 'GET' 
-    }; 
+        method : 'GET'
+    };
     // do the GET request
     var reqGet = http.request(optionsgetmsg, function(res2) {
         res2.on('data', function(d) {
@@ -812,7 +823,7 @@ app.post('/api/todos', function(req, res) {
     reqGet.end();
     reqGet.on('error', function(e) {
         console.error(e);
-    });   
+    });
 });
 
 app.delete('/api/todos/:todo_id', function(req, res) {
@@ -838,7 +849,7 @@ app.delete('/api/todos/:todo_id', function(req, res) {
         host : 'strongloop-server', // here only the domain name
         port : 3000,
         path : '/api/Todos', // the rest of the url with parameters if needed
-        method : 'GET' // do GET 
+        method : 'GET' // do GET
     };
     var reqGet = http.request(optionsgetmsg, function(res2) {
         res2.on('data', function(d) {
@@ -860,7 +871,7 @@ app.start = function() {
 console.log("App listening on port 8090");
 EOT
 
-sed -i -e "s/strongloop-server/$STRONGLOOP_SERVER/g" $SERVER_JS_FILE                     >> $LOGFILE 2>&1 || { echo "---Failed to configure server.js---" | tee -a $LOGFILE; exit 1; } 
+sed -i -e "s/strongloop-server/$STRONGLOOP_SERVER/g" $SERVER_JS_FILE                     >> $LOGFILE 2>&1 || { echo "---Failed to configure server.js---" | tee -a $LOGFILE; exit 1; }
 
 #install packages in server side
 npm install                                                                              >> $LOGFILE 2>&1 || { echo "---Failed to install packages via npm---" | tee -a $LOGFILE; exit 1; }
@@ -876,7 +887,7 @@ EOT
 
 yum install -y git                                                                       >> $LOGFILE 2>&1 || { echo "---Failed to install git---" | tee -a $LOGFILE; exit 1; }
 bower install angular angular-resource angular-ui-router bootstrap --allow-root          >> $LOGFILE 2>&1 || { echo "---Failed to install packages via bower---" | tee -a $LOGFILE; exit 1; }
-	
+
 #add client files
 INDEX_HTML=client/index.html
 cat << EOT > $INDEX_HTML
@@ -977,18 +988,18 @@ angular
  .controller('TodoCtrl', ['\$scope', '\$state', '\$http', function(\$scope,
      \$state,\$http) {
    \$scope.todos = [];
-   function getTodos() {        
+   function getTodos() {
      \$http({
         method: 'GET',
         url: 'api/todos'
      }).then(function (data){
-        \$scope.todos = data.data;    
+        \$scope.todos = data.data;
      },function (error){
         console.log('Error: ' + error);
-     });  
+     });
    };
    getTodos();
- 
+
    \$scope.addTodo = function() {
       \$http({
 	method: 'POST',
@@ -1007,7 +1018,7 @@ angular
         console.log('Error: ' + error);
      });
    };
- 
+
    \$scope.removeTodo = function(item) {
      \$http({
 	method: 'DELETE',
@@ -1023,9 +1034,10 @@ EOT
 
 node $SAMPLE_DIR/server/server.js &                                       >> $LOGFILE 2>&1 || { echo "---Failed to start the application---" | tee -a $LOGFILE; exit 1; }
 
-echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1 		
+echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installAngularJs.sh"
   }
 
@@ -1034,7 +1046,7 @@ EOF
     inline = [
       "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}\"",
       "chmod +x /tmp/installStrongloop.sh",
-      "chmod +x /tmp/installAngularJs.sh"   
+      "chmod +x /tmp/installAngularJs.sh",
     ]
   }
 }
@@ -1042,15 +1054,16 @@ EOF
 ##############################################################
 # Install Dashboard
 ##############################################################
-resource "null_resource" "install_dashboard"{
-  depends_on    = ["null_resource.install_kubernetes_node"]
+resource "null_resource" "install_dashboard" {
+  depends_on = ["null_resource.install_kubernetes_node"]
 
   # Specify the ssh connection
   connection {
-    user        = "${var.master_server_ssh_user}"
-    password    = "${var.master_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-	host        = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
+    user     = "${var.master_server_ssh_user}"
+    password = "${var.master_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -1092,13 +1105,14 @@ done
 echo "---Check $StatusCheckCount: $DashboardPodStatus---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/dashboard-installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/dashboard-installation.sh; bash /tmp/dashboard-installation.sh"
+      "chmod +x /tmp/dashboard-installation.sh; bash /tmp/dashboard-installation.sh",
     ]
   }
 }
@@ -1106,15 +1120,16 @@ EOF
 ##############################################################
 # Install Strongloop Three Tiers
 ##############################################################
-resource "null_resource" "install_strongloop_three_tiers"{
-  depends_on    = ["null_resource.install_dashboard"]
+resource "null_resource" "install_strongloop_three_tiers" {
+  depends_on = ["null_resource.install_dashboard"]
 
   # Specify the ssh connection
   connection {
-    user        = "${var.master_server_ssh_user}"
-    password    = "${var.master_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-	host        = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
+    user     = "${var.master_server_ssh_user}"
+    password = "${var.master_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -1161,12 +1176,12 @@ StatusCheckCount=0
 while [ "$MongoPodStatus" != "Running" ]; do
 	echo "---Check $StatusCheckCount: $MongoPodStatus---" | tee -a $LOGFILE 2>&1
 	sleep 10
-	let StatusCheckCount=StatusCheckCount+1	
+	let StatusCheckCount=StatusCheckCount+1
 	if [ $StatusCheckCount -eq $StatusCheckMaxCount ]; then
-		echo "---Cannot connect to the mongodb container---" | tee -a $LOGFILE 2>&1 
+		echo "---Cannot connect to the mongodb container---" | tee -a $LOGFILE 2>&1
 		exit 1
 	fi
-	MongoPodStatus=$(kubectl get pod | grep "todolist-mongodb-deployment" | awk '{print $3}') 
+	MongoPodStatus=$(kubectl get pod | grep "todolist-mongodb-deployment" | awk '{print $3}')
 done
 
 MongoPod=$(kubectl get pod | grep "todolist-mongodb-deployment" | awk '{print $1}')
@@ -1175,7 +1190,7 @@ kubectl exec $MongoPod -- mongo localhost:27017/admin mongouser.js              
 
 # define a service for the todolist-mongodb deployment
 echo "---define a service for the todolist-mongodb---" | tee -a $LOGFILE 2>&1
-cat << EOT > todolist-mongodb-service.yaml     
+cat << EOT > todolist-mongodb-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -1218,14 +1233,14 @@ spec:
       volumes:
       - name: temp-volume
         hostPath:
-          path: /tmp        
+          path: /tmp
 EOT
 
 kubectl create -f todolist-strongloop-deployment.yaml        >> $LOGFILE 2>&1 || { echo "---Failed to create todolist-strongloop deployment---" | tee -a $LOGFILE; exit 1; }
 
 # define a service for the todolist-strongloop deployment
 echo "---define a service for the todolist-strongloop---" | tee -a $LOGFILE 2>&1
-cat << EOT > todolist-strongloop-service.yaml 
+cat << EOT > todolist-strongloop-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -1268,7 +1283,7 @@ spec:
       volumes:
       - name: temp-volume
         hostPath:
-          path: /tmp          
+          path: /tmp
 EOT
 
 kubectl create -f todolist-angularjs-deployment.yaml        >> $LOGFILE 2>&1 || { echo "---Failed to create todolist-angularjs deployment---" | tee -a $LOGFILE; exit 1; }
@@ -1292,6 +1307,7 @@ EOT
 kubectl create -f todolist-angularjs-service.yaml          >> $LOGFILE 2>&1 || { echo "---Failed to create todolist-anngular service---" | tee -a $LOGFILE; exit 1; }
 
 EOF
+
     destination = "/tmp/strongloop-three-tiers-installation.sh"
   }
 
@@ -1299,7 +1315,7 @@ EOF
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/strongloop-three-tiers-installation.sh; bash /tmp/strongloop-three-tiers-installation.sh \"${var.count}\" \"${var.mongodb_user_password}\"",
-      "reboot"
+      "reboot",
     ]
   }
 }
@@ -1307,15 +1323,16 @@ EOF
 ##############################################################
 # Check status
 ##############################################################
-resource "null_resource" "check_strongloop_status"{
-  depends_on    = ["null_resource.install_strongloop_three_tiers"]
+resource "null_resource" "check_strongloop_status" {
+  depends_on = ["null_resource.install_strongloop_three_tiers"]
 
   # Specify the ssh connection
   connection {
-    user        = "${var.master_server_ssh_user}"
-    password    = "${var.master_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-	host        = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
+    user     = "${var.master_server_ssh_user}"
+    password = "${var.master_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -1342,12 +1359,12 @@ SERVICE_STATUS=$(cat $TMPFILE)
 while [ "$SERVICE_STATUS" != "200" ]; do
 	echo "---application is being started---"
 	sleep 10
-	let StatusCheckCount=StatusCheckCount+1	
+	let StatusCheckCount=StatusCheckCount+1
 	if [ $StatusCheckCount -eq $StatusCheckMaxCount ]; then
 		echo "---The servce is not up---"
 		rm -f $TMPFILE
 		exit 1
-	fi	
+	fi
 	curl -k -s -o /dev/null -w "%{http_code}" -I -m 5 $APP_URL > $TMPFILE || true
 	SERVICE_STATUS=$(cat $TMPFILE)
 done
@@ -1356,33 +1373,35 @@ rm -f $TMPFILE
 echo "---application is up---"
 
 EOF
+
     destination = "/tmp/checkStatus.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/checkStatus.sh; bash /tmp/checkStatus.sh http://\"${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}\":3000/explorer/"
+      "chmod +x /tmp/checkStatus.sh; bash /tmp/checkStatus.sh http://\"${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}\":3000/explorer/",
     ]
   }
 }
 
-resource "null_resource" "check_angularjs_status"{
-  depends_on    = ["null_resource.check_strongloop_status"]
+resource "null_resource" "check_angularjs_status" {
+  depends_on = ["null_resource.check_strongloop_status"]
 
   # Specify the ssh connection
   connection {
-    user        = "${var.master_server_ssh_user}"
-    password    = "${var.master_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-	host        = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
+    user     = "${var.master_server_ssh_user}"
+    password = "${var.master_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
       "bash /tmp/checkStatus.sh http://\"${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}\":8090",
-      "sleep 60"
+      "sleep 60",
     ]
   }
 }
@@ -1391,13 +1410,13 @@ resource "null_resource" "check_angularjs_status"{
 # Output
 #########################################################
 output "Please access the kubernetes dashboard" {
-    value = "http://${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}:8080/ui"
+  value = "http://${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}:8080/ui"
 }
 
 output "Please access the sample application" {
-    value = "http://${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}:8090"
+  value = "http://${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}:8090"
 }
 
 output "Please be aware that node's ip addresses" {
-    value = ["${vsphere_virtual_machine.kuberentes_node_vm.*.network_interface.0.ipv4_address}"]
+  value = ["${vsphere_virtual_machine.kuberentes_node_vm.*.network_interface.0.ipv4_address}"]
 }

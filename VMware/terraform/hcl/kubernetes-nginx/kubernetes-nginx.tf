@@ -20,6 +20,7 @@
 # Define the vsphere provider
 #########################################################
 provider "vsphere" {
+  version              = "~> 0.4"
   allow_unverified_ssl = true
 }
 
@@ -27,13 +28,13 @@ provider "vsphere" {
 # Define the variables
 #########################################################
 variable "kubernetes_master_name" {
-    description = "Name of kubernetes master server; the names of managed nodes are the master name with count index"
-    default     = "kubernetes-vm"
+  description = "Name of kubernetes master server; the names of managed nodes are the master name with count index"
+  default     = "kubernetes-vm"
 }
 
 variable "count" {
-    description = "Number of managed nodes"
-    default     = 1
+  description = "Number of managed nodes"
+  default     = 1
 }
 
 variable "folder" {
@@ -156,6 +157,7 @@ resource "vsphere_virtual_machine" "kubernetes_master_vm" {
   cluster      = "${var.cluster}"
   dns_suffixes = "${var.dns_suffixes}"
   dns_servers  = "${var.dns_servers}"
+
   network_interface {
     label              = "${var.network_label}"
     ipv4_gateway       = "${var.ipv4_gateway}"
@@ -171,10 +173,11 @@ resource "vsphere_virtual_machine" "kubernetes_master_vm" {
 
   # Specify the ssh connection
   connection {
-    user        = "${var.master_server_ssh_user}"
-    password    = "${var.master_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${self.network_interface.0.ipv4_address}"
+    user     = "${var.master_server_ssh_user}"
+    password = "${var.master_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${self.network_interface.0.ipv4_address}"
   }
 
   provisioner "file" {
@@ -202,13 +205,14 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\""
+      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
     ]
   }
 }
@@ -226,6 +230,7 @@ resource "vsphere_virtual_machine" "kuberentes_node_vm" {
   cluster      = "${var.cluster}"
   dns_suffixes = "${var.dns_suffixes}"
   dns_servers  = "${var.dns_servers}"
+
   network_interface {
     label              = "${var.network_label}"
     ipv4_gateway       = "${var.ipv4_gateway}"
@@ -241,10 +246,11 @@ resource "vsphere_virtual_machine" "kuberentes_node_vm" {
 
   # Specify the ssh connection
   connection {
-    user        = "${var.node_server_ssh_user}"
-    password    = "${var.node_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${self.network_interface.0.ipv4_address}"
+    user     = "${var.node_server_ssh_user}"
+    password = "${var.node_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${self.network_interface.0.ipv4_address}"
   }
 
   provisioner "file" {
@@ -272,13 +278,14 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\""
+      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
     ]
   }
 }
@@ -286,14 +293,14 @@ EOF
 ##############################################################
 # Install Kuberentes Master
 ##############################################################
-resource "null_resource" "install_kubernetes_master"{
-
+resource "null_resource" "install_kubernetes_master" {
   # Specify the ssh connection
   connection {
-    user        = "${var.master_server_ssh_user}"
-    password    = "${var.master_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-	host        = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
+    user     = "${var.master_server_ssh_user}"
+    password = "${var.master_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -411,13 +418,14 @@ done
 echo "---kubernetes master node installed successfully---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh"
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
   }
 }
@@ -425,16 +433,17 @@ EOF
 ##############################################################
 # Install Kuberentes Nodes
 ##############################################################
-resource "null_resource" "install_kubernetes_node"{
-  depends_on    = ["null_resource.install_kubernetes_master"]
-  count         = "${var.count}"
+resource "null_resource" "install_kubernetes_node" {
+  depends_on = ["null_resource.install_kubernetes_master"]
+  count      = "${var.count}"
 
   # Specify the ssh connection
   connection {
-    user        = "${var.node_server_ssh_user}"
-    password    = "${var.node_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-	host        = "${element(vsphere_virtual_machine.kuberentes_node_vm.*.network_interface.0.ipv4_address,count.index)}"
+    user     = "${var.node_server_ssh_user}"
+    password = "${var.node_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${element(vsphere_virtual_machine.kuberentes_node_vm.*.network_interface.0.ipv4_address,count.index)}"
   }
 
   # Create the installation script
@@ -549,13 +558,14 @@ fi
 echo "---kubernetes minion node installed successfully---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}\""
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}\"",
     ]
   }
 }
@@ -563,15 +573,16 @@ EOF
 ##############################################################
 # Install Dashboard
 ##############################################################
-resource "null_resource" "install_dashboard"{
-  depends_on    = ["null_resource.install_kubernetes_node"]
+resource "null_resource" "install_dashboard" {
+  depends_on = ["null_resource.install_kubernetes_node"]
 
   # Specify the ssh connection
   connection {
-    user        = "${var.master_server_ssh_user}"
-    password    = "${var.master_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-	host        = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
+    user     = "${var.master_server_ssh_user}"
+    password = "${var.master_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -613,13 +624,14 @@ done
 echo "---Check $StatusCheckCount: $DashboardPodStatus---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/dashboard-installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/dashboard-installation.sh; bash /tmp/dashboard-installation.sh"
+      "chmod +x /tmp/dashboard-installation.sh; bash /tmp/dashboard-installation.sh",
     ]
   }
 }
@@ -627,15 +639,16 @@ EOF
 ##############################################################
 # Install Nginx
 ##############################################################
-resource "null_resource" "install_nginx"{
-  depends_on    = ["null_resource.install_dashboard"]
+resource "null_resource" "install_nginx" {
+  depends_on = ["null_resource.install_dashboard"]
 
   # Specify the ssh connection
   connection {
-    user        = "${var.master_server_ssh_user}"
-    password    = "${var.master_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-	host        = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
+    user     = "${var.master_server_ssh_user}"
+    password = "${var.master_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -713,6 +726,7 @@ done
 echo "---Check $StatusCheckCount: $NginxPodStatus---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/nginx-installation.sh"
   }
 
@@ -720,7 +734,7 @@ EOF
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/nginx-installation.sh; bash /tmp/nginx-installation.sh \"${var.count}\"",
-      "reboot"
+      "reboot",
     ]
   }
 }
@@ -728,15 +742,16 @@ EOF
 ##############################################################
 # Check status
 ##############################################################
-resource "null_resource" "check_status"{
-  depends_on    = ["null_resource.install_nginx"]
+resource "null_resource" "check_status" {
+  depends_on = ["null_resource.install_nginx"]
 
   # Specify the ssh connection
   connection {
-    user        = "${var.master_server_ssh_user}"
-    password    = "${var.master_server_ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-	host        = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
+    user     = "${var.master_server_ssh_user}"
+    password = "${var.master_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -763,12 +778,12 @@ SERVICE_STATUS=$(cat $TMPFILE)
 while [ "$SERVICE_STATUS" != "200" ]; do
 	echo "---application is being started---"
 	sleep 10
-	let StatusCheckCount=StatusCheckCount+1	
+	let StatusCheckCount=StatusCheckCount+1
 	if [ $StatusCheckCount -eq $StatusCheckMaxCount ]; then
 		echo "---The servce is not up---"
 		rm -f $TMPFILE
 		exit 1
-	fi		
+	fi
 	curl -k -s -o /dev/null -w "%{http_code}" -I -m 5 $APP_URL > $TMPFILE || true
 	SERVICE_STATUS=$(cat $TMPFILE)
 done
@@ -777,13 +792,14 @@ rm -f $TMPFILE
 echo "---application is up---"
 
 EOF
+
     destination = "/tmp/checkStatus.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/checkStatus.sh; bash /tmp/checkStatus.sh http://\"${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}\":8080"
+      "chmod +x /tmp/checkStatus.sh; bash /tmp/checkStatus.sh http://\"${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}\":8080",
     ]
   }
 }
@@ -792,9 +808,9 @@ EOF
 # Output
 #########################################################
 output "Please access the kubernetes dashboard" {
-    value = "http://${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}:8080/ui"
+  value = "http://${vsphere_virtual_machine.kubernetes_master_vm.network_interface.0.ipv4_address}:8080/ui"
 }
 
 output "Please be aware that node's ip addresses" {
-    value = ["${vsphere_virtual_machine.kuberentes_node_vm.*.network_interface.0.ipv4_address}"]
+  value = ["${vsphere_virtual_machine.kuberentes_node_vm.*.network_interface.0.ipv4_address}"]
 }

@@ -19,6 +19,7 @@
 # Define the vsphere provider
 #########################################################
 provider "vsphere" {
+  version              = "~> 0.4"
   allow_unverified_ssl = true
 }
 
@@ -37,7 +38,7 @@ variable "folder" {
 
 variable "datacenter" {
   description = "Target vSphere datacenter for Virtual Machine creation"
-  default     = "" 
+  default     = ""
 }
 
 variable "vcpu" {
@@ -52,7 +53,7 @@ variable "memory" {
 
 variable "cluster" {
   description = "Target vSphere Cluster to host the Virtual Machine"
-  default     = "" 
+  default     = ""
 }
 
 variable "dns_suffixes" {
@@ -85,7 +86,7 @@ variable "ipv4_prefix_length" {
 
 variable "storage" {
   description = "Data store or storage cluster name for target VMs disks"
-  default     = "" 
+  default     = ""
 }
 
 variable "vm_template" {
@@ -122,6 +123,7 @@ resource "vsphere_virtual_machine" "mariadb_vm" {
   cluster      = "${var.cluster}"
   dns_suffixes = "${var.dns_suffixes}"
   dns_servers  = "${var.dns_servers}"
+
   network_interface {
     label              = "${var.network_label}"
     ipv4_gateway       = "${var.ipv4_gateway}"
@@ -137,10 +139,11 @@ resource "vsphere_virtual_machine" "mariadb_vm" {
 
   # Specify the ssh connection
   connection {
-    user        = "${var.ssh_user}"
-    password    = "${var.ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${self.network_interface.0.ipv4_address}"
+    user     = "${var.ssh_user}"
+    password = "${var.ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${self.network_interface.0.ipv4_address}"
   }
 
   provisioner "file" {
@@ -168,6 +171,7 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
@@ -201,6 +205,7 @@ systemctl enable mariadb                             >> $LOGFILE 2>&1 || { echo 
 echo "---finish installing mariaDB---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
@@ -208,7 +213,7 @@ EOF
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh"
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
   }
 }
@@ -217,5 +222,5 @@ EOF
 # Output
 #########################################################
 output "The IP address of the VM with MariaDB installed" {
-    value = "${vsphere_virtual_machine.mariadb_vm.network_interface.0.ipv4_address}"
+  value = "${vsphere_virtual_machine.mariadb_vm.network_interface.0.ipv4_address}"
 }
