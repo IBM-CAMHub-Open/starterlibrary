@@ -1,6 +1,6 @@
 #################################################################
 # Terraform template that will deploy:
-#    * MongoDB in one VM 
+#    * MongoDB in one VM
 #    * NodeJS, AngularJS and Express in another VM
 #    * Sample application
 #
@@ -16,13 +16,14 @@
 #
 # ©Copyright IBM Corp. 2017.
 #
-#################################################################
+##################################################################
 
 #########################################################
 # Define the AWS provider
 #########################################################
 provider "aws" {
-  region     = "${var.aws_region}"
+  version = "~> 1.2"
+  region  = "${var.aws_region}"
 }
 
 #########################################################
@@ -37,6 +38,7 @@ variable "aws_region" {
 variable "aws_ami" {
   type        = "map"
   description = "loop up ami using aws region"
+
   default = {
     us-west-1 = "ami-539ac933"
     us-west-2 = "ami-7c803d1c"
@@ -75,6 +77,7 @@ variable "hostname-nodejs" {
 resource "aws_vpc" "default" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
+
   tags {
     Name = "${var.network_name_prefix}-vpc"
   }
@@ -82,6 +85,7 @@ resource "aws_vpc" "default" {
 
 resource "aws_internet_gateway" "default" {
   vpc_id = "${aws_vpc.default.id}"
+
   tags {
     Name = "${var.network_name_prefix}-gateway"
   }
@@ -90,6 +94,7 @@ resource "aws_internet_gateway" "default" {
 resource "aws_subnet" "default" {
   vpc_id     = "${aws_vpc.default.id}"
   cidr_block = "10.0.1.0/24"
+
   tags {
     Name = "${var.network_name_prefix}-subnet"
   }
@@ -97,10 +102,12 @@ resource "aws_subnet" "default" {
 
 resource "aws_route_table" "default" {
   vpc_id = "${aws_vpc.default.id}"
+
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.default.id}"
   }
+
   tags {
     Name = "${var.network_name_prefix}-route-table"
   }
@@ -115,30 +122,35 @@ resource "aws_security_group" "meanstack_mongo" {
   name        = "${var.network_name_prefix}-security-group-meanstack-mongo"
   description = "Security group which applies to meanstack servers with mongodb installed "
   vpc_id      = "${aws_vpc.default.id}"
+
   ingress {
     from_port   = 27017
     to_port     = 27017
     protocol    = "tcp"
     cidr_blocks = ["10.0.1.0/24"]
   }
+
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   ingress {
     from_port   = -1
     to_port     = -1
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   tags {
     Name = "${var.network_name_prefix}-security-group-meanstack-mongo"
   }
@@ -148,30 +160,35 @@ resource "aws_security_group" "meanstack_nodejs" {
   name        = "${var.network_name_prefix}-security-group-meanstack-nodejs"
   description = "Security group which applies to meanstack servers with nodejs/angular/express installed "
   vpc_id      = "${aws_vpc.default.id}"
+
   ingress {
     from_port   = 8443
     to_port     = 8443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   ingress {
     from_port   = -1
     to_port     = -1
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   tags {
     Name = "${var.network_name_prefix}-security-group-meanstack-nodejs"
   }
@@ -202,12 +219,13 @@ resource "aws_key_pair" "temp_public_key" {
 ##############################################################
 resource "aws_instance" "mongodb_server" {
   depends_on                  = ["aws_route_table_association.default"]
-  instance_type               = "t2.medium" 
+  instance_type               = "t2.medium"
   ami                         = "${lookup(var.aws_ami, var.aws_region)}"
   subnet_id                   = "${aws_subnet.default.id}"
   vpc_security_group_ids      = ["${aws_security_group.meanstack_mongo.id}"]
   key_name                    = "${aws_key_pair.temp_public_key.id}"
   associate_public_ip_address = true
+
   tags {
     Name = "${var.hostname-db}"
   }
@@ -233,13 +251,14 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; sudo bash /tmp/addkey.sh \"${var.public_ssh_key}\""
+      "chmod +x /tmp/addkey.sh; sudo bash /tmp/addkey.sh \"${var.public_ssh_key}\"",
     ]
   }
 }
@@ -249,12 +268,13 @@ EOF
 ##############################################################
 resource "aws_instance" "nodejs_server" {
   depends_on                  = ["aws_route_table_association.default"]
-  instance_type               = "t2.medium" 
+  instance_type               = "t2.medium"
   ami                         = "${lookup(var.aws_ami, var.aws_region)}"
   subnet_id                   = "${aws_subnet.default.id}"
   vpc_security_group_ids      = ["${aws_security_group.meanstack_nodejs.id}"]
   key_name                    = "${aws_key_pair.temp_public_key.id}"
   associate_public_ip_address = true
+
   tags {
     Name = "${var.hostname-nodejs}"
   }
@@ -280,13 +300,14 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; sudo bash /tmp/addkey.sh \"${var.public_ssh_key}\""
+      "chmod +x /tmp/addkey.sh; sudo bash /tmp/addkey.sh \"${var.public_ssh_key}\"",
     ]
   }
 }
@@ -294,8 +315,7 @@ EOF
 ##############################################################
 # Install MEAN
 ##############################################################
-resource "null_resource" "install_mongodb"{
-
+resource "null_resource" "install_mongodb" {
   # Specify the ssh connection
   connection {
     user        = "ubuntu"
@@ -327,20 +347,21 @@ service mongod start                                                            
 echo "---Done---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh"
+      "chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh",
     ]
   }
 }
 
-resource "null_resource" "install_nodejs"{
-  depends_on    = ["null_resource.install_mongodb"]
-  
+resource "null_resource" "install_nodejs" {
+  depends_on = ["null_resource.install_mongodb"]
+
   # Specify the ssh connection
   connection {
     user        = "ubuntu"
@@ -399,16 +420,17 @@ EOT
 systemctl enable nodeserver.service                                                                               >> $LOGFILE 2>&1 || { echo "---Failed to enable the sample node service---" | tee -a $LOGFILE; exit 1; }
 systemctl start nodeserver.service                                                                                >> $LOGFILE 2>&1 || { echo "---Failed to start the sample node service---" | tee -a $LOGFILE; exit 1; }
 
-echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh \"${aws_instance.mongodb_server.private_ip}\""
+      "chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh \"${aws_instance.mongodb_server.private_ip}\"",
     ]
   }
 }
@@ -416,16 +438,16 @@ EOF
 ##############################################################
 # Check status
 ##############################################################
-resource "null_resource" "check_status"{
-  depends_on    = ["null_resource.install_nodejs"]
-    
+resource "null_resource" "check_status" {
+  depends_on = ["null_resource.install_nodejs"]
+
   # Specify the ssh connection
   connection {
     user        = "ubuntu"
     private_key = "${tls_private_key.ssh.private_key_pem}"
     host        = "${aws_instance.nodejs_server.public_ip}"
   }
-  
+
   # Create the installation script
   provisioner "file" {
     content = <<EOF
@@ -450,31 +472,31 @@ SERVICE_STATUS=$(cat $TMPFILE)
 while [ "$SERVICE_STATUS" != "200" ]; do
 	echo "---application is being started---"
 	sleep 10
-	let StatusCheckCount=StatusCheckCount+1	
+	let StatusCheckCount=StatusCheckCount+1
 	if [ $StatusCheckCount -eq $StatusCheckMaxCount ]; then
 		echo "---The servce is not up---"
 		rm -f $TMPFILE
 		exit 1
-	fi		
+	fi
 	curl -k -s -o /dev/null -w "%{http_code}" -I -m 5 $APP_URL > $TMPFILE || true
 	SERVICE_STATUS=$(cat $TMPFILE)
 done
-rm -f $TMPFILE	
-	
+rm -f $TMPFILE
+
 echo "---application is up---"
 
 EOF
+
     destination = "/tmp/checkStatus.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/checkStatus.sh; sudo bash /tmp/checkStatus.sh http://\"${aws_instance.nodejs_server.public_ip}\":8443"
+      "chmod +x /tmp/checkStatus.sh; sudo bash /tmp/checkStatus.sh http://\"${aws_instance.nodejs_server.public_ip}\":8443",
     ]
-  } 
+  }
 }
-
 
 #########################################################
 # Output

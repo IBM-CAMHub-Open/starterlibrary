@@ -23,6 +23,7 @@
 # Define the vsphere provider
 #########################################################
 provider "vsphere" {
+  version              = "~> 0.4"
   allow_unverified_ssl = true
 }
 
@@ -194,6 +195,7 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
   cluster      = "${var.cluster}"
   dns_suffixes = "${var.dns_suffixes}"
   dns_servers  = "${var.dns_servers}"
+
   network_interface {
     label              = "${var.network_label}"
     ipv4_gateway       = "${var.ipv4_gateway}"
@@ -209,10 +211,11 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
 
   # Specify the ssh connection
   connection {
-    user        = "${var.mongodb_server_ssh_user}"
-    password    = "${var.mongodb_server_ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${self.network_interface.0.ipv4_address}"
+    user     = "${var.mongodb_server_ssh_user}"
+    password = "${var.mongodb_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${self.network_interface.0.ipv4_address}"
   }
 
   provisioner "file" {
@@ -240,6 +243,7 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
@@ -287,21 +291,22 @@ echo "---finish installing mongodb---" | tee -a $LOGFILE 2>&1
 
 #config mongodb
 DBUserPwd=$1
-echo "---start configuring mongodb---" | tee -a $LOGFILE 2>&1 
-		
+echo "---start configuring mongodb---" | tee -a $LOGFILE 2>&1
+
 #create mongodb user and allow external access
 sleep 30
 mongo admin --eval "db.createUser({user: \"sampleUser\", pwd: \"$DBUserPwd\", roles: [{role: \"userAdminAnyDatabase\", db: \"admin\"}]})"    >> $LOGFILE 2>&1 || { echo "---Failed to create MongoDB user---" | tee -a $LOGFILE; exit 1; }
 service mongod restart                                                                                                                       >> $LOGFILE 2>&1 || { echo "---Failed to restart mongod---" | tee -a $LOGFILE; exit 1; }
-				
-echo "---finish configuring mongodb---" | tee -a $LOGFILE 2>&1 
+
+echo "---finish configuring mongodb---" | tee -a $LOGFILE 2>&1
 
 if hash iptables 2>/dev/null; then
 	#update firewall
-	iptables -I INPUT 1 -p tcp -m tcp --dport 27017 -m conntrack --ctstate NEW -j ACCEPT                                                         >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }   
-fi	
+	iptables -I INPUT 1 -p tcp -m tcp --dport 27017 -m conntrack --ctstate NEW -j ACCEPT                                                         >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }
+fi
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
@@ -309,7 +314,7 @@ EOF
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${var.mongodb_user_password}\""
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${var.mongodb_user_password}\"",
     ]
   }
 }
@@ -326,6 +331,7 @@ resource "vsphere_virtual_machine" "strongloop_vm" {
   cluster      = "${var.cluster}"
   dns_suffixes = "${var.dns_suffixes}"
   dns_servers  = "${var.dns_servers}"
+
   network_interface {
     label              = "${var.network_label}"
     ipv4_gateway       = "${var.ipv4_gateway}"
@@ -341,10 +347,11 @@ resource "vsphere_virtual_machine" "strongloop_vm" {
 
   # Specify the ssh connection
   connection {
-    user        = "${var.strongloop_server_ssh_user}"
-    password    = "${var.strongloop_server_ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${self.network_interface.0.ipv4_address}"
+    user     = "${var.strongloop_server_ssh_user}"
+    password = "${var.strongloop_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${self.network_interface.0.ipv4_address}"
   }
 
   provisioner "file" {
@@ -372,13 +379,14 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\""
+      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
     ]
   }
 }
@@ -395,6 +403,7 @@ resource "vsphere_virtual_machine" "angularjs_vm" {
   cluster      = "${var.cluster}"
   dns_suffixes = "${var.dns_suffixes}"
   dns_servers  = "${var.dns_servers}"
+
   network_interface {
     label              = "${var.network_label}"
     ipv4_gateway       = "${var.ipv4_gateway}"
@@ -410,10 +419,11 @@ resource "vsphere_virtual_machine" "angularjs_vm" {
 
   # Specify the ssh connection
   connection {
-    user        = "${var.angularjs_server_ssh_user}"
-    password    = "${var.angularjs_server_ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${self.network_interface.0.ipv4_address}"
+    user     = "${var.angularjs_server_ssh_user}"
+    password = "${var.angularjs_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${self.network_interface.0.ipv4_address}"
   }
 
   provisioner "file" {
@@ -441,13 +451,14 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\""
+      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
     ]
   }
 }
@@ -455,16 +466,16 @@ EOF
 ##############################################################
 # Install Strongloop
 ##############################################################
-resource "null_resource" "install_strongloop"{
-    
+resource "null_resource" "install_strongloop" {
   # Specify the ssh connection
   connection {
-    user        = "${var.strongloop_server_ssh_user}"
-    password    = "${var.strongloop_server_ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-	host        = "${vsphere_virtual_machine.strongloop_vm.network_interface.0.ipv4_address}"
+    user     = "${var.strongloop_server_ssh_user}"
+    password = "${var.strongloop_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.strongloop_vm.network_interface.0.ipv4_address}"
   }
-  
+
   # Create the installation script
   provisioner "file" {
     content = <<EOF
@@ -496,22 +507,22 @@ retryInstall () {
 
 #install node.js
 
-echo "---start installing node.js---" | tee -a $LOGFILE 2>&1 
+echo "---start installing node.js---" | tee -a $LOGFILE 2>&1
 retryInstall "yum install gcc-c++ make -y"                         >> $LOGFILE 2>&1 || { echo "---Failed to install build tools---" | tee -a $LOGFILE; exit 1; }
 curl -sL https://rpm.nodesource.com/setup_7.x | bash -             >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
 retryInstall "yum install nodejs -y"                               >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
-echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1
 
 #install strongloop
 
-echo "---start installing strongloop---" | tee -a $LOGFILE 2>&1 
+echo "---start installing strongloop---" | tee -a $LOGFILE 2>&1
 yum groupinstall 'Development Tools' -y                            >> $LOGFILE 2>&1 || { echo "---Failed to install development tools---" | tee -a $LOGFILE; exit 1; }
 npm install -g strongloop                                          >> $LOGFILE 2>&1 || { echo "---Failed to install strongloop---" | tee -a $LOGFILE; exit 1; }
-echo "---finish installing strongloop---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing strongloop---" | tee -a $LOGFILE 2>&1
 
 #install sample application
 
-echo "---start installing sample application---" | tee -a $LOGFILE 2>&1 
+echo "---start installing sample application---" | tee -a $LOGFILE 2>&1
 
 PROJECT_NAME=sample
 SAMPLE_DIR=$HOME/$PROJECT_NAME
@@ -520,7 +531,7 @@ retryInstall "yum install expect -y"                               >> $LOGFILE 2
 
 #create project
 cd $HOME
-SCRIPT_CREATE_PROJECT=createProject.sh	
+SCRIPT_CREATE_PROJECT=createProject.sh
 cat << EOT > $SCRIPT_CREATE_PROJECT
 #!/usr/bin/expect
 set timeout 20
@@ -542,13 +553,13 @@ chmod 755 $SCRIPT_CREATE_PROJECT                                   >> $LOGFILE 2
 ./$SCRIPT_CREATE_PROJECT                                           >> $LOGFILE 2>&1 || { echo "---Failed to execute script---" | tee -a $LOGFILE; exit 1; }
 rm -f $SCRIPT_CREATE_PROJECT                                       >> $LOGFILE 2>&1 || { echo "---Failed to remove script---" | tee -a $LOGFILE; exit 1; }
 
-#add dependency package 
+#add dependency package
 cd $SAMPLE_DIR
 sed -i -e '/loopback-datasource-juggler/a\ \ \ \ "loopback-connector-mongodb": "^1.18.0",' package.json    >> $LOGFILE 2>&1 || { echo "---Failed to add dependency for loopback-connector-mongo---" | tee -a $LOGFILE; exit 1; }
-	
+
 #install packages in server side
 npm install                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install packages via npm---" | tee -a $LOGFILE; exit 1; }
-	
+
 #create data model
 MODEL_NAME=Todos
 SCRIPT_CREATE_MODEL=createModel.sh
@@ -591,7 +602,7 @@ sed -i -e 's/\ \ }/\ \ },/g' $DATA_SOURCE_FILE                                  
 sed -i -e '/\ \ },/a\ \ "myMongoDB": {\n\ \ \ \ "host": "mongodb-server",\n\ \ \ \ "port": 27017,\n\ \ \ \ "url": "mongodb://sampleUser:sampleUserPwd@mongodb-server:27017/admin",\n\ \ \ \ "database": "Todos",\n\ \ \ \ "password": "sampleUserPwd",\n\ \ \ \ "name": "myMongoDB",\n\ \ \ \ "user": "sampleUser",\n\ \ \ \ "connector": "mongodb"\n\ \ }' $DATA_SOURCE_FILE    >> $LOGFILE 2>&1 || { echo "---Failed to update datasource.json---" | tee -a $LOGFILE; exit 1; }
 sed -i -e "s/mongodb-server/$MongoDB_Server/g" $DATA_SOURCE_FILE                        >> $LOGFILE 2>&1 || { echo "---Failed to update datasource.json---" | tee -a $LOGFILE; exit 1; }
 sed -i -e "s/sampleUserPwd/$DBUserPwd/g" $DATA_SOURCE_FILE                              >> $LOGFILE 2>&1 || { echo "---Failed to update datasource.json---" | tee -a $LOGFILE; exit 1; }
-	
+
 MODEL_CONFIG_FILE=server/model-config.json
 sed -i -e '/Todos/{n;d}' $MODEL_CONFIG_FILE                                             >> $LOGFILE 2>&1 || { echo "---Failed to update model-config.json---" | tee -a $LOGFILE; exit 1; }
 sed -i -e '/Todos/a\ \ \ \ "dataSource": "myMongoDB",' $MODEL_CONFIG_FILE               >> $LOGFILE 2>&1 || { echo "---Failed to update model-config.json---" | tee -a $LOGFILE; exit 1; }
@@ -621,36 +632,37 @@ systemctl start nodeserver.service                                              
 
 #update firewall
 if hash iptables 2>/dev/null; then
-	iptables -I INPUT 1 -p tcp -m tcp --dport 3000 -m conntrack --ctstate NEW -j ACCEPT     >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }   
+	iptables -I INPUT 1 -p tcp -m tcp --dport 3000 -m conntrack --ctstate NEW -j ACCEPT     >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }
 fi
-	
-echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1 		
+
+echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.mongodb_vm.network_interface.0.ipv4_address}\" \"${var.mongodb_user_password}\""
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.mongodb_vm.network_interface.0.ipv4_address}\" \"${var.mongodb_user_password}\"",
     ]
-  } 
+  }
 }
 
 ##############################################################
 # Install AngularJs
 ##############################################################
-resource "null_resource" "install_angularjs"{
-    
+resource "null_resource" "install_angularjs" {
   # Specify the ssh connection
   connection {
-    user        = "${var.angularjs_server_ssh_user}"
-    password    = "${var.angularjs_server_ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-	host        = "${vsphere_virtual_machine.angularjs_vm.network_interface.0.ipv4_address}"
+    user     = "${var.angularjs_server_ssh_user}"
+    password = "${var.angularjs_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.angularjs_vm.network_interface.0.ipv4_address}"
   }
-  
+
   # Create the installation script
   provisioner "file" {
     content = <<EOF
@@ -681,15 +693,15 @@ retryInstall () {
 
 #install node.js
 
-echo "---start installing node.js---" | tee -a $LOGFILE 2>&1 
+echo "---start installing node.js---" | tee -a $LOGFILE 2>&1
 retryInstall "yum install gcc-c++ make -y"                                 >> $LOGFILE 2>&1 || { echo "---Failed to install build tools---" | tee -a $LOGFILE; exit 1; }
 curl -sL https://rpm.nodesource.com/setup_7.x | bash -                     >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
 retryInstall "yum install nodejs -y"                                       >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
-echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1
 
 #install angularjs
 
-echo "---start installing angularjs---" | tee -a $LOGFILE 2>&1 
+echo "---start installing angularjs---" | tee -a $LOGFILE 2>&1
 npm install -g grunt-cli bower yo generator-karma generator-angular        >> $LOGFILE 2>&1 || { echo "---Failed to install angular tools---" | tee -a $LOGFILE; exit 1; }
 
 # enable repo to install ruby-devel
@@ -698,11 +710,11 @@ yum-config-manager --enable rhel-7-server-optional-rpms                    >> $L
 
 retryInstall "yum install gcc ruby ruby-devel rubygems make -y"            >> $LOGFILE 2>&1 || { echo "---Failed to install ruby---" | tee -a $LOGFILE; exit 1; }
 gem install compass                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install compass---" | tee -a $LOGFILE; exit 1; }
-echo "---finish installing angularjs---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing angularjs---" | tee -a $LOGFILE 2>&1
 
 #install sample application
 
-echo "---start installing sample application---" | tee -a $LOGFILE 2>&1 
+echo "---start installing sample application---" | tee -a $LOGFILE 2>&1
 
 #create project
 PROJECT_NAME=sample
@@ -740,7 +752,7 @@ cat << EOT > $SERVER_JS_FILE
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var methodOverride = require('method-override'); 
+var methodOverride = require('method-override');
 var http = require('http');
 
 app.use(bodyParser.json());
@@ -757,7 +769,7 @@ app.get('/api/todos', function(req, res) {
         res1.on('data', function(d) {
             res.send(d);
         });
-    }); 
+    });
     reqGet.end();
     reqGet.on('error', function(e) {
         res.send(e);
@@ -767,18 +779,18 @@ app.get('/api/todos', function(req, res) {
 app.post('/api/todos', function(req, res) {
     jsonObject = JSON.stringify({
         "content" : req.body.content
-    });  
+    });
     var postheaders = {
         'Content-Type' : 'application/json',
         'Accept' : 'application/json'
-    }; 
+    };
     var optionspost = {
         host : 'strongloop-server',
         port : 3000,
         path : '/api/Todos',
         method : 'POST',
         headers : postheaders
-    };  
+    };
     var reqPost = http.request(optionspost, function(res1) {
         res1.on('data', function(d) {
         });
@@ -792,8 +804,8 @@ app.post('/api/todos', function(req, res) {
         host : 'strongloop-server',
         port : 3000,
         path : '/api/Todos',
-        method : 'GET' 
-    }; 
+        method : 'GET'
+    };
     // do the GET request
     var reqGet = http.request(optionsgetmsg, function(res2) {
         res2.on('data', function(d) {
@@ -803,7 +815,7 @@ app.post('/api/todos', function(req, res) {
     reqGet.end();
     reqGet.on('error', function(e) {
         console.error(e);
-    });   
+    });
 });
 
 app.delete('/api/todos/:todo_id', function(req, res) {
@@ -829,7 +841,7 @@ app.delete('/api/todos/:todo_id', function(req, res) {
         host : 'strongloop-server', // here only the domain name
         port : 3000,
         path : '/api/Todos', // the rest of the url with parameters if needed
-        method : 'GET' // do GET 
+        method : 'GET' // do GET
     };
     var reqGet = http.request(optionsgetmsg, function(res2) {
         res2.on('data', function(d) {
@@ -851,7 +863,7 @@ app.start = function() {
 console.log("App listening on port 8080");
 EOT
 
-sed -i -e "s/strongloop-server/$STRONGLOOP_SERVER/g" $SERVER_JS_FILE                     >> $LOGFILE 2>&1 || { echo "---Failed to configure server.js---" | tee -a $LOGFILE; exit 1; } 
+sed -i -e "s/strongloop-server/$STRONGLOOP_SERVER/g" $SERVER_JS_FILE                     >> $LOGFILE 2>&1 || { echo "---Failed to configure server.js---" | tee -a $LOGFILE; exit 1; }
 
 #install packages in server side
 npm install                                                                              >> $LOGFILE 2>&1 || { echo "---Failed to install packages via npm---" | tee -a $LOGFILE; exit 1; }
@@ -867,7 +879,7 @@ EOT
 
 retryInstall "yum install -y git"                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install git---" | tee -a $LOGFILE; exit 1; }
 bower install angular angular-resource angular-ui-router bootstrap --allow-root          >> $LOGFILE 2>&1 || { echo "---Failed to install packages via bower---" | tee -a $LOGFILE; exit 1; }
-	
+
 #add client files
 INDEX_HTML=client/index.html
 cat << EOT > $INDEX_HTML
@@ -968,18 +980,18 @@ angular
  .controller('TodoCtrl', ['\$scope', '\$state', '\$http', function(\$scope,
      \$state,\$http) {
    \$scope.todos = [];
-   function getTodos() {        
+   function getTodos() {
      \$http({
         method: 'GET',
         url: 'api/todos'
      }).then(function (data){
-        \$scope.todos = data.data;    
+        \$scope.todos = data.data;
      },function (error){
         console.log('Error: ' + error);
-     });  
+     });
    };
    getTodos();
- 
+
    \$scope.addTodo = function() {
       \$http({
 	method: 'POST',
@@ -998,7 +1010,7 @@ angular
         console.log('Error: ' + error);
      });
    };
- 
+
    \$scope.removeTodo = function(item) {
      \$http({
 	method: 'DELETE',
@@ -1036,38 +1048,39 @@ systemctl start nodeserver.service                                        >> $LO
 
 #update firewall
 if hash iptables 2>/dev/null; then
-	iptables -I INPUT 1 -p tcp -m tcp --dport 8080 -m conntrack --ctstate NEW -j ACCEPT     >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }   
+	iptables -I INPUT 1 -p tcp -m tcp --dport 8080 -m conntrack --ctstate NEW -j ACCEPT     >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }
 fi
 
-echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1 		
+echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.strongloop_vm.network_interface.0.ipv4_address}\""
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.strongloop_vm.network_interface.0.ipv4_address}\"",
     ]
-  } 
+  }
 }
 
 #########################################################
 # Output
 #########################################################
 output "The mongodb server's ip addresses" {
-    value = "${vsphere_virtual_machine.mongodb_vm.network_interface.0.ipv4_address}"
+  value = "${vsphere_virtual_machine.mongodb_vm.network_interface.0.ipv4_address}"
 }
 
 output "The strongloop server's ip addresses" {
-    value = "${vsphere_virtual_machine.strongloop_vm.network_interface.0.ipv4_address}"
+  value = "${vsphere_virtual_machine.strongloop_vm.network_interface.0.ipv4_address}"
 }
 
 output "The angular server's ip addresses" {
-    value = "${vsphere_virtual_machine.angularjs_vm.network_interface.0.ipv4_address}"
+  value = "${vsphere_virtual_machine.angularjs_vm.network_interface.0.ipv4_address}"
 }
 
 output "Please access the strongloop-three-tiers sample application using the following url" {
-    value = "http://${vsphere_virtual_machine.angularjs_vm.network_interface.0.ipv4_address}:8080"
+  value = "http://${vsphere_virtual_machine.angularjs_vm.network_interface.0.ipv4_address}:8080"
 }

@@ -21,6 +21,7 @@
 # Define the Azure provider
 #########################################################
 provider "azurerm" {
+  version = "0.2.2"
 }
 
 #########################################################
@@ -38,7 +39,7 @@ variable "name_prefix" {
 
 variable "admin_user" {
   description = "Name of an administrative user to be created in virtual machine and SQL service in this deployment"
-  default = "ibmadmin"
+  default     = "ibmadmin"
 }
 
 variable "admin_user_password" {
@@ -70,10 +71,10 @@ resource "azurerm_virtual_network" "default" {
 }
 
 resource "azurerm_subnet" "web" {
-  name                      = "${var.name_prefix}-subnet-web"
-  resource_group_name       = "${azurerm_resource_group.default.name}"
-  virtual_network_name      = "${azurerm_virtual_network.default.name}"
-  address_prefix            = "10.0.1.0/24"
+  name                 = "${var.name_prefix}-subnet-web"
+  resource_group_name  = "${azurerm_resource_group.default.name}"
+  virtual_network_name = "${azurerm_virtual_network.default.name}"
+  address_prefix       = "10.0.1.0/24"
 }
 
 resource "azurerm_public_ip" "web" {
@@ -157,9 +158,9 @@ resource "azurerm_virtual_machine" "web" {
 
   storage_image_reference {
     publisher = "Canonical"
-    offer = "UbuntuServer"
-    sku = "16.04-LTS"
-    version = "latest"
+    offer     = "UbuntuServer"
+    sku       = "16.04-LTS"
+    version   = "latest"
   }
 
   storage_os_disk {
@@ -179,8 +180,8 @@ resource "azurerm_virtual_machine" "web" {
     disable_password_authentication = false
 
     ssh_keys {
-      path = "/home/${var.admin_user}/.ssh/authorized_keys"
-      key_data =  "${var.user_public_key}"
+      path     = "/home/${var.admin_user}/.ssh/authorized_keys"
+      key_data = "${var.user_public_key}"
     }
   }
 }
@@ -195,9 +196,9 @@ resource "azurerm_virtual_machine" "web-alternative" {
 
   storage_image_reference {
     publisher = "Canonical"
-    offer = "UbuntuServer"
-    sku = "16.04-LTS"
-    version = "latest"
+    offer     = "UbuntuServer"
+    sku       = "16.04-LTS"
+    version   = "latest"
   }
 
   storage_os_disk {
@@ -248,8 +249,8 @@ resource "azurerm_sql_firewall_rule" "db" {
 ##############################################################
 # Install Apache and PHP
 ##############################################################
-resource "null_resource" "install_php"{
-  depends_on    = ["azurerm_sql_firewall_rule.db", "azurerm_sql_database.db", "azurerm_virtual_machine.web", "azurerm_virtual_machine.web-alternative"]
+resource "null_resource" "install_php" {
+  depends_on = ["azurerm_sql_firewall_rule.db", "azurerm_sql_database.db", "azurerm_virtual_machine.web", "azurerm_virtual_machine.web-alternative"]
 
   # Specify the ssh connection
   connection {
@@ -375,13 +376,14 @@ systemctl restart apache2                                                       
 echo "---installed apache2 and php successfully---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh \"${azurerm_sql_server.db.fully_qualified_domain_name}\" \"${var.admin_user}\" \"${var.admin_user_password}\" \"${azurerm_sql_database.db.name}\""
+      "chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh \"${azurerm_sql_server.db.fully_qualified_domain_name}\" \"${var.admin_user}\" \"${var.admin_user_password}\" \"${azurerm_sql_database.db.name}\"",
     ]
   }
 }
