@@ -52,7 +52,7 @@ resource "tls_private_key" "ssh" {
 }
 
 resource "ibm_compute_ssh_key" "temp_public_key" {
-  label = "Temp Public Key"
+  label      = "Temp Public Key"
   public_key = "${tls_private_key.ssh.public_key_openssh}"
 }
 
@@ -80,7 +80,7 @@ resource "ibm_compute_vm_instance" "softlayer_virtual_guest" {
     private_key = "${tls_private_key.ssh.private_key_pem}"
     host        = "${self.ipv4_address}"
   }
-  
+
   # Create the installation script
   provisioner "file" {
     content = <<EOF
@@ -110,13 +110,14 @@ service mongod start                                                            
 echo "---finish installing mongodb---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh"
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
   }
 }
@@ -125,5 +126,5 @@ EOF
 # Output
 #########################################################
 output "The IP address of the VM with MongoDB installed" {
-    value = "${ibm_compute_vm_instance.softlayer_virtual_guest.ipv4_address}"    
+  value = "${ibm_compute_vm_instance.softlayer_virtual_guest.ipv4_address}"
 }

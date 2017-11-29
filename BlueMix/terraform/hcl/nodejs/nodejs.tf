@@ -52,7 +52,7 @@ resource "tls_private_key" "ssh" {
 }
 
 resource "ibm_compute_ssh_key" "temp_public_key" {
-  label = "Temp Public Key"
+  label      = "Temp Public Key"
   public_key = "${tls_private_key.ssh.public_key_openssh}"
 }
 
@@ -80,7 +80,7 @@ resource "ibm_compute_vm_instance" "softlayer_virtual_guest" {
     private_key = "${tls_private_key.ssh.private_key_pem}"
     host        = "${self.ipv4_address}"
   }
-  
+
   # Create the installation script
   provisioner "file" {
     content = <<EOF
@@ -92,22 +92,23 @@ set -o pipefail
 
 LOGFILE="/var/log/install_nodejs.log"
 
-echo "---start installing node.js---" | tee -a $LOGFILE 2>&1 
+echo "---start installing node.js---" | tee -a $LOGFILE 2>&1
 
 yum install gcc-c++ make -y                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install build tools---" | tee -a $LOGFILE; exit 1; }
 curl -sL https://rpm.nodesource.com/setup_7.x | bash -                             >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
 yum install nodejs -y                                                              >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
 
-echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh"
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
   }
 }
@@ -116,5 +117,5 @@ EOF
 # Output
 #########################################################
 output "The IP address of the VM with NodeJs installed" {
-    value = "${ibm_compute_vm_instance.softlayer_virtual_guest.ipv4_address}"    
+  value = "${ibm_compute_vm_instance.softlayer_virtual_guest.ipv4_address}"
 }

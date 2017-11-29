@@ -19,6 +19,7 @@
 # Define the vsphere provider
 #########################################################
 provider "vsphere" {
+  version              = "~> 0.4"
   allow_unverified_ssl = true
 }
 
@@ -131,6 +132,7 @@ resource "vsphere_virtual_machine" "tomcat_vm" {
   cluster      = "${var.cluster}"
   dns_suffixes = "${var.dns_suffixes}"
   dns_servers  = "${var.dns_servers}"
+
   network_interface {
     label              = "${var.network_label}"
     ipv4_gateway       = "${var.ipv4_gateway}"
@@ -146,10 +148,11 @@ resource "vsphere_virtual_machine" "tomcat_vm" {
 
   # Specify the ssh connection
   connection {
-    user        = "${var.ssh_user}"
-    password    = "${var.ssh_user_password}"
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${self.network_interface.0.ipv4_address}"
+    user     = "${var.ssh_user}"
+    password = "${var.ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${self.network_interface.0.ipv4_address}"
   }
 
   provisioner "file" {
@@ -177,6 +180,7 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
@@ -223,6 +227,7 @@ fi
 echo "---finish installing tomcat---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
@@ -230,7 +235,7 @@ EOF
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${var.tomcat_user}\" \"${var.tomcat_pwd}\" "
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${var.tomcat_user}\" \"${var.tomcat_pwd}\" ",
     ]
   }
 }
@@ -239,5 +244,5 @@ EOF
 # Output
 #########################################################
 output "Please access Tomcat web management" {
-    value = "http://${vsphere_virtual_machine.tomcat_vm.network_interface.0.ipv4_address}:8080"
+  value = "http://${vsphere_virtual_machine.tomcat_vm.network_interface.0.ipv4_address}:8080"
 }
