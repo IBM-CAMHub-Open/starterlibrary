@@ -11,6 +11,12 @@
        "templateData": "",
        "templateVariables": "",
        "templateOutput": ""
+     },
+     "template_source": {
+       "githubRepoUrl": "",
+       "githubAccessToken": "",
+       "relativePathToTemplateFolder": "VMware/terraform/hcl/nodejs",
+       "templateFileName": "nodejs.tf"
      }
    },
    "metadata": {

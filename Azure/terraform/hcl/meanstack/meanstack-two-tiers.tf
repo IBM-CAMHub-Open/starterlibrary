@@ -22,6 +22,7 @@
 # Define the Azure provider
 #########################################################
 provider "azurerm" {
+  version = "0.2.2"
 }
 
 #########################################################
@@ -39,7 +40,7 @@ variable "name_prefix" {
 
 variable "admin_user" {
   description = "Name of an administrative user to be created in all virtual machines in this deployment"
-  default = "ibmadmin"
+  default     = "ibmadmin"
 }
 
 variable "admin_user_password" {
@@ -71,17 +72,17 @@ resource "azurerm_virtual_network" "default" {
 }
 
 resource "azurerm_subnet" "db" {
-  name                      = "${var.name_prefix}-subnet-db"
-  resource_group_name       = "${azurerm_resource_group.default.name}"
-  virtual_network_name      = "${azurerm_virtual_network.default.name}"
-  address_prefix            = "10.0.1.0/24"
+  name                 = "${var.name_prefix}-subnet-db"
+  resource_group_name  = "${azurerm_resource_group.default.name}"
+  virtual_network_name = "${azurerm_virtual_network.default.name}"
+  address_prefix       = "10.0.1.0/24"
 }
 
 resource "azurerm_subnet" "web" {
-  name                      = "${var.name_prefix}-subnet-web"
-  resource_group_name       = "${azurerm_resource_group.default.name}"
-  virtual_network_name      = "${azurerm_virtual_network.default.name}"
-  address_prefix            = "10.0.2.0/24"
+  name                 = "${var.name_prefix}-subnet-web"
+  resource_group_name  = "${azurerm_resource_group.default.name}"
+  virtual_network_name = "${azurerm_virtual_network.default.name}"
+  address_prefix       = "10.0.2.0/24"
 }
 
 resource "azurerm_public_ip" "db" {
@@ -216,9 +217,9 @@ resource "azurerm_virtual_machine" "web" {
 
   storage_image_reference {
     publisher = "Canonical"
-    offer = "UbuntuServer"
-    sku = "16.04-LTS"
-    version = "latest"
+    offer     = "UbuntuServer"
+    sku       = "16.04-LTS"
+    version   = "latest"
   }
 
   storage_os_disk {
@@ -238,8 +239,8 @@ resource "azurerm_virtual_machine" "web" {
     disable_password_authentication = false
 
     ssh_keys {
-      path = "/home/${var.admin_user}/.ssh/authorized_keys"
-      key_data =  "${var.user_public_key}"
+      path     = "/home/${var.admin_user}/.ssh/authorized_keys"
+      key_data = "${var.user_public_key}"
     }
   }
 }
@@ -254,9 +255,9 @@ resource "azurerm_virtual_machine" "web-alternative" {
 
   storage_image_reference {
     publisher = "Canonical"
-    offer = "UbuntuServer"
-    sku = "16.04-LTS"
-    version = "latest"
+    offer     = "UbuntuServer"
+    sku       = "16.04-LTS"
+    version   = "latest"
   }
 
   storage_os_disk {
@@ -287,9 +288,9 @@ resource "azurerm_virtual_machine" "db" {
 
   storage_image_reference {
     publisher = "Canonical"
-    offer = "UbuntuServer"
-    sku = "16.04-LTS"
-    version = "latest"
+    offer     = "UbuntuServer"
+    sku       = "16.04-LTS"
+    version   = "latest"
   }
 
   storage_os_disk {
@@ -309,8 +310,8 @@ resource "azurerm_virtual_machine" "db" {
     disable_password_authentication = false
 
     ssh_keys {
-      path = "/home/${var.admin_user}/.ssh/authorized_keys"
-      key_data =  "${var.user_public_key}"
+      path     = "/home/${var.admin_user}/.ssh/authorized_keys"
+      key_data = "${var.user_public_key}"
     }
   }
 }
@@ -325,9 +326,9 @@ resource "azurerm_virtual_machine" "db-alternative" {
 
   storage_image_reference {
     publisher = "Canonical"
-    offer = "UbuntuServer"
-    sku = "16.04-LTS"
-    version = "latest"
+    offer     = "UbuntuServer"
+    sku       = "16.04-LTS"
+    version   = "latest"
   }
 
   storage_os_disk {
@@ -351,8 +352,8 @@ resource "azurerm_virtual_machine" "db-alternative" {
 ##############################################################
 # Install MEAN
 ##############################################################
-resource "null_resource" "install_mongodb"{
-  depends_on    = ["azurerm_virtual_machine.db", "azurerm_virtual_machine.db-alternative"]
+resource "null_resource" "install_mongodb" {
+  depends_on = ["azurerm_virtual_machine.db", "azurerm_virtual_machine.db-alternative"]
 
   # Specify the ssh connection
   connection {
@@ -385,19 +386,20 @@ service mongod start                                                            
 echo "---Done---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh"
+      "chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh",
     ]
   }
 }
 
-resource "null_resource" "install_nodejs"{
-  depends_on    = ["null_resource.install_mongodb", "azurerm_virtual_machine.web", "azurerm_virtual_machine.web-alternative"]
+resource "null_resource" "install_nodejs" {
+  depends_on = ["null_resource.install_mongodb", "azurerm_virtual_machine.web", "azurerm_virtual_machine.web-alternative"]
 
   # Specify the ssh connection
   connection {
@@ -460,13 +462,14 @@ systemctl start nodeserver.service                                              
 echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh \"${azurerm_network_interface.db.private_ip_address}\""
+      "chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh \"${azurerm_network_interface.db.private_ip_address}\"",
     ]
   }
 }
@@ -474,8 +477,8 @@ EOF
 ##############################################################
 # Check status
 ##############################################################
-resource "null_resource" "check_status"{
-  depends_on    = ["null_resource.install_nodejs"]
+resource "null_resource" "check_status" {
+  depends_on = ["null_resource.install_nodejs"]
 
   # Specify the ssh connection
   connection {
@@ -522,13 +525,14 @@ rm -f $TMPFILE
 echo "---application is up---"
 
 EOF
+
     destination = "/tmp/checkStatus.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/checkStatus.sh; sudo bash /tmp/checkStatus.sh http://\"${azurerm_public_ip.web.ip_address}\":8443"
+      "chmod +x /tmp/checkStatus.sh; sudo bash /tmp/checkStatus.sh http://\"${azurerm_public_ip.web.ip_address}\":8443",
     ]
   }
 }

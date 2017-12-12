@@ -1,5 +1,19 @@
+#################################################################
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Licensed Materials - Property of IBM
+#
+# ©Copyright IBM Corp. 2017.
+#
+#################################################################
+
 provider "aws" {
- region = "${var.aws_region}"
+  version = "~> 1.2"
+  region  = "${var.aws_region}"
 }
 
 variable "aws_region" {
@@ -17,17 +31,17 @@ variable "subnet_cidr" {
 
 data "aws_vpc" "selected" {
   state = "available"
+
   filter {
-    name = "tag:Name"
+    name   = "tag:Name"
     values = ["${var.vpc_name_tag}"]
   }
 }
 
 data "aws_subnet" "selected" {
-  state        = "available"
-  vpc_id       = "${data.aws_vpc.selected.id}"
-  cidr_block   = "${var.subnet_cidr}"
-
+  state      = "available"
+  vpc_id     = "${data.aws_vpc.selected.id}"
+  cidr_block = "${var.subnet_cidr}"
 }
 
 variable "public_ssh_key_name" {
@@ -47,13 +61,13 @@ variable "aws_amis" {
 }
 
 resource "aws_key_pair" "orpheus_public_key" {
-    key_name = "${var.public_ssh_key_name}"
-    public_key = "${var.public_ssh_key}"
+  key_name   = "${var.public_ssh_key_name}"
+  public_key = "${var.public_ssh_key}"
 }
 
 resource "aws_instance" "orpheus_ubuntu_micro" {
   instance_type = "t2.micro"
-  ami = "${lookup(var.aws_amis, var.aws_region)}"
-  subnet_id = "${data.aws_subnet.selected.id}"
-  key_name = "${aws_key_pair.orpheus_public_key.id}"
+  ami           = "${lookup(var.aws_amis, var.aws_region)}"
+  subnet_id     = "${data.aws_subnet.selected.id}"
+  key_name      = "${aws_key_pair.orpheus_public_key.id}"
 }

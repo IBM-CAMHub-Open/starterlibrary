@@ -1,6 +1,6 @@
 #################################################################
 # Terraform template that will deploy:
-#    * MongoDB in one VM 
+#    * MongoDB in one VM
 #    * NodeJS, AngularJS and Express in another VM
 #    * Sample application
 #
@@ -22,6 +22,7 @@
 # Define the vsphere provider
 #########################################################
 provider "vsphere" {
+  version              = "~> 0.4"
   allow_unverified_ssl = true
 }
 
@@ -157,6 +158,7 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
   cluster      = "${var.cluster}"
   dns_suffixes = "${var.dns_suffixes}"
   dns_servers  = "${var.dns_servers}"
+
   network_interface {
     label              = "${var.network_label}"
     ipv4_gateway       = "${var.ipv4_gateway}"
@@ -172,10 +174,11 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
 
   # Specify the ssh connection
   connection {
-    user        = "${var.mongodb_server_ssh_user}"
-    password    = "${var.mongodb_server_ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${self.network_interface.0.ipv4_address}"
+    user     = "${var.mongodb_server_ssh_user}"
+    password = "${var.mongodb_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${self.network_interface.0.ipv4_address}"
   }
 
   provisioner "file" {
@@ -203,13 +206,14 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\""
+      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
     ]
   }
 }
@@ -223,6 +227,7 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
   cluster      = "${var.cluster}"
   dns_suffixes = "${var.dns_suffixes}"
   dns_servers  = "${var.dns_servers}"
+
   network_interface {
     label              = "${var.network_label}"
     ipv4_gateway       = "${var.ipv4_gateway}"
@@ -238,10 +243,11 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
 
   # Specify the ssh connection
   connection {
-    user        = "${var.nodejs_server_ssh_user}"
-    password    = "${var.nodejs_server_ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${self.network_interface.0.ipv4_address}"
+    user     = "${var.nodejs_server_ssh_user}"
+    password = "${var.nodejs_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${self.network_interface.0.ipv4_address}"
   }
 
   provisioner "file" {
@@ -269,13 +275,14 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\""
+      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
     ]
   }
 }
@@ -283,14 +290,14 @@ EOF
 ##############################################################
 # Install MEAN
 ##############################################################
-resource "null_resource" "install_mongodb"{
-
+resource "null_resource" "install_mongodb" {
   # Specify the ssh connection
   connection {
-    user        = "${var.mongodb_server_ssh_user}"
-    password    = "${var.mongodb_server_ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${vsphere_virtual_machine.mongodb_vm.network_interface.0.ipv4_address}"
+    user     = "${var.mongodb_server_ssh_user}"
+    password = "${var.mongodb_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.mongodb_vm.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -338,30 +345,32 @@ echo "---finish installing mongodb---" | tee -a $LOGFILE 2>&1
 
 if hash iptables 2>/dev/null; then
 	#update firewall
-	iptables -I INPUT 1 -p tcp -m tcp --dport 27017 -m conntrack --ctstate NEW -j ACCEPT   >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }   
-fi	
+	iptables -I INPUT 1 -p tcp -m tcp --dport 27017 -m conntrack --ctstate NEW -j ACCEPT   >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }
+fi
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh"
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
   }
 }
 
-resource "null_resource" "install_nodejs"{
-  depends_on    = ["null_resource.install_mongodb"]
-  
+resource "null_resource" "install_nodejs" {
+  depends_on = ["null_resource.install_mongodb"]
+
   # Specify the ssh connection
   connection {
-    user        = "${var.nodejs_server_ssh_user}"
-    password    = "${var.nodejs_server_ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${vsphere_virtual_machine.nodejs_vm.network_interface.0.ipv4_address}"
+    user     = "${var.nodejs_server_ssh_user}"
+    password = "${var.nodejs_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.nodejs_vm.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -435,19 +444,20 @@ systemctl start nodeserver.service                                              
 
 if hash iptables 2>/dev/null; then
 	#update firewall
-	iptables -I INPUT 1 -p tcp -m tcp --dport 8443 -m conntrack --ctstate NEW -j ACCEPT                           >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }   
-fi	
+	iptables -I INPUT 1 -p tcp -m tcp --dport 8443 -m conntrack --ctstate NEW -j ACCEPT                           >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }
+fi
 
-echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.mongodb_vm.network_interface.0.ipv4_address}\""
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.mongodb_vm.network_interface.0.ipv4_address}\"",
     ]
   }
 }
@@ -455,17 +465,18 @@ EOF
 ##############################################################
 # Check status
 ##############################################################
-resource "null_resource" "check_status"{
-  depends_on    = ["null_resource.install_nodejs"]
-    
+resource "null_resource" "check_status" {
+  depends_on = ["null_resource.install_nodejs"]
+
   # Specify the ssh connection
   connection {
-    user        = "${var.nodejs_server_ssh_user}"
-    password    = "${var.nodejs_server_ssh_user_password}"    
-#    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host        = "${vsphere_virtual_machine.nodejs_vm.network_interface.0.ipv4_address}"
+    user     = "${var.nodejs_server_ssh_user}"
+    password = "${var.nodejs_server_ssh_user_password}"
+
+    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.nodejs_vm.network_interface.0.ipv4_address}"
   }
-  
+
   # Create the installation script
   provisioner "file" {
     content = <<EOF
@@ -490,31 +501,31 @@ SERVICE_STATUS=$(cat $TMPFILE)
 while [ "$SERVICE_STATUS" != "200" ]; do
 	echo "---application is being started---"
 	sleep 10
-	let StatusCheckCount=StatusCheckCount+1	
+	let StatusCheckCount=StatusCheckCount+1
 	if [ $StatusCheckCount -eq $StatusCheckMaxCount ]; then
 		echo "---The servce is not up---"
 		rm -f $TMPFILE
 		exit 1
-	fi		
+	fi
 	curl -k -s -o /dev/null -w "%{http_code}" -I -m 5 $APP_URL > $TMPFILE || true
 	SERVICE_STATUS=$(cat $TMPFILE)
 done
-rm -f $TMPFILE	
-	
+rm -f $TMPFILE
+
 echo "---application is up---"
 
 EOF
+
     destination = "/tmp/checkStatus.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/checkStatus.sh; bash /tmp/checkStatus.sh http://\"${vsphere_virtual_machine.nodejs_vm.network_interface.0.ipv4_address}\":8443"
+      "chmod +x /tmp/checkStatus.sh; bash /tmp/checkStatus.sh http://\"${vsphere_virtual_machine.nodejs_vm.network_interface.0.ipv4_address}\":8443",
     ]
-  } 
+  }
 }
-
 
 #########################################################
 # Output
