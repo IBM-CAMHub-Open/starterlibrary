@@ -14,7 +14,7 @@
 #
 # Licensed Materials - Property of IBM
 #
-# ©Copyright IBM Corp. 2017.
+# ©Copyright IBM Corp. 2017, 2018.
 #
 #################################################################
 
@@ -22,6 +22,7 @@
 # Define the AWS provider
 #########################################################
 provider "aws" {
+  version    = "~> 1.2"
   access_key = "${var.aws_access_key}"
   secret_key = "${var.aws_secret_key}"
   region     = "${var.aws_region}"
@@ -31,6 +32,7 @@ provider "aws" {
 # Define the ibmcloud provider
 #########################################################
 provider "ibm" {
+  version = "~> 0.5"
 }
 
 #########################################################
@@ -49,16 +51,26 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-# Ubuntu 16.04, https://cloud-images.ubuntu.com/locator/
-variable "aws_ami" {
-  type        = "map"
-  description = "loop up ami using aws region"
-  default = {
-    us-west-1 = "ami-539ac933"
-    us-west-2 = "ami-7c803d1c"
-    us-east-1 = "ami-6edd3078"
-    us-east-2 = "ami-e0b59085"
+#Variable : AWS image name
+variable "aws_image" {
+  type = "string"
+  description = "Operating system image id / template that should be used when creating the virtual image"
+  default = "ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"
+}
+
+variable "aws_ami_owner_id" {
+  description = "AWS AMI Owner ID"
+  default = "099720109477"
+}
+
+# Lookup for AMI based on image name and owner ID
+data "aws_ami" "aws_ami" {
+  most_recent = true
+  filter {
+    name = "name"
+    values = ["${var.aws_image}*"]
   }
+  owners = ["${var.aws_ami_owner_id}"]
 }
 
 variable "network_name_prefix" {
@@ -95,6 +107,7 @@ variable "softlayer_datacenter" {
 resource "aws_vpc" "default" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
+
   tags {
     Name = "${var.network_name_prefix}-vpc"
   }
@@ -102,6 +115,7 @@ resource "aws_vpc" "default" {
 
 resource "aws_internet_gateway" "default" {
   vpc_id = "${aws_vpc.default.id}"
+
   tags {
     Name = "${var.network_name_prefix}-gateway"
   }
@@ -110,6 +124,7 @@ resource "aws_internet_gateway" "default" {
 resource "aws_subnet" "default" {
   vpc_id     = "${aws_vpc.default.id}"
   cidr_block = "10.0.1.0/24"
+
   tags {
     Name = "${var.network_name_prefix}-subnet"
   }
@@ -117,10 +132,12 @@ resource "aws_subnet" "default" {
 
 resource "aws_route_table" "default" {
   vpc_id = "${aws_vpc.default.id}"
+
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.default.id}"
   }
+
   tags {
     Name = "${var.network_name_prefix}-route-table"
   }
@@ -135,30 +152,35 @@ resource "aws_security_group" "meanstack_nodejs" {
   name        = "${var.network_name_prefix}-security-group-meanstack-nodejs"
   description = "Security group which applies to meanstack servers with nodejs/angular/express installed "
   vpc_id      = "${aws_vpc.default.id}"
+
   ingress {
     from_port   = 8443
     to_port     = 8443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   ingress {
     from_port   = -1
     to_port     = -1
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   tags {
     Name = "${var.network_name_prefix}-security-group-meanstack-nodejs"
   }
@@ -190,8 +212,8 @@ resource "aws_key_pair" "temp_public_key" {
 }
 
 resource "ibm_compute_ssh_key" "temp_public_key" {
-    label      = "${var.public_ssh_key_name}-temp"
-    public_key = "${tls_private_key.ssh.public_key_openssh}"
+  label      = "${var.public_ssh_key_name}-temp"
+  public_key = "${tls_private_key.ssh.public_key_openssh}"
 }
 
 ##############################################################
@@ -218,7 +240,7 @@ resource "ibm_compute_vm_instance" "mongodb_server" {
     private_key = "${tls_private_key.ssh.private_key_pem}"
     host        = "${self.ipv4_address}"
   }
-  
+
   # Create the installation script
   provisioner "file" {
     content = <<EOF
@@ -248,13 +270,14 @@ service mongod start                                                            
 echo "---finish installing mongodb---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh"
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
   }
 }
@@ -264,12 +287,13 @@ EOF
 ##############################################################
 resource "aws_instance" "nodejs_server" {
   depends_on                  = ["aws_route_table_association.default"]
-  instance_type               = "t2.medium" 
-  ami                         = "${lookup(var.aws_ami, var.aws_region)}"
+  instance_type               = "t2.medium"
+  ami                         = "${data.aws_ami.aws_ami.id}"
   subnet_id                   = "${aws_subnet.default.id}"
   vpc_security_group_ids      = ["${aws_security_group.meanstack_nodejs.id}"]
   key_name                    = "${aws_key_pair.temp_public_key.id}"
   associate_public_ip_address = true
+
   tags {
     Name = "${var.hostname-nodejs}"
   }
@@ -295,13 +319,14 @@ if [ "$user_public_key" != "None" ] ; then
 fi
 
 EOF
+
     destination = "/tmp/addkey.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; sudo bash /tmp/addkey.sh \"${var.public_ssh_key}\""
+      "chmod +x /tmp/addkey.sh; sudo bash /tmp/addkey.sh \"${var.public_ssh_key}\"",
     ]
   }
 }
@@ -309,9 +334,8 @@ EOF
 ##############################################################
 # Install Node.js, Express and Angular.js
 ##############################################################
-resource "null_resource" "install_nodejs"{
-
-    # Specify the ssh connection
+resource "null_resource" "install_nodejs" {
+  # Specify the ssh connection
   connection {
     user        = "ubuntu"
     private_key = "${tls_private_key.ssh.private_key_pem}"
@@ -369,16 +393,17 @@ EOT
 systemctl enable nodeserver.service                                                                               >> $LOGFILE 2>&1 || { echo "---Failed to enable the sample node service---" | tee -a $LOGFILE; exit 1; }
 systemctl start nodeserver.service                                                                                >> $LOGFILE 2>&1 || { echo "---Failed to start the sample node service---" | tee -a $LOGFILE; exit 1; }
 
-echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh \"${ibm_compute_vm_instance.mongodb_server.ipv4_address}\""
+      "chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh \"${ibm_compute_vm_instance.mongodb_server.ipv4_address}\"",
     ]
   }
 }
@@ -386,16 +411,16 @@ EOF
 ##############################################################
 # Check status
 ##############################################################
-resource "null_resource" "check_status"{
-  depends_on    = ["null_resource.install_nodejs"]
-    
+resource "null_resource" "check_status" {
+  depends_on = ["null_resource.install_nodejs"]
+
   # Specify the ssh connection
   connection {
     user        = "ubuntu"
     private_key = "${tls_private_key.ssh.private_key_pem}"
     host        = "${aws_instance.nodejs_server.public_ip}"
   }
-  
+
   # Create the installation script
   provisioner "file" {
     content = <<EOF
@@ -420,29 +445,30 @@ SERVICE_STATUS=$(cat $TMPFILE)
 while [ "$SERVICE_STATUS" != "200" ]; do
 	echo "---application is being started---"
 	sleep 10
-	let StatusCheckCount=StatusCheckCount+1	
+	let StatusCheckCount=StatusCheckCount+1
 	if [ $StatusCheckCount -eq $StatusCheckMaxCount ]; then
-		echo "---The servce is not up---" 
+		echo "---The servce is not up---"
 		rm -f $TMPFILE
 		exit 1
-	fi	
+	fi
 	curl -k -s -o /dev/null -w "%{http_code}" -I -m 5 $APP_URL > $TMPFILE || true
 	SERVICE_STATUS=$(cat $TMPFILE)
 done
-rm -f $TMPFILE	
-	
+rm -f $TMPFILE
+
 echo "---application is up---"
 
 EOF
+
     destination = "/tmp/checkStatus.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/checkStatus.sh; sudo bash /tmp/checkStatus.sh http://\"${aws_instance.nodejs_server.public_ip}\":8443"
+      "chmod +x /tmp/checkStatus.sh; sudo bash /tmp/checkStatus.sh http://\"${aws_instance.nodejs_server.public_ip}\":8443",
     ]
-  } 
+  }
 }
 
 #########################################################

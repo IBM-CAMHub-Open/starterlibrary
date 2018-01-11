@@ -44,8 +44,8 @@ variable "public_ssh_key" {
 # Create public key in Devices>Manage>SSH Keys in SL console
 ##############################################################
 resource "ibm_compute_ssh_key" "cam_public_key" {
-    label      = "CAM Public Key"
-    public_key = "${var.public_ssh_key}"
+  label      = "CAM Public Key"
+  public_key = "${var.public_ssh_key}"
 }
 
 ##############################################################
@@ -114,38 +114,38 @@ echo "---finish installing mongodb---" | tee -a $LOGFILE 2>&1
 
 #install node.js
 
-echo "---start installing node.js---" | tee -a $LOGFILE 2>&1 
+echo "---start installing node.js---" | tee -a $LOGFILE 2>&1
 yum install gcc-c++ make -y                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install build tools---" | tee -a $LOGFILE; exit 1; }
 curl -sL https://rpm.nodesource.com/setup_7.x | bash -                             >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
 yum install nodejs -y                                                              >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
-echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1
 
 #install angularjs
 
-echo "---start installing angularjs---" | tee -a $LOGFILE 2>&1 
+echo "---start installing angularjs---" | tee -a $LOGFILE 2>&1
 npm install -g grunt-cli bower yo generator-karma generator-angular                >> $LOGFILE 2>&1 || { echo "---Failed to install angular tools---" | tee -a $LOGFILE; exit 1; }
 yum install gcc ruby ruby-devel rubygems -y                                        >> $LOGFILE 2>&1 || { echo "---Failed to install ruby---" | tee -a $LOGFILE; exit 1; }
 gem install compass                                                                >> $LOGFILE 2>&1 || { echo "---Failed to install compass---" | tee -a $LOGFILE; exit 1; }
-echo "---finish installing angularjs---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing angularjs---" | tee -a $LOGFILE 2>&1
 
 #install strongloop
 
-echo "---start installing strongloop---" | tee -a $LOGFILE 2>&1 
+echo "---start installing strongloop---" | tee -a $LOGFILE 2>&1
 yum groupinstall 'Development Tools' -y                                            >> $LOGFILE 2>&1 || { echo "---Failed to install development tools---" | tee -a $LOGFILE; exit 1; }
 npm install -g strongloop                                                          >> $LOGFILE 2>&1 || { echo "---Failed to install strongloop---" | tee -a $LOGFILE; exit 1; }
-echo "---finish installing strongloop---" | tee -a $LOGFILE 2>&1 
+echo "---finish installing strongloop---" | tee -a $LOGFILE 2>&1
 
 #install sample application
 
-echo "---start installing sample application---" | tee -a $LOGFILE 2>&1 
-		
+echo "---start installing sample application---" | tee -a $LOGFILE 2>&1
+
 #create mongodb user
 dbUserPwd=$(date | md5sum | head -c 10)
 mongo admin --eval "db.createUser({user: \"sampleUser\", pwd: \"$dbUserPwd\", roles: [{role: \"userAdminAnyDatabase\", db: \"admin\"}]})"    >> $LOGFILE 2>&1 || { echo "---Failed to create MongoDB user---" | tee -a $LOGFILE; exit 1; }
 
 PROJECT_NAME=sample
 SAMPLE_DIR=$HOME/$PROJECT_NAME
-			
+
 yum install expect -y                                                                                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install Expect---" | tee -a $LOGFILE; exit 1; }
 
 #create project
@@ -173,17 +173,17 @@ chmod 755 $SCRIPT_CREATE_PROJECT                                                
 ./$SCRIPT_CREATE_PROJECT                                                                                                                    >> $LOGFILE 2>&1 || { echo "---Failed to execute script---" | tee -a $LOGFILE; exit 1; }
 rm -f $SCRIPT_CREATE_PROJECT                                                                                                                >> $LOGFILE 2>&1 || { echo "---Failed to remove script---" | tee -a $LOGFILE; exit 1; }
 
-#add dependency package 
+#add dependency package
 cd $SAMPLE_DIR
 sed -i -e '/loopback-datasource-juggler/a\ \ \ \ "loopback-connector-mongodb": "^1.18.0",' package.json                                     >> $LOGFILE 2>&1 || { echo "---Failed to add dependency for loopback-connector-mongo---" | tee -a $LOGFILE; exit 1; }
 
 #install packages in server side
 npm install                                                                                                                                 >> $LOGFILE 2>&1 || { echo "---Failed to install packages via npm---" | tee -a $LOGFILE; exit 1; }
-	
+
 #create data model
 MODEL_NAME=Todos
 SCRIPT_CREATE_MODEL=createModel.sh
-	
+
 cat << EOT > $SCRIPT_CREATE_MODEL
 #!/usr/bin/expect
 set timeout 20
@@ -216,17 +216,17 @@ EOT
 chmod 755 $SCRIPT_CREATE_MODEL                                                                                                              >> $LOGFILE 2>&1 || { echo "---Failed to change permission of script---" | tee -a $LOGFILE; exit 1; }
 ./$SCRIPT_CREATE_MODEL                                                                                                                      >> $LOGFILE 2>&1 || { echo "---Failed to execute script---" | tee -a $LOGFILE; exit 1; }
 rm -f $SCRIPT_CREATE_MODEL                                                                                                                  >> $LOGFILE 2>&1 || { echo "---Failed to remove script---" | tee -a $LOGFILE; exit 1; }
-	
+
 #update server config
 DATA_SOURCE_FILE=server/datasources.json
 sed -i -e 's/\ \ }/\ \ },/g' $DATA_SOURCE_FILE                                                                                              >> $LOGFILE 2>&1 || { echo "---Failed to update datasource.json---" | tee -a $LOGFILE; exit 1; }
 sed -i -e '/\ \ },/a\ \ "myMongoDB": {\n\ \ \ \ "host": "localhost",\n\ \ \ \ "port": 27017,\n\ \ \ \ "url": "mongodb://sampleUser:sampleUserPwd@localhost:27017/admin",\n\ \ \ \ "database": "Todos",\n\ \ \ \ "password": "sampleUserPwd",\n\ \ \ \ "name": "myMongoDB",\n\ \ \ \ "user": "sampleUser",\n\ \ \ \ "connector": "mongodb"\n\ \ }' $DATA_SOURCE_FILE    >> $LOGFILE 2>&1 || { echo "---Failed to update datasource.json---" | tee -a $LOGFILE; exit 1; }
 sed -i -e "s/sampleUserPwd/$dbUserPwd/g" $DATA_SOURCE_FILE                                                                                  >> $LOGFILE 2>&1 || { echo "---Failed to update datasource.json---" | tee -a $LOGFILE; exit 1; }
-	
+
 MODEL_CONFIG_FILE=server/model-config.json
 sed -i -e '/Todos/{n;d}' $MODEL_CONFIG_FILE                                                                                                 >> $LOGFILE 2>&1 || { echo "---Failed to update model-config.json---" | tee -a $LOGFILE; exit 1; }
 sed -i -e '/Todos/a\ \ \ \ "dataSource": "myMongoDB",' $MODEL_CONFIG_FILE                                                                   >> $LOGFILE 2>&1 || { echo "---Failed to update model-config.json---" | tee -a $LOGFILE; exit 1; }
-	
+
 SERVER_JS_FILE=server/server.js
 sed -i -e "/app = module.exports = loopback()/a var path = require('path');\napp.use(loopback.static(path.resolve(__dirname, \'../client\')));" $SERVER_JS_FILE     >> $LOGFILE 2>&1 || { echo "---Failed to update server.js---" | tee -a $LOGFILE; exit 1; }
 
@@ -407,17 +407,18 @@ EOT
 
 systemctl enable nodeserver.service                                                                                                         >> $LOGFILE 2>&1 || { echo "---Failed to enable the sample node service---" | tee -a $LOGFILE; exit 1; }
 systemctl start nodeserver.service                                                                                                          >> $LOGFILE 2>&1 || { echo "---Failed to start the sample node service---" | tee -a $LOGFILE; exit 1; }
-		
-echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1 		
+
+echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
 
 EOF
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
-    inline = [ 
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh"
+    inline = [
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
   }
 }
@@ -426,6 +427,5 @@ EOF
 # Output
 #########################################################
 output "Please access the strongloop-single-stack sample application using the following url" {
-    value = "http://${ibm_compute_vm_instance.softlayer_virtual_guest.ipv4_address}:3000"
+  value = "http://${ibm_compute_vm_instance.softlayer_virtual_guest.ipv4_address}:3000"
 }
-

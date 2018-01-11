@@ -11,7 +11,13 @@
        "templateData": "",
        "templateVariables": "",
        "templateOutput": ""
-     }
+     },
+    "template_source": {
+      "githubRepoUrl": "",
+      "githubAccessToken": "",
+      "relativePathToTemplateFolder": "VMware/terraform/hcl/strongloop-three-tiers",
+      "templateFileName": "strongloop-three-tiers.tf"
+    }
    },
    "metadata": {
      "displayName": "Strongloop 3 Tier Deployment",

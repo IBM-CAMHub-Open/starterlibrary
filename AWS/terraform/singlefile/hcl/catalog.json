@@ -37,7 +37,7 @@
        },
        {
          "title": "Operating systems supported",
-         "description": "AWS: Ubuntu 14.04.01 LTS (Trusty Tahr) "
+         "description": "AWS: Ubuntu 14.04 LTS"
        },
        {
          "title": "Topology",
@@ -46,7 +46,7 @@
        {
          "title": "Default virtual machine settings",
          "description": "<ul><li>AWS:<ul style=\"margin-left: 20px;\"><li>Flavor: t2.micro, Cores = 1, Memory = 1GB</li><li>Network: Private IP - Computed, Public IP - Computed</li></ul></li></ul>"
-       },       
+       },
        {
          "title": "Usage and special notes",
          "description": "<ul><li>1. Creates a virtual server with an ssh key provided by the user into an existing virtual private cloud specified by the user.</li><li>2. Deployment takes approximately 5 minutes to complete.</li><li>3. To access the application and virtual machines, please see the instructions in the output log.</li></ul>"
@@ -77,4 +77,3 @@
       "git": "https://github.com/ibmcam/cam-toolchain"
     }
   }
-
