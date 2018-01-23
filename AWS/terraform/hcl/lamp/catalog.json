@@ -1,7 +1,7 @@
 {
    "name": "LAMP stack deployment",
    "description": "LAMP - A fully-integrated environment for full stack PHP web development.",
-   "version": "1.0.0.0",
+   "version": "1.0.4",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
    "image": "tp_WAS_standalone.png",
    "type": "prebuilt",

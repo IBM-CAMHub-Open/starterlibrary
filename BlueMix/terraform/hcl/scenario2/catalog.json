@@ -1,7 +1,7 @@
  {
     "name": "2 Virtual Servers with SSH keys",
     "description": "A sample cloud resource template that creates 2 virtual servers.",
-    "version": "1.0.0.0",
+    "version": "1.0.4",
     "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
     "image": "tp_WAS_standalone.png",
     "type": "prebuilt",
