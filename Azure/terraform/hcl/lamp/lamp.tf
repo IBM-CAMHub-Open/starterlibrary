@@ -332,7 +332,7 @@ apt-get install -y php7.0 libapache2-mod-php7.0 mcrypt php7.0-mcrypt php-mbstrin
 echo "---install ODBC drive and SQL tools---" | tee -a $LOGFILE 2>&1
 curl -s https://packages.microsoft.com/config/ubuntu/16.04/prod.list | tee /etc/apt/sources.list.d/mssql-tools.list    >> $LOGFILE 2>&1 || { echo "---Failed to update repo---" | tee -a $LOGFILE; exit 1; }
 apt-get update                                                                                                         >> $LOGFILE 2>&1 || true
-sudo ACCEPT_EULA=Y apt-get install mssql-tools -y --allow-unauthenticated                                              >> $LOGFILE 2>&1 || { echo "---Failed to install mssql tools---" | tee -a $LOGFILE; exit 1; }
+ACCEPT_EULA=Y apt-get install mssql-tools -y --allow-unauthenticated                                              >> $LOGFILE 2>&1 || { echo "---Failed to install mssql tools---" | tee -a $LOGFILE; exit 1; }
 apt-get install unixodbc-dev -y                                                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install ODBC drive---" | tee -a $LOGFILE; exit 1; }
 echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
 echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc

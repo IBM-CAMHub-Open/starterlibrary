@@ -1,316 +1,422 @@
-#################################################################
-# Terraform template that will deploy:
-#    * MongoDB in one VM
-#    * NodeJS, AngularJS and Express in another VM
-#    * Sample application
-#
-# Version: 1.0
+# =================================================================
+# Copyright 2017 IBM Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#	you may not use this file except in compliance with the License.
+#	You may obtain a copy of the License at
 #
-#    http://www.apache.org/licenses/LICENSE-2.0
+#	  http://www.apache.org/licenses/LICENSE-2.0
 #
-# Licensed Materials - Property of IBM
-#
-# ©Copyright IBM Corp. 2017.
-#
-#################################################################
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+#	WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# =================================================================
 
-#########################################################
+# This is a terraform generated template generated from LAMPStarter
+
+##############################################################
+# Keys - CAMC (public/private) & optional User Key (public)
+##############################################################
+variable "user_public_ssh_key" {
+  type = "string"
+  description = "User defined public SSH key used to connect to the virtual machine. The format must be in openSSH."
+  default = "None"
+}
+
+variable "ibm_stack_id" {
+  description = "A unique stack id."
+}
+
+variable "ibm_pm_public_ssh_key" {
+  description = "Public CAMC SSH key value which is used to connect to a guest, used on VMware only."
+}
+
+variable "ibm_pm_private_ssh_key" {
+  description = "Private CAMC SSH key (base64 encoded) used to connect to the virtual guest."
+}
+
+variable "allow_unverified_ssl" {
+  description = "Communication with vsphere server with self signed certificate"
+  default = "true"
+}
+
+##############################################################
 # Define the vsphere provider
-#########################################################
+##############################################################
 provider "vsphere" {
-  version              = "~> 0.4"
-  allow_unverified_ssl = true
+  allow_unverified_ssl = "${var.allow_unverified_ssl}"
+  version = "~> 1.3"
 }
+
+provider "camc" {
+  version = "~> 0.1"
+}
+
+##############################################################
+# Define pattern variables
+##############################################################
+##### unique stack name #####
+variable "ibm_stack_name" {
+  description = "A unique stack name."
+}
+
+##############################################################
+# Vsphere data for provider
+##############################################################
+data "vsphere_datacenter" "mongodb_vm_datacenter" {
+  name = "${var.mongodb_vm_datacenter}"
+}
+data "vsphere_datastore" "mongodb_vm_datastore" {
+  name = "${var.mongodb_vm_root_disk_datastore}"
+  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
+}
+data "vsphere_resource_pool" "mongodb_vm_resource_pool" {
+  name = "${var.mongodb_vm_resource_pool}"
+  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
+}
+data "vsphere_network" "mongodb_vm_network" {
+  name = "${var.mongodb_vm_network_interface_label}"
+  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
+}
+
+data "vsphere_virtual_machine" "mongodb_vm_template" {
+  name = "${var.mongodb_vm-image}"
+  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
+}
+##############################################################
+# Vsphere data for provider
+##############################################################
+data "vsphere_datacenter" "nodejs_vm_datacenter" {
+  name = "${var.nodejs_vm_datacenter}"
+}
+data "vsphere_datastore" "nodejs_vm_datastore" {
+  name = "${var.nodejs_vm_root_disk_datastore}"
+  datacenter_id = "${data.vsphere_datacenter.nodejs_vm_datacenter.id}"
+}
+data "vsphere_resource_pool" "nodejs_vm_resource_pool" {
+  name = "${var.nodejs_vm_resource_pool}"
+  datacenter_id = "${data.vsphere_datacenter.nodejs_vm_datacenter.id}"
+}
+data "vsphere_network" "nodejs_vm_network" {
+  name = "${var.nodejs_vm_network_interface_label}"
+  datacenter_id = "${data.vsphere_datacenter.nodejs_vm_datacenter.id}"
+}
+
+data "vsphere_virtual_machine" "nodejs_vm_template" {
+  name = "${var.nodejs_vm-image}"
+  datacenter_id = "${data.vsphere_datacenter.nodejs_vm_datacenter.id}"
+}
+
+##### Environment variables #####
+#Variable : ibm_pm_access_token
+variable "ibm_pm_access_token" {
+  type = "string"
+  description = "IBM Pattern Manager Access Token"
+}
+
+#Variable : ibm_pm_service
+variable "ibm_pm_service" {
+  type = "string"
+  description = "IBM Pattern Manager Service"
+}
+
+
+##### Image Parameters variables #####
+
+##### mongodb_vm variables #####
+#Variable : mongodb_vm-image
+variable "mongodb_vm-image" {
+  type = "string"
+  description = "Operating system image id / template that should be used when creating the virtual image"
+}
+
+#Variable : mongodb_vm-name
+variable "mongodb_vm-name" {
+  type = "string"
+  description = "Short hostname of virtual machine"
+}
+
+#Variable : mongodb_vm-os_admin_user
+variable "mongodb_vm-os_admin_user" {
+  type = "string"
+  description = "Name of the admin user account in the virtual machine that will be accessed via SSH"
+}
+
+
+##### nodejs_vm variables #####
+#Variable : nodejs_vm-image
+variable "nodejs_vm-image" {
+  type = "string"
+  description = "Operating system image id / template that should be used when creating the virtual image"
+}
+
+#Variable : nodejs_vm-name
+variable "nodejs_vm-name" {
+  type = "string"
+  description = "Short hostname of virtual machine"
+}
+
+#Variable : nodejs_vm-os_admin_user
+variable "nodejs_vm-os_admin_user" {
+  type = "string"
+  description = "Name of the admin user account in the virtual machine that will be accessed via SSH"
+}
+
+
+##### virtualmachine variables #####
+
+##### ungrouped variables #####
 
 #########################################################
-# Define the variables
+##### Resource : mongodb_vm
 #########################################################
-variable "mongodb_server_hostname" {
-  description = "Hostname of the virtual instance (with MongoDB installed) to be deployed"
-  default     = "mean-mongodb-vm"
+
+variable "mongodb_vm-os_password" {
+  type = "string"
+  description = "Operating System Password for the Operating System User to access virtual machine"
 }
 
-variable "nodejs_server_hostname" {
-  description = "Hostname of the virtual instance (with NodeJS, AngularJS and Express installed) to be deployed"
-  default     = "mean-nodejs-vm"
+variable "mongodb_vm_folder" {
+  description = "Target vSphere folder for virtual machine"
 }
 
-variable "folder" {
-  description = "Target vSphere folder for Virtual Machine"
-  default     = ""
+variable "mongodb_vm_datacenter" {
+  description = "Target vSphere datacenter for virtual machine creation"
 }
 
-variable "datacenter" {
-  description = "Target vSphere datacenter for Virtual Machine creation"
-  default     = ""
+variable "mongodb_vm_domain" {
+  description = "Domain Name of virtual machine"
 }
 
-variable "mongodb_server_vcpu" {
-  description = "Number of Virtual CPU for the MongoDB server"
-  default     = 1
+variable "mongodb_vm_number_of_vcpu" {
+  description = "Number of virtual CPU for the virtual machine, which is required to be a positive Integer"
+  default = "2"
 }
 
-variable "mongodb_server_memory" {
-  description = "Memory for the MongoDB server in GBs"
-  default     = 1
+variable "mongodb_vm_memory" {
+  description = "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024"
+  default = "2048"
 }
 
-variable "nodejs_server_vcpu" {
-  description = "Number of Virtual CPU for the NodeJs server; must not be less than 2 cores"
-  default     = 2
+variable "mongodb_vm_cluster" {
+  description = "Target vSphere cluster to host the virtual machine"
 }
 
-variable "nodejs_server_memory" {
-  description = "Memory for the NodeJs server in GBs; must not be less than 4GB"
-  default     = 4
+variable "mongodb_vm_resource_pool" {
+  description = "Target vSphere Resource Pool to host the virtual machine"
 }
 
-variable "cluster" {
-  description = "Target vSphere Cluster to host the Virtual Machine"
-  default     = ""
-}
-
-variable "dns_suffixes" {
+variable "mongodb_vm_dns_suffixes" {
+  type = "list"
   description = "Name resolution suffixes for the virtual network adapter"
-  type        = "list"
-  default     = []
 }
 
-variable "dns_servers" {
+variable "mongodb_vm_dns_servers" {
+  type = "list"
   description = "DNS servers for the virtual network adapter"
-  type        = "list"
-  default     = []
 }
 
-variable "network_label" {
-  description = "vSphere Port Group or Network label for Virtual Machine's vNIC"
+variable "mongodb_vm_network_interface_label" {
+  description = "vSphere port group or network label for virtual machine's vNIC"
 }
 
-variable "mongodb_server_ipv4_address" {
-  description = "IPv4 address for vNIC configuration in mongodb server"
-}
-
-variable "nodejs_server_ipv4_address" {
-  description = "IPv4 address for vNIC configuration in nodejs server"
-}
-
-variable "ipv4_gateway" {
+variable "mongodb_vm_ipv4_gateway" {
   description = "IPv4 gateway for vNIC configuration"
 }
 
-variable "ipv4_prefix_length" {
-  description = "IPv4 Prefix length for vNIC configuration"
+variable "mongodb_vm_ipv4_address" {
+  description = "IPv4 address for vNIC configuration"
 }
 
-variable "storage" {
-  description = "Data store or storage cluster name for target VMs disks"
-  default     = ""
+variable "mongodb_vm_ipv4_prefix_length" {
+  description = "IPv4 prefix length for vNIC configuration. The value must be a number between 8 and 32"
 }
 
-variable "mongodb_server_vm_template" {
-  description = "Source VM or Template label for cloning to MongoDB server"
+variable "mongodb_vm_adapter_type" {
+  description = "Network adapter type for vNIC Configuration"
+  default = "vmxnet3"
 }
 
-variable "mongodb_server_ssh_user" {
-  description = "The user for ssh connection to MongoDB server, which is default in template"
-  default     = "root"
+variable "mongodb_vm_root_disk_datastore" {
+  description = "Data store or storage cluster name for target virtual machine's disks"
 }
 
-variable "mongodb_server_ssh_user_password" {
-  description = "The user password for ssh connection to MongoDB server, which is default in template"
+variable "mongodb_vm_root_disk_type" {
+  type = "string"
+  description = "Type of template disk volume"
+  default = "eager_zeroed"
 }
 
-variable "nodejs_server_vm_template" {
-  description = "Source VM or Template label for cloning to NodeJs server"
+variable "mongodb_vm_root_disk_controller_type" {
+  type = "string"
+  description = "Type of template disk controller"
+  default = "scsi"
 }
 
-variable "nodejs_server_ssh_user" {
-  description = "The user for ssh connection to NodeJs server, which is default in template"
-  default     = "root"
+variable "mongodb_vm_root_disk_keep_on_remove" {
+  type = "string"
+  description = "Delete template disk volume when the virtual machine is deleted"
+  default = "false"
 }
 
-variable "nodejs_server_ssh_user_password" {
-  description = "The user password for ssh connection to NodeJs server, which is default in template"
+variable "mongodb_vm_root_disk_size" {
+  description = "Size of template disk volume. Should be equal to template's disk size"
+  default = "25"
 }
 
-#variable "camc_private_ssh_key" {
-#  description = "The base64 encoded private key for ssh connection"
-#}
-
-variable "user_public_key" {
-  description = "User-provided public SSH key used to connect to the virtual machine"
-  default     = "None"
-}
-
-##############################################################
-# Create Virtual Machines
-##############################################################
+# vsphere vm
 resource "vsphere_virtual_machine" "mongodb_vm" {
-  name         = "${var.mongodb_server_hostname}"
-  folder       = "${var.folder}"
-  datacenter   = "${var.datacenter}"
-  vcpu         = "${var.mongodb_server_vcpu}"
-  memory       = "${var.mongodb_server_memory * 1024}"
-  cluster      = "${var.cluster}"
-  dns_suffixes = "${var.dns_suffixes}"
-  dns_servers  = "${var.dns_servers}"
+  name = "${var.mongodb_vm-name}"
+  folder = "${var.mongodb_vm_folder}"
+  num_cpus = "${var.mongodb_vm_number_of_vcpu}"
+  memory = "${var.mongodb_vm_memory}"
+  resource_pool_id = "${data.vsphere_resource_pool.mongodb_vm_resource_pool.id}"
+  datastore_id = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
+  guest_id = "${data.vsphere_virtual_machine.mongodb_vm_template.guest_id}"
+  clone {
+    template_uuid = "${data.vsphere_virtual_machine.mongodb_vm_template.id}"
+    customize {
+      linux_options {
+        domain = "${var.mongodb_vm_domain}"
+        host_name = "${var.mongodb_vm-name}"
+      }
+    network_interface {
+      ipv4_address = "${var.mongodb_vm_ipv4_address}"
+      ipv4_netmask = "${var.mongodb_vm_ipv4_prefix_length}"
+    }
+    ipv4_gateway = "${var.mongodb_vm_ipv4_gateway}"
+    dns_suffix_list = "${var.mongodb_vm_dns_suffixes}"
+    dns_server_list = "${var.mongodb_vm_dns_servers}"
+    }
+  }
 
   network_interface {
-    label              = "${var.network_label}"
-    ipv4_gateway       = "${var.ipv4_gateway}"
-    ipv4_address       = "${var.mongodb_server_ipv4_address}"
-    ipv4_prefix_length = "${var.ipv4_prefix_length}"
+    network_id = "${data.vsphere_network.mongodb_vm_network.id}"
+    adapter_type = "${var.mongodb_vm_adapter_type}"
   }
 
   disk {
-    datastore = "${var.storage}"
-    template  = "${var.mongodb_server_vm_template}"
-    type      = "thin"
+    label = "${var.mongodb_vm-name}0.vmdk"
+    size = "${var.mongodb_vm_root_disk_size}"
+    keep_on_remove = "${var.mongodb_vm_root_disk_keep_on_remove}"
+    datastore_id = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
   }
 
-  # Specify the ssh connection
+  # Specify the connection
   connection {
-    user     = "${var.mongodb_server_ssh_user}"
-    password = "${var.mongodb_server_ssh_user_password}"
-
-    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host = "${self.network_interface.0.ipv4_address}"
+    type = "ssh"
+    user = "${var.mongodb_vm-os_admin_user}"
+    password = "${var.mongodb_vm-os_password}"
   }
 
   provisioner "file" {
-    content = <<EOF
+    destination = "mongodb_vm_add_ssh_key.sh"
+    content     = <<EOF
+# =================================================================
+# Copyright 2017 IBM Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+#	you may not use this file except in compliance with the License.
+#	You may obtain a copy of the License at
+#
+#	  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+#	WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# =================================================================
 #!/bin/bash
 
-LOGFILE="/var/log/addkey.log"
-
-user_public_key=$1
-
-mkdir -p .ssh
-if [ ! -f .ssh/authorized_keys ] ; then
-    touch .ssh/authorized_keys                                    >> $LOGFILE 2>&1 || { echo "---Failed to create authorized_keys---" | tee -a $LOGFILE; exit 1; }
-    chmod 400 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
+if (( $# != 3 )); then
+echo "usage: arg 1 is user, arg 2 is public key, arg3 is CAMC Public Key"
+exit -1
 fi
 
-if [ "$user_public_key" != "None" ] ; then
-    echo "---start adding user_public_key----" | tee -a $LOGFILE 2>&1
+userid="$1"
+ssh_key="$2"
+camc_ssh_key="$3"
 
-    chmod 600 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
-    echo "$user_public_key" | tee -a $HOME/.ssh/authorized_keys   >> $LOGFILE 2>&1 || { echo "---Failed to add user_public_key---" | tee -a $LOGFILE; exit 1; }
-    chmod 400 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
+user_home=$(eval echo "~$userid")
+user_auth_key_file=$user_home/.ssh/authorized_keys
+echo "$user_auth_key_file"
+if ! [ -f $user_auth_key_file ]; then
+echo "$user_auth_key_file does not exist on this system, creating."
+mkdir $user_home/.ssh
+chmod 700 $user_home/.ssh
+touch $user_home/.ssh/authorized_keys
+chmod 600 $user_home/.ssh/authorized_keys
+else
+echo "user_home : $user_home"
+fi
 
-    echo "---finish adding user_public_key----" | tee -a $LOGFILE 2>&1
+if [[ $ssh_key = 'None' ]]; then
+echo "skipping user key add, 'None' specified"
+else
+echo "$user_auth_key_file"
+echo "$ssh_key" >> "$user_auth_key_file"
+if [ $? -ne 0 ]; then
+echo "failed to add to $user_auth_key_file"
+exit -1
+else
+echo "updated $user_auth_key_file"
+fi
+fi
+
+echo "$camc_ssh_key" >> "$user_auth_key_file"
+if [ $? -ne 0 ]; then
+echo "failed to add to $user_auth_key_file"
+exit -1
+else
+echo "updated $user_auth_key_file"
 fi
 
 EOF
-
-    destination = "/tmp/addkey.sh"
   }
 
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
+      "bash -c 'chmod +x mongodb_vm_add_ssh_key.sh'",
+      "bash -c './mongodb_vm_add_ssh_key.sh  \"${var.mongodb_vm-os_admin_user}\" \"${var.user_public_ssh_key}\" \"${var.ibm_pm_public_ssh_key}\">> mongodb_vm_add_ssh_key.log 2>&1'"
     ]
   }
+
 }
 
-resource "vsphere_virtual_machine" "nodejs_vm" {
-  name         = "${var.nodejs_server_hostname}"
-  folder       = "${var.folder}"
-  datacenter   = "${var.datacenter}"
-  vcpu         = "${var.nodejs_server_vcpu}"
-  memory       = "${var.nodejs_server_memory * 1024}"
-  cluster      = "${var.cluster}"
-  dns_suffixes = "${var.dns_suffixes}"
-  dns_servers  = "${var.dns_servers}"
+#########################################################
+##### Resource : mongodb_vm_install_mongodb
+#########################################################
 
-  network_interface {
-    label              = "${var.network_label}"
-    ipv4_gateway       = "${var.ipv4_gateway}"
-    ipv4_address       = "${var.nodejs_server_ipv4_address}"
-    ipv4_prefix_length = "${var.ipv4_prefix_length}"
-  }
-
-  disk {
-    datastore = "${var.storage}"
-    template  = "${var.nodejs_server_vm_template}"
-    type      = "thin"
-  }
+resource "null_resource" "mongodb_vm_install_mongodb" {
+  depends_on = ["vsphere_virtual_machine.mongodb_vm"]
 
   # Specify the ssh connection
   connection {
-    user     = "${var.nodejs_server_ssh_user}"
-    password = "${var.nodejs_server_ssh_user_password}"
-
-    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host = "${self.network_interface.0.ipv4_address}"
+    user = "${var.mongodb_vm-os_admin_user}"
+    private_key = "${base64decode(var.ibm_pm_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
   }
 
   provisioner "file" {
-    content = <<EOF
-#!/bin/bash
-
-LOGFILE="/var/log/addkey.log"
-
-user_public_key=$1
-
-mkdir -p .ssh
-if [ ! -f .ssh/authorized_keys ] ; then
-    touch .ssh/authorized_keys                                    >> $LOGFILE 2>&1 || { echo "---Failed to create authorized_keys---" | tee -a $LOGFILE; exit 1; }
-    chmod 400 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
-fi
-
-if [ "$user_public_key" != "None" ] ; then
-    echo "---start adding user_public_key----" | tee -a $LOGFILE 2>&1
-
-    chmod 600 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
-    echo "$user_public_key" | tee -a $HOME/.ssh/authorized_keys   >> $LOGFILE 2>&1 || { echo "---Failed to add user_public_key---" | tee -a $LOGFILE; exit 1; }
-    chmod 400 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
-
-    echo "---finish adding user_public_key----" | tee -a $LOGFILE 2>&1
-fi
+    destination = "mariadb_vm_install_mariadb.properties"
+    content     = <<EOF
 
 EOF
-
-    destination = "/tmp/addkey.sh"
   }
 
-  # Execute the script remotely
-  provisioner "remote-exec" {
-    inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
-    ]
-  }
-}
-
-##############################################################
-# Install MEAN
-##############################################################
-resource "null_resource" "install_mongodb" {
-  # Specify the ssh connection
-  connection {
-    user     = "${var.mongodb_server_ssh_user}"
-    password = "${var.mongodb_server_ssh_user_password}"
-
-    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host = "${vsphere_virtual_machine.mongodb_vm.network_interface.0.ipv4_address}"
-  }
-
-  # Create the installation script
   provisioner "file" {
     content = <<EOF
 #!/bin/bash
-
 set -o errexit
 set -o nounset
 set -o pipefail
-
 LOGFILE="/var/log/install_mongodb.log"
-
 retryInstall () {
   n=0
   max=5
@@ -325,9 +431,7 @@ retryInstall () {
     sleep 15
    done
 }
-
 #install mongodb
-
 echo "---start installing mongodb---" | tee -a $LOGFILE 2>&1
 mongo_repo=/etc/yum.repos.d/mongodb-org-3.4.repo
 cat <<EOT | tee -a $mongo_repo                                                    >> $LOGFILE 2>&1 || { echo "---Failed to create mongo repo---" | tee -a $LOGFILE; exit 1; }
@@ -342,50 +446,274 @@ retryInstall "yum install -y mongodb-org"                                       
 sed -i -e 's/  bindIp/#  bindIp/g' /etc/mongod.conf                               >> $LOGFILE 2>&1 || { echo "---Failed to configure mongod---" | tee -a $LOGFILE; exit 1; }
 service mongod start                                                              >> $LOGFILE 2>&1 || { echo "---Failed to start mongodb---" | tee -a $LOGFILE; exit 1; }
 echo "---finish installing mongodb---" | tee -a $LOGFILE 2>&1
-
 if hash iptables 2>/dev/null; then
 	#update firewall
 	iptables -I INPUT 1 -p tcp -m tcp --dport 27017 -m conntrack --ctstate NEW -j ACCEPT   >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }
 fi
-
 EOF
 
     destination = "/tmp/installation.sh"
   }
 
-  # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
   }
+
 }
 
-resource "null_resource" "install_nodejs" {
-  depends_on = ["null_resource.install_mongodb"]
+
+#########################################################
+##### Resource : nodejs_vm
+#########################################################
+
+variable "nodejs_vm-os_password" {
+  type = "string"
+  description = "Operating System Password for the Operating System User to access virtual machine"
+}
+
+variable "nodejs_vm_folder" {
+  description = "Target vSphere folder for virtual machine"
+}
+
+variable "nodejs_vm_datacenter" {
+  description = "Target vSphere datacenter for virtual machine creation"
+}
+
+variable "nodejs_vm_domain" {
+  description = "Domain Name of virtual machine"
+}
+
+variable "nodejs_vm_number_of_vcpu" {
+  description = "Number of virtual CPU for the virtual machine, which is required to be a positive Integer"
+  default = "2"
+}
+
+variable "nodejs_vm_memory" {
+  description = "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024"
+  default = "2048"
+}
+
+variable "nodejs_vm_cluster" {
+  description = "Target vSphere cluster to host the virtual machine"
+}
+
+variable "nodejs_vm_resource_pool" {
+  description = "Target vSphere Resource Pool to host the virtual machine"
+}
+
+variable "nodejs_vm_dns_suffixes" {
+  type = "list"
+  description = "Name resolution suffixes for the virtual network adapter"
+}
+
+variable "nodejs_vm_dns_servers" {
+  type = "list"
+  description = "DNS servers for the virtual network adapter"
+}
+
+variable "nodejs_vm_network_interface_label" {
+  description = "vSphere port group or network label for virtual machine's vNIC"
+}
+
+variable "nodejs_vm_ipv4_gateway" {
+  description = "IPv4 gateway for vNIC configuration"
+}
+
+variable "nodejs_vm_ipv4_address" {
+  description = "IPv4 address for vNIC configuration"
+}
+
+variable "nodejs_vm_ipv4_prefix_length" {
+  description = "IPv4 prefix length for vNIC configuration. The value must be a number between 8 and 32"
+}
+
+variable "nodejs_vm_adapter_type" {
+  description = "Network adapter type for vNIC Configuration"
+  default = "vmxnet3"
+}
+
+variable "nodejs_vm_root_disk_datastore" {
+  description = "Data store or storage cluster name for target virtual machine's disks"
+}
+
+variable "nodejs_vm_root_disk_type" {
+  type = "string"
+  description = "Type of template disk volume"
+  default = "eager_zeroed"
+}
+
+variable "nodejs_vm_root_disk_controller_type" {
+  type = "string"
+  description = "Type of template disk controller"
+  default = "scsi"
+}
+
+variable "nodejs_vm_root_disk_keep_on_remove" {
+  type = "string"
+  description = "Delete template disk volume when the virtual machine is deleted"
+  default = "false"
+}
+
+variable "nodejs_vm_root_disk_size" {
+  description = "Size of template disk volume. Should be equal to template's disk size"
+  default = "25"
+}
+
+# vsphere vm
+resource "vsphere_virtual_machine" "nodejs_vm" {
+  name = "${var.nodejs_vm-name}"
+  folder = "${var.nodejs_vm_folder}"
+  num_cpus = "${var.nodejs_vm_number_of_vcpu}"
+  memory = "${var.nodejs_vm_memory}"
+  resource_pool_id = "${data.vsphere_resource_pool.nodejs_vm_resource_pool.id}"
+  datastore_id = "${data.vsphere_datastore.nodejs_vm_datastore.id}"
+  guest_id = "${data.vsphere_virtual_machine.nodejs_vm_template.guest_id}"
+  clone {
+    template_uuid = "${data.vsphere_virtual_machine.nodejs_vm_template.id}"
+    customize {
+      linux_options {
+        domain = "${var.nodejs_vm_domain}"
+        host_name = "${var.nodejs_vm-name}"
+      }
+    network_interface {
+      ipv4_address = "${var.nodejs_vm_ipv4_address}"
+      ipv4_netmask = "${var.nodejs_vm_ipv4_prefix_length}"
+    }
+    ipv4_gateway = "${var.nodejs_vm_ipv4_gateway}"
+    dns_suffix_list = "${var.nodejs_vm_dns_suffixes}"
+    dns_server_list = "${var.nodejs_vm_dns_servers}"
+    }
+  }
+
+  network_interface {
+    network_id = "${data.vsphere_network.nodejs_vm_network.id}"
+    adapter_type = "${var.nodejs_vm_adapter_type}"
+  }
+
+  disk {
+    name = "${var.nodejs_vm-name}.vmdk"
+    size = "${var.nodejs_vm_root_disk_size}"
+    keep_on_remove = "${var.nodejs_vm_root_disk_keep_on_remove}"
+    datastore_id = "${data.vsphere_datastore.nodejs_vm_datastore.id}"
+  }
+
+  # Specify the connection
+  connection {
+    type = "ssh"
+    user = "${var.nodejs_vm-os_admin_user}"
+    password = "${var.nodejs_vm-os_password}"
+  }
+
+  provisioner "file" {
+    destination = "nodejs_vm_add_ssh_key.sh"
+    content     = <<EOF
+# =================================================================
+# Copyright 2017 IBM Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+#	you may not use this file except in compliance with the License.
+#	You may obtain a copy of the License at
+#
+#	  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+#	WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# =================================================================
+#!/bin/bash
+
+if (( $# != 3 )); then
+echo "usage: arg 1 is user, arg 2 is public key, arg3 is CAMC Public Key"
+exit -1
+fi
+
+userid="$1"
+ssh_key="$2"
+camc_ssh_key="$3"
+
+user_home=$(eval echo "~$userid")
+user_auth_key_file=$user_home/.ssh/authorized_keys
+echo "$user_auth_key_file"
+if ! [ -f $user_auth_key_file ]; then
+echo "$user_auth_key_file does not exist on this system, creating."
+mkdir $user_home/.ssh
+chmod 700 $user_home/.ssh
+touch $user_home/.ssh/authorized_keys
+chmod 600 $user_home/.ssh/authorized_keys
+else
+echo "user_home : $user_home"
+fi
+
+if [[ $ssh_key = 'None' ]]; then
+echo "skipping user key add, 'None' specified"
+else
+echo "$user_auth_key_file"
+echo "$ssh_key" >> "$user_auth_key_file"
+if [ $? -ne 0 ]; then
+echo "failed to add to $user_auth_key_file"
+exit -1
+else
+echo "updated $user_auth_key_file"
+fi
+fi
+
+echo "$camc_ssh_key" >> "$user_auth_key_file"
+if [ $? -ne 0 ]; then
+echo "failed to add to $user_auth_key_file"
+exit -1
+else
+echo "updated $user_auth_key_file"
+fi
+
+EOF
+
+  }
+
+  # Execute the script remotely
+  provisioner "remote-exec" {
+    inline = [
+      "bash -c 'chmod +x nodejs_vm_add_ssh_key.sh'",
+      "bash -c './nodejs_vm_add_ssh_key.sh  \"${var.nodejs_vm-os_admin_user}\" \"${var.user_public_ssh_key}\" \"${var.ibm_pm_public_ssh_key}\">> nodejs_vm_add_ssh_key.log 2>&1'"
+    ]
+  }
+
+}
+
+#########################################################
+##### Resource : nodejs_vm_install_nodejs
+#########################################################
+
+resource "null_resource" "nodejs_vm_install_nodejs" {
+  depends_on = ["vsphere_virtual_machine.nodejs_vm"]
 
   # Specify the ssh connection
   connection {
-    user     = "${var.nodejs_server_ssh_user}"
-    password = "${var.nodejs_server_ssh_user_password}"
-
-    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host = "${vsphere_virtual_machine.nodejs_vm.network_interface.0.ipv4_address}"
+    user = "${var.nodejs_vm-os_admin_user}"
+    private_key = "${base64decode(var.ibm_pm_private_ssh_key)}"
+    host = "${vsphere_virtual_machine.nodejs_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
   }
 
-  # Create the installation script
   provisioner "file" {
-    content = <<EOF
-#!/bin/bash
+    destination = "mariadb_vm_install_mariadb.properties"
+    content     = <<EOF
 
+EOF
+  }
+
+provisioner "file" {
+  destination = "nodejs_vm_install_nodejs.sh"
+  content     = <<EOF
+  #!/bin/bash
 set -o errexit
 set -o nounset
 set -o pipefail
-
 LOGFILE="/var/log/install_nodejs.log"
-
 DBADDRESS=$1
-
 retryInstall () {
   n=0
   max=5
@@ -400,13 +728,11 @@ retryInstall () {
     sleep 15
    done
 }
-
 echo "---Install nodejs---" | tee -a $LOGFILE 2>&1
 retryInstall "yum install gcc-c++ make -y"                                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install build tools---" | tee -a $LOGFILE; exit 1; }
 curl -sL https://rpm.nodesource.com/setup_7.x | bash -                                                            >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
 retryInstall "yum install nodejs -y"                                                                              >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
 npm install -g bower gulp                                                                                         >> $LOGFILE 2>&1 || { echo "---Failed to install bower and gulp---" | tee -a $LOGFILE; exit 1; }
-
 echo "---Install mean sample application---" | tee -a $LOGFILE 2>&1
 retryInstall "yum install -y git"                                                                                 >> $LOGFILE 2>&1 || { echo "---Failed to install git---" | tee -a $LOGFILE; exit 1; }
 git clone https://github.com/meanjs/mean.git mean                                                                 >> $LOGFILE 2>&1 || { echo "---Failed to clone mean sample project---" | tee -a $LOGFILE; exit 1; }
@@ -414,18 +740,15 @@ cd mean
 yum groupinstall 'Development Tools' -y                                                                           >> $LOGFILE 2>&1 || { echo "---Failed to install development tools---" | tee -a $LOGFILE; exit 1; }
 npm install                                                                                                       >> $LOGFILE 2>&1 || { echo "---Failed to install node modules---" | tee -a $LOGFILE; exit 1; }
 bower --allow-root --config.interactive=false install                                                             >> $LOGFILE 2>&1 || { echo "---Failed to install bower---" | tee -a $LOGFILE; exit 1; }
-
 PRODCONF=config/env/production.js
 sed -i -e "/    uri: process.env.MONGOHQ_URL/a\ \ \ \ uri: \'mongodb:\/\/"$DBADDRESS":27017/mean\'," $PRODCONF    >> $LOGFILE 2>&1 || { echo "---Failed to update db config---" | tee -a $LOGFILE; exit 1; }
 sed -i -e 's/    uri: process.env.MONGOHQ_URL/\/\/    uri: process.env.MONGOHQ_URL/g' $PRODCONF                   >> $LOGFILE 2>&1 || { echo "---Failed to update db config---" | tee -a $LOGFILE; exit 1; }
 sed -i -e 's/ssl: true/ssl: false/g' $PRODCONF                                                                    >> $LOGFILE 2>&1 || { echo "---Failed to update db config---" | tee -a $LOGFILE; exit 1; }
-
 #make sample application as a service
 SAMPLE_APP_SERVICE_CONF=/etc/systemd/system/nodeserver.service
 cat << EOT > $SAMPLE_APP_SERVICE_CONF
 [Unit]
 Description=Node.js Example Server
-
 [Service]
 ExecStart=/usr/bin/gulp prod --gulpfile $HOME/mean/gulpfile.js
 Restart=always
@@ -434,110 +757,40 @@ StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=nodejs-example
 Environment=NODE_ENV=production PORT=8443
-
 [Install]
 WantedBy=multi-user.target
 EOT
-
 systemctl enable nodeserver.service                                                                               >> $LOGFILE 2>&1 || { echo "---Failed to enable the sample node service---" | tee -a $LOGFILE; exit 1; }
 systemctl start nodeserver.service                                                                                >> $LOGFILE 2>&1 || { echo "---Failed to start the sample node service---" | tee -a $LOGFILE; exit 1; }
-
 if hash iptables 2>/dev/null; then
 	#update firewall
 	iptables -I INPUT 1 -p tcp -m tcp --dport 8443 -m conntrack --ctstate NEW -j ACCEPT                           >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }
 fi
-
 echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
-
 EOF
 
     destination = "/tmp/installation.sh"
   }
 
-  # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.mongodb_vm.network_interface.0.ipv4_address}\"",
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}\"",
     ]
   }
-}
 
-##############################################################
-# Check status
-##############################################################
-resource "null_resource" "check_status" {
-  depends_on = ["null_resource.install_nodejs"]
-
-  # Specify the ssh connection
-  connection {
-    user     = "${var.nodejs_server_ssh_user}"
-    password = "${var.nodejs_server_ssh_user_password}"
-
-    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host = "${vsphere_virtual_machine.nodejs_vm.network_interface.0.ipv4_address}"
-  }
-
-  # Create the installation script
-  provisioner "file" {
-    content = <<EOF
-#!/bin/bash
-
-set -o errexit
-set -o nounset
-set -o pipefail
-
-echo "---check application status---"
-
-APP_URL=$1
-
-TMPFILE=`mktemp tmp.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX` && echo $TMPFILE
-
-StatusCheckMaxCount=120
-StatusCheckCount=0
-
-curl -k -s -o /dev/null -w "%{http_code}" -I -m 5 $APP_URL > $TMPFILE || true
-SERVICE_STATUS=$(cat $TMPFILE)
-
-while [ "$SERVICE_STATUS" != "200" ]; do
-	echo "---application is being started---"
-	sleep 10
-	let StatusCheckCount=StatusCheckCount+1
-	if [ $StatusCheckCount -eq $StatusCheckMaxCount ]; then
-		echo "---The servce is not up---"
-		rm -f $TMPFILE
-		exit 1
-	fi
-	curl -k -s -o /dev/null -w "%{http_code}" -I -m 5 $APP_URL > $TMPFILE || true
-	SERVICE_STATUS=$(cat $TMPFILE)
-done
-rm -f $TMPFILE
-
-echo "---application is up---"
-
-EOF
-
-    destination = "/tmp/checkStatus.sh"
-  }
-
-  # Execute the script remotely
-  provisioner "remote-exec" {
-    inline = [
-      "chmod +x /tmp/checkStatus.sh; bash /tmp/checkStatus.sh http://\"${vsphere_virtual_machine.nodejs_vm.network_interface.0.ipv4_address}\":8443",
-    ]
-  }
 }
 
 #########################################################
 # Output
 #########################################################
 output "Meanstack DB Server IP Address" {
-  value = "${vsphere_virtual_machine.mongodb_vm.network_interface.0.ipv4_address}"
+  value = "${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }
 
 output "Meanstack NodeJS Server IP Address" {
-  value = "${vsphere_virtual_machine.nodejs_vm.network_interface.0.ipv4_address}"
+  value = "${vsphere_virtual_machine.nodejs_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }
 
 output "Please access the meanstack sample application" {
-  value = "http://${vsphere_virtual_machine.nodejs_vm.network_interface.0.ipv4_address}:8443"
+  value = "http://${vsphere_virtual_machine.nodejs_vm.clone.0.customize.0.network_interface.0.ipv4_address}:8443"
 }

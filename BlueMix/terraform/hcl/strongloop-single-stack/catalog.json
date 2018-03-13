@@ -1,7 +1,7 @@
 {
    "name": "Strongloop Stack on a Single VM",
    "description": "Strongloop - An Easy starting point for full stack JavaScript web development.",
-   "version": "1.0.4",
+   "version": "2.0.0",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
    "image": "tp_WAS_standalone.png",
    "type": "prebuilt",

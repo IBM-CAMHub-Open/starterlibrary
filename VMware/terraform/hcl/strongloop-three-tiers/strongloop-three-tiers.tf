@@ -1,262 +1,433 @@
-#################################################################
-# Terraform template that will deploy three VMs with:
-#    * StrongLoop in Strongloop-VM
-#    * NodeJS in Strongloop-VM and Angular-VM
-#    * AngularJS in Angular-VM
-#    * MongoDB in MongoDB-VM
-#
-# Version: 1.0
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Licensed Materials - Property of IBM
-#
-# ©Copyright IBM Corp. 2017.
-#
-#################################################################
+# This is a terraform generated template generated from threefinal
 
-#########################################################
+##############################################################
+# Keys - CAMC (public/private) & optional User Key (public)
+##############################################################
+variable "allow_unverified_ssl" {
+  description = "Communication with vsphere server with self signed certificate"
+  default = "true"
+}
+
+##############################################################
 # Define the vsphere provider
-#########################################################
+##############################################################
 provider "vsphere" {
-  version              = "~> 0.4"
-  allow_unverified_ssl = true
+  allow_unverified_ssl = "${var.allow_unverified_ssl}"
+  version = "~> 1.3"
 }
+
+provider "camc" {
+  version = "~> 0.1"
+}
+
+##############################################################
+# Define pattern variables
+##############################################################
+##############################################################
+# Vsphere data for provider
+##############################################################
+data "vsphere_datacenter" "angular-vm_datacenter" {
+  name = "${var.angular-vm_datacenter}"
+}
+data "vsphere_datastore" "angular-vm_datastore" {
+  name = "${var.angular-vm_root_disk_datastore}"
+  datacenter_id = "${data.vsphere_datacenter.angular-vm_datacenter.id}"
+}
+data "vsphere_resource_pool" "angular-vm_resource_pool" {
+  name = "${var.angular-vm_resource_pool}"
+  datacenter_id = "${data.vsphere_datacenter.angular-vm_datacenter.id}"
+}
+data "vsphere_network" "angular-vm_network" {
+  name = "${var.angular-vm_network_interface_label}"
+  datacenter_id = "${data.vsphere_datacenter.angular-vm_datacenter.id}"
+}
+
+data "vsphere_virtual_machine" "angular-vm_template" {
+  name = "${var.angular-vm-image}"
+  datacenter_id = "${data.vsphere_datacenter.angular-vm_datacenter.id}"
+}
+##############################################################
+# Vsphere data for provider
+##############################################################
+data "vsphere_datacenter" "mongodb-vm_datacenter" {
+  name = "${var.mongodb-vm_datacenter}"
+}
+data "vsphere_datastore" "mongodb-vm_datastore" {
+  name = "${var.mongodb-vm_root_disk_datastore}"
+  datacenter_id = "${data.vsphere_datacenter.mongodb-vm_datacenter.id}"
+}
+data "vsphere_resource_pool" "mongodb-vm_resource_pool" {
+  name = "${var.mongodb-vm_resource_pool}"
+  datacenter_id = "${data.vsphere_datacenter.mongodb-vm_datacenter.id}"
+}
+data "vsphere_network" "mongodb-vm_network" {
+  name = "${var.mongodb-vm_network_interface_label}"
+  datacenter_id = "${data.vsphere_datacenter.mongodb-vm_datacenter.id}"
+}
+
+data "vsphere_virtual_machine" "mongodb-vm_template" {
+  name = "${var.mongodb-vm-image}"
+  datacenter_id = "${data.vsphere_datacenter.mongodb-vm_datacenter.id}"
+}
+##############################################################
+# Vsphere data for provider
+##############################################################
+data "vsphere_datacenter" "strongloop-vm_datacenter" {
+  name = "${var.strongloop-vm_datacenter}"
+}
+data "vsphere_datastore" "strongloop-vm_datastore" {
+  name = "${var.strongloop-vm_root_disk_datastore}"
+  datacenter_id = "${data.vsphere_datacenter.strongloop-vm_datacenter.id}"
+}
+data "vsphere_resource_pool" "strongloop-vm_resource_pool" {
+  name = "${var.strongloop-vm_resource_pool}"
+  datacenter_id = "${data.vsphere_datacenter.strongloop-vm_datacenter.id}"
+}
+data "vsphere_network" "strongloop-vm_network" {
+  name = "${var.strongloop-vm_network_interface_label}"
+  datacenter_id = "${data.vsphere_datacenter.strongloop-vm_datacenter.id}"
+}
+
+data "vsphere_virtual_machine" "strongloop-vm_template" {
+  name = "${var.strongloop-vm-image}"
+  datacenter_id = "${data.vsphere_datacenter.strongloop-vm_datacenter.id}"
+}
+
+##### Image Parameters variables #####
+
+#Variable : angular-vm-name
+variable "angular-vm-name" {
+  type = "string"
+  default = "angular-vm"
+}
+
+#Variable : mongodb-vm-name
+variable "mongodb-vm-name" {
+  type = "string"
+  default = "mongodb-vm"
+}
+
+#Variable : strongloop-vm-name
+variable "strongloop-vm-name" {
+  type = "string"
+  default = "strongloop-vm"
+}
+
 
 #########################################################
-# Define the variables
+##### Resource : angular-vm
 #########################################################
-variable "mongodb_server_hostname" {
-  description = "Hostname of the virtual instance (with MongoDB installed) to be deployed"
-  default     = "mongodb-vm"
-}
-
-variable "strongloop_server_hostname" {
-  description = "Hostname of the virtual instance (with Strongloop and NodeJS installed) to be deployed"
-  default     = "strongloop-vm"
-}
-
-variable "angularjs_server_hostname" {
-  description = "Hostname of the virtual instance (with AngularJS and NodeJS installed) to be deployed"
-  default     = "angularjs-vm"
-}
 
 variable "mongodb_user_password" {
   description = "The password of an user in mongodb for sample application; It should be alphanumeric with length in [8,16]"
 }
 
-variable "folder" {
-  description = "Target vSphere folder for Virtual Machine"
-  default     = ""
+variable "angular-vm_folder" {
+  description = "Target vSphere folder for virtual machine"
 }
 
-variable "datacenter" {
-  description = "Target vSphere datacenter for Virtual Machine creation"
-  default     = ""
+variable "angular-vm_datacenter" {
+  description = "Target vSphere datacenter for virtual machine creation"
 }
 
-variable "mongodb_server_vcpu" {
-  description = "Number of Virtual CPU for the MongoDB server"
-  default     = 1
+variable "angular-vm_domain" {
+  description = "Domain Name of virtual machine"
 }
 
-variable "mongodb_server_memory" {
-  description = "Memory for the MongoDB server in GBs"
-  default     = 1
+variable "angular-vm_number_of_vcpu" {
+  description = "Number of virtual CPU for the virtual machine, which is required to be a positive Integer"
+  default = "1"
 }
 
-variable "strongloop_server_vcpu" {
-  description = "Number of Virtual CPU for the Strongloop server; must not be less than 2 cores"
-  default     = 2
+variable "angular-vm_memory" {
+  description = "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024"
+  default = "1024"
 }
 
-variable "strongloop_server_memory" {
-  description = "Memory for the Strongloop server in GBs; must not be less than 4GB"
-  default     = 4
+variable "angular-vm_cluster" {
+  description = "Target vSphere cluster to host the virtual machine"
 }
 
-variable "angularjs_server_vcpu" {
-  description = "Number of Virtual CPU for the AngularJs server; must not be less than 2 cores"
-  default     = 2
+variable "angular-vm_resource_pool" {
+  description = "Target vSphere Resource Pool to host the virtual machine"
 }
 
-variable "angularjs_server_memory" {
-  description = "Memory for the AngularJs server in GBs; must not be less than 4GB"
-  default     = 4
-}
-
-variable "cluster" {
-  description = "Target vSphere Cluster to host the Virtual Machine"
-  default     = ""
-}
-
-variable "dns_suffixes" {
+variable "angular-vm_dns_suffixes" {
+  type = "list"
   description = "Name resolution suffixes for the virtual network adapter"
-  type        = "list"
-  default     = []
 }
 
-variable "dns_servers" {
+variable "angular-vm_dns_servers" {
+  type = "list"
   description = "DNS servers for the virtual network adapter"
-  type        = "list"
-  default     = []
 }
 
-variable "network_label" {
-  description = "vSphere Port Group or Network label for Virtual Machine's vNIC"
+variable "angular-vm_network_interface_label" {
+  description = "vSphere port group or network label for virtual machine's vNIC"
 }
 
-variable "mongodb_server_ipv4_address" {
-  description = "IPv4 address for vNIC configuration in mongodb server"
-}
-
-variable "strongloop_server_ipv4_address" {
-  description = "IPv4 address for vNIC configuration in strongloop server"
-}
-
-variable "angularjs_server_ipv4_address" {
-  description = "IPv4 address for vNIC configuration in angularjs server"
-}
-
-variable "ipv4_gateway" {
+variable "angular-vm_ipv4_gateway" {
   description = "IPv4 gateway for vNIC configuration"
 }
 
-variable "ipv4_prefix_length" {
-  description = "IPv4 Prefix length for vNIC configuration"
+variable "angular-vm_ipv4_address" {
+  description = "IPv4 address for vNIC configuration"
 }
 
-variable "storage" {
-  description = "Data store or storage cluster name for target VMs disks"
-  default     = ""
+variable "angular-vm_ipv4_prefix_length" {
+  description = "IPv4 prefix length for vNIC configuration. The value must be a number between 8 and 32"
 }
 
-variable "mongodb_server_vm_template" {
-  description = "Source VM or Template label for cloning to MongoDB server"
+variable "angular-vm_adapter_type" {
+  description = "Network adapter type for vNIC Configuration"
+  default = "vmxnet3"
 }
 
-variable "mongodb_server_ssh_user" {
+variable "angular-vm_root_disk_datastore" {
+  description = "Data store or storage cluster name for target virtual machine's disks"
+}
+
+variable "angular-vm_root_disk_type" {
+  type = "string"
+  description = "Type of template disk volume"
+  default = "eager_zeroed"
+}
+
+variable "angular-vm_root_disk_controller_type" {
+  type = "string"
+  description = "Type of template disk controller"
+  default = "scsi"
+}
+
+variable "angular-vm_root_disk_keep_on_remove" {
+  type = "string"
+  description = "Delete template disk volume when the virtual machine is deleted"
+  default = "false"
+}
+
+variable "angular-vm_root_disk_size" {
+  description = "Size of template disk volume. Should be equal to template's disk size"
+  default = "25"
+}
+
+variable "angular-vm-image" {
+  description = "Operating system image id / template that should be used when creating the virtual image"
+}
+
+# vsphere vm
+resource "vsphere_virtual_machine" "angular-vm" {
+  name = "${var.angular-vm-name}"
+  folder = "${var.angular-vm_folder}"
+  num_cpus = "${var.angular-vm_number_of_vcpu}"
+  memory = "${var.angular-vm_memory}"
+  resource_pool_id = "${data.vsphere_resource_pool.angular-vm_resource_pool.id}"
+  datastore_id = "${data.vsphere_datastore.angular-vm_datastore.id}"
+  guest_id = "${data.vsphere_virtual_machine.angular-vm_template.guest_id}"
+  clone {
+    template_uuid = "${data.vsphere_virtual_machine.angular-vm_template.id}"
+    customize {
+      linux_options {
+        domain = "${var.angular-vm_domain}"
+        host_name = "${var.angular-vm-name}"
+      }
+    network_interface {
+      ipv4_address = "${var.angular-vm_ipv4_address}"
+      ipv4_netmask = "${var.angular-vm_ipv4_prefix_length}"
+    }
+    ipv4_gateway = "${var.angular-vm_ipv4_gateway}"
+    dns_suffix_list = "${var.angular-vm_dns_suffixes}"
+    dns_server_list = "${var.angular-vm_dns_servers}"
+    }
+  }
+
+  network_interface {
+    network_id = "${data.vsphere_network.angular-vm_network.id}"
+    adapter_type = "${var.angular-vm_adapter_type}"
+  }
+
+  disk {
+    label = "${var.angular-vm-name}0.vmdk"
+    size = "${var.angular-vm_root_disk_size}"
+    keep_on_remove = "${var.angular-vm_root_disk_keep_on_remove}"
+    datastore_id = "${data.vsphere_datastore.angular-vm_datastore.id}"
+  }
+
+}
+
+#########################################################
+##### Resource : mongodb-vm
+#########################################################
+
+variable "mongodb_ssh_user" {
   description = "The user for ssh connection to MongoDB server, which is default in template"
   default     = "root"
 }
 
-variable "mongodb_server_ssh_user_password" {
+variable "mongodb_ssh_user_password" {
   description = "The user password for ssh connection to MongoDB server, which is default in template"
 }
 
-variable "strongloop_server_vm_template" {
-  description = "Source VM or Template label for cloning to Strongloop server"
-}
-
-variable "strongloop_server_ssh_user" {
+variable "strongloop_ssh_user" {
   description = "The user for ssh connection to Strongloop server, which is default in template"
   default     = "root"
 }
 
-variable "strongloop_server_ssh_user_password" {
+variable "strongloop_ssh_user_password" {
   description = "The user password for ssh connection to Strongloop server, which is default in template"
 }
 
-variable "angularjs_server_vm_template" {
-  description = "Source VM or Template label for cloning to AngularJs server"
-}
-
-variable "angularjs_server_ssh_user" {
+variable "angularjs_ssh_user" {
   description = "The user for ssh connection to AngularJs server, which is default in template"
   default     = "root"
 }
 
-variable "angularjs_server_ssh_user_password" {
+variable "angularjs_ssh_user_password" {
   description = "The user password for ssh connection to AngularJs server, which is default in template"
 }
 
-#variable "camc_private_ssh_key" {
-#  description = "The base64 encoded private key for ssh connection"
-#}
-
-variable "user_public_key" {
-  description = "User-provided public SSH key used to connect to the virtual machine"
-  default     = "None"
+variable "mongodb-vm_folder" {
+  description = "Target vSphere folder for virtual machine"
 }
 
-##############################################################
-# Create Virtual Machine and install MongoDB
-##############################################################
-resource "vsphere_virtual_machine" "mongodb_vm" {
-  name         = "${var.mongodb_server_hostname}"
-  folder       = "${var.folder}"
-  datacenter   = "${var.datacenter}"
-  vcpu         = "${var.mongodb_server_vcpu}"
-  memory       = "${var.mongodb_server_memory * 1024}"
-  cluster      = "${var.cluster}"
-  dns_suffixes = "${var.dns_suffixes}"
-  dns_servers  = "${var.dns_servers}"
+variable "mongodb-vm_datacenter" {
+  description = "Target vSphere datacenter for virtual machine creation"
+}
+
+variable "mongodb-vm_domain" {
+  description = "Domain Name of virtual machine"
+}
+
+variable "mongodb-vm_number_of_vcpu" {
+  description = "Number of virtual CPU for the virtual machine, which is required to be a positive Integer"
+  default = "1"
+}
+
+variable "mongodb-vm_memory" {
+  description = "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024"
+  default = "1024"
+}
+
+variable "mongodb-vm_cluster" {
+  description = "Target vSphere cluster to host the virtual machine"
+}
+
+variable "mongodb-vm_resource_pool" {
+  description = "Target vSphere Resource Pool to host the virtual machine"
+}
+
+variable "mongodb-vm_dns_suffixes" {
+  type = "list"
+  description = "Name resolution suffixes for the virtual network adapter"
+}
+
+variable "mongodb-vm_dns_servers" {
+  type = "list"
+  description = "DNS servers for the virtual network adapter"
+}
+
+variable "mongodb-vm_network_interface_label" {
+  description = "vSphere port group or network label for virtual machine's vNIC"
+}
+
+variable "mongodb-vm_ipv4_gateway" {
+  description = "IPv4 gateway for vNIC configuration"
+}
+
+variable "mongodb-vm_ipv4_address" {
+  description = "IPv4 address for vNIC configuration"
+}
+
+variable "mongodb-vm_ipv4_prefix_length" {
+  description = "IPv4 prefix length for vNIC configuration. The value must be a number between 8 and 32"
+}
+
+variable "mongodb-vm_adapter_type" {
+  description = "Network adapter type for vNIC Configuration"
+  default = "vmxnet3"
+}
+
+variable "mongodb-vm_root_disk_datastore" {
+  description = "Data store or storage cluster name for target virtual machine's disks"
+}
+
+variable "mongodb-vm_root_disk_type" {
+  type = "string"
+  description = "Type of template disk volume"
+  default = "eager_zeroed"
+}
+
+variable "mongodb-vm_root_disk_controller_type" {
+  type = "string"
+  description = "Type of template disk controller"
+  default = "scsi"
+}
+
+variable "mongodb-vm_root_disk_keep_on_remove" {
+  type = "string"
+  description = "Delete template disk volume when the virtual machine is deleted"
+  default = "false"
+}
+
+variable "mongodb-vm_root_disk_size" {
+  description = "Size of template disk volume. Should be equal to template's disk size"
+  default = "25"
+}
+
+variable "mongodb-vm-image" {
+  description = "Operating system image id / template that should be used when creating the virtual image"
+}
+
+# vsphere vm
+resource "vsphere_virtual_machine" "mongodb-vm" {
+  name = "${var.mongodb-vm-name}"
+  folder = "${var.mongodb-vm_folder}"
+  num_cpus = "${var.mongodb-vm_number_of_vcpu}"
+  memory = "${var.mongodb-vm_memory}"
+  resource_pool_id = "${data.vsphere_resource_pool.mongodb-vm_resource_pool.id}"
+  datastore_id = "${data.vsphere_datastore.mongodb-vm_datastore.id}"
+  guest_id = "${data.vsphere_virtual_machine.mongodb-vm_template.guest_id}"
+  clone {
+    template_uuid = "${data.vsphere_virtual_machine.mongodb-vm_template.id}"
+    customize {
+      linux_options {
+        domain = "${var.mongodb-vm_domain}"
+        host_name = "${var.mongodb-vm-name}"
+      }
+    network_interface {
+      ipv4_address = "${var.mongodb-vm_ipv4_address}"
+      ipv4_netmask = "${var.mongodb-vm_ipv4_prefix_length}"
+    }
+    ipv4_gateway = "${var.mongodb-vm_ipv4_gateway}"
+    dns_suffix_list = "${var.mongodb-vm_dns_suffixes}"
+    dns_server_list = "${var.mongodb-vm_dns_servers}"
+    }
+  }
 
   network_interface {
-    label              = "${var.network_label}"
-    ipv4_gateway       = "${var.ipv4_gateway}"
-    ipv4_address       = "${var.mongodb_server_ipv4_address}"
-    ipv4_prefix_length = "${var.ipv4_prefix_length}"
+    network_id = "${data.vsphere_network.mongodb-vm_network.id}"
+    adapter_type = "${var.mongodb-vm_adapter_type}"
   }
 
   disk {
-    datastore = "${var.storage}"
-    template  = "${var.mongodb_server_vm_template}"
-    type      = "thin"
+    label = "${var.mongodb-vm-name}.vmdk"
+    size = "${var.mongodb-vm_root_disk_size}"
+    keep_on_remove = "${var.mongodb-vm_root_disk_keep_on_remove}"
+    datastore_id = "${data.vsphere_datastore.mongodb-vm_datastore.id}"
   }
 
-  # Specify the ssh connection
   connection {
-    user     = "${var.mongodb_server_ssh_user}"
-    password = "${var.mongodb_server_ssh_user_password}"
-
-    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host = "${self.network_interface.0.ipv4_address}"
+    type = "ssh"
+    user     = "${var.mongodb_ssh_user}"
+    password = "${var.mongodb_ssh_user_password}"
   }
 
   provisioner "file" {
     content = <<EOF
 #!/bin/bash
-
-LOGFILE="/var/log/addkey.log"
-
-user_public_key=$1
-
-mkdir -p .ssh
-if [ ! -f .ssh/authorized_keys ] ; then
-    touch .ssh/authorized_keys                                    >> $LOGFILE 2>&1 || { echo "---Failed to create authorized_keys---" | tee -a $LOGFILE; exit 1; }
-    chmod 400 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
-fi
-
-if [ "$user_public_key" != "None" ] ; then
-    echo "---start adding user_public_key----" | tee -a $LOGFILE 2>&1
-
-    chmod 600 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
-    echo "$user_public_key" | tee -a $HOME/.ssh/authorized_keys   >> $LOGFILE 2>&1 || { echo "---Failed to add user_public_key---" | tee -a $LOGFILE; exit 1; }
-    chmod 400 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
-
-    echo "---finish adding user_public_key----" | tee -a $LOGFILE 2>&1
-fi
-
-EOF
-
-    destination = "/tmp/addkey.sh"
-  }
-
-  provisioner "file" {
-    content = <<EOF
-#!/bin/bash
-
 set -o errexit
 set -o nounset
 set -o pipefail
-
 LOGFILE="/var/log/install_mongodb.log"
-
 retryInstall () {
   n=0
   max=5
@@ -271,9 +442,7 @@ retryInstall () {
     sleep 15
    done
 }
-
 #install mongodb
-
 echo "---start installing mongodb---" | tee -a $LOGFILE 2>&1
 mongo_repo=/etc/yum.repos.d/mongodb-org-3.4.repo
 cat <<EOT | tee -a $mongo_repo                                                    >> $LOGFILE 2>&1 || { echo "---Failed to create mongo repo---" | tee -a $LOGFILE; exit 1; }
@@ -288,23 +457,18 @@ retryInstall "yum install -y mongodb-org"                                       
 sed -i -e 's/  bindIp/#  bindIp/g' /etc/mongod.conf                               >> $LOGFILE 2>&1 || { echo "---Failed to configure mongod---" | tee -a $LOGFILE; exit 1; }
 service mongod start                                                              >> $LOGFILE 2>&1 || { echo "---Failed to start mongodb---" | tee -a $LOGFILE; exit 1; }
 echo "---finish installing mongodb---" | tee -a $LOGFILE 2>&1
-
 #config mongodb
 DBUserPwd=$1
 echo "---start configuring mongodb---" | tee -a $LOGFILE 2>&1
-
 #create mongodb user and allow external access
 sleep 30
 mongo admin --eval "db.createUser({user: \"sampleUser\", pwd: \"$DBUserPwd\", roles: [{role: \"userAdminAnyDatabase\", db: \"admin\"}]})"    >> $LOGFILE 2>&1 || { echo "---Failed to create MongoDB user---" | tee -a $LOGFILE; exit 1; }
 service mongod restart                                                                                                                       >> $LOGFILE 2>&1 || { echo "---Failed to restart mongod---" | tee -a $LOGFILE; exit 1; }
-
 echo "---finish configuring mongodb---" | tee -a $LOGFILE 2>&1
-
 if hash iptables 2>/dev/null; then
 	#update firewall
 	iptables -I INPUT 1 -p tcp -m tcp --dport 27017 -m conntrack --ctstate NEW -j ACCEPT                                                         >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }
 fi
-
 EOF
 
     destination = "/tmp/installation.sh"
@@ -313,183 +477,166 @@ EOF
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
       "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${var.mongodb_user_password}\"",
     ]
   }
+
 }
 
-##############################################################
-# Create Virtual Machine for Strongloop
-##############################################################
-resource "vsphere_virtual_machine" "strongloop_vm" {
-  name         = "${var.strongloop_server_hostname}"
-  folder       = "${var.folder}"
-  datacenter   = "${var.datacenter}"
-  vcpu         = "${var.strongloop_server_vcpu}"
-  memory       = "${var.strongloop_server_memory * 1024}"
-  cluster      = "${var.cluster}"
-  dns_suffixes = "${var.dns_suffixes}"
-  dns_servers  = "${var.dns_servers}"
+#########################################################
+##### Resource : strongloop-vm
+#########################################################
+
+variable "strongloop-vm_folder" {
+  description = "Target vSphere folder for virtual machine"
+}
+
+variable "strongloop-vm_datacenter" {
+  description = "Target vSphere datacenter for virtual machine creation"
+}
+
+variable "strongloop-vm_domain" {
+  description = "Domain Name of virtual machine"
+}
+
+variable "strongloop-vm_number_of_vcpu" {
+  description = "Number of virtual CPU for the virtual machine, which is required to be a positive Integer"
+  default = "1"
+}
+
+variable "strongloop-vm_memory" {
+  description = "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024"
+  default = "1024"
+}
+
+variable "strongloop-vm_cluster" {
+  description = "Target vSphere cluster to host the virtual machine"
+}
+
+variable "strongloop-vm_resource_pool" {
+  description = "Target vSphere Resource Pool to host the virtual machine"
+}
+
+variable "strongloop-vm_dns_suffixes" {
+  type = "list"
+  description = "Name resolution suffixes for the virtual network adapter"
+}
+
+variable "strongloop-vm_dns_servers" {
+  type = "list"
+  description = "DNS servers for the virtual network adapter"
+}
+
+variable "strongloop-vm_network_interface_label" {
+  description = "vSphere port group or network label for virtual machine's vNIC"
+}
+
+variable "strongloop-vm_ipv4_gateway" {
+  description = "IPv4 gateway for vNIC configuration"
+}
+
+variable "strongloop-vm_ipv4_address" {
+  description = "IPv4 address for vNIC configuration"
+}
+
+variable "strongloop-vm_ipv4_prefix_length" {
+  description = "IPv4 prefix length for vNIC configuration. The value must be a number between 8 and 32"
+}
+
+variable "strongloop-vm_adapter_type" {
+  description = "Network adapter type for vNIC Configuration"
+  default = "vmxnet3"
+}
+
+variable "strongloop-vm_root_disk_datastore" {
+  description = "Data store or storage cluster name for target virtual machine's disks"
+}
+
+variable "strongloop-vm_root_disk_type" {
+  type = "string"
+  description = "Type of template disk volume"
+  default = "eager_zeroed"
+}
+
+variable "strongloop-vm_root_disk_controller_type" {
+  type = "string"
+  description = "Type of template disk controller"
+  default = "scsi"
+}
+
+variable "strongloop-vm_root_disk_keep_on_remove" {
+  type = "string"
+  description = "Delete template disk volume when the virtual machine is deleted"
+  default = "false"
+}
+
+variable "strongloop-vm_root_disk_size" {
+  description = "Size of template disk volume. Should be equal to template's disk size"
+  default = "25"
+}
+
+variable "strongloop-vm-image" {
+  description = "Operating system image id / template that should be used when creating the virtual image"
+}
+
+# vsphere vm
+resource "vsphere_virtual_machine" "strongloop-vm" {
+  name = "${var.strongloop-vm-name}"
+  folder = "${var.strongloop-vm_folder}"
+  num_cpus = "${var.strongloop-vm_number_of_vcpu}"
+  memory = "${var.strongloop-vm_memory}"
+  resource_pool_id = "${data.vsphere_resource_pool.strongloop-vm_resource_pool.id}"
+  datastore_id = "${data.vsphere_datastore.strongloop-vm_datastore.id}"
+  guest_id = "${data.vsphere_virtual_machine.strongloop-vm_template.guest_id}"
+  clone {
+    template_uuid = "${data.vsphere_virtual_machine.strongloop-vm_template.id}"
+    customize {
+      linux_options {
+        domain = "${var.strongloop-vm_domain}"
+        host_name = "${var.strongloop-vm-name}"
+      }
+    network_interface {
+      ipv4_address = "${var.strongloop-vm_ipv4_address}"
+      ipv4_netmask = "${var.strongloop-vm_ipv4_prefix_length}"
+    }
+    ipv4_gateway = "${var.strongloop-vm_ipv4_gateway}"
+    dns_suffix_list = "${var.strongloop-vm_dns_suffixes}"
+    dns_server_list = "${var.strongloop-vm_dns_servers}"
+    }
+  }
 
   network_interface {
-    label              = "${var.network_label}"
-    ipv4_gateway       = "${var.ipv4_gateway}"
-    ipv4_address       = "${var.strongloop_server_ipv4_address}"
-    ipv4_prefix_length = "${var.ipv4_prefix_length}"
+    network_id = "${data.vsphere_network.strongloop-vm_network.id}"
+    adapter_type = "${var.strongloop-vm_adapter_type}"
   }
 
   disk {
-    datastore = "${var.storage}"
-    template  = "${var.strongloop_server_vm_template}"
-    type      = "thin"
+    label = "${var.strongloop-vm-name}.vmdk"
+    size = "${var.strongloop-vm_root_disk_size}"
+    keep_on_remove = "${var.strongloop-vm_root_disk_keep_on_remove}"
+    datastore_id = "${data.vsphere_datastore.strongloop-vm_datastore.id}"
   }
 
-  # Specify the ssh connection
-  connection {
-    user     = "${var.strongloop_server_ssh_user}"
-    password = "${var.strongloop_server_ssh_user_password}"
-
-    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host = "${self.network_interface.0.ipv4_address}"
-  }
-
-  provisioner "file" {
-    content = <<EOF
-#!/bin/bash
-
-LOGFILE="/var/log/addkey.log"
-
-user_public_key=$1
-
-mkdir -p .ssh
-if [ ! -f .ssh/authorized_keys ] ; then
-    touch .ssh/authorized_keys                                    >> $LOGFILE 2>&1 || { echo "---Failed to create authorized_keys---" | tee -a $LOGFILE; exit 1; }
-    chmod 400 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
-fi
-
-if [ "$user_public_key" != "None" ] ; then
-    echo "---start adding user_public_key----" | tee -a $LOGFILE 2>&1
-
-    chmod 600 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
-    echo "$user_public_key" | tee -a $HOME/.ssh/authorized_keys   >> $LOGFILE 2>&1 || { echo "---Failed to add user_public_key---" | tee -a $LOGFILE; exit 1; }
-    chmod 400 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
-
-    echo "---finish adding user_public_key----" | tee -a $LOGFILE 2>&1
-fi
-
-EOF
-
-    destination = "/tmp/addkey.sh"
-  }
-
-  # Execute the script remotely
-  provisioner "remote-exec" {
-    inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
-    ]
-  }
 }
 
-##############################################################
-# Create Virtual Machine for AngularJS
-##############################################################
-resource "vsphere_virtual_machine" "angularjs_vm" {
-  name         = "${var.angularjs_server_hostname}"
-  folder       = "${var.folder}"
-  datacenter   = "${var.datacenter}"
-  vcpu         = "${var.angularjs_server_vcpu}"
-  memory       = "${var.angularjs_server_memory * 1024}"
-  cluster      = "${var.cluster}"
-  dns_suffixes = "${var.dns_suffixes}"
-  dns_servers  = "${var.dns_servers}"
-
-  network_interface {
-    label              = "${var.network_label}"
-    ipv4_gateway       = "${var.ipv4_gateway}"
-    ipv4_address       = "${var.angularjs_server_ipv4_address}"
-    ipv4_prefix_length = "${var.ipv4_prefix_length}"
-  }
-
-  disk {
-    datastore = "${var.storage}"
-    template  = "${var.angularjs_server_vm_template}"
-    type      = "thin"
-  }
-
-  # Specify the ssh connection
-  connection {
-    user     = "${var.angularjs_server_ssh_user}"
-    password = "${var.angularjs_server_ssh_user_password}"
-
-    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host = "${self.network_interface.0.ipv4_address}"
-  }
-
-  provisioner "file" {
-    content = <<EOF
-#!/bin/bash
-
-LOGFILE="/var/log/addkey.log"
-
-user_public_key=$1
-
-mkdir -p .ssh
-if [ ! -f .ssh/authorized_keys ] ; then
-    touch .ssh/authorized_keys                                    >> $LOGFILE 2>&1 || { echo "---Failed to create authorized_keys---" | tee -a $LOGFILE; exit 1; }
-    chmod 400 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
-fi
-
-if [ "$user_public_key" != "None" ] ; then
-    echo "---start adding user_public_key----" | tee -a $LOGFILE 2>&1
-
-    chmod 600 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
-    echo "$user_public_key" | tee -a $HOME/.ssh/authorized_keys   >> $LOGFILE 2>&1 || { echo "---Failed to add user_public_key---" | tee -a $LOGFILE; exit 1; }
-    chmod 400 .ssh/authorized_keys                                >> $LOGFILE 2>&1 || { echo "---Failed to change permission of authorized_keys---" | tee -a $LOGFILE; exit 1; }
-
-    echo "---finish adding user_public_key----" | tee -a $LOGFILE 2>&1
-fi
-
-EOF
-
-    destination = "/tmp/addkey.sh"
-  }
-
-  # Execute the script remotely
-  provisioner "remote-exec" {
-    inline = [
-      "chmod +x /tmp/addkey.sh; bash /tmp/addkey.sh \"${var.user_public_key}\"",
-    ]
-  }
-}
-
-##############################################################
-# Install Strongloop
-##############################################################
 resource "null_resource" "install_strongloop" {
   # Specify the ssh connection
   connection {
-    user     = "${var.strongloop_server_ssh_user}"
-    password = "${var.strongloop_server_ssh_user_password}"
-
-    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host = "${vsphere_virtual_machine.strongloop_vm.network_interface.0.ipv4_address}"
+    user     = "${var.strongloop_ssh_user}"
+    password = "${var.strongloop_ssh_user_password}"
+    host = "${vsphere_virtual_machine.strongloop-vm.clone.0.customize.0.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
   provisioner "file" {
     content = <<EOF
 #!/bin/bash
-
 set -o errexit
 set -o nounset
 set -o pipefail
-
 LOGFILE="/var/log/install_strongloop_nodejs.log"
-
 MongoDB_Server=$1
 DBUserPwd=$2
-
 retryInstall () {
   n=0
   max=5
@@ -504,31 +651,22 @@ retryInstall () {
     sleep 15
    done
 }
-
 #install node.js
-
 echo "---start installing node.js---" | tee -a $LOGFILE 2>&1
 retryInstall "yum install gcc-c++ make -y"                         >> $LOGFILE 2>&1 || { echo "---Failed to install build tools---" | tee -a $LOGFILE; exit 1; }
 curl -sL https://rpm.nodesource.com/setup_7.x | bash -             >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
 retryInstall "yum install nodejs -y"                               >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
 echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1
-
 #install strongloop
-
 echo "---start installing strongloop---" | tee -a $LOGFILE 2>&1
 yum groupinstall 'Development Tools' -y                            >> $LOGFILE 2>&1 || { echo "---Failed to install development tools---" | tee -a $LOGFILE; exit 1; }
 npm install -g strongloop                                          >> $LOGFILE 2>&1 || { echo "---Failed to install strongloop---" | tee -a $LOGFILE; exit 1; }
 echo "---finish installing strongloop---" | tee -a $LOGFILE 2>&1
-
 #install sample application
-
 echo "---start installing sample application---" | tee -a $LOGFILE 2>&1
-
 PROJECT_NAME=sample
 SAMPLE_DIR=$HOME/$PROJECT_NAME
-
 retryInstall "yum install expect -y"                               >> $LOGFILE 2>&1 || { echo "---Failed to install Expect---" | tee -a $LOGFILE; exit 1; }
-
 #create project
 cd $HOME
 SCRIPT_CREATE_PROJECT=createProject.sh
@@ -548,18 +686,14 @@ expect "Run the app"
 send "\r"
 close
 EOT
-
 chmod 755 $SCRIPT_CREATE_PROJECT                                   >> $LOGFILE 2>&1 || { echo "---Failed to change permission of script---" | tee -a $LOGFILE; exit 1; }
 ./$SCRIPT_CREATE_PROJECT                                           >> $LOGFILE 2>&1 || { echo "---Failed to execute script---" | tee -a $LOGFILE; exit 1; }
 rm -f $SCRIPT_CREATE_PROJECT                                       >> $LOGFILE 2>&1 || { echo "---Failed to remove script---" | tee -a $LOGFILE; exit 1; }
-
 #add dependency package
 cd $SAMPLE_DIR
 sed -i -e '/loopback-datasource-juggler/a\ \ \ \ "loopback-connector-mongodb": "^1.18.0",' package.json    >> $LOGFILE 2>&1 || { echo "---Failed to add dependency for loopback-connector-mongo---" | tee -a $LOGFILE; exit 1; }
-
 #install packages in server side
 npm install                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install packages via npm---" | tee -a $LOGFILE; exit 1; }
-
 #create data model
 MODEL_NAME=Todos
 SCRIPT_CREATE_MODEL=createModel.sh
@@ -591,30 +725,23 @@ expect "Property name"
 send "\r"
 close
 EOT
-
 chmod 755 $SCRIPT_CREATE_MODEL                                                          >> $LOGFILE 2>&1 || { echo "---Failed to change permission of script---" | tee -a $LOGFILE; exit 1; }
 ./$SCRIPT_CREATE_MODEL                                                                  >> $LOGFILE 2>&1 || { echo "---Failed to execute script---" | tee -a $LOGFILE; exit 1; }
 rm -f $SCRIPT_CREATE_MODEL                                                              >> $LOGFILE 2>&1 || { echo "---Failed to remove script---" | tee -a $LOGFILE; exit 1; }
-
 #update server config
 DATA_SOURCE_FILE=server/datasources.json
 sed -i -e 's/\ \ }/\ \ },/g' $DATA_SOURCE_FILE                                          >> $LOGFILE 2>&1 || { echo "---Failed to update datasource.json---" | tee -a $LOGFILE; exit 1; }
 sed -i -e '/\ \ },/a\ \ "myMongoDB": {\n\ \ \ \ "host": "mongodb-server",\n\ \ \ \ "port": 27017,\n\ \ \ \ "url": "mongodb://sampleUser:sampleUserPwd@mongodb-server:27017/admin",\n\ \ \ \ "database": "Todos",\n\ \ \ \ "password": "sampleUserPwd",\n\ \ \ \ "name": "myMongoDB",\n\ \ \ \ "user": "sampleUser",\n\ \ \ \ "connector": "mongodb"\n\ \ }' $DATA_SOURCE_FILE    >> $LOGFILE 2>&1 || { echo "---Failed to update datasource.json---" | tee -a $LOGFILE; exit 1; }
 sed -i -e "s/mongodb-server/$MongoDB_Server/g" $DATA_SOURCE_FILE                        >> $LOGFILE 2>&1 || { echo "---Failed to update datasource.json---" | tee -a $LOGFILE; exit 1; }
 sed -i -e "s/sampleUserPwd/$DBUserPwd/g" $DATA_SOURCE_FILE                              >> $LOGFILE 2>&1 || { echo "---Failed to update datasource.json---" | tee -a $LOGFILE; exit 1; }
-
 MODEL_CONFIG_FILE=server/model-config.json
 sed -i -e '/Todos/{n;d}' $MODEL_CONFIG_FILE                                             >> $LOGFILE 2>&1 || { echo "---Failed to update model-config.json---" | tee -a $LOGFILE; exit 1; }
 sed -i -e '/Todos/a\ \ \ \ "dataSource": "myMongoDB",' $MODEL_CONFIG_FILE               >> $LOGFILE 2>&1 || { echo "---Failed to update model-config.json---" | tee -a $LOGFILE; exit 1; }
-
-
 #make sample application as a service
-
 SAMPLE_APP_SERVICE_CONF=/etc/systemd/system/nodeserver.service
 cat << EOT > $SAMPLE_APP_SERVICE_CONF
 [Unit]
 Description=Node.js Example Server
-
 [Service]
 ExecStart=/usr/bin/node $SAMPLE_DIR/server/server.js
 Restart=always
@@ -623,20 +750,16 @@ StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=nodejs-example
 Environment=NODE_ENV=production PORT=3000
-
 [Install]
 WantedBy=multi-user.target
 EOT
 systemctl enable nodeserver.service                                                 >> $LOGFILE 2>&1 || { echo "---Failed to enable the sample node service---" | tee -a $LOGFILE; exit 1; }
 systemctl start nodeserver.service                                                  >> $LOGFILE 2>&1 || { echo "---Failed to start the sample node service---" | tee -a $LOGFILE; exit 1; }
-
 #update firewall
 if hash iptables 2>/dev/null; then
 	iptables -I INPUT 1 -p tcp -m tcp --dport 3000 -m conntrack --ctstate NEW -j ACCEPT     >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }
 fi
-
 echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
-
 EOF
 
     destination = "/tmp/installation.sh"
@@ -645,29 +768,23 @@ EOF
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.mongodb_vm.network_interface.0.ipv4_address}\" \"${var.mongodb_user_password}\"",
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.mongodb-vm.clone.0.customize.0.network_interface.0.ipv4_address}\" \"${var.mongodb_user_password}\"",
     ]
   }
 }
 
-##############################################################
-# Install AngularJs
-##############################################################
 resource "null_resource" "install_angularjs" {
   # Specify the ssh connection
   connection {
-    user     = "${var.angularjs_server_ssh_user}"
-    password = "${var.angularjs_server_ssh_user_password}"
-
-    #    private_key = "${base64decode(var.camc_private_ssh_key)}"
-    host = "${vsphere_virtual_machine.angularjs_vm.network_interface.0.ipv4_address}"
+    user     = "${var.angularjs_ssh_user}"
+    password = "${var.angularjs_ssh_user_password}"
+    host = "${vsphere_virtual_machine.angular-vm.clone.0.customize.0.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
   provisioner "file" {
     content = <<EOF
 #!/bin/bash
-
 set -o errexit
 set -o nounset
 set -o pipefail
@@ -709,6 +826,7 @@ retryInstall "yum install -y yum-utils"                                    >> $L
 yum-config-manager --enable rhel-7-server-optional-rpms                    >> $LOGFILE 2>&1 || { echo "---Failed to enable rhel-7-server-optional-rpms---" | tee -a $LOGFILE; exit 1; }
 
 retryInstall "yum install gcc ruby ruby-devel rubygems make -y"            >> $LOGFILE 2>&1 || { echo "---Failed to install ruby---" | tee -a $LOGFILE; exit 1; }
+yum groupinstall 'Development Tools' -y                            >> $LOGFILE 2>&1 || { echo "---Failed to install development tools---" | tee -a $LOGFILE; exit 1; }
 gem install compass                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install compass---" | tee -a $LOGFILE; exit 1; }
 echo "---finish installing angularjs---" | tee -a $LOGFILE 2>&1
 
@@ -878,7 +996,7 @@ cat << EOT > $BOWERRC_FILE
 EOT
 
 retryInstall "yum install -y git"                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install git---" | tee -a $LOGFILE; exit 1; }
-bower install angular angular-resource angular-ui-router bootstrap --allow-root          >> $LOGFILE 2>&1 || { echo "---Failed to install packages via bower---" | tee -a $LOGFILE; exit 1; }
+bower install jquery angular angular-resource angular-ui-router bootstrap --allow-root          >> $LOGFILE 2>&1 || { echo "---Failed to install packages via bower---" | tee -a $LOGFILE; exit 1; }
 
 #add client files
 INDEX_HTML=client/index.html
@@ -1052,7 +1170,6 @@ if hash iptables 2>/dev/null; then
 fi
 
 echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
-
 EOF
 
     destination = "/tmp/installation.sh"
@@ -1061,26 +1178,27 @@ EOF
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.strongloop_vm.network_interface.0.ipv4_address}\"",
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.strongloop-vm.clone.0.customize.0.network_interface.0.ipv4_address}\"",
     ]
   }
 }
+
 
 #########################################################
 # Output
 #########################################################
 output "The mongodb server's ip addresses" {
-  value = "${vsphere_virtual_machine.mongodb_vm.network_interface.0.ipv4_address}"
+  value = "${vsphere_virtual_machine.mongodb-vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }
 
 output "The strongloop server's ip addresses" {
-  value = "${vsphere_virtual_machine.strongloop_vm.network_interface.0.ipv4_address}"
+  value = "${vsphere_virtual_machine.strongloop-vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }
 
 output "The angular server's ip addresses" {
-  value = "${vsphere_virtual_machine.angularjs_vm.network_interface.0.ipv4_address}"
+  value = "${vsphere_virtual_machine.angular-vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }
 
 output "Please access the strongloop-three-tiers sample application using the following url" {
-  value = "http://${vsphere_virtual_machine.angularjs_vm.network_interface.0.ipv4_address}:8080"
+  value = "http://${vsphere_virtual_machine.angular-vm.clone.0.customize.0.network_interface.0.ipv4_address}:8080"
 }

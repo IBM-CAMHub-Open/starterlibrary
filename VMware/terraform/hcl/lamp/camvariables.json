@@ -1,434 +1,722 @@
-[
+{
+  "input_datatypes": [],
+  "output_datatype": "content_template_output",
+  "input_groups": [
     {
-        "name": "mariadb_server_hostname",
-        "label": "MariaDB Server Hostname",
-        "description": "Hostname of the virtual instance (with MariaDB installed) to be deployed; Allow 1 to 80 alphanumeric characters with special characters in [.- _]",
-        "default": "lamp-mariadb-vm",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string",
-        "regex": "^[a-z0-9._-]{1,80}$",
-        "regexdesc": "Allow 1 to 80 alphanumeric characters, in lowercase"
+      "name": "cloud",
+      "label": "Cloud Input Variables"
     },
     {
-        "name": "php_server_hostname",
-        "label": "PHP Server Hostname",
-        "description": "Hostname of the virtual instance (with Apache and PHP installed) to be deployed; Allow 1 to 80 alphanumeric characters with special characters in [.- _]",
-        "default": "lamp-php-vm",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string",
-        "regex": "^[a-z0-9._-]{1,80}$",
-        "regexdesc": "Allow 1 to 80 alphanumeric characters, in lowercase"
+      "name": "ssh_keys",
+      "label": "SSH Keys"
     },
     {
-        "name": "cam_user",
-        "label": "MariaDB User",
-        "description": "User to be added into db and sshed into servers; Allow 1 to 16 alphanumeric characters with beginning at letters",
-        "default": "camuser",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string",
-        "regex": "^[A-Za-z][A-Za-z0-9]{0,15}$"
+      "name": "virtualmachine",
+      "label": "Virtual Machine Input Variables"
     },
     {
-        "name": "cam_pwd",
-        "label": "MariaDB User Password",
-        "description": "User password for cam user; Allow 8 to 16 alphanumeric characters",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": true,
-        "type": "string",
-        "regex": "^[0-9A-Za-z]{8,16}$"
-    },
-    {
-        "name": "folder",
-        "label": "Folder",
-        "description": "Target vSphere folder for Virtual Machine",
-        "hidden": false,
-        "immutable": false,
-        "required": false,
-        "secured": false,
-        "type": "string"
-    },
-    {
-        "name": "datacenter",
-        "label": "Datacenter",
-        "description": "Target vSphere datacenter for Virtual Machine creation",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string"
-    },
-    {
-        "name": "mariadb_server_vcpu",
-        "label": "MariaDB Server vCPU",
-        "description": "Number of Virtual CPU for the MariaDB server",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string",
-		"options": [
-         	{
-            	"value" : "1",
-              	"label": "1 Core"
-          	},
-         	{
-            	"value" : "2",
-              	"label": "2 Cores"
-          	},
-         	{
-            	"value" : "4",
-              	"label": "4 Cores"
-          	},
-         	{
-            	"value" : "8",
-              	"label": "8 Cores"
-          	},
-         	{
-            	"value" : "12",
-              	"label": "12 Cores"
-          	},
-         	{
-            	"value" : "16",
-              	"label": "16 Cores"
-          	},
-         	{
-            	"value" : "32",
-              	"label": "32 Cores"
-          	}
-        ]
-    },
-    {
-        "name": "mariadb_server_memory",
-        "label": "MariaDB Server Memory",
-        "description": "Memory for the MariaDB server in GBs",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string",
-		"options": [
-         	{
-            	"value" : "1",
-              	"label": "1 GB"
-          	},
-         	{
-            	"value" : "2",
-              	"label": "2 GB"
-          	},
-         	{
-            	"value" : "4",
-              	"label": "4 GB"
-          	},
-         	{
-            	"value" : "6",
-              	"label": "6 GB"
-          	},
-         	{
-            	"value" : "8",
-              	"label": "8 GB"
-          	},
-         	{
-            	"value" : "12",
-              	"label": "12 GB"
-          	},
-         	{
-            	"value" : "16",
-              	"label": "16 GB"
-          	},
-         	{
-            	"value" : "32",
-              	"label": "32 GB"
-          	},
-         	{
-            	"value" : "48",
-              	"label": "48 GB"
-          	},
-         	{
-            	"value" : "64",
-              	"label": "64 GB"
-          	},
-         	{
-            	"value" : "128",
-              	"label": "128 GB"
-          	}
-        ]
-    },
-    {
-        "name": "php_server_vcpu",
-        "label": "PHP Server vCPU",
-        "description": "Number of Virtual CPU for the PHP server",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string",
-		"options": [
-         	{
-            	"value" : "1",
-              	"label": "1 Core"
-          	},
-         	{
-            	"value" : "2",
-              	"label": "2 Cores"
-          	},
-         	{
-            	"value" : "4",
-              	"label": "4 Cores"
-          	},
-         	{
-            	"value" : "8",
-              	"label": "8 Cores"
-          	},
-         	{
-            	"value" : "12",
-              	"label": "12 Cores"
-          	},
-         	{
-            	"value" : "16",
-              	"label": "16 Cores"
-          	},
-         	{
-            	"value" : "32",
-              	"label": "32 Cores"
-          	}
-        ]
-    },
-    {
-        "name": "php_server_memory",
-        "label": "PHP Server Memory",
-        "description": "Memory for the PHP server in GBs",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string",
-		"options": [
-         	{
-            	"value" : "1",
-              	"label": "1 GB"
-          	},
-         	{
-            	"value" : "2",
-              	"label": "2 GB"
-          	},
-         	{
-            	"value" : "4",
-              	"label": "4 GB"
-          	},
-         	{
-            	"value" : "6",
-              	"label": "6 GB"
-          	},
-         	{
-            	"value" : "8",
-              	"label": "8 GB"
-          	},
-         	{
-            	"value" : "12",
-              	"label": "12 GB"
-          	},
-         	{
-            	"value" : "16",
-              	"label": "16 GB"
-          	},
-         	{
-            	"value" : "32",
-              	"label": "32 GB"
-          	},
-         	{
-            	"value" : "48",
-              	"label": "48 GB"
-          	},
-         	{
-            	"value" : "64",
-              	"label": "64 GB"
-          	},
-         	{
-            	"value" : "128",
-              	"label": "128 GB"
-          	}
-        ]
-    },
-    {
-        "name": "cluster",
-        "label": "Cluster",
-        "description": "Target vSphere Cluster to host the Virtual Machine",
-        "hidden": false,
-        "immutable": false,
-        "required": false,
-        "secured": false,
-        "type": "string"
-    },
-    {
-        "name": "dns_suffixes",
-        "label": "DNS Suffixes",
-        "description": "Name resolution suffixes for the virtual network adapter",
-        "default": [],
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "list"
-    },
-    {
-        "name": "dns_servers",
-        "label": "DNS Servers",
-        "description": "DNS servers for the virtual network adapter; Allow 0.0.0.0 to 255.255.255.255",
-        "default": [],
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "list",
-        "regex": "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"
-    },
-    {
-        "name": "network_label",
-        "label": "Network Label",
-        "description": "vSphere Port Group or Network label for Virtual Machine's vNIC",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string"
-    },
-    {
-        "name": "mariadb_server_ipv4_address",
-        "label": "MariaDB Server IPv4 Address",
-        "description": "IPv4 address for vNIC configuration in mariadb server; Allow 0.0.0.0 to 255.255.255.255",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string",
-        "regex": "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"
-    },
-    {
-        "name": "php_server_ipv4_address",
-        "label": "PHP Server IPv4 Addresses",
-        "description": "IPv4 address for vNIC configuration in php server; Allow 0.0.0.0 to 255.255.255.255",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string",
-        "regex": "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"
-    },
-    {
-        "name": "ipv4_gateway",
-        "label": "IPv4 Gateway",
-        "description": "IPv4 gateway for vNIC configuration; Allow 0.0.0.0 to 255.255.255.255",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string",
-        "regex": "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"
-    },
-    {
-        "name": "ipv4_prefix_length",
-        "label": "IPv4 Prefix Length",
-        "description": "IPv4 Prefix length for vNIC configuration; Allow numbers between 8 and 32",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string",
-        "regex": "^([8-9]|[1-2][0-9]|3[0-2])$"
-    },
-    {
-        "name": "storage",
-        "label": "Virtual Machine Disk Datastore",
-        "description": "Data store or storage cluster name for target VMs disks",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string"
-    },
-    {
-        "name": "mariadb_server_vm_template",
-        "label": "MariaDB Server VM Template",
-        "description": "Source VM or Template label for cloning to MariaDB server",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string"
-    },
-    {
-        "name": "mariadb_server_ssh_user",
-        "label": "MariaDB Server SSH User",
-        "description": "The user for ssh connection to MariaDB server, which is default in template",
-        "default": "root",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string"
-    },
-    {
-        "name": "mariadb_server_ssh_user_password",
-        "label": "MariaDB Server SSH User Password",
-        "description": "The user password for ssh connection to MariaDB server, which is default in template",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": true,
-        "type": "string"
-    },
-    {
-        "name": "php_server_vm_template",
-        "label": "PHP Server VM Template",
-        "description": "Source VM or Template label for cloning to PHP server",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string"
-    },
-    {
-        "name": "php_server_ssh_user",
-        "label": "PHP Server SSH User",
-        "description": "The user for ssh connection to PHP server, which is default in template",
-        "default": "root",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string"
-    },
-    {
-        "name": "php_server_ssh_user_password",
-        "label": "PHP Server SSH User Password",
-        "description": "The user password for ssh connection to PHP server, which is default in template",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": true,
-        "type": "string"
-    },
-    {
-        "name": "user_public_key",
-        "label": "User Public Key",
-        "description": "User-provided public SSH key used to connect to the virtual machine; Allow 'None' or the openSSH format key with optional comment (with optional email)",
-        "default": "None",
-        "hidden": false,
-        "immutable": false,
-        "required": true,
-        "secured": false,
-        "type": "string",
-        "regex": "^None$|^ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}( [^@]+@[^@]+| [^@]+){0,1}$"
+      "name": "image_parameters",
+      "label": "Image Parameters"
     }
-]
+  ],
+  "output_groups": [
+    {
+      "name": "content_template_output",
+      "label": "Outputs"
+    }
+  ],
+  "template_input_params": [
+    {
+      "name": "allow_unverified_ssl",
+      "type": "string",
+      "description": "Communication with vsphere server with self signed certificate",
+      "default": true,
+      "hidden": true,
+      "label": "Communication with vsphere server with self signed certificate",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "cloud"
+    },
+    {
+      "name": "mariadb_user",
+      "label": "mariadb User",
+      "description": "User to be added into db and sshed into servers; Allow 1 to 16 alphanumeric characters with beginning at letters",
+      "default": "camuser",
+      "hidden": false,
+      "immutable": false,
+      "required": true,
+      "secured": false,
+      "type": "string",
+      "regex": "^[A-Za-z][A-Za-z0-9]{0,15}$",
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb_pwd",
+      "label": "mariadb User Password",
+      "description": "User password for cam user; Allow 8 to 16 alphanumeric characters",
+      "hidden": false,
+      "immutable": false,
+      "required": true,
+      "secured": true,
+      "type": "string",
+      "regex": "^[0-9A-Za-z]{8,16}$",
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb_ssh_user",
+      "label": "mariadb Server SSH User",
+      "description": "The user for ssh connection to mariadb server, which is default in template",
+      "default": "root",
+      "hidden": false,
+      "immutable": false,
+      "required": true,
+      "secured": false,
+      "type": "string",
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb_ssh_user_password",
+      "label": "mariadb Server SSH User Password",
+      "description": "The user password for ssh connection to mariadb server, which is default in template",
+      "hidden": false,
+      "immutable": false,
+      "required": true,
+      "secured": true,
+      "type": "string",
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php_ssh_user",
+      "label": "PHP Server SSH User",
+      "description": "The user for ssh connection to PHP server, which is default in template",
+      "default": "root",
+      "hidden": false,
+      "immutable": false,
+      "required": true,
+      "secured": false,
+      "type": "string",
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php_ssh_user_password",
+      "label": "PHP Server SSH User Password",
+      "description": "The user password for ssh connection to PHP server, which is default in template",
+      "hidden": false,
+      "immutable": false,
+      "required": true,
+      "secured": true,
+      "type": "string",
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm-name",
+      "type": "string",
+      "description": "Short hostname of mariadb vm",
+      "default": "mariadb-vm",
+      "hidden": false,
+      "label": "mariadb short hostname",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm-name",
+      "type": "string",
+      "description": "Short hostname of php mv",
+      "default": "php-vm",
+      "hidden": false,
+      "label": "PHP short hostname",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_dns_servers",
+      "type": "list",
+      "description": "DNS servers for the virtual network adapter",
+      "hidden": false,
+      "label": "DNS Servers - mariadb-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_dns_suffixes",
+      "type": "list",
+      "description": "Name resolution suffixes for the virtual network adapter",
+      "hidden": false,
+      "label": "DNS Suffixes - mariadb-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_root_disk_keep_on_remove",
+      "type": "string",
+      "description": "Delete template disk volume when the virtual machine is deleted",
+      "default": "false",
+      "hidden": true,
+      "label": "Delete template disk volume when the virtual machine is deleted - mariadb-vm",
+      "secured": false,
+      "options": [
+        {
+          "value": "false",
+          "label": "False",
+          "default": "true"
+        },
+        {
+          "value": "true",
+          "label": "True"
+        }
+      ],
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_domain",
+      "type": "string",
+      "description": "Domain Name of virtual machine",
+      "hidden": false,
+      "label": "Domain Name - mariadb-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm-image",
+      "type": "string",
+      "description": "Operating system image id / template that should be used when creating the virtual image",
+      "hidden": false,
+      "label": "Operating System ID / Template - mariadb-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_root_disk_size",
+      "type": "string",
+      "description": "Size of template disk volume. Should be equal to template's disk size",
+      "default": "25",
+      "hidden": false,
+      "label": "Root Disk Size - mariadb-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_root_disk_controller_type",
+      "type": "string",
+      "description": "Type of template disk controller",
+      "default": "scsi",
+      "hidden": false,
+      "label": "Template Disk Controller - mariadb-vm",
+      "secured": false,
+      "options": [
+        {
+          "value": "scsi",
+          "label": "scsi",
+          "default": "true"
+        },
+        {
+          "value": "scsi-lsi-parallel",
+          "label": "scsi-lsi-parallel"
+        },
+        {
+          "value": "scsi-buslogic",
+          "label": "scsi-buslogic"
+        },
+        {
+          "value": "scsi-paravirtual",
+          "label": "scsi-paravirtual"
+        },
+        {
+          "value": "scsi-isi-sas",
+          "label": "scsi-isi-sas"
+        },
+        {
+          "value": "ide",
+          "label": "ide"
+        }
+      ],
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_root_disk_datastore",
+      "type": "string",
+      "description": "Data store or storage cluster name for target virtual machine's disks",
+      "hidden": false,
+      "label": "Template Disk Datastore - mariadb-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_root_disk_type",
+      "type": "string",
+      "description": "Type of template disk volume",
+      "default": "eager_zeroed",
+      "hidden": false,
+      "label": "Template Disk Type - mariadb-vm",
+      "secured": false,
+      "options": [
+        {
+          "value": "eager_zeroed",
+          "label": "Thick Provision Eager Zeroed",
+          "default": "true"
+        },
+        {
+          "value": "lazy",
+          "label": "Thick Provision Lazy Zeroed"
+        },
+        {
+          "value": "thin",
+          "label": "Thin Provision",
+          "group_name": "virtualmachine"
+        }
+      ],
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_ipv4_gateway",
+      "type": "string",
+      "description": "IPv4 gateway for vNIC configuration",
+      "hidden": false,
+      "label": "Virtual Machine Gateway Address - mariadb-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_ipv4_address",
+      "type": "string",
+      "description": "IPv4 address for vNIC configuration",
+      "hidden": false,
+      "label": "Virtual Machine IP Address - mariadb-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_memory",
+      "type": "string",
+      "description": "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024",
+      "default": "1024",
+      "hidden": false,
+      "label": "Virtual Machine Memory - mariadb-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_ipv4_prefix_length",
+      "type": "string",
+      "description": "IPv4 prefix length for vNIC configuration. The value must be a number between 8 and 32",
+      "hidden": false,
+      "label": "Virtual Machine Netmask Prefix - mariadb-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_number_of_vcpu",
+      "type": "string",
+      "description": "Number of virtual CPU for the virtual machine, which is required to be a positive Integer",
+      "default": "1",
+      "hidden": false,
+      "label": "Virtual Machine vCPUs - mariadb-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_network_interface_label",
+      "type": "string",
+      "description": "vSphere port group or network label for virtual machine's vNIC",
+      "hidden": false,
+      "label": "Virtual Machine vSphere Port Group - mariadb-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_cluster",
+      "type": "string",
+      "description": "Target vSphere cluster to host the virtual machine",
+      "hidden": false,
+      "label": "vSphere Cluster - mariadb-vm",
+      "secured": false,
+      "required": false,
+      "immutable": false,
+      "group_name": "cloud"
+    },
+    {
+      "name": "mariadb-vm_datacenter",
+      "type": "string",
+      "description": "Target vSphere datacenter for virtual machine creation",
+      "hidden": false,
+      "label": "vSphere Datacenter - mariadb-vm",
+      "secured": false,
+      "required": false,
+      "immutable": false,
+      "group_name": "cloud"
+    },
+    {
+      "name": "mariadb-vm_folder",
+      "type": "string",
+      "description": "Target vSphere folder for virtual machine",
+      "hidden": false,
+      "label": "vSphere Folder Name - mariadb-vm",
+      "secured": false,
+      "required": false,
+      "immutable": false,
+      "group_name": "cloud"
+    },
+    {
+      "name": "mariadb-vm_adapter_type",
+      "type": "string",
+      "description": "Network adapter type for vNIC Configuration",
+      "default": "vmxnet3",
+      "hidden": false,
+      "label": "vSphere Network Adapter Type - mariadb-vm",
+      "secured": false,
+      "options": [
+        {
+          "value": "vmxnet3",
+          "label": "vmxnet3",
+          "default": "true"
+        },
+        {
+          "value": "e1000",
+          "default": "e1000"
+        }
+      ],
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "mariadb-vm_resource_pool",
+      "type": "string",
+      "description": "Target vSphere Resource Pool to host the virtual machine",
+      "hidden": false,
+      "label": "vSphere Resource Pool - mariadb-vm",
+      "secured": false,
+      "required": false,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_dns_servers",
+      "type": "list",
+      "description": "DNS servers for the virtual network adapter",
+      "hidden": false,
+      "label": "DNS Servers - php-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_dns_suffixes",
+      "type": "list",
+      "description": "Name resolution suffixes for the virtual network adapter",
+      "hidden": false,
+      "label": "DNS Suffixes - php-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_root_disk_keep_on_remove",
+      "type": "string",
+      "description": "Delete template disk volume when the virtual machine is deleted",
+      "default": "false",
+      "hidden": true,
+      "label": "Delete template disk volume when the virtual machine is deleted - php-vm",
+      "secured": false,
+      "options": [
+        {
+          "value": "false",
+          "label": "False",
+          "default": "true"
+        },
+        {
+          "value": "true",
+          "label": "True"
+        }
+      ],
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_domain",
+      "type": "string",
+      "description": "Domain Name of virtual machine",
+      "hidden": false,
+      "label": "Domain Name - php-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm-image",
+      "type": "string",
+      "description": "Operating system image id / template that should be used when creating the virtual image",
+      "hidden": false,
+      "label": "Operating System ID / Template - php-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_root_disk_size",
+      "type": "string",
+      "description": "Size of template disk volume. Should be equal to template's disk size",
+      "default": "25",
+      "hidden": false,
+      "label": "Root Disk Size - php-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_root_disk_controller_type",
+      "type": "string",
+      "description": "Type of template disk controller",
+      "default": "scsi",
+      "hidden": false,
+      "label": "Template Disk Controller - php-vm",
+      "secured": false,
+      "options": [
+        {
+          "value": "scsi",
+          "label": "scsi",
+          "default": "true"
+        },
+        {
+          "value": "scsi-lsi-parallel",
+          "label": "scsi-lsi-parallel"
+        },
+        {
+          "value": "scsi-buslogic",
+          "label": "scsi-buslogic"
+        },
+        {
+          "value": "scsi-paravirtual",
+          "label": "scsi-paravirtual"
+        },
+        {
+          "value": "scsi-isi-sas",
+          "label": "scsi-isi-sas"
+        },
+        {
+          "value": "ide",
+          "label": "ide"
+        }
+      ],
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_root_disk_datastore",
+      "type": "string",
+      "description": "Data store or storage cluster name for target virtual machine's disks",
+      "hidden": false,
+      "label": "Template Disk Datastore - php-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_root_disk_type",
+      "type": "string",
+      "description": "Type of template disk volume",
+      "default": "eager_zeroed",
+      "hidden": false,
+      "label": "Template Disk Type - php-vm",
+      "secured": false,
+      "options": [
+        {
+          "value": "eager_zeroed",
+          "label": "Thick Provision Eager Zeroed",
+          "default": "true"
+        },
+        {
+          "value": "lazy",
+          "label": "Thick Provision Lazy Zeroed"
+        },
+        {
+          "value": "thin",
+          "label": "Thin Provision",
+          "group_name": "virtualmachine"
+        }
+      ],
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_ipv4_gateway",
+      "type": "string",
+      "description": "IPv4 gateway for vNIC configuration",
+      "hidden": false,
+      "label": "Virtual Machine Gateway Address - php-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_ipv4_address",
+      "type": "string",
+      "description": "IPv4 address for vNIC configuration",
+      "hidden": false,
+      "label": "Virtual Machine IP Address - php-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_memory",
+      "type": "string",
+      "description": "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024",
+      "default": "1024",
+      "hidden": false,
+      "label": "Virtual Machine Memory - php-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_ipv4_prefix_length",
+      "type": "string",
+      "description": "IPv4 prefix length for vNIC configuration. The value must be a number between 8 and 32",
+      "hidden": false,
+      "label": "Virtual Machine Netmask Prefix - php-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_number_of_vcpu",
+      "type": "string",
+      "description": "Number of virtual CPU for the virtual machine, which is required to be a positive Integer",
+      "default": "1",
+      "hidden": false,
+      "label": "Virtual Machine vCPUs - php-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_network_interface_label",
+      "type": "string",
+      "description": "vSphere port group or network label for virtual machine's vNIC",
+      "hidden": false,
+      "label": "Virtual Machine vSphere Port Group - php-vm",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_cluster",
+      "type": "string",
+      "description": "Target vSphere cluster to host the virtual machine",
+      "hidden": false,
+      "label": "vSphere Cluster - php-vm",
+      "secured": false,
+      "required": false,
+      "immutable": false,
+      "group_name": "cloud"
+    },
+    {
+      "name": "php-vm_datacenter",
+      "type": "string",
+      "description": "Target vSphere datacenter for virtual machine creation",
+      "hidden": false,
+      "label": "vSphere Datacenter - php-vm",
+      "secured": false,
+      "required": false,
+      "immutable": false,
+      "group_name": "cloud"
+    },
+    {
+      "name": "php-vm_folder",
+      "type": "string",
+      "description": "Target vSphere folder for virtual machine",
+      "hidden": false,
+      "label": "vSphere Folder Name - php-vm",
+      "secured": false,
+      "required": false,
+      "immutable": false,
+      "group_name": "cloud"
+    },
+    {
+      "name": "php-vm_adapter_type",
+      "type": "string",
+      "description": "Network adapter type for vNIC Configuration",
+      "default": "vmxnet3",
+      "hidden": false,
+      "label": "vSphere Network Adapter Type - php-vm",
+      "secured": false,
+      "options": [
+        {
+          "value": "vmxnet3",
+          "label": "vmxnet3",
+          "default": "true"
+        },
+        {
+          "value": "e1000",
+          "default": "e1000"
+        }
+      ],
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "php-vm_resource_pool",
+      "type": "string",
+      "description": "Target vSphere Resource Pool to host the virtual machine",
+      "hidden": false,
+      "label": "vSphere Resource Pool - php-vm",
+      "secured": false,
+      "required": false,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    }
+  ],
+  "template_output_params": []
+}

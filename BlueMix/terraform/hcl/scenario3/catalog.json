@@ -1,7 +1,7 @@
   {
     "name": "2 Virtual Servers with SSH keys with one on a private network",
     "description": "A sample cloud resource template with 2 virtual servers, one on a private network.",
-    "version": "1.0.4",
+    "version": "2.0.0",
     "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
     "image": "tp_WAS_standalone.png",
     "type": "prebuilt",

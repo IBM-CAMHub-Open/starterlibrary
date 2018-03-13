@@ -1,0 +1,143 @@
+{
+  "template_input_params": [
+    {
+      "name": "boot_disk",
+      "description": "The boot disk for the instance.",
+      "default": "centos-cloud/centos-7",
+      "options": [
+        {
+          "value": "centos-cloud/centos-7",
+          "label": "CentOS 7",
+          "default": true
+        },
+        {
+          "value": "rhel-cloud/rhel-7",
+          "label": "RHEL 7"
+        },
+        {
+          "value": "debian-cloud/debian-8",
+          "label": "Debian 8"
+        },
+        {
+          "value": "suse-cloud/sles-12",
+          "label": "SLES 12"
+        },
+        {
+          "value": "ubuntu-os-cloud/ubuntu-1604-lts",
+          "label": "Ubuntu 16.04"
+        }
+      ],
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "boot_disk",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "machine_type",
+      "description": "The machine type to create.",
+      "default": "n1-standard-1",
+      "options": [
+        {
+          "value": "n1-standard-1",
+          "label": "n1-standard-1 (1 vCPU, 3.75 Memory(GB))",
+          "default": true
+        },
+        {
+          "value": "n1-standard-2",
+          "label": "n1-standard-2 (2 vCPU, 7.50 Memory(GB))"
+        },
+        {
+          "value": "n1-highmem-2",
+          "label": "n1-highmem-2 (2 vCPU, 13 Memory(GB))"
+        },
+        {
+          "value": "n1-highcpu-2",
+          "label": "n1-highcpu-2 (2 vCPU, 1.80 Memory(GB))"
+        },
+        {
+          "value": "n1-highcpu-4",
+          "label": "n1-highcpu-4 (4 vCPU, 3.60 Memory(GB))"
+        }
+      ],
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "machine_type",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "unique_resource_name",
+      "description": "A unique name for the resource, required by GCE.",
+      "default": "googlevm",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "unique_resource_name",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "zone",
+      "description": "The zone the resource should be created in.",
+      "default": "us-central1-a",
+      "options": [
+        {
+          "value": "us-central1-a",
+          "label": "us-central1-a (Iowa, USA)",
+          "default": true
+        },
+        {
+          "value": "us-west1-a",
+          "label": "us-west1-a (Oregon, USA)"
+        },
+        {
+          "value": "us-east1-c",
+          "label": "us-east1-c (South Carolina, USA)"
+        },
+        {
+          "value": "europe-west3-a",
+          "label": "europe-west3-a (Frankfurt, Germany)"
+        },
+        {
+          "value": "asia-south1-a",
+          "label": "asia-south1-a (Mumbai, India)"
+        }
+      ],
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "zone",
+      "hidden": false,
+      "immutable": false
+    }
+  ],
+  "template_output_params": [
+    {
+      "name": "Name",
+      "label": "VM instance name",
+      "description": "The unique VM resource name.",
+      "type": "string",
+      "hidden": false,
+      "secured": false
+    },
+    {
+      "name": "External_IP",
+      "label": "External IP",
+      "description": "The external IP of the virtual machine.",
+      "type": "string",
+      "hidden": false,
+      "secured": false
+    },
+    {
+      "name": "Internal_IP",
+      "label": "Internal IP",
+      "description": "The internal IP of the virtual machine.",
+      "type": "string",
+      "hidden": false,
+      "secured": false
+    }
+  ]
+}
