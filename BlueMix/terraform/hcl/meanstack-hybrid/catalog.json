@@ -1,7 +1,7 @@
 {
    "name": "MEAN stack deployment (hybrid-cloud)",
    "description": "MEAN - A simple and scalable starting point for full stack JavaScript web development.",
-   "version": "2.0.0",
+   "version": "2.0.1",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
    "image": "tp_WAS_standalone.png",
    "type": "prebuilt",
@@ -30,10 +30,6 @@
        {
          "title": "Clouds",
          "description": "<ul style=\"list-style-type: disc; margin-left: 12px;\"><li>Amazon Web Services (AWS)</li><li>IBM Cloud/Softlayer</li></ul>"
-       },
-       {
-         "title": "Template version",
-         "description": "V1.0"
        },
        {
          "title": "Operating systems supported",
