@@ -30,14 +30,6 @@ variable "ibm_stack_id" {
   description = "A unique stack id."
 }
 
-variable "ibm_pm_public_ssh_key" {
-  description = "Public CAMC SSH key value which is used to connect to a guest, used on VMware only."
-}
-
-variable "ibm_pm_private_ssh_key" {
-  description = "Private CAMC SSH key (base64 encoded) used to connect to the virtual guest."
-}
-
 variable "allow_unverified_ssl" {
   description = "Communication with vsphere server with self signed certificate"
   default = "true"
@@ -49,10 +41,6 @@ variable "allow_unverified_ssl" {
 provider "vsphere" {
   allow_unverified_ssl = "${var.allow_unverified_ssl}"
   version = "~> 1.3"
-}
-
-provider "camc" {
-  version = "~> 0.2"
 }
 
 ##############################################################
@@ -108,19 +96,6 @@ data "vsphere_network" "nodejs_vm_network" {
 data "vsphere_virtual_machine" "nodejs_vm_template" {
   name = "${var.nodejs_vm-image}"
   datacenter_id = "${data.vsphere_datacenter.nodejs_vm_datacenter.id}"
-}
-
-##### Environment variables #####
-#Variable : ibm_pm_access_token
-variable "ibm_pm_access_token" {
-  type = "string"
-  description = "IBM Pattern Manager Access Token"
-}
-
-#Variable : ibm_pm_service
-variable "ibm_pm_service" {
-  type = "string"
-  description = "IBM Pattern Manager Service"
 }
 
 
@@ -333,14 +308,13 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
 # =================================================================
 #!/bin/bash
 
-if (( $# != 3 )); then
-echo "usage: arg 1 is user, arg 2 is public key, arg3 is CAMC Public Key"
+if (( $# != 2 )); then
+echo "usage: arg 1 is user, arg 2 is public key"
 exit -1
 fi
 
 userid="$1"
 ssh_key="$2"
-camc_ssh_key="$3"
 
 user_home=$(eval echo "~$userid")
 user_auth_key_file=$user_home/.ssh/authorized_keys
@@ -368,14 +342,6 @@ echo "updated $user_auth_key_file"
 fi
 fi
 
-echo "$camc_ssh_key" >> "$user_auth_key_file"
-if [ $? -ne 0 ]; then
-echo "failed to add to $user_auth_key_file"
-exit -1
-else
-echo "updated $user_auth_key_file"
-fi
-
 EOF
   }
 
@@ -383,7 +349,7 @@ EOF
   provisioner "remote-exec" {
     inline = [
       "bash -c 'chmod +x mongodb_vm_add_ssh_key.sh'",
-      "bash -c './mongodb_vm_add_ssh_key.sh  \"${var.mongodb_vm-os_admin_user}\" \"${var.user_public_ssh_key}\" \"${var.ibm_pm_public_ssh_key}\">> mongodb_vm_add_ssh_key.log 2>&1'"
+      "bash -c './mongodb_vm_add_ssh_key.sh  \"${var.mongodb_vm-os_admin_user}\" \"${var.user_public_ssh_key}\">> mongodb_vm_add_ssh_key.log 2>&1'"
     ]
   }
 
@@ -399,7 +365,7 @@ resource "null_resource" "mongodb_vm_install_mongodb" {
   # Specify the ssh connection
   connection {
     user = "${var.mongodb_vm-os_admin_user}"
-    private_key = "${base64decode(var.ibm_pm_private_ssh_key)}"
+    password = "${var.mongodb_vm-os_password}"
     host = "${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
   }
 
@@ -593,7 +559,7 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
   }
 
   disk {
-    name = "${var.nodejs_vm-name}.vmdk"
+    label = "${var.nodejs_vm-name}.vmdk"
     size = "${var.nodejs_vm_root_disk_size}"
     keep_on_remove = "${var.nodejs_vm_root_disk_keep_on_remove}"
     datastore_id = "${data.vsphere_datastore.nodejs_vm_datastore.id}"
@@ -627,14 +593,13 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
 # =================================================================
 #!/bin/bash
 
-if (( $# != 3 )); then
-echo "usage: arg 1 is user, arg 2 is public key, arg3 is CAMC Public Key"
+if (( $# != 2 )); then
+echo "usage: arg 1 is user and arg 2 is public key"
 exit -1
 fi
 
 userid="$1"
 ssh_key="$2"
-camc_ssh_key="$3"
 
 user_home=$(eval echo "~$userid")
 user_auth_key_file=$user_home/.ssh/authorized_keys
@@ -662,14 +627,6 @@ echo "updated $user_auth_key_file"
 fi
 fi
 
-echo "$camc_ssh_key" >> "$user_auth_key_file"
-if [ $? -ne 0 ]; then
-echo "failed to add to $user_auth_key_file"
-exit -1
-else
-echo "updated $user_auth_key_file"
-fi
-
 EOF
 
   }
@@ -678,7 +635,7 @@ EOF
   provisioner "remote-exec" {
     inline = [
       "bash -c 'chmod +x nodejs_vm_add_ssh_key.sh'",
-      "bash -c './nodejs_vm_add_ssh_key.sh  \"${var.nodejs_vm-os_admin_user}\" \"${var.user_public_ssh_key}\" \"${var.ibm_pm_public_ssh_key}\">> nodejs_vm_add_ssh_key.log 2>&1'"
+      "bash -c './nodejs_vm_add_ssh_key.sh  \"${var.nodejs_vm-os_admin_user}\" \"${var.user_public_ssh_key}\">> nodejs_vm_add_ssh_key.log 2>&1'"
     ]
   }
 
@@ -694,7 +651,7 @@ resource "null_resource" "nodejs_vm_install_nodejs" {
   # Specify the ssh connection
   connection {
     user = "${var.nodejs_vm-os_admin_user}"
-    private_key = "${base64decode(var.ibm_pm_private_ssh_key)}"
+    password = "${var.nodejs_vm-os_password}"
     host = "${vsphere_virtual_machine.nodejs_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
   }
 

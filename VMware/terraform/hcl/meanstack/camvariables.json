@@ -130,30 +130,6 @@
       "group_name": "virtualmachine"
     },
     {
-      "name": "ibm_pm_access_token",
-      "type": "string",
-      "description": "IBM Pattern Manager Access Token",
-      "hidden": true,
-      "label": "IBM Pattern Manager Access Token",
-      "secured": true,
-      "required": true,
-      "immutable": true,
-      "group_name": "environment",
-      "default": "${advanced_content_runtime_chef.ibm_pm_access_token}"
-    },
-    {
-      "name": "ibm_pm_service",
-      "type": "string",
-      "description": "IBM Pattern Manager Service",
-      "hidden": true,
-      "label": "IBM Pattern Manager Service",
-      "secured": false,
-      "required": true,
-      "immutable": true,
-      "group_name": "environment",
-      "default": "${advanced_content_runtime_chef.ibm_pm_service}"
-    },
-    {
       "name": "mongodb_vm-image",
       "type": "string",
       "description": "Operating system image id / template that should be used when creating the virtual image",
@@ -185,30 +161,6 @@
       "required": true,
       "immutable": false,
       "group_name": "virtualmachine"
-    },
-    {
-      "name": "ibm_pm_private_ssh_key",
-      "type": "string",
-      "description": "Private CAMC SSH key (base64 encoded) used to connect to the virtual guest.",
-      "hidden": true,
-      "label": "Private CAMC SSH key (base64 encoded) used to connect to the virtual guest.",
-      "secured": true,
-      "required": true,
-      "immutable": true,
-      "group_name": "environment",
-      "default": "${advanced_content_runtime_chef.ibm_pm_private_ssh_key}"
-    },
-    {
-      "name": "ibm_pm_public_ssh_key",
-      "type": "string",
-      "description": "Public CAMC SSH key value which is used to connect to a guest, used on VMware only.",
-      "hidden": true,
-      "label": "Public CAMC SSH key value which is used to connect to a guest, used on VMware only.",
-      "secured": false,
-      "required": true,
-      "immutable": false,
-      "group_name": "environment",
-      "default": "${advanced_content_runtime_chef.ibm_pm_public_ssh_key}"
     },
     {
       "name": "mongodb_vm_root_disk_size",
