@@ -1,7 +1,7 @@
 {
    "name": "Node.js on a Single VM",
    "description": "Node.js - An execution environment for event-driven server-side applications.",
-   "version": "2.0.0",
+   "version": "2.0.1",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
    "image": "tp_WAS_standalone.png",
    "type": "prebuilt",
