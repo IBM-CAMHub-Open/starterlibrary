@@ -5,7 +5,7 @@
 ##############################################################
 variable "allow_unverified_ssl" {
   description = "Communication with vsphere server with self signed certificate"
-  default = "true"
+  default     = "true"
 }
 
 ##############################################################
@@ -13,7 +13,7 @@ variable "allow_unverified_ssl" {
 ##############################################################
 provider "vsphere" {
   allow_unverified_ssl = "${var.allow_unverified_ssl}"
-  version = "~> 1.3"
+  version              = "~> 1.3"
 }
 
 ##############################################################
@@ -25,21 +25,24 @@ provider "vsphere" {
 data "vsphere_datacenter" "tomcat_vm_datacenter" {
   name = "${var.tomcat_vm_datacenter}"
 }
+
 data "vsphere_datastore" "tomcat_vm_datastore" {
-  name = "${var.tomcat_vm_root_disk_datastore}"
+  name          = "${var.tomcat_vm_root_disk_datastore}"
   datacenter_id = "${data.vsphere_datacenter.tomcat_vm_datacenter.id}"
 }
+
 data "vsphere_resource_pool" "tomcat_vm_resource_pool" {
-  name = "${var.tomcat_vm_resource_pool}"
+  name          = "${var.tomcat_vm_resource_pool}"
   datacenter_id = "${data.vsphere_datacenter.tomcat_vm_datacenter.id}"
 }
+
 data "vsphere_network" "tomcat_vm_network" {
-  name = "${var.tomcat_vm_network_interface_label}"
+  name          = "${var.tomcat_vm_network_interface_label}"
   datacenter_id = "${data.vsphere_datacenter.tomcat_vm_datacenter.id}"
 }
 
 data "vsphere_virtual_machine" "tomcat_vm_template" {
-  name = "${var.tomcat_vm-image}"
+  name          = "${var.tomcat_vm-image}"
   datacenter_id = "${data.vsphere_datacenter.tomcat_vm_datacenter.id}"
 }
 
@@ -47,11 +50,10 @@ data "vsphere_virtual_machine" "tomcat_vm_template" {
 
 #Variable : tomcat_vm-name
 variable "tomcat_vm-name" {
-  type = "string"
+  type        = "string"
   description = "Generated"
-  default = "tomcat Vm"
+  default     = "tomcat Vm"
 }
-
 
 #########################################################
 ##### Resource : tomcat_vm
@@ -87,12 +89,12 @@ variable "tomcat_vm_domain" {
 
 variable "tomcat_vm_number_of_vcpu" {
   description = "Number of virtual CPU for the virtual machine, which is required to be a positive Integer"
-  default = "1"
+  default     = "1"
 }
 
 variable "tomcat_vm_memory" {
   description = "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024"
-  default = "1024"
+  default     = "1024"
 }
 
 variable "tomcat_vm_cluster" {
@@ -104,12 +106,12 @@ variable "tomcat_vm_resource_pool" {
 }
 
 variable "tomcat_vm_dns_suffixes" {
-  type = "list"
+  type        = "list"
   description = "Name resolution suffixes for the virtual network adapter"
 }
 
 variable "tomcat_vm_dns_servers" {
-  type = "list"
+  type        = "list"
   description = "DNS servers for the virtual network adapter"
 }
 
@@ -131,7 +133,7 @@ variable "tomcat_vm_ipv4_prefix_length" {
 
 variable "tomcat_vm_adapter_type" {
   description = "Network adapter type for vNIC Configuration"
-  default = "vmxnet3"
+  default     = "vmxnet3"
 }
 
 variable "tomcat_vm_root_disk_datastore" {
@@ -139,26 +141,26 @@ variable "tomcat_vm_root_disk_datastore" {
 }
 
 variable "tomcat_vm_root_disk_type" {
-  type = "string"
+  type        = "string"
   description = "Type of template disk volume"
-  default = "eager_zeroed"
+  default     = "eager_zeroed"
 }
 
 variable "tomcat_vm_root_disk_controller_type" {
-  type = "string"
+  type        = "string"
   description = "Type of template disk controller"
-  default = "scsi"
+  default     = "scsi"
 }
 
 variable "tomcat_vm_root_disk_keep_on_remove" {
-  type = "string"
+  type        = "string"
   description = "Delete template disk volume when the virtual machine is deleted"
-  default = "false"
+  default     = "false"
 }
 
 variable "tomcat_vm_root_disk_size" {
   description = "Size of template disk volume. Should be equal to template's disk size"
-  default = "25"
+  default     = "25"
 }
 
 variable "tomcat_vm-image" {
@@ -167,44 +169,49 @@ variable "tomcat_vm-image" {
 
 # vsphere vm
 resource "vsphere_virtual_machine" "tomcat_vm" {
-  name = "${var.tomcat_vm-name}"
-  folder = "${var.tomcat_vm_folder}"
-  num_cpus = "${var.tomcat_vm_number_of_vcpu}"
-  memory = "${var.tomcat_vm_memory}"
+  name             = "${var.tomcat_vm-name}"
+  folder           = "${var.tomcat_vm_folder}"
+  num_cpus         = "${var.tomcat_vm_number_of_vcpu}"
+  memory           = "${var.tomcat_vm_memory}"
   resource_pool_id = "${data.vsphere_resource_pool.tomcat_vm_resource_pool.id}"
-  datastore_id = "${data.vsphere_datastore.tomcat_vm_datastore.id}"
-  guest_id = "${data.vsphere_virtual_machine.tomcat_vm_template.guest_id}"
+  datastore_id     = "${data.vsphere_datastore.tomcat_vm_datastore.id}"
+  guest_id         = "${data.vsphere_virtual_machine.tomcat_vm_template.guest_id}"
+  scsi_type        = "${data.vsphere_virtual_machine.tomcat_vm_template.scsi_type}"
+
   clone {
     template_uuid = "${data.vsphere_virtual_machine.tomcat_vm_template.id}"
+
     customize {
       linux_options {
-        domain = "${var.tomcat_vm_domain}"
+        domain    = "${var.tomcat_vm_domain}"
         host_name = "${var.tomcat_vm-name}"
       }
-    network_interface {
-      ipv4_address = "${var.tomcat_vm_ipv4_address}"
-      ipv4_netmask = "${var.tomcat_vm_ipv4_prefix_length}"
-    }
-    ipv4_gateway = "${var.tomcat_vm_ipv4_gateway}"
-    dns_suffix_list = "${var.tomcat_vm_dns_suffixes}"
-    dns_server_list = "${var.tomcat_vm_dns_servers}"
+
+      network_interface {
+        ipv4_address = "${var.tomcat_vm_ipv4_address}"
+        ipv4_netmask = "${var.tomcat_vm_ipv4_prefix_length}"
+      }
+
+      ipv4_gateway    = "${var.tomcat_vm_ipv4_gateway}"
+      dns_suffix_list = "${var.tomcat_vm_dns_suffixes}"
+      dns_server_list = "${var.tomcat_vm_dns_servers}"
     }
   }
 
   network_interface {
-    network_id = "${data.vsphere_network.tomcat_vm_network.id}"
+    network_id   = "${data.vsphere_network.tomcat_vm_network.id}"
     adapter_type = "${var.tomcat_vm_adapter_type}"
   }
 
   disk {
-    label = "${var.tomcat_vm-name}0.vmdk"
-    size = "${var.tomcat_vm_root_disk_size}"
+    label          = "${var.tomcat_vm-name}0.vmdk"
+    size           = "${var.tomcat_vm_root_disk_size}"
     keep_on_remove = "${var.tomcat_vm_root_disk_keep_on_remove}"
-    datastore_id = "${data.vsphere_datastore.tomcat_vm_datastore.id}"
+    datastore_id   = "${data.vsphere_datastore.tomcat_vm_datastore.id}"
   }
 
   connection {
-    type = "ssh"
+    type     = "ssh"
     user     = "${var.ssh_user}"
     password = "${var.ssh_user_password}"
   }
@@ -245,7 +252,6 @@ echo "---finish installing tomcat---" | tee -a $LOGFILE 2>&1
     EOF
 
     destination = "/tmp/installation.sh"
-
   }
 
   # Execute the script remotely
@@ -253,9 +259,7 @@ echo "---finish installing tomcat---" | tee -a $LOGFILE 2>&1
     inline = [
       "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${var.tomcat_user}\" \"${var.tomcat_pwd}\" ",
     ]
-
   }
-
 }
 
 #########################################################

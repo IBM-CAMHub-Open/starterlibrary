@@ -5,7 +5,7 @@
 ##############################################################
 variable "allow_unverified_ssl" {
   description = "Communication with vsphere server with self signed certificate"
-  default = "true"
+  default     = "true"
 }
 
 ##############################################################
@@ -13,7 +13,7 @@ variable "allow_unverified_ssl" {
 ##############################################################
 provider "vsphere" {
   allow_unverified_ssl = "${var.allow_unverified_ssl}"
-  version = "~> 1.3"
+  version              = "~> 1.3"
 }
 
 ##############################################################
@@ -25,21 +25,24 @@ provider "vsphere" {
 data "vsphere_datacenter" "mongodb_vm_datacenter" {
   name = "${var.mongodb_vm_datacenter}"
 }
+
 data "vsphere_datastore" "mongodb_vm_datastore" {
-  name = "${var.mongodb_vm_root_disk_datastore}"
+  name          = "${var.mongodb_vm_root_disk_datastore}"
   datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
 }
+
 data "vsphere_resource_pool" "mongodb_vm_resource_pool" {
-  name = "${var.mongodb_vm_resource_pool}"
+  name          = "${var.mongodb_vm_resource_pool}"
   datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
 }
+
 data "vsphere_network" "mongodb_vm_network" {
-  name = "${var.mongodb_vm_network_interface_label}"
+  name          = "${var.mongodb_vm_network_interface_label}"
   datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
 }
 
 data "vsphere_virtual_machine" "mongodb_vm_template" {
-  name = "${var.mongodb_vm-image}"
+  name          = "${var.mongodb_vm-image}"
   datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
 }
 
@@ -47,11 +50,10 @@ data "vsphere_virtual_machine" "mongodb_vm_template" {
 
 #Variable : mongodb_vm-name
 variable "mongodb_vm-name" {
-  type = "string"
+  type        = "string"
   description = "Generated"
-  default = "mongodb Vm"
+  default     = "mongodb Vm"
 }
-
 
 #########################################################
 ##### Resource : mongodb_vm
@@ -79,12 +81,12 @@ variable "mongodb_vm_domain" {
 
 variable "mongodb_vm_number_of_vcpu" {
   description = "Number of virtual CPU for the virtual machine, which is required to be a positive Integer"
-  default = "1"
+  default     = "1"
 }
 
 variable "mongodb_vm_memory" {
   description = "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024"
-  default = "1024"
+  default     = "1024"
 }
 
 variable "mongodb_vm_cluster" {
@@ -96,12 +98,12 @@ variable "mongodb_vm_resource_pool" {
 }
 
 variable "mongodb_vm_dns_suffixes" {
-  type = "list"
+  type        = "list"
   description = "Name resolution suffixes for the virtual network adapter"
 }
 
 variable "mongodb_vm_dns_servers" {
-  type = "list"
+  type        = "list"
   description = "DNS servers for the virtual network adapter"
 }
 
@@ -123,7 +125,7 @@ variable "mongodb_vm_ipv4_prefix_length" {
 
 variable "mongodb_vm_adapter_type" {
   description = "Network adapter type for vNIC Configuration"
-  default = "vmxnet3"
+  default     = "vmxnet3"
 }
 
 variable "mongodb_vm_root_disk_datastore" {
@@ -131,26 +133,26 @@ variable "mongodb_vm_root_disk_datastore" {
 }
 
 variable "mongodb_vm_root_disk_type" {
-  type = "string"
+  type        = "string"
   description = "Type of template disk volume"
-  default = "eager_zeroed"
+  default     = "eager_zeroed"
 }
 
 variable "mongodb_vm_root_disk_controller_type" {
-  type = "string"
+  type        = "string"
   description = "Type of template disk controller"
-  default = "scsi"
+  default     = "scsi"
 }
 
 variable "mongodb_vm_root_disk_keep_on_remove" {
-  type = "string"
+  type        = "string"
   description = "Delete template disk volume when the virtual machine is deleted"
-  default = "false"
+  default     = "false"
 }
 
 variable "mongodb_vm_root_disk_size" {
   description = "Size of template disk volume. Should be equal to template's disk size"
-  default = "25"
+  default     = "25"
 }
 
 variable "mongodb_vm-image" {
@@ -159,44 +161,49 @@ variable "mongodb_vm-image" {
 
 # vsphere vm
 resource "vsphere_virtual_machine" "mongodb_vm" {
-  name = "${var.mongodb_vm-name}"
-  folder = "${var.mongodb_vm_folder}"
-  num_cpus = "${var.mongodb_vm_number_of_vcpu}"
-  memory = "${var.mongodb_vm_memory}"
+  name             = "${var.mongodb_vm-name}"
+  folder           = "${var.mongodb_vm_folder}"
+  num_cpus         = "${var.mongodb_vm_number_of_vcpu}"
+  memory           = "${var.mongodb_vm_memory}"
   resource_pool_id = "${data.vsphere_resource_pool.mongodb_vm_resource_pool.id}"
-  datastore_id = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
-  guest_id = "${data.vsphere_virtual_machine.mongodb_vm_template.guest_id}"
+  datastore_id     = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
+  guest_id         = "${data.vsphere_virtual_machine.mongodb_vm_template.guest_id}"
+  scsi_type        = "${data.vsphere_virtual_machine.mongodb_vm_template.scsi_type}"
+
   clone {
     template_uuid = "${data.vsphere_virtual_machine.mongodb_vm_template.id}"
+
     customize {
       linux_options {
-        domain = "${var.mongodb_vm_domain}"
+        domain    = "${var.mongodb_vm_domain}"
         host_name = "${var.mongodb_vm-name}"
       }
-    network_interface {
-      ipv4_address = "${var.mongodb_vm_ipv4_address}"
-      ipv4_netmask = "${var.mongodb_vm_ipv4_prefix_length}"
-    }
-    ipv4_gateway = "${var.mongodb_vm_ipv4_gateway}"
-    dns_suffix_list = "${var.mongodb_vm_dns_suffixes}"
-    dns_server_list = "${var.mongodb_vm_dns_servers}"
+
+      network_interface {
+        ipv4_address = "${var.mongodb_vm_ipv4_address}"
+        ipv4_netmask = "${var.mongodb_vm_ipv4_prefix_length}"
+      }
+
+      ipv4_gateway    = "${var.mongodb_vm_ipv4_gateway}"
+      dns_suffix_list = "${var.mongodb_vm_dns_suffixes}"
+      dns_server_list = "${var.mongodb_vm_dns_servers}"
     }
   }
 
   network_interface {
-    network_id = "${data.vsphere_network.mongodb_vm_network.id}"
+    network_id   = "${data.vsphere_network.mongodb_vm_network.id}"
     adapter_type = "${var.mongodb_vm_adapter_type}"
   }
 
   disk {
-    label = "${var.mongodb_vm-name}0.vmdk"
-    size = "${var.mongodb_vm_root_disk_size}"
+    label          = "${var.mongodb_vm-name}0.vmdk"
+    size           = "${var.mongodb_vm_root_disk_size}"
     keep_on_remove = "${var.mongodb_vm_root_disk_keep_on_remove}"
-    datastore_id = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
+    datastore_id   = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
   }
 
   connection {
-    type = "ssh"
+    type     = "ssh"
     user     = "${var.ssh_user}"
     password = "${var.ssh_user_password}"
   }
@@ -245,7 +252,6 @@ fi
     EOF
 
     destination = "/tmp/installation.sh"
-
   }
 
   # Execute the script remotely
@@ -253,9 +259,7 @@ fi
     inline = [
       "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
-
   }
-
 }
 
 #########################################################

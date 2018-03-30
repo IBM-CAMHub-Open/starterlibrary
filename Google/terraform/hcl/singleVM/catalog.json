@@ -1,7 +1,7 @@
 {
    "name": "Google Cloud Single Virtual Machine Example",
    "description": "Example template to provision a single virtual machine instance in Google Compute Engine.",
-   "version": "2.0.1",
+   "version": "2.0.2",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
    "image": "tp_WAS_standalone.png",
    "type": "prebuilt",
@@ -33,7 +33,7 @@
       },
       {
         "title": "Template version",
-        "description": "2.0.1<br>"
+        "description": "2.0.2<br>"
       },
       {
         "title": "Default Operating System",
