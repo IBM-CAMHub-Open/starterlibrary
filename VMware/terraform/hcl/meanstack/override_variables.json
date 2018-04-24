@@ -1,0 +1,6 @@
+{
+  "mongodb_vm_name": "meanstack-two-tiers-mongodb",
+  "mongodb_vm_os_password": "Op3nPatterns",
+  "nodejs_vm_name": "meanstack-two-tiers-mongodb-nodejs",
+  "nodejs_vm_os_password": "Op3nPatterns"
+}

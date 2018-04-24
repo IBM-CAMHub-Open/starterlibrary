@@ -22,250 +22,250 @@ provider "vsphere" {
 ##############################################################
 # Vsphere data for provider
 ##############################################################
-data "vsphere_datacenter" "angular-vm_datacenter" {
-  name = "${var.angular-vm_datacenter}"
+data "vsphere_datacenter" "angular_vm_datacenter" {
+  name = "${var.angular_vm_datacenter}"
 }
 
-data "vsphere_datastore" "angular-vm_datastore" {
-  name          = "${var.angular-vm_root_disk_datastore}"
-  datacenter_id = "${data.vsphere_datacenter.angular-vm_datacenter.id}"
+data "vsphere_datastore" "angular_vm_datastore" {
+  name          = "${var.angular_vm_root_disk_datastore}"
+  datacenter_id = "${data.vsphere_datacenter.angular_vm_datacenter.id}"
 }
 
-data "vsphere_resource_pool" "angular-vm_resource_pool" {
-  name          = "${var.angular-vm_resource_pool}"
-  datacenter_id = "${data.vsphere_datacenter.angular-vm_datacenter.id}"
+data "vsphere_resource_pool" "angular_vm_resource_pool" {
+  name          = "${var.angular_vm_resource_pool}"
+  datacenter_id = "${data.vsphere_datacenter.angular_vm_datacenter.id}"
 }
 
-data "vsphere_network" "angular-vm_network" {
-  name          = "${var.angular-vm_network_interface_label}"
-  datacenter_id = "${data.vsphere_datacenter.angular-vm_datacenter.id}"
+data "vsphere_network" "angular_vm_network" {
+  name          = "${var.angular_vm_network_interface_label}"
+  datacenter_id = "${data.vsphere_datacenter.angular_vm_datacenter.id}"
 }
 
-data "vsphere_virtual_machine" "angular-vm_template" {
-  name          = "${var.angular-vm-image}"
-  datacenter_id = "${data.vsphere_datacenter.angular-vm_datacenter.id}"
-}
-
-##############################################################
-# Vsphere data for provider
-##############################################################
-data "vsphere_datacenter" "mongodb-vm_datacenter" {
-  name = "${var.mongodb-vm_datacenter}"
-}
-
-data "vsphere_datastore" "mongodb-vm_datastore" {
-  name          = "${var.mongodb-vm_root_disk_datastore}"
-  datacenter_id = "${data.vsphere_datacenter.mongodb-vm_datacenter.id}"
-}
-
-data "vsphere_resource_pool" "mongodb-vm_resource_pool" {
-  name          = "${var.mongodb-vm_resource_pool}"
-  datacenter_id = "${data.vsphere_datacenter.mongodb-vm_datacenter.id}"
-}
-
-data "vsphere_network" "mongodb-vm_network" {
-  name          = "${var.mongodb-vm_network_interface_label}"
-  datacenter_id = "${data.vsphere_datacenter.mongodb-vm_datacenter.id}"
-}
-
-data "vsphere_virtual_machine" "mongodb-vm_template" {
-  name          = "${var.mongodb-vm-image}"
-  datacenter_id = "${data.vsphere_datacenter.mongodb-vm_datacenter.id}"
+data "vsphere_virtual_machine" "angular_vm_template" {
+  name          = "${var.angular_vm-image}"
+  datacenter_id = "${data.vsphere_datacenter.angular_vm_datacenter.id}"
 }
 
 ##############################################################
 # Vsphere data for provider
 ##############################################################
-data "vsphere_datacenter" "strongloop-vm_datacenter" {
-  name = "${var.strongloop-vm_datacenter}"
+data "vsphere_datacenter" "mongodb_vm_datacenter" {
+  name = "${var.mongodb_vm_datacenter}"
 }
 
-data "vsphere_datastore" "strongloop-vm_datastore" {
-  name          = "${var.strongloop-vm_root_disk_datastore}"
-  datacenter_id = "${data.vsphere_datacenter.strongloop-vm_datacenter.id}"
+data "vsphere_datastore" "mongodb_vm_datastore" {
+  name          = "${var.mongodb_vm_root_disk_datastore}"
+  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
 }
 
-data "vsphere_resource_pool" "strongloop-vm_resource_pool" {
-  name          = "${var.strongloop-vm_resource_pool}"
-  datacenter_id = "${data.vsphere_datacenter.strongloop-vm_datacenter.id}"
+data "vsphere_resource_pool" "mongodb_vm_resource_pool" {
+  name          = "${var.mongodb_vm_resource_pool}"
+  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
 }
 
-data "vsphere_network" "strongloop-vm_network" {
-  name          = "${var.strongloop-vm_network_interface_label}"
-  datacenter_id = "${data.vsphere_datacenter.strongloop-vm_datacenter.id}"
+data "vsphere_network" "mongodb_vm_network" {
+  name          = "${var.mongodb_vm_network_interface_label}"
+  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
 }
 
-data "vsphere_virtual_machine" "strongloop-vm_template" {
-  name          = "${var.strongloop-vm-image}"
-  datacenter_id = "${data.vsphere_datacenter.strongloop-vm_datacenter.id}"
+data "vsphere_virtual_machine" "mongodb_vm_template" {
+  name          = "${var.mongodb_vm_image}"
+  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
+}
+
+##############################################################
+# Vsphere data for provider
+##############################################################
+data "vsphere_datacenter" "strongloop_vm_datacenter" {
+  name = "${var.strongloop_vm_datacenter}"
+}
+
+data "vsphere_datastore" "strongloop_vm_datastore" {
+  name          = "${var.strongloop_vm_root_disk_datastore}"
+  datacenter_id = "${data.vsphere_datacenter.strongloop_vm_datacenter.id}"
+}
+
+data "vsphere_resource_pool" "strongloop_vm_resource_pool" {
+  name          = "${var.strongloop_vm_resource_pool}"
+  datacenter_id = "${data.vsphere_datacenter.strongloop_vm_datacenter.id}"
+}
+
+data "vsphere_network" "strongloop_vm_network" {
+  name          = "${var.strongloop_vm_network_interface_label}"
+  datacenter_id = "${data.vsphere_datacenter.strongloop_vm_datacenter.id}"
+}
+
+data "vsphere_virtual_machine" "strongloop_vm_template" {
+  name          = "${var.strongloop_vm-image}"
+  datacenter_id = "${data.vsphere_datacenter.strongloop_vm_datacenter.id}"
 }
 
 ##### Image Parameters variables #####
 
-#Variable : angular-vm-name
-variable "angular-vm-name" {
+#Variable : angular_vm_name
+variable "angular_vm_name" {
   type    = "string"
   default = "angular-vm"
 }
 
-#Variable : mongodb-vm-name
-variable "mongodb-vm-name" {
+#Variable : mongodb_vm_name
+variable "mongodb_vm_name" {
   type    = "string"
   default = "mongodb-vm"
 }
 
-#Variable : strongloop-vm-name
-variable "strongloop-vm-name" {
+#Variable : strongloop_vm_name
+variable "strongloop_vm_name" {
   type    = "string"
   default = "strongloop-vm"
 }
 
 #########################################################
-##### Resource : angular-vm
+##### Resource : angular_vm
 #########################################################
 
 variable "mongodb_user_password" {
   description = "The password of an user in mongodb for sample application; It should be alphanumeric with length in [8,16]"
 }
 
-variable "angular-vm_folder" {
+variable "angular_vm_folder" {
   description = "Target vSphere folder for virtual machine"
 }
 
-variable "angular-vm_datacenter" {
+variable "angular_vm_datacenter" {
   description = "Target vSphere datacenter for virtual machine creation"
 }
 
-variable "angular-vm_domain" {
+variable "angular_vm_domain" {
   description = "Domain Name of virtual machine"
 }
 
-variable "angular-vm_number_of_vcpu" {
+variable "angular_vm_number_of_vcpu" {
   description = "Number of virtual CPU for the virtual machine, which is required to be a positive Integer"
   default     = "1"
 }
 
-variable "angular-vm_memory" {
+variable "angular_vm_memory" {
   description = "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024"
   default     = "1024"
 }
 
-variable "angular-vm_cluster" {
+variable "angular_vm_cluster" {
   description = "Target vSphere cluster to host the virtual machine"
 }
 
-variable "angular-vm_resource_pool" {
+variable "angular_vm_resource_pool" {
   description = "Target vSphere Resource Pool to host the virtual machine"
 }
 
-variable "angular-vm_dns_suffixes" {
+variable "angular_vm_dns_suffixes" {
   type        = "list"
   description = "Name resolution suffixes for the virtual network adapter"
 }
 
-variable "angular-vm_dns_servers" {
+variable "angular_vm_dns_servers" {
   type        = "list"
   description = "DNS servers for the virtual network adapter"
 }
 
-variable "angular-vm_network_interface_label" {
+variable "angular_vm_network_interface_label" {
   description = "vSphere port group or network label for virtual machine's vNIC"
 }
 
-variable "angular-vm_ipv4_gateway" {
+variable "angular_vm_ipv4_gateway" {
   description = "IPv4 gateway for vNIC configuration"
 }
 
-variable "angular-vm_ipv4_address" {
+variable "angular_vm_ipv4_address" {
   description = "IPv4 address for vNIC configuration"
 }
 
-variable "angular-vm_ipv4_prefix_length" {
+variable "angular_vm_ipv4_prefix_length" {
   description = "IPv4 prefix length for vNIC configuration. The value must be a number between 8 and 32"
 }
 
-variable "angular-vm_adapter_type" {
+variable "angular_vm_adapter_type" {
   description = "Network adapter type for vNIC Configuration"
   default     = "vmxnet3"
 }
 
-variable "angular-vm_root_disk_datastore" {
+variable "angular_vm_root_disk_datastore" {
   description = "Data store or storage cluster name for target virtual machine's disks"
 }
 
-variable "angular-vm_root_disk_type" {
+variable "angular_vm_root_disk_type" {
   type        = "string"
   description = "Type of template disk volume"
   default     = "eager_zeroed"
 }
 
-variable "angular-vm_root_disk_controller_type" {
+variable "angular_vm_root_disk_controller_type" {
   type        = "string"
   description = "Type of template disk controller"
   default     = "scsi"
 }
 
-variable "angular-vm_root_disk_keep_on_remove" {
+variable "angular_vm_root_disk_keep_on_remove" {
   type        = "string"
   description = "Delete template disk volume when the virtual machine is deleted"
   default     = "false"
 }
 
-variable "angular-vm_root_disk_size" {
+variable "angular_vm_root_disk_size" {
   description = "Size of template disk volume. Should be equal to template's disk size"
   default     = "25"
 }
 
-variable "angular-vm-image" {
+variable "angular_vm-image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
 # vsphere vm
-resource "vsphere_virtual_machine" "angular-vm" {
-  name             = "${var.angular-vm-name}"
-  folder           = "${var.angular-vm_folder}"
-  num_cpus         = "${var.angular-vm_number_of_vcpu}"
-  memory           = "${var.angular-vm_memory}"
-  resource_pool_id = "${data.vsphere_resource_pool.angular-vm_resource_pool.id}"
-  datastore_id     = "${data.vsphere_datastore.angular-vm_datastore.id}"
-  guest_id         = "${data.vsphere_virtual_machine.angular-vm_template.guest_id}"
-  scsi_type        = "${data.vsphere_virtual_machine.angular-vm_template.scsi_type}"
+resource "vsphere_virtual_machine" "angular_vm" {
+  name             = "${var.angular_vm_name}"
+  folder           = "${var.angular_vm_folder}"
+  num_cpus         = "${var.angular_vm_number_of_vcpu}"
+  memory           = "${var.angular_vm_memory}"
+  resource_pool_id = "${data.vsphere_resource_pool.angular_vm_resource_pool.id}"
+  datastore_id     = "${data.vsphere_datastore.angular_vm_datastore.id}"
+  guest_id         = "${data.vsphere_virtual_machine.angular_vm_template.guest_id}"
+  scsi_type        = "${data.vsphere_virtual_machine.angular_vm_template.scsi_type}"
 
   clone {
-    template_uuid = "${data.vsphere_virtual_machine.angular-vm_template.id}"
+    template_uuid = "${data.vsphere_virtual_machine.angular_vm_template.id}"
 
     customize {
       linux_options {
-        domain    = "${var.angular-vm_domain}"
-        host_name = "${var.angular-vm-name}"
+        domain    = "${var.angular_vm_domain}"
+        host_name = "${var.angular_vm_name}"
       }
 
       network_interface {
-        ipv4_address = "${var.angular-vm_ipv4_address}"
-        ipv4_netmask = "${var.angular-vm_ipv4_prefix_length}"
+        ipv4_address = "${var.angular_vm_ipv4_address}"
+        ipv4_netmask = "${var.angular_vm_ipv4_prefix_length}"
       }
 
-      ipv4_gateway    = "${var.angular-vm_ipv4_gateway}"
-      dns_suffix_list = "${var.angular-vm_dns_suffixes}"
-      dns_server_list = "${var.angular-vm_dns_servers}"
+      ipv4_gateway    = "${var.angular_vm_ipv4_gateway}"
+      dns_suffix_list = "${var.angular_vm_dns_suffixes}"
+      dns_server_list = "${var.angular_vm_dns_servers}"
     }
   }
 
   network_interface {
-    network_id   = "${data.vsphere_network.angular-vm_network.id}"
-    adapter_type = "${var.angular-vm_adapter_type}"
+    network_id   = "${data.vsphere_network.angular_vm_network.id}"
+    adapter_type = "${var.angular_vm_adapter_type}"
   }
 
   disk {
-    label          = "${var.angular-vm-name}0.vmdk"
-    size           = "${var.angular-vm_root_disk_size}"
-    keep_on_remove = "${var.angular-vm_root_disk_keep_on_remove}"
-    datastore_id   = "${data.vsphere_datastore.angular-vm_datastore.id}"
+    label          = "${var.angular_vm_name}0.vmdk"
+    size           = "${var.angular_vm_root_disk_size}"
+    keep_on_remove = "${var.angular_vm_root_disk_keep_on_remove}"
+    datastore_id   = "${data.vsphere_datastore.angular_vm_datastore.id}"
   }
 }
 
 #########################################################
-##### Resource : mongodb-vm
+##### Resource : mongodb_vm
 #########################################################
 
 variable "mongodb_ssh_user" {
@@ -295,139 +295,139 @@ variable "angularjs_ssh_user_password" {
   description = "The user password for ssh connection to AngularJs server, which is default in template"
 }
 
-variable "mongodb-vm_folder" {
+variable "mongodb_vm_folder" {
   description = "Target vSphere folder for virtual machine"
 }
 
-variable "mongodb-vm_datacenter" {
+variable "mongodb_vm_datacenter" {
   description = "Target vSphere datacenter for virtual machine creation"
 }
 
-variable "mongodb-vm_domain" {
+variable "mongodb_vm_domain" {
   description = "Domain Name of virtual machine"
 }
 
-variable "mongodb-vm_number_of_vcpu" {
+variable "mongodb_vm_number_of_vcpu" {
   description = "Number of virtual CPU for the virtual machine, which is required to be a positive Integer"
   default     = "1"
 }
 
-variable "mongodb-vm_memory" {
+variable "mongodb_vm_memory" {
   description = "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024"
   default     = "1024"
 }
 
-variable "mongodb-vm_cluster" {
+variable "mongodb_vm_cluster" {
   description = "Target vSphere cluster to host the virtual machine"
 }
 
-variable "mongodb-vm_resource_pool" {
+variable "mongodb_vm_resource_pool" {
   description = "Target vSphere Resource Pool to host the virtual machine"
 }
 
-variable "mongodb-vm_dns_suffixes" {
+variable "mongodb_vm_dns_suffixes" {
   type        = "list"
   description = "Name resolution suffixes for the virtual network adapter"
 }
 
-variable "mongodb-vm_dns_servers" {
+variable "mongodb_vm_dns_servers" {
   type        = "list"
   description = "DNS servers for the virtual network adapter"
 }
 
-variable "mongodb-vm_network_interface_label" {
+variable "mongodb_vm_network_interface_label" {
   description = "vSphere port group or network label for virtual machine's vNIC"
 }
 
-variable "mongodb-vm_ipv4_gateway" {
+variable "mongodb_vm_ipv4_gateway" {
   description = "IPv4 gateway for vNIC configuration"
 }
 
-variable "mongodb-vm_ipv4_address" {
+variable "mongodb_vm_ipv4_address" {
   description = "IPv4 address for vNIC configuration"
 }
 
-variable "mongodb-vm_ipv4_prefix_length" {
+variable "mongodb_vm_ipv4_prefix_length" {
   description = "IPv4 prefix length for vNIC configuration. The value must be a number between 8 and 32"
 }
 
-variable "mongodb-vm_adapter_type" {
+variable "mongodb_vm_adapter_type" {
   description = "Network adapter type for vNIC Configuration"
   default     = "vmxnet3"
 }
 
-variable "mongodb-vm_root_disk_datastore" {
+variable "mongodb_vm_root_disk_datastore" {
   description = "Data store or storage cluster name for target virtual machine's disks"
 }
 
-variable "mongodb-vm_root_disk_type" {
+variable "mongodb_vm_root_disk_type" {
   type        = "string"
   description = "Type of template disk volume"
   default     = "eager_zeroed"
 }
 
-variable "mongodb-vm_root_disk_controller_type" {
+variable "mongodb_vm_root_disk_controller_type" {
   type        = "string"
   description = "Type of template disk controller"
   default     = "scsi"
 }
 
-variable "mongodb-vm_root_disk_keep_on_remove" {
+variable "mongodb_vm_root_disk_keep_on_remove" {
   type        = "string"
   description = "Delete template disk volume when the virtual machine is deleted"
   default     = "false"
 }
 
-variable "mongodb-vm_root_disk_size" {
+variable "mongodb_vm_root_disk_size" {
   description = "Size of template disk volume. Should be equal to template's disk size"
   default     = "25"
 }
 
-variable "mongodb-vm-image" {
+variable "mongodb_vm_image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
 # vsphere vm
-resource "vsphere_virtual_machine" "mongodb-vm" {
-  name             = "${var.mongodb-vm-name}"
-  folder           = "${var.mongodb-vm_folder}"
-  num_cpus         = "${var.mongodb-vm_number_of_vcpu}"
-  memory           = "${var.mongodb-vm_memory}"
-  resource_pool_id = "${data.vsphere_resource_pool.mongodb-vm_resource_pool.id}"
-  datastore_id     = "${data.vsphere_datastore.mongodb-vm_datastore.id}"
-  guest_id         = "${data.vsphere_virtual_machine.mongodb-vm_template.guest_id}"
-  scsi_type        = "${data.vsphere_virtual_machine.mongodb-vm_template.scsi_type}"
+resource "vsphere_virtual_machine" "mongodb_vm" {
+  name             = "${var.mongodb_vm_name}"
+  folder           = "${var.mongodb_vm_folder}"
+  num_cpus         = "${var.mongodb_vm_number_of_vcpu}"
+  memory           = "${var.mongodb_vm_memory}"
+  resource_pool_id = "${data.vsphere_resource_pool.mongodb_vm_resource_pool.id}"
+  datastore_id     = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
+  guest_id         = "${data.vsphere_virtual_machine.mongodb_vm_template.guest_id}"
+  scsi_type        = "${data.vsphere_virtual_machine.mongodb_vm_template.scsi_type}"
 
   clone {
-    template_uuid = "${data.vsphere_virtual_machine.mongodb-vm_template.id}"
+    template_uuid = "${data.vsphere_virtual_machine.mongodb_vm_template.id}"
 
     customize {
       linux_options {
-        domain    = "${var.mongodb-vm_domain}"
-        host_name = "${var.mongodb-vm-name}"
+        domain    = "${var.mongodb_vm_domain}"
+        host_name = "${var.mongodb_vm_name}"
       }
 
       network_interface {
-        ipv4_address = "${var.mongodb-vm_ipv4_address}"
-        ipv4_netmask = "${var.mongodb-vm_ipv4_prefix_length}"
+        ipv4_address = "${var.mongodb_vm_ipv4_address}"
+        ipv4_netmask = "${var.mongodb_vm_ipv4_prefix_length}"
       }
 
-      ipv4_gateway    = "${var.mongodb-vm_ipv4_gateway}"
-      dns_suffix_list = "${var.mongodb-vm_dns_suffixes}"
-      dns_server_list = "${var.mongodb-vm_dns_servers}"
+      ipv4_gateway    = "${var.mongodb_vm_ipv4_gateway}"
+      dns_suffix_list = "${var.mongodb_vm_dns_suffixes}"
+      dns_server_list = "${var.mongodb_vm_dns_servers}"
     }
   }
 
   network_interface {
-    network_id   = "${data.vsphere_network.mongodb-vm_network.id}"
-    adapter_type = "${var.mongodb-vm_adapter_type}"
+    network_id   = "${data.vsphere_network.mongodb_vm_network.id}"
+    adapter_type = "${var.mongodb_vm_adapter_type}"
   }
 
   disk {
-    label          = "${var.mongodb-vm-name}.vmdk"
-    size           = "${var.mongodb-vm_root_disk_size}"
-    keep_on_remove = "${var.mongodb-vm_root_disk_keep_on_remove}"
-    datastore_id   = "${data.vsphere_datastore.mongodb-vm_datastore.id}"
+    label          = "${var.mongodb_vm_name}.vmdk"
+    size           = "${var.mongodb_vm_root_disk_size}"
+    keep_on_remove = "${var.mongodb_vm_root_disk_keep_on_remove}"
+    datastore_id   = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
   }
 
   connection {
@@ -498,142 +498,142 @@ EOF
 }
 
 #########################################################
-##### Resource : strongloop-vm
+##### Resource : strongloop_vm
 #########################################################
 
-variable "strongloop-vm_folder" {
+variable "strongloop_vm_folder" {
   description = "Target vSphere folder for virtual machine"
 }
 
-variable "strongloop-vm_datacenter" {
+variable "strongloop_vm_datacenter" {
   description = "Target vSphere datacenter for virtual machine creation"
 }
 
-variable "strongloop-vm_domain" {
+variable "strongloop_vm_domain" {
   description = "Domain Name of virtual machine"
 }
 
-variable "strongloop-vm_number_of_vcpu" {
+variable "strongloop_vm_number_of_vcpu" {
   description = "Number of virtual CPU for the virtual machine, which is required to be a positive Integer"
   default     = "1"
 }
 
-variable "strongloop-vm_memory" {
+variable "strongloop_vm_memory" {
   description = "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024"
   default     = "1024"
 }
 
-variable "strongloop-vm_cluster" {
+variable "strongloop_vm_cluster" {
   description = "Target vSphere cluster to host the virtual machine"
 }
 
-variable "strongloop-vm_resource_pool" {
+variable "strongloop_vm_resource_pool" {
   description = "Target vSphere Resource Pool to host the virtual machine"
 }
 
-variable "strongloop-vm_dns_suffixes" {
+variable "strongloop_vm_dns_suffixes" {
   type        = "list"
   description = "Name resolution suffixes for the virtual network adapter"
 }
 
-variable "strongloop-vm_dns_servers" {
+variable "strongloop_vm_dns_servers" {
   type        = "list"
   description = "DNS servers for the virtual network adapter"
 }
 
-variable "strongloop-vm_network_interface_label" {
+variable "strongloop_vm_network_interface_label" {
   description = "vSphere port group or network label for virtual machine's vNIC"
 }
 
-variable "strongloop-vm_ipv4_gateway" {
+variable "strongloop_vm_ipv4_gateway" {
   description = "IPv4 gateway for vNIC configuration"
 }
 
-variable "strongloop-vm_ipv4_address" {
+variable "strongloop_vm_ipv4_address" {
   description = "IPv4 address for vNIC configuration"
 }
 
-variable "strongloop-vm_ipv4_prefix_length" {
+variable "strongloop_vm_ipv4_prefix_length" {
   description = "IPv4 prefix length for vNIC configuration. The value must be a number between 8 and 32"
 }
 
-variable "strongloop-vm_adapter_type" {
+variable "strongloop_vm_adapter_type" {
   description = "Network adapter type for vNIC Configuration"
   default     = "vmxnet3"
 }
 
-variable "strongloop-vm_root_disk_datastore" {
+variable "strongloop_vm_root_disk_datastore" {
   description = "Data store or storage cluster name for target virtual machine's disks"
 }
 
-variable "strongloop-vm_root_disk_type" {
+variable "strongloop_vm_root_disk_type" {
   type        = "string"
   description = "Type of template disk volume"
   default     = "eager_zeroed"
 }
 
-variable "strongloop-vm_root_disk_controller_type" {
+variable "strongloop_vm_root_disk_controller_type" {
   type        = "string"
   description = "Type of template disk controller"
   default     = "scsi"
 }
 
-variable "strongloop-vm_root_disk_keep_on_remove" {
+variable "strongloop_vm_root_disk_keep_on_remove" {
   type        = "string"
   description = "Delete template disk volume when the virtual machine is deleted"
   default     = "false"
 }
 
-variable "strongloop-vm_root_disk_size" {
+variable "strongloop_vm_root_disk_size" {
   description = "Size of template disk volume. Should be equal to template's disk size"
   default     = "25"
 }
 
-variable "strongloop-vm-image" {
+variable "strongloop_vm-image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
 # vsphere vm
-resource "vsphere_virtual_machine" "strongloop-vm" {
-  name             = "${var.strongloop-vm-name}"
-  folder           = "${var.strongloop-vm_folder}"
-  num_cpus         = "${var.strongloop-vm_number_of_vcpu}"
-  memory           = "${var.strongloop-vm_memory}"
-  resource_pool_id = "${data.vsphere_resource_pool.strongloop-vm_resource_pool.id}"
-  datastore_id     = "${data.vsphere_datastore.strongloop-vm_datastore.id}"
-  guest_id         = "${data.vsphere_virtual_machine.strongloop-vm_template.guest_id}"
-  scsi_type        = "${data.vsphere_virtual_machine.strongloop-vm_template.scsi_type}"
+resource "vsphere_virtual_machine" "strongloop_vm" {
+  name             = "${var.strongloop_vm_name}"
+  folder           = "${var.strongloop_vm_folder}"
+  num_cpus         = "${var.strongloop_vm_number_of_vcpu}"
+  memory           = "${var.strongloop_vm_memory}"
+  resource_pool_id = "${data.vsphere_resource_pool.strongloop_vm_resource_pool.id}"
+  datastore_id     = "${data.vsphere_datastore.strongloop_vm_datastore.id}"
+  guest_id         = "${data.vsphere_virtual_machine.strongloop_vm_template.guest_id}"
+  scsi_type        = "${data.vsphere_virtual_machine.strongloop_vm_template.scsi_type}"
 
   clone {
-    template_uuid = "${data.vsphere_virtual_machine.strongloop-vm_template.id}"
+    template_uuid = "${data.vsphere_virtual_machine.strongloop_vm_template.id}"
 
     customize {
       linux_options {
-        domain    = "${var.strongloop-vm_domain}"
-        host_name = "${var.strongloop-vm-name}"
+        domain    = "${var.strongloop_vm_domain}"
+        host_name = "${var.strongloop_vm_name}"
       }
 
       network_interface {
-        ipv4_address = "${var.strongloop-vm_ipv4_address}"
-        ipv4_netmask = "${var.strongloop-vm_ipv4_prefix_length}"
+        ipv4_address = "${var.strongloop_vm_ipv4_address}"
+        ipv4_netmask = "${var.strongloop_vm_ipv4_prefix_length}"
       }
 
-      ipv4_gateway    = "${var.strongloop-vm_ipv4_gateway}"
-      dns_suffix_list = "${var.strongloop-vm_dns_suffixes}"
-      dns_server_list = "${var.strongloop-vm_dns_servers}"
+      ipv4_gateway    = "${var.strongloop_vm_ipv4_gateway}"
+      dns_suffix_list = "${var.strongloop_vm_dns_suffixes}"
+      dns_server_list = "${var.strongloop_vm_dns_servers}"
     }
   }
 
   network_interface {
-    network_id   = "${data.vsphere_network.strongloop-vm_network.id}"
-    adapter_type = "${var.strongloop-vm_adapter_type}"
+    network_id   = "${data.vsphere_network.strongloop_vm_network.id}"
+    adapter_type = "${var.strongloop_vm_adapter_type}"
   }
 
   disk {
-    label          = "${var.strongloop-vm-name}.vmdk"
-    size           = "${var.strongloop-vm_root_disk_size}"
-    keep_on_remove = "${var.strongloop-vm_root_disk_keep_on_remove}"
-    datastore_id   = "${data.vsphere_datastore.strongloop-vm_datastore.id}"
+    label          = "${var.strongloop_vm_name}.vmdk"
+    size           = "${var.strongloop_vm_root_disk_size}"
+    keep_on_remove = "${var.strongloop_vm_root_disk_keep_on_remove}"
+    datastore_id   = "${data.vsphere_datastore.strongloop_vm_datastore.id}"
   }
 }
 
@@ -642,7 +642,7 @@ resource "null_resource" "install_strongloop" {
   connection {
     user     = "${var.strongloop_ssh_user}"
     password = "${var.strongloop_ssh_user_password}"
-    host     = "${vsphere_virtual_machine.strongloop-vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+    host     = "${vsphere_virtual_machine.strongloop_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -786,7 +786,7 @@ EOF
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.mongodb-vm.clone.0.customize.0.network_interface.0.ipv4_address}\" \"${var.mongodb_user_password}\"",
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}\" \"${var.mongodb_user_password}\"",
     ]
   }
 }
@@ -796,7 +796,7 @@ resource "null_resource" "install_angularjs" {
   connection {
     user     = "${var.angularjs_ssh_user}"
     password = "${var.angularjs_ssh_user_password}"
-    host     = "${vsphere_virtual_machine.angular-vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+    host     = "${vsphere_virtual_machine.angular_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -1196,7 +1196,7 @@ EOF
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.strongloop-vm.clone.0.customize.0.network_interface.0.ipv4_address}\"",
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.strongloop_vm.clone.0.customize.0.network_interface.0.ipv4_address}\"",
     ]
   }
 }
@@ -1205,17 +1205,17 @@ EOF
 # Output
 #########################################################
 output "The mongodb server's ip addresses" {
-  value = "${vsphere_virtual_machine.mongodb-vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+  value = "${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }
 
 output "The strongloop server's ip addresses" {
-  value = "${vsphere_virtual_machine.strongloop-vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+  value = "${vsphere_virtual_machine.strongloop_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }
 
 output "The angular server's ip addresses" {
-  value = "${vsphere_virtual_machine.angular-vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+  value = "${vsphere_virtual_machine.angular_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }
 
 output "Please access the strongloop-three-tiers sample application using the following url" {
-  value = "http://${vsphere_virtual_machine.angular-vm.clone.0.customize.0.network_interface.0.ipv4_address}:8080"
+  value = "http://${vsphere_virtual_machine.angular_vm.clone.0.customize.0.network_interface.0.ipv4_address}:8080"
 }

@@ -42,14 +42,14 @@ data "vsphere_network" "mariadb_vm_network" {
 }
 
 data "vsphere_virtual_machine" "mariadb_vm_template" {
-  name          = "${var.mariadb_vm-image}"
+  name          = "${var.mariadb_vm_image}"
   datacenter_id = "${data.vsphere_datacenter.mariadb_vm_datacenter.id}"
 }
 
 ##### Image Parameters variables #####
 
-#Variable : mariadb_vm-name
-variable "mariadb_vm-name" {
+#Variable : mariadb_vm_name
+variable "mariadb_vm_name" {
   type        = "string"
   description = "Generated"
   default     = "mariadb Vm"
@@ -155,20 +155,20 @@ variable "mariadb_vm_root_disk_size" {
   default     = "25"
 }
 
-variable "mariadb_vm-image" {
+variable "mariadb_vm_image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
 # vsphere vm
 resource "vsphere_virtual_machine" "mariadb_vm" {
-  name             = "${var.mariadb_vm-name}"
+  name             = "${var.mariadb_vm_name}"
   folder           = "${var.mariadb_vm_folder}"
   num_cpus         = "${var.mariadb_vm_number_of_vcpu}"
   memory           = "${var.mariadb_vm_memory}"
   resource_pool_id = "${data.vsphere_resource_pool.mariadb_vm_resource_pool.id}"
   datastore_id     = "${data.vsphere_datastore.mariadb_vm_datastore.id}"
   guest_id         = "${data.vsphere_virtual_machine.mariadb_vm_template.guest_id}"
-  scsi_type        = "${data.vsphere_virtual_machine.mariadb-vm_template.scsi_type}"
+  scsi_type        = "${data.vsphere_virtual_machine.mariadb_vm_template.scsi_type}"
 
   clone {
     template_uuid = "${data.vsphere_virtual_machine.mariadb_vm_template.id}"
@@ -176,7 +176,7 @@ resource "vsphere_virtual_machine" "mariadb_vm" {
     customize {
       linux_options {
         domain    = "${var.mariadb_vm_domain}"
-        host_name = "${var.mariadb_vm-name}"
+        host_name = "${var.mariadb_vm_name}"
       }
 
       network_interface {
@@ -196,7 +196,7 @@ resource "vsphere_virtual_machine" "mariadb_vm" {
   }
 
   disk {
-    label          = "${var.mariadb_vm-name}0.vmdk"
+    label          = "${var.mariadb_vm_name}0.vmdk"
     size           = "${var.mariadb_vm_root_disk_size}"
     keep_on_remove = "${var.mariadb_vm_root_disk_keep_on_remove}"
     datastore_id   = "${data.vsphere_datastore.mariadb_vm_datastore.id}"
@@ -210,30 +210,29 @@ resource "vsphere_virtual_machine" "mariadb_vm" {
 
   provisioner "file" {
     content = <<EOF
-    #!/bin/bash
-    LOGFILE="/var/log/install_mariadb.log"
-    retryInstall () {
-      n=0
-      max=5
-      command=$1
-      while [ $n -lt $max ]; do
-        $command && break
-        let n=n+1
-        if [ $n -eq $max ]; then
-          echo "---Exceed maximal number of retries---"
-          exit 1
-        fi
-        sleep 15
-       done
-    }
-    echo "---start installing mariaDB---" | tee -a $LOGFILE 2>&1
-    retryInstall "yum install -y mariadb mariadb-server" >> $LOGFILE 2>&1 || { echo "---Failed to install MariaDB---" | tee -a $LOGFILE; exit 1; }
-    systemctl start mariadb                              >> $LOGFILE 2>&1 || { echo "---Failed to start MariaDB---" | tee -a $LOGFILE; exit 1; }
-    systemctl enable mariadb                             >> $LOGFILE 2>&1 || { echo "---Failed to enable MariaDB---" | tee -a $LOGFILE; exit 1; }
-    echo "---finish installing mariaDB---" | tee -a $LOGFILE 2>&1
+#!/bin/bash
+LOGFILE="/var/log/install_mariadb.log"
+retryInstall () {
+  n=0
+  max=5
+  command=$1
+  while [ $n -lt $max ]; do
+    $command && break
+    let n=n+1
+    if [ $n -eq $max ]; then
+      echo "---Exceed maximal number of retries---"
+      exit 1
+    fi
+    sleep 15
+  done
+}
+echo "---start installing mariaDB---" | tee -a $LOGFILE 2>&1
+retryInstall "yum install -y mariadb mariadb-server" >> $LOGFILE 2>&1 || { echo "---Failed to install MariaDB---" | tee -a $LOGFILE; exit 1; }
+systemctl start mariadb                              >> $LOGFILE 2>&1 || { echo "---Failed to start MariaDB---" | tee -a $LOGFILE; exit 1; }
+systemctl enable mariadb                             >> $LOGFILE 2>&1 || { echo "---Failed to enable MariaDB---" | tee -a $LOGFILE; exit 1; }
+echo "---finish installing mariaDB---" | tee -a $LOGFILE 2>&1
 
-    EOF
-
+EOF
     destination = "/tmp/installation.sh"
   }
 

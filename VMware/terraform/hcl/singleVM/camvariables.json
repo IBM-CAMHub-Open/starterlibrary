@@ -40,7 +40,7 @@
       "group_name": "cloud"
     },
     {
-      "name": "vm_1-name",
+      "name": "vm_1_name",
       "type": "string",
       "description": "Hostname of virtual machine",
       "default": "vm-1",

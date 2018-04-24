@@ -42,14 +42,14 @@ data "vsphere_network" "mongodb_vm_network" {
 }
 
 data "vsphere_virtual_machine" "mongodb_vm_template" {
-  name          = "${var.mongodb_vm-image}"
+  name          = "${var.mongodb_vm_image}"
   datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
 }
 
 ##### Image Parameters variables #####
 
-#Variable : mongodb_vm-name
-variable "mongodb_vm-name" {
+#Variable : mongodb_vm_name
+variable "mongodb_vm_name" {
   type        = "string"
   description = "Generated"
   default     = "mongodb Vm"
@@ -155,13 +155,13 @@ variable "mongodb_vm_root_disk_size" {
   default     = "25"
 }
 
-variable "mongodb_vm-image" {
+variable "mongodb_vm_image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
 # vsphere vm
 resource "vsphere_virtual_machine" "mongodb_vm" {
-  name             = "${var.mongodb_vm-name}"
+  name             = "${var.mongodb_vm_name}"
   folder           = "${var.mongodb_vm_folder}"
   num_cpus         = "${var.mongodb_vm_number_of_vcpu}"
   memory           = "${var.mongodb_vm_memory}"
@@ -176,7 +176,7 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
     customize {
       linux_options {
         domain    = "${var.mongodb_vm_domain}"
-        host_name = "${var.mongodb_vm-name}"
+        host_name = "${var.mongodb_vm_name}"
       }
 
       network_interface {
@@ -196,7 +196,7 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
   }
 
   disk {
-    label          = "${var.mongodb_vm-name}0.vmdk"
+    label          = "${var.mongodb_vm_name}0.vmdk"
     size           = "${var.mongodb_vm_root_disk_size}"
     keep_on_remove = "${var.mongodb_vm_root_disk_keep_on_remove}"
     datastore_id   = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
@@ -210,8 +210,8 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
 
   provisioner "file" {
     content = <<EOF
-    #!/bin/bash
-    set -o errexit
+#!/bin/bash
+set -o errexit
 set -o nounset
 set -o pipefail
 LOGFILE="/var/log/install_mongodb.log"
@@ -249,7 +249,7 @@ if hash iptables 2>/dev/null; then
 	iptables -I INPUT 1 -p tcp -m tcp --dport 27017 -m conntrack --ctstate NEW -j ACCEPT     >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }
 fi
 
-    EOF
+EOF
 
     destination = "/tmp/installation.sh"
   }

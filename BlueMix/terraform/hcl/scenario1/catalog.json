@@ -1,7 +1,7 @@
  {
     "name": "Virtual Server with SSH key",
     "description": "A sample cloud resource template that creates a Debian virtual server and ssh key.",
-    "version": "2.0.2",
+    "version": "1.0",
     "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
     "image": "tp_WAS_standalone.png",
     "type": "prebuilt",

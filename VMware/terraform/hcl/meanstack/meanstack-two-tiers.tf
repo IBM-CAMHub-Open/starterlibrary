@@ -74,7 +74,7 @@ data "vsphere_network" "mongodb_vm_network" {
 }
 
 data "vsphere_virtual_machine" "mongodb_vm_template" {
-  name          = "${var.mongodb_vm-image}"
+  name          = "${var.mongodb_vm_image}"
   datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
 }
 
@@ -101,46 +101,46 @@ data "vsphere_network" "nodejs_vm_network" {
 }
 
 data "vsphere_virtual_machine" "nodejs_vm_template" {
-  name          = "${var.nodejs_vm-image}"
+  name          = "${var.nodejs_vm_image}"
   datacenter_id = "${data.vsphere_datacenter.nodejs_vm_datacenter.id}"
 }
 
 ##### Image Parameters variables #####
 
 ##### mongodb_vm variables #####
-#Variable : mongodb_vm-image
-variable "mongodb_vm-image" {
+#Variable : mongodb_vm_image
+variable "mongodb_vm_image" {
   type        = "string"
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
-#Variable : mongodb_vm-name
-variable "mongodb_vm-name" {
+#Variable : mongodb_vm_name
+variable "mongodb_vm_name" {
   type        = "string"
   description = "Short hostname of virtual machine"
 }
 
-#Variable : mongodb_vm-os_admin_user
-variable "mongodb_vm-os_admin_user" {
+#Variable : mongodb_vm_os_admin_user
+variable "mongodb_vm_os_admin_user" {
   type        = "string"
   description = "Name of the admin user account in the virtual machine that will be accessed via SSH"
 }
 
 ##### nodejs_vm variables #####
-#Variable : nodejs_vm-image
-variable "nodejs_vm-image" {
+#Variable : nodejs_vm_image
+variable "nodejs_vm_image" {
   type        = "string"
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
-#Variable : nodejs_vm-name
-variable "nodejs_vm-name" {
+#Variable : nodejs_vm_name
+variable "nodejs_vm_name" {
   type        = "string"
   description = "Short hostname of virtual machine"
 }
 
-#Variable : nodejs_vm-os_admin_user
-variable "nodejs_vm-os_admin_user" {
+#Variable : nodejs_vm_os_admin_user
+variable "nodejs_vm_os_admin_user" {
   type        = "string"
   description = "Name of the admin user account in the virtual machine that will be accessed via SSH"
 }
@@ -153,7 +153,7 @@ variable "nodejs_vm-os_admin_user" {
 ##### Resource : mongodb_vm
 #########################################################
 
-variable "mongodb_vm-os_password" {
+variable "mongodb_vm_os_password" {
   type        = "string"
   description = "Operating System Password for the Operating System User to access virtual machine"
 }
@@ -248,7 +248,7 @@ variable "mongodb_vm_root_disk_size" {
 
 # vsphere vm
 resource "vsphere_virtual_machine" "mongodb_vm" {
-  name             = "${var.mongodb_vm-name}"
+  name             = "${var.mongodb_vm_name}"
   folder           = "${var.mongodb_vm_folder}"
   num_cpus         = "${var.mongodb_vm_number_of_vcpu}"
   memory           = "${var.mongodb_vm_memory}"
@@ -263,7 +263,7 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
     customize {
       linux_options {
         domain    = "${var.mongodb_vm_domain}"
-        host_name = "${var.mongodb_vm-name}"
+        host_name = "${var.mongodb_vm_name}"
       }
 
       network_interface {
@@ -283,7 +283,7 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
   }
 
   disk {
-    label          = "${var.mongodb_vm-name}0.vmdk"
+    label          = "${var.mongodb_vm_name}0.vmdk"
     size           = "${var.mongodb_vm_root_disk_size}"
     keep_on_remove = "${var.mongodb_vm_root_disk_keep_on_remove}"
     datastore_id   = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
@@ -292,8 +292,8 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
   # Specify the connection
   connection {
     type     = "ssh"
-    user     = "${var.mongodb_vm-os_admin_user}"
-    password = "${var.mongodb_vm-os_password}"
+    user     = "${var.mongodb_vm_os_admin_user}"
+    password = "${var.mongodb_vm_os_password}"
   }
 
   provisioner "file" {
@@ -359,7 +359,7 @@ EOF
   provisioner "remote-exec" {
     inline = [
       "bash -c 'chmod +x mongodb_vm_add_ssh_key.sh'",
-      "bash -c './mongodb_vm_add_ssh_key.sh  \"${var.mongodb_vm-os_admin_user}\" \"${var.user_public_ssh_key}\">> mongodb_vm_add_ssh_key.log 2>&1'",
+      "bash -c './mongodb_vm_add_ssh_key.sh  \"${var.mongodb_vm_os_admin_user}\" \"${var.user_public_ssh_key}\">> mongodb_vm_add_ssh_key.log 2>&1'",
     ]
   }
 }
@@ -373,8 +373,8 @@ resource "null_resource" "mongodb_vm_install_mongodb" {
 
   # Specify the ssh connection
   connection {
-    user     = "${var.mongodb_vm-os_admin_user}"
-    password = "${var.mongodb_vm-os_password}"
+    user     = "${var.mongodb_vm_os_admin_user}"
+    password = "${var.mongodb_vm_os_password}"
     host     = "${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
   }
 
@@ -442,7 +442,7 @@ EOF
 ##### Resource : nodejs_vm
 #########################################################
 
-variable "nodejs_vm-os_password" {
+variable "nodejs_vm_os_password" {
   type        = "string"
   description = "Operating System Password for the Operating System User to access virtual machine"
 }
@@ -537,7 +537,7 @@ variable "nodejs_vm_root_disk_size" {
 
 # vsphere vm
 resource "vsphere_virtual_machine" "nodejs_vm" {
-  name             = "${var.nodejs_vm-name}"
+  name             = "${var.nodejs_vm_name}"
   folder           = "${var.nodejs_vm_folder}"
   num_cpus         = "${var.nodejs_vm_number_of_vcpu}"
   memory           = "${var.nodejs_vm_memory}"
@@ -552,7 +552,7 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
     customize {
       linux_options {
         domain    = "${var.nodejs_vm_domain}"
-        host_name = "${var.nodejs_vm-name}"
+        host_name = "${var.nodejs_vm_name}"
       }
 
       network_interface {
@@ -572,7 +572,7 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
   }
 
   disk {
-    label          = "${var.nodejs_vm-name}.vmdk"
+    label          = "${var.nodejs_vm_name}.vmdk"
     size           = "${var.nodejs_vm_root_disk_size}"
     keep_on_remove = "${var.nodejs_vm_root_disk_keep_on_remove}"
     datastore_id   = "${data.vsphere_datastore.nodejs_vm_datastore.id}"
@@ -581,8 +581,8 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
   # Specify the connection
   connection {
     type     = "ssh"
-    user     = "${var.nodejs_vm-os_admin_user}"
-    password = "${var.nodejs_vm-os_password}"
+    user     = "${var.nodejs_vm_os_admin_user}"
+    password = "${var.nodejs_vm_os_password}"
   }
 
   provisioner "file" {
@@ -648,7 +648,7 @@ EOF
   provisioner "remote-exec" {
     inline = [
       "bash -c 'chmod +x nodejs_vm_add_ssh_key.sh'",
-      "bash -c './nodejs_vm_add_ssh_key.sh  \"${var.nodejs_vm-os_admin_user}\" \"${var.user_public_ssh_key}\">> nodejs_vm_add_ssh_key.log 2>&1'",
+      "bash -c './nodejs_vm_add_ssh_key.sh  \"${var.nodejs_vm_os_admin_user}\" \"${var.user_public_ssh_key}\">> nodejs_vm_add_ssh_key.log 2>&1'",
     ]
   }
 }
@@ -662,8 +662,8 @@ resource "null_resource" "nodejs_vm_install_nodejs" {
 
   # Specify the ssh connection
   connection {
-    user     = "${var.nodejs_vm-os_admin_user}"
-    password = "${var.nodejs_vm-os_password}"
+    user     = "${var.nodejs_vm_os_admin_user}"
+    password = "${var.nodejs_vm_os_password}"
     host     = "${vsphere_virtual_machine.nodejs_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
   }
 
@@ -709,6 +709,7 @@ retryInstall "yum install -y git"                                               
 git clone https://github.com/meanjs/mean.git mean                                                                 >> $LOGFILE 2>&1 || { echo "---Failed to clone mean sample project---" | tee -a $LOGFILE; exit 1; }
 cd mean
 yum groupinstall 'Development Tools' -y                                                                           >> $LOGFILE 2>&1 || { echo "---Failed to install development tools---" | tee -a $LOGFILE; exit 1; }
+retryInstall "yum install -y libpng-devel"                                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install libpng---" | tee -a $LOGFILE; exit 1; }
 npm install                                                                                                       >> $LOGFILE 2>&1 || { echo "---Failed to install node modules---" | tee -a $LOGFILE; exit 1; }
 bower --allow-root --config.interactive=false install                                                             >> $LOGFILE 2>&1 || { echo "---Failed to install bower---" | tee -a $LOGFILE; exit 1; }
 PRODCONF=config/env/production.js

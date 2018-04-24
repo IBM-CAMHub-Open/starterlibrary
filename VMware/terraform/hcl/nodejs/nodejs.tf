@@ -42,14 +42,14 @@ data "vsphere_network" "nodejs_vm_network" {
 }
 
 data "vsphere_virtual_machine" "nodejs_vm_template" {
-  name          = "${var.nodejs_vm-image}"
+  name          = "${var.nodejs_vm_image}"
   datacenter_id = "${data.vsphere_datacenter.nodejs_vm_datacenter.id}"
 }
 
 ##### Image Parameters variables #####
 
-#Variable : nodejs_vm-name
-variable "nodejs_vm-name" {
+#Variable : nodejs_vm_name
+variable "nodejs_vm_name" {
   type        = "string"
   description = "Generated"
   default     = "nodejs Vm"
@@ -155,13 +155,13 @@ variable "nodejs_vm_root_disk_size" {
   default     = "25"
 }
 
-variable "nodejs_vm-image" {
+variable "nodejs_vm_image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
 # vsphere vm
 resource "vsphere_virtual_machine" "nodejs_vm" {
-  name             = "${var.nodejs_vm-name}"
+  name             = "${var.nodejs_vm_name}"
   folder           = "${var.nodejs_vm_folder}"
   num_cpus         = "${var.nodejs_vm_number_of_vcpu}"
   memory           = "${var.nodejs_vm_memory}"
@@ -176,7 +176,7 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
     customize {
       linux_options {
         domain    = "${var.nodejs_vm_domain}"
-        host_name = "${var.nodejs_vm-name}"
+        host_name = "${var.nodejs_vm_name}"
       }
 
       network_interface {
@@ -196,7 +196,7 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
   }
 
   disk {
-    label          = "${var.nodejs_vm-name}0.vmdk"
+    label          = "${var.nodejs_vm_name}0.vmdk"
     size           = "${var.nodejs_vm_root_disk_size}"
     keep_on_remove = "${var.nodejs_vm_root_disk_keep_on_remove}"
     datastore_id   = "${data.vsphere_datastore.nodejs_vm_datastore.id}"
@@ -235,7 +235,7 @@ curl -sL https://rpm.nodesource.com/setup_7.x | bash -    >> $LOGFILE 2>&1 || { 
 retryInstall "yum install nodejs -y"                      >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
 echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1
 
-    EOF
+EOF
 
     destination = "/tmp/installation.sh"
   }

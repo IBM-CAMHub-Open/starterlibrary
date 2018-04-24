@@ -39,7 +39,7 @@
       "group_name": "cloud"
     },
     {
-      "name": "tomcat_vm-name",
+      "name": "tomcat_vm_name",
       "type": "string",
       "description": "Short host name of tomcat vm",
       "default": "tomcat-vm",
@@ -307,7 +307,7 @@
       "immutable": false,
       "required": true,
       "secured": true,
-      "type": "string",
+      "type": "password",
       "regex": "^[0-9A-Za-z]{8,16}$",
       "group_name": "virtualmachine"
     },
@@ -387,7 +387,7 @@
         "immutable": false,
         "required": true,
         "secured": true,
-        "type": "string",
+        "type": "password",
         "group_name": "virtualmachine"
     }
   ],

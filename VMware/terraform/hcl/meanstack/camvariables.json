@@ -130,7 +130,7 @@
       "group_name": "virtualmachine"
     },
     {
-      "name": "mongodb_vm-image",
+      "name": "mongodb_vm_image",
       "type": "string",
       "description": "Operating system image id / template that should be used when creating the virtual image",
       "hidden": false,
@@ -141,7 +141,7 @@
       "group_name": "virtualmachine"
     },
     {
-      "name": "mongodb_vm-os_admin_user",
+      "name": "mongodb_vm_os_admin_user",
       "type": "string",
       "description": "Name of the admin user account in the virtual machine that will be accessed via SSH",
       "hidden": false,
@@ -152,8 +152,8 @@
       "group_name": "virtualmachine"
     },
     {
-      "name": "mongodb_vm-os_password",
-      "type": "string",
+      "name": "mongodb_vm_os_password",
+      "type": "password",
       "description": "Operating System Password for the Operating System User to access virtual machine",
       "hidden": false,
       "label": "Operating system password - mongodb_vm",
@@ -175,7 +175,7 @@
       "group_name": "virtualmachine"
     },
     {
-      "name": "mongodb_vm-name",
+      "name": "mongodb_vm_name",
       "type": "string",
       "description": "Short hostname of virtual machine",
       "hidden": false,
@@ -455,7 +455,7 @@
       "group_name": "virtualmachine"
     },
     {
-      "name": "nodejs_vm-image",
+      "name": "nodejs_vm_image",
       "type": "string",
       "description": "Operating system image id / template that should be used when creating the virtual image",
       "hidden": false,
@@ -466,7 +466,7 @@
       "group_name": "virtualmachine"
     },
     {
-      "name": "nodejs_vm-os_admin_user",
+      "name": "nodejs_vm_os_admin_user",
       "type": "string",
       "description": "Name of the admin user account in the virtual machine that will be accessed via SSH",
       "hidden": false,
@@ -477,8 +477,8 @@
       "group_name": "virtualmachine"
     },
     {
-      "name": "nodejs_vm-os_password",
-      "type": "string",
+      "name": "nodejs_vm_os_password",
+      "type": "password",
       "description": "Operating System Password for the Operating System User to access virtual machine",
       "hidden": false,
       "label": "Operating system password - nodejs_vm",
@@ -500,7 +500,7 @@
       "group_name": "virtualmachine"
     },
     {
-      "name": "nodejs_vm-name",
+      "name": "nodejs_vm_name",
       "type": "string",
       "description": "Short hostname of virtual machine",
       "hidden": false,

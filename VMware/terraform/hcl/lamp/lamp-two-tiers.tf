@@ -22,74 +22,74 @@ provider "vsphere" {
 ##############################################################
 # Vsphere data for provider
 ##############################################################
-data "vsphere_datacenter" "mariadb-vm_datacenter" {
-  name = "${var.mariadb-vm_datacenter}"
+data "vsphere_datacenter" "mariadb_vm_datacenter" {
+  name = "${var.mariadb_vm_datacenter}"
 }
 
-data "vsphere_datastore" "mariadb-vm_datastore" {
-  name          = "${var.mariadb-vm_root_disk_datastore}"
-  datacenter_id = "${data.vsphere_datacenter.mariadb-vm_datacenter.id}"
+data "vsphere_datastore" "mariadb_vm_datastore" {
+  name          = "${var.mariadb_vm_root_disk_datastore}"
+  datacenter_id = "${data.vsphere_datacenter.mariadb_vm_datacenter.id}"
 }
 
-data "vsphere_resource_pool" "mariadb-vm_resource_pool" {
-  name          = "${var.mariadb-vm_resource_pool}"
-  datacenter_id = "${data.vsphere_datacenter.mariadb-vm_datacenter.id}"
+data "vsphere_resource_pool" "mariadb_vm_resource_pool" {
+  name          = "${var.mariadb_vm_resource_pool}"
+  datacenter_id = "${data.vsphere_datacenter.mariadb_vm_datacenter.id}"
 }
 
-data "vsphere_network" "mariadb-vm_network" {
-  name          = "${var.mariadb-vm_network_interface_label}"
-  datacenter_id = "${data.vsphere_datacenter.mariadb-vm_datacenter.id}"
+data "vsphere_network" "mariadb_vm_network" {
+  name          = "${var.mariadb_vm_network_interface_label}"
+  datacenter_id = "${data.vsphere_datacenter.mariadb_vm_datacenter.id}"
 }
 
-data "vsphere_virtual_machine" "mariadb-vm_template" {
-  name          = "${var.mariadb-vm-image}"
-  datacenter_id = "${data.vsphere_datacenter.mariadb-vm_datacenter.id}"
+data "vsphere_virtual_machine" "mariadb_vm_template" {
+  name          = "${var.mariadb_vm_image}"
+  datacenter_id = "${data.vsphere_datacenter.mariadb_vm_datacenter.id}"
 }
 
 ##############################################################
 # Vsphere data for provider
 ##############################################################
-data "vsphere_datacenter" "php-vm_datacenter" {
-  name = "${var.php-vm_datacenter}"
+data "vsphere_datacenter" "php_vm_datacenter" {
+  name = "${var.php_vm_datacenter}"
 }
 
-data "vsphere_datastore" "php-vm_datastore" {
-  name          = "${var.php-vm_root_disk_datastore}"
-  datacenter_id = "${data.vsphere_datacenter.php-vm_datacenter.id}"
+data "vsphere_datastore" "php_vm_datastore" {
+  name          = "${var.php_vm_root_disk_datastore}"
+  datacenter_id = "${data.vsphere_datacenter.php_vm_datacenter.id}"
 }
 
-data "vsphere_resource_pool" "php-vm_resource_pool" {
-  name          = "${var.php-vm_resource_pool}"
-  datacenter_id = "${data.vsphere_datacenter.php-vm_datacenter.id}"
+data "vsphere_resource_pool" "php_vm_resource_pool" {
+  name          = "${var.php_vm_resource_pool}"
+  datacenter_id = "${data.vsphere_datacenter.php_vm_datacenter.id}"
 }
 
-data "vsphere_network" "php-vm_network" {
-  name          = "${var.php-vm_network_interface_label}"
-  datacenter_id = "${data.vsphere_datacenter.php-vm_datacenter.id}"
+data "vsphere_network" "php_vm_network" {
+  name          = "${var.php_vm_network_interface_label}"
+  datacenter_id = "${data.vsphere_datacenter.php_vm_datacenter.id}"
 }
 
-data "vsphere_virtual_machine" "php-vm_template" {
-  name          = "${var.php-vm-image}"
-  datacenter_id = "${data.vsphere_datacenter.php-vm_datacenter.id}"
+data "vsphere_virtual_machine" "php_vm_template" {
+  name          = "${var.php_vm_image}"
+  datacenter_id = "${data.vsphere_datacenter.php_vm_datacenter.id}"
 }
 
 ##### Image Parameters variables #####
-#Variable : mariadb-vm-name
-variable "mariadb-vm-name" {
+#Variable : mariadb_vm_name
+variable "mariadb_vm_name" {
   type        = "string"
   description = "Generated"
-  default     = "mariadb-vm"
+  default     = "mariadb_vm"
 }
 
-#Variable : php-vm-name
-variable "php-vm-name" {
+#Variable : php_vm_name
+variable "php_vm_name" {
   type        = "string"
   description = "Generated"
-  default     = "php-vm"
+  default     = "php_vm"
 }
 
 #########################################################
-##### Resource : mariadb-vm
+##### Resource : mariadb_vm
 #########################################################
 
 variable "mariadb_user" {
@@ -119,281 +119,281 @@ variable "mariadb_pwd" {
   description = "User password for cam user; It should be alphanumeric with length in [8,16]"
 }
 
-variable "mariadb-vm_folder" {
+variable "mariadb_vm_folder" {
   description = "Target vSphere folder for virtual machine"
 }
 
-variable "mariadb-vm_datacenter" {
+variable "mariadb_vm_datacenter" {
   description = "Target vSphere datacenter for virtual machine creation"
 }
 
-variable "mariadb-vm_domain" {
+variable "mariadb_vm_domain" {
   description = "Domain Name of virtual machine"
 }
 
-variable "mariadb-vm_number_of_vcpu" {
+variable "mariadb_vm_number_of_vcpu" {
   description = "Number of virtual CPU for the virtual machine, which is required to be a positive Integer"
   default     = "1"
 }
 
-variable "mariadb-vm_memory" {
+variable "mariadb_vm_memory" {
   description = "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024"
   default     = "1024"
 }
 
-variable "mariadb-vm_cluster" {
+variable "mariadb_vm_cluster" {
   description = "Target vSphere cluster to host the virtual machine"
 }
 
-variable "mariadb-vm_resource_pool" {
+variable "mariadb_vm_resource_pool" {
   description = "Target vSphere Resource Pool to host the virtual machine"
 }
 
-variable "mariadb-vm_dns_suffixes" {
+variable "mariadb_vm_dns_suffixes" {
   type        = "list"
   description = "Name resolution suffixes for the virtual network adapter"
 }
 
-variable "mariadb-vm_dns_servers" {
+variable "mariadb_vm_dns_servers" {
   type        = "list"
   description = "DNS servers for the virtual network adapter"
 }
 
-variable "mariadb-vm_network_interface_label" {
+variable "mariadb_vm_network_interface_label" {
   description = "vSphere port group or network label for virtual machine's vNIC"
 }
 
-variable "mariadb-vm_ipv4_gateway" {
+variable "mariadb_vm_ipv4_gateway" {
   description = "IPv4 gateway for vNIC configuration"
 }
 
-variable "mariadb-vm_ipv4_address" {
+variable "mariadb_vm_ipv4_address" {
   description = "IPv4 address for vNIC configuration"
 }
 
-variable "mariadb-vm_ipv4_prefix_length" {
+variable "mariadb_vm_ipv4_prefix_length" {
   description = "IPv4 prefix length for vNIC configuration. The value must be a number between 8 and 32"
 }
 
-variable "mariadb-vm_adapter_type" {
+variable "mariadb_vm_adapter_type" {
   description = "Network adapter type for vNIC Configuration"
   default     = "vmxnet3"
 }
 
-variable "mariadb-vm_root_disk_datastore" {
+variable "mariadb_vm_root_disk_datastore" {
   description = "Data store or storage cluster name for target virtual machine's disks"
 }
 
-variable "mariadb-vm_root_disk_type" {
+variable "mariadb_vm_root_disk_type" {
   type        = "string"
   description = "Type of template disk volume"
   default     = "eager_zeroed"
 }
 
-variable "mariadb-vm_root_disk_controller_type" {
+variable "mariadb_vm_root_disk_controller_type" {
   type        = "string"
   description = "Type of template disk controller"
   default     = "scsi"
 }
 
-variable "mariadb-vm_root_disk_keep_on_remove" {
+variable "mariadb_vm_root_disk_keep_on_remove" {
   type        = "string"
   description = "Delete template disk volume when the virtual machine is deleted"
   default     = "false"
 }
 
-variable "mariadb-vm_root_disk_size" {
+variable "mariadb_vm_root_disk_size" {
   description = "Size of template disk volume. Should be equal to template's disk size"
   default     = "25"
 }
 
-variable "mariadb-vm-image" {
+variable "mariadb_vm_image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
 # vsphere vm
-resource "vsphere_virtual_machine" "mariadb-vm" {
-  name             = "${var.mariadb-vm-name}"
-  folder           = "${var.mariadb-vm_folder}"
-  num_cpus         = "${var.mariadb-vm_number_of_vcpu}"
-  memory           = "${var.mariadb-vm_memory}"
-  resource_pool_id = "${data.vsphere_resource_pool.mariadb-vm_resource_pool.id}"
-  datastore_id     = "${data.vsphere_datastore.mariadb-vm_datastore.id}"
-  guest_id         = "${data.vsphere_virtual_machine.mariadb-vm_template.guest_id}"
-  scsi_type        = "${data.vsphere_virtual_machine.mariadb-vm_template.scsi_type}"
+resource "vsphere_virtual_machine" "mariadb_vm" {
+  name             = "${var.mariadb_vm_name}"
+  folder           = "${var.mariadb_vm_folder}"
+  num_cpus         = "${var.mariadb_vm_number_of_vcpu}"
+  memory           = "${var.mariadb_vm_memory}"
+  resource_pool_id = "${data.vsphere_resource_pool.mariadb_vm_resource_pool.id}"
+  datastore_id     = "${data.vsphere_datastore.mariadb_vm_datastore.id}"
+  guest_id         = "${data.vsphere_virtual_machine.mariadb_vm_template.guest_id}"
+  scsi_type        = "${data.vsphere_virtual_machine.mariadb_vm_template.scsi_type}"
 
   clone {
-    template_uuid = "${data.vsphere_virtual_machine.mariadb-vm_template.id}"
+    template_uuid = "${data.vsphere_virtual_machine.mariadb_vm_template.id}"
 
     customize {
       linux_options {
-        domain    = "${var.mariadb-vm_domain}"
-        host_name = "${var.mariadb-vm-name}"
+        domain    = "${var.mariadb_vm_domain}"
+        host_name = "${var.mariadb_vm_name}"
       }
 
       network_interface {
-        ipv4_address = "${var.mariadb-vm_ipv4_address}"
-        ipv4_netmask = "${var.mariadb-vm_ipv4_prefix_length}"
+        ipv4_address = "${var.mariadb_vm_ipv4_address}"
+        ipv4_netmask = "${var.mariadb_vm_ipv4_prefix_length}"
       }
 
-      ipv4_gateway    = "${var.mariadb-vm_ipv4_gateway}"
-      dns_suffix_list = "${var.mariadb-vm_dns_suffixes}"
-      dns_server_list = "${var.mariadb-vm_dns_servers}"
+      ipv4_gateway    = "${var.mariadb_vm_ipv4_gateway}"
+      dns_suffix_list = "${var.mariadb_vm_dns_suffixes}"
+      dns_server_list = "${var.mariadb_vm_dns_servers}"
     }
   }
 
   network_interface {
-    network_id   = "${data.vsphere_network.mariadb-vm_network.id}"
-    adapter_type = "${var.mariadb-vm_adapter_type}"
+    network_id   = "${data.vsphere_network.mariadb_vm_network.id}"
+    adapter_type = "${var.mariadb_vm_adapter_type}"
   }
 
   disk {
-    label          = "${var.mariadb-vm-name}0.vmdk"
-    size           = "${var.mariadb-vm_root_disk_size}"
-    keep_on_remove = "${var.mariadb-vm_root_disk_keep_on_remove}"
-    datastore_id   = "${data.vsphere_datastore.mariadb-vm_datastore.id}"
+    label          = "${var.mariadb_vm_name}0.vmdk"
+    size           = "${var.mariadb_vm_root_disk_size}"
+    keep_on_remove = "${var.mariadb_vm_root_disk_keep_on_remove}"
+    datastore_id   = "${data.vsphere_datastore.mariadb_vm_datastore.id}"
   }
 }
 
 #########################################################
-##### Resource : php-vm
+##### Resource : php_vm
 #########################################################
 
-variable "php-vm_folder" {
+variable "php_vm_folder" {
   description = "Target vSphere folder for virtual machine"
 }
 
-variable "php-vm_datacenter" {
+variable "php_vm_datacenter" {
   description = "Target vSphere datacenter for virtual machine creation"
 }
 
-variable "php-vm_domain" {
+variable "php_vm_domain" {
   description = "Domain Name of virtual machine"
 }
 
-variable "php-vm_number_of_vcpu" {
+variable "php_vm_number_of_vcpu" {
   description = "Number of virtual CPU for the virtual machine, which is required to be a positive Integer"
   default     = "1"
 }
 
-variable "php-vm_memory" {
+variable "php_vm_memory" {
   description = "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024"
   default     = "1024"
 }
 
-variable "php-vm_cluster" {
+variable "php_vm_cluster" {
   description = "Target vSphere cluster to host the virtual machine"
 }
 
-variable "php-vm_resource_pool" {
+variable "php_vm_resource_pool" {
   description = "Target vSphere Resource Pool to host the virtual machine"
 }
 
-variable "php-vm_dns_suffixes" {
+variable "php_vm_dns_suffixes" {
   type        = "list"
   description = "Name resolution suffixes for the virtual network adapter"
 }
 
-variable "php-vm_dns_servers" {
+variable "php_vm_dns_servers" {
   type        = "list"
   description = "DNS servers for the virtual network adapter"
 }
 
-variable "php-vm_network_interface_label" {
+variable "php_vm_network_interface_label" {
   description = "vSphere port group or network label for virtual machine's vNIC"
 }
 
-variable "php-vm_ipv4_gateway" {
+variable "php_vm_ipv4_gateway" {
   description = "IPv4 gateway for vNIC configuration"
 }
 
-variable "php-vm_ipv4_address" {
+variable "php_vm_ipv4_address" {
   description = "IPv4 address for vNIC configuration"
 }
 
-variable "php-vm_ipv4_prefix_length" {
+variable "php_vm_ipv4_prefix_length" {
   description = "IPv4 prefix length for vNIC configuration. The value must be a number between 8 and 32"
 }
 
-variable "php-vm_adapter_type" {
+variable "php_vm_adapter_type" {
   description = "Network adapter type for vNIC Configuration"
   default     = "vmxnet3"
 }
 
-variable "php-vm_root_disk_datastore" {
+variable "php_vm_root_disk_datastore" {
   description = "Data store or storage cluster name for target virtual machine's disks"
 }
 
-variable "php-vm_root_disk_type" {
+variable "php_vm_root_disk_type" {
   type        = "string"
   description = "Type of template disk volume"
   default     = "eager_zeroed"
 }
 
-variable "php-vm_root_disk_controller_type" {
+variable "php_vm_root_disk_controller_type" {
   type        = "string"
   description = "Type of template disk controller"
   default     = "scsi"
 }
 
-variable "php-vm_root_disk_keep_on_remove" {
+variable "php_vm_root_disk_keep_on_remove" {
   type        = "string"
   description = "Delete template disk volume when the virtual machine is deleted"
   default     = "false"
 }
 
-variable "php-vm_root_disk_size" {
+variable "php_vm_root_disk_size" {
   description = "Size of template disk volume. Should be equal to template's disk size"
   default     = "25"
 }
 
-variable "php-vm-image" {
+variable "php_vm_image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
 # vsphere vm
-resource "vsphere_virtual_machine" "php-vm" {
-  depends_on = ["vsphere_virtual_machine.mariadb-vm"]
+resource "vsphere_virtual_machine" "php_vm" {
+  depends_on = ["vsphere_virtual_machine.mariadb_vm"]
 
-  name             = "${var.php-vm-name}"
-  folder           = "${var.php-vm_folder}"
-  num_cpus         = "${var.php-vm_number_of_vcpu}"
-  memory           = "${var.php-vm_memory}"
-  resource_pool_id = "${data.vsphere_resource_pool.php-vm_resource_pool.id}"
-  datastore_id     = "${data.vsphere_datastore.php-vm_datastore.id}"
-  guest_id         = "${data.vsphere_virtual_machine.php-vm_template.guest_id}"
-  scsi_type        = "${data.vsphere_virtual_machine.php-vm_template.scsi_type}"
+  name             = "${var.php_vm_name}"
+  folder           = "${var.php_vm_folder}"
+  num_cpus         = "${var.php_vm_number_of_vcpu}"
+  memory           = "${var.php_vm_memory}"
+  resource_pool_id = "${data.vsphere_resource_pool.php_vm_resource_pool.id}"
+  datastore_id     = "${data.vsphere_datastore.php_vm_datastore.id}"
+  guest_id         = "${data.vsphere_virtual_machine.php_vm_template.guest_id}"
+  scsi_type        = "${data.vsphere_virtual_machine.php_vm_template.scsi_type}"
 
   clone {
-    template_uuid = "${data.vsphere_virtual_machine.php-vm_template.id}"
+    template_uuid = "${data.vsphere_virtual_machine.php_vm_template.id}"
 
     customize {
       linux_options {
-        domain    = "${var.php-vm_domain}"
-        host_name = "${var.php-vm-name}"
+        domain    = "${var.php_vm_domain}"
+        host_name = "${var.php_vm_name}"
       }
 
       network_interface {
-        ipv4_address = "${var.php-vm_ipv4_address}"
-        ipv4_netmask = "${var.php-vm_ipv4_prefix_length}"
+        ipv4_address = "${var.php_vm_ipv4_address}"
+        ipv4_netmask = "${var.php_vm_ipv4_prefix_length}"
       }
 
-      ipv4_gateway    = "${var.php-vm_ipv4_gateway}"
-      dns_suffix_list = "${var.php-vm_dns_suffixes}"
-      dns_server_list = "${var.php-vm_dns_servers}"
+      ipv4_gateway    = "${var.php_vm_ipv4_gateway}"
+      dns_suffix_list = "${var.php_vm_dns_suffixes}"
+      dns_server_list = "${var.php_vm_dns_servers}"
     }
   }
 
   network_interface {
-    network_id   = "${data.vsphere_network.php-vm_network.id}"
-    adapter_type = "${var.php-vm_adapter_type}"
+    network_id   = "${data.vsphere_network.php_vm_network.id}"
+    adapter_type = "${var.php_vm_adapter_type}"
   }
 
   disk {
-    name           = "${var.php-vm-name}.vmdk"
-    size           = "${var.php-vm_root_disk_size}"
-    keep_on_remove = "${var.php-vm_root_disk_keep_on_remove}"
-    datastore_id   = "${data.vsphere_datastore.php-vm_datastore.id}"
+    name           = "${var.php_vm_name}.vmdk"
+    size           = "${var.php_vm_root_disk_size}"
+    keep_on_remove = "${var.php_vm_root_disk_keep_on_remove}"
+    datastore_id   = "${data.vsphere_datastore.php_vm_datastore.id}"
   }
 }
 
@@ -402,7 +402,7 @@ resource "null_resource" "install_mariadb" {
   connection {
     user     = "${var.mariadb_ssh_user}"
     password = "${var.mariadb_ssh_user_password}"
-    host     = "${vsphere_virtual_machine.mariadb-vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+    host     = "${vsphere_virtual_machine.mariadb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -446,7 +446,7 @@ EOF
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${var.mariadb_user}\" \"${var.mariadb_pwd}\" \"${vsphere_virtual_machine.php-vm.clone.0.customize.0.network_interface.0.ipv4_address}\"",
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${var.mariadb_user}\" \"${var.mariadb_pwd}\" \"${vsphere_virtual_machine.php_vm.clone.0.customize.0.network_interface.0.ipv4_address}\"",
     ]
   }
 }
@@ -458,7 +458,7 @@ resource "null_resource" "install_php" {
   connection {
     user     = "${var.php_ssh_user}"
     password = "${var.php_ssh_user_password}"
-    host     = "${vsphere_virtual_machine.php-vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+    host     = "${vsphere_virtual_machine.php_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
   }
 
   # Create the installation script
@@ -548,15 +548,15 @@ EOF
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.php-vm.clone.0.customize.0.network_interface.0.ipv4_address}\" \"${vsphere_virtual_machine.mariadb-vm.clone.0.customize.0.network_interface.0.ipv4_address}\" \"${var.mariadb_user}\" \"${var.mariadb_pwd}\"",
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.php_vm.clone.0.customize.0.network_interface.0.ipv4_address}\" \"${vsphere_virtual_machine.mariadb_vm.clone.0.customize.0.network_interface.0.ipv4_address}\" \"${var.mariadb_user}\" \"${var.mariadb_pwd}\"",
     ]
   }
 }
 
 output "IBM Cloud PHP address" {
-  value = "http://${vsphere_virtual_machine.php-vm.clone.0.customize.0.network_interface.0.ipv4_address}/test.php"
+  value = "http://${vsphere_virtual_machine.php_vm.clone.0.customize.0.network_interface.0.ipv4_address}/test.php"
 }
 
 output "MariaDB address" {
-  value = "${vsphere_virtual_machine.mariadb-vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+  value = "${vsphere_virtual_machine.mariadb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }

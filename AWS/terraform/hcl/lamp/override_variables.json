@@ -1,0 +1,8 @@
+{
+  "network_name_prefix": "testrunner-lamp",
+  "public_key_name": "testrunner-lamp",
+  "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCunj1Un1T9s1FNdHl+yY9ta5b71ldQahM7CKYnSKf+Y8baXmEejajSM+cc2WXhcXZPscjate8P7oLdQfFg/zAr1MzbKU7sTvupA6Qx+hlneweL0KKhGpMFLhsp9lgFzGLW4424k+WvKlUf3o59SbLwaMIVeMM/0DlOGLfh2Z2e7o39fsLIg6D5ptr8hBnsQZ9zwReh9qbwiAW9bbl/5tYgit0HSucrYiZRTss8unHCeuVvRwxK6KeVoqzNRxx2UtL0eb62TzVM+IIm4JlsXr1Nx6IvLf/z6icaMViu3GPKtf4Gz5zbZv3PI/EF/7CJf03S5F5vYuDCi4CKa0OhKh9d",
+  "cam_pwd": "Op3nPatterns",
+  "aws_image": "ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*",
+  "aws_ami_owner_id": "099720109477"
+}

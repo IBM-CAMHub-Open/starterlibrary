@@ -2,7 +2,7 @@
   "name": "SingleVirtualMachine",
   "description": "Create Virtual Machine with single vnic",
   "type": "prebuilt",
-  "version": "2.0.2",
+  "version": "1.0",
   "manifest": {
     "template_type": "Terraform",
     "template_format": "HCL",

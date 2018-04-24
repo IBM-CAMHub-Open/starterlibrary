@@ -1,12 +1,24 @@
-[
+{
+  "input_datatypes": [
+  ],
+  "output_datatype": "content_template_output",
+  "input_groups": [
     {
-        "description": "Softlayer datacenter where infrastructure resources will be deployed", 
-        "hidden": false, 
-        "immutable": false, 
-        "label": "SoftLayer Data Center", 
-        "name": "datacenter", 
-        "required": true, 
-        "secured": false, 
+      "name": "virtualmachine",
+      "label": "Virtual Machine Input Variables"
+    }
+  ],
+  "output_groups": [
+  ],
+  "template_input_params": [
+    {
+        "description": "Softlayer datacenter where infrastructure resources will be deployed",
+        "hidden": false,
+        "immutable": false,
+        "label": "SoftLayer Data Center",
+        "name": "datacenter",
+        "required": true,
+        "secured": false,
         "type": "string",
         "options": [
           {
@@ -135,63 +147,64 @@
               "default": "true"
           }
         ]
-    }, 
+    },
     {
         "default": "strongloop-vm",
-        "description": "Hostname of the virtual instance (with Strongloop and NodeJS installed) to be deployed; Allow 1 to 200 alphanumeric characters and non-consecutive non-leading non-ending dashes", 
-        "hidden": false, 
-        "immutable": false, 
-        "label": "Strongloop Server Hostname", 
-        "name": "strongloop-server-hostname", 
-        "required": true, 
-        "secured": false, 
+        "description": "Hostname of the virtual instance (with Strongloop and NodeJS installed) to be deployed; Allow 1 to 200 alphanumeric characters and non-consecutive non-leading non-ending dashes",
+        "hidden": false,
+        "immutable": false,
+        "label": "Strongloop Server Hostname",
+        "name": "strongloop-server-hostname",
+        "required": true,
+        "secured": false,
         "type": "string",
         "regex": "^(?!(.*(--)))([A-Za-z0-9]{1,2}|[A-Za-z0-9][A-Za-z0-9-]{1,198}[A-Za-z0-9])$"
     },
     {
         "default": "angularjs-vm",
-        "description": "Hostname of the virtual instance (with AngularJS and NodeJS installed) to be deployed; Allow 1 to 200 alphanumeric characters and non-consecutive non-leading non-ending dashes", 
-        "hidden": false, 
-        "immutable": false, 
-        "label": "Angular Server Hostname", 
-        "name": "angular-server-hostname", 
-        "required": true, 
-        "secured": false, 
+        "description": "Hostname of the virtual instance (with AngularJS and NodeJS installed) to be deployed; Allow 1 to 200 alphanumeric characters and non-consecutive non-leading non-ending dashes",
+        "hidden": false,
+        "immutable": false,
+        "label": "Angular Server Hostname",
+        "name": "angular-server-hostname",
+        "required": true,
+        "secured": false,
         "type": "string",
         "regex": "^(?!(.*(--)))([A-Za-z0-9]{1,2}|[A-Za-z0-9][A-Za-z0-9-]{1,198}[A-Za-z0-9])$"
     },
     {
         "default": "mongodb-vm",
-        "description": "Hostname of the virtual instance (with MongoDB installed) to be deployed; Allow 1 to 200 alphanumeric characters and non-consecutive non-leading non-ending dashes", 
-        "hidden": false, 
-        "immutable": false, 
-        "label": "MongoDB Server Hostname", 
-        "name": "mongodb-server-hostname", 
-        "required": true, 
-        "secured": false, 
+        "description": "Hostname of the virtual instance (with MongoDB installed) to be deployed; Allow 1 to 200 alphanumeric characters and non-consecutive non-leading non-ending dashes",
+        "hidden": false,
+        "immutable": false,
+        "label": "MongoDB Server Hostname",
+        "name": "mongodb-server-hostname",
+        "required": true,
+        "secured": false,
         "type": "string",
         "regex": "^(?!(.*(--)))([A-Za-z0-9]{1,2}|[A-Za-z0-9][A-Za-z0-9-]{1,198}[A-Za-z0-9])$"
-    },    
+    },
     {
-        "description": "Public SSH key used to connect to the virtual guest; Allow the openSSH format key with optional comment (with optional email)", 
-        "hidden": false, 
-        "immutable": false, 
-        "label": "Public SSH Key", 
-        "name": "public_ssh_key", 
-        "required": true, 
-        "secured": false, 
+        "description": "Public SSH key used to connect to the virtual guest; Allow the openSSH format key with optional comment (with optional email)",
+        "hidden": false,
+        "immutable": false,
+        "label": "Public SSH Key",
+        "name": "public_ssh_key",
+        "required": true,
+        "secured": false,
         "type": "string",
         "regex": "^ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}( [^@]+@[^@]+| [^@]+){0,1}$"
     },
     {
-        "description": "The password of an user (sampleUser) in mongodb for sample application; Allow 8 to 16 alphanumeric characters", 
-        "hidden": false, 
-        "immutable": false, 
-        "label": "MongoDB User Password", 
-        "name": "mongodb_user_password", 
-        "required": true, 
-        "secured": true, 
-        "type": "string",
+        "description": "The password of an user (sampleUser) in mongodb for sample application; Allow 8 to 16 alphanumeric characters",
+        "hidden": false,
+        "immutable": false,
+        "label": "MongoDB User Password",
+        "name": "mongodb_user_password",
+        "required": true,
+        "secured": true,
+        "type": "password",
         "regex": "^[0-9A-Za-z]{8,16}$"
-    }    
-]
+    }
+  ]
+}

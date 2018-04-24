@@ -48,8 +48,8 @@ data "vsphere_virtual_machine" "tomcat_vm_template" {
 
 ##### Image Parameters variables #####
 
-#Variable : tomcat_vm-name
-variable "tomcat_vm-name" {
+#Variable : tomcat_vm_name
+variable "tomcat_vm_name" {
   type        = "string"
   description = "Generated"
   default     = "tomcat Vm"
@@ -169,7 +169,7 @@ variable "tomcat_vm-image" {
 
 # vsphere vm
 resource "vsphere_virtual_machine" "tomcat_vm" {
-  name             = "${var.tomcat_vm-name}"
+  name             = "${var.tomcat_vm_name}"
   folder           = "${var.tomcat_vm_folder}"
   num_cpus         = "${var.tomcat_vm_number_of_vcpu}"
   memory           = "${var.tomcat_vm_memory}"
@@ -184,7 +184,7 @@ resource "vsphere_virtual_machine" "tomcat_vm" {
     customize {
       linux_options {
         domain    = "${var.tomcat_vm_domain}"
-        host_name = "${var.tomcat_vm-name}"
+        host_name = "${var.tomcat_vm_name}"
       }
 
       network_interface {
@@ -204,7 +204,7 @@ resource "vsphere_virtual_machine" "tomcat_vm" {
   }
 
   disk {
-    label          = "${var.tomcat_vm-name}0.vmdk"
+    label          = "${var.tomcat_vm_name}0.vmdk"
     size           = "${var.tomcat_vm_root_disk_size}"
     keep_on_remove = "${var.tomcat_vm_root_disk_keep_on_remove}"
     datastore_id   = "${data.vsphere_datastore.tomcat_vm_datastore.id}"
@@ -249,7 +249,7 @@ if [ $? -eq 0 ] ; then
 fi
 echo "---finish installing tomcat---" | tee -a $LOGFILE 2>&1
 
-    EOF
+EOF
 
     destination = "/tmp/installation.sh"
   }

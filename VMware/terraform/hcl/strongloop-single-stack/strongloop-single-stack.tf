@@ -42,14 +42,14 @@ data "vsphere_network" "strongloop_vm_network" {
 }
 
 data "vsphere_virtual_machine" "strongloop_vm_template" {
-  name          = "${var.strongloop_vm-image}"
+  name          = "${var.strongloop_vm_image}"
   datacenter_id = "${data.vsphere_datacenter.strongloop_vm_datacenter.id}"
 }
 
 ##### Image Parameters variables #####
 
-#Variable : strongloop_vm-name
-variable "strongloop_vm-name" {
+#Variable : strongloop_vm_name
+variable "strongloop_vm_name" {
   type        = "string"
   description = "Generated"
   default     = "strongloop Vm"
@@ -155,13 +155,13 @@ variable "strongloop_vm_root_disk_size" {
   default     = "25"
 }
 
-variable "strongloop_vm-image" {
+variable "strongloop_vm_image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
 # vsphere vm
 resource "vsphere_virtual_machine" "strongloop_vm" {
-  name             = "${var.strongloop_vm-name}"
+  name             = "${var.strongloop_vm_name}"
   folder           = "${var.strongloop_vm_folder}"
   num_cpus         = "${var.strongloop_vm_number_of_vcpu}"
   memory           = "${var.strongloop_vm_memory}"
@@ -176,7 +176,7 @@ resource "vsphere_virtual_machine" "strongloop_vm" {
     customize {
       linux_options {
         domain    = "${var.strongloop_vm_domain}"
-        host_name = "${var.strongloop_vm-name}"
+        host_name = "${var.strongloop_vm_name}"
       }
 
       network_interface {
@@ -196,7 +196,7 @@ resource "vsphere_virtual_machine" "strongloop_vm" {
   }
 
   disk {
-    label          = "${var.strongloop_vm-name}0.vmdk"
+    label          = "${var.strongloop_vm_name}0.vmdk"
     size           = "${var.strongloop_vm_root_disk_size}"
     keep_on_remove = "${var.strongloop_vm_root_disk_keep_on_remove}"
     datastore_id   = "${data.vsphere_datastore.strongloop_vm_datastore.id}"
@@ -508,7 +508,7 @@ systemctl start nodeserver.service                                              
 iptables -I INPUT 1 -p tcp -m tcp --dport 3000 -m conntrack --ctstate NEW -j ACCEPT                                                         >> $LOGFILE 2>&1 || { echo "---Failed to update firewall---" | tee -a $LOGFILE; exit 1; }
 echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
 
-    EOF
+EOF
 
     destination = "/tmp/installation.sh"
   }

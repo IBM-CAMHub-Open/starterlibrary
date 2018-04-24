@@ -53,8 +53,8 @@ data "vsphere_virtual_machine" "vm_1_template" {
 
 ##### Image Parameters variables #####
 
-#Variable : vm_1-name
-variable "vm_1-name" {
+#Variable : vm_1_name
+variable "vm_1_name" {
   type        = "string"
   description = "Generated"
   default     = "vm_1"
@@ -158,7 +158,7 @@ variable "vm_1-image" {
 
 # vsphere vm
 resource "vsphere_virtual_machine" "vm_1" {
-  name             = "${var.vm_1-name}"
+  name             = "${var.vm_1_name}"
   folder           = "${var.vm_1_folder}"
   num_cpus         = "${var.vm_1_number_of_vcpu}"
   memory           = "${var.vm_1_memory}"
@@ -173,7 +173,7 @@ resource "vsphere_virtual_machine" "vm_1" {
     customize {
       linux_options {
         domain    = "${var.vm_1_domain}"
-        host_name = "${var.vm_1-name}"
+        host_name = "${var.vm_1_name}"
       }
 
       network_interface {
@@ -193,7 +193,7 @@ resource "vsphere_virtual_machine" "vm_1" {
   }
 
   disk {
-    label          = "${var.vm_1-name}0.vmdk"
+    label          = "${var.vm_1_name}0.vmdk"
     size           = "${var.vm_1_root_disk_size}"
     keep_on_remove = "${var.vm_1_root_disk_keep_on_remove}"
     datastore_id   = "${data.vsphere_datastore.vm_1_datastore.id}"

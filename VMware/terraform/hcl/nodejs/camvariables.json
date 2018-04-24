@@ -39,7 +39,7 @@
       "group_name": "cloud"
     },
     {
-      "name": "nodejs_vm-name",
+      "name": "nodejs_vm_name",
       "type": "string",
       "description": "Short host name of nodejs vm",
       "default": "nodejs-vm",
@@ -107,7 +107,7 @@
       "group_name": "virtualmachine"
     },
     {
-      "name": "nodejs_vm-image",
+      "name": "nodejs_vm_image",
       "type": "string",
       "description": "Operating system image id / template that should be used when creating the virtual image",
       "hidden": false,
@@ -362,7 +362,7 @@
         "immutable": false,
         "required": true,
         "secured": true,
-        "type": "string",
+        "type": "password",
         "group_name": "virtualmachine"
     }
   ],

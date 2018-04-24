@@ -1,23 +1,36 @@
-[
+{
+  "input_datatypes": [
+  ],
+  "output_datatype": "content_template_output",
+  "input_groups": [
     {
-        "description": "Public SSH key used to connect to the virtual guest", 
-        "hidden": false, 
-        "immutable": false, 
-        "label": "Public SSH Key", 
-        "name": "public_ssh_key", 
-        "required": true, 
-        "secured": false, 
-        "type": "string"
-    }, 
+      "name": "virtualmachine",
+      "label": "Virtual Machine Input Variables"
+    }
+  ],
+  "output_groups": [
+  ],
+  "template_input_params": [
     {
-        "description": "SoftLayer datacenter where infrastructure resources will be deployed", 
-        "hidden": false, 
-        "immutable": false, 
-        "label": "SoftLayer Datacenter", 
-        "name": "datacenter", 
-        "required": true, 
-        "secured": false, 
-        "type": "string", 
+        "description": "Public SSH key used to connect to the virtual guest",
+        "hidden": false,
+        "immutable": false,
+        "label": "Public SSH Key",
+        "name": "public_ssh_key",
+        "required": true,
+        "secured": false,
+        "type": "string",
+        "group": "virtualmachine"
+    },
+    {
+        "description": "SoftLayer datacenter where infrastructure resources will be deployed",
+        "hidden": false,
+        "immutable": false,
+        "label": "SoftLayer Datacenter",
+        "name": "datacenter",
+        "required": true,
+        "secured": false,
+        "type": "string",
         "options": [
           {
               "value" : "ams01",
@@ -33,7 +46,8 @@
           },
           {
               "value" : "dal01",
-              "label": "Dallas 01, USA"          },
+              "label": "Dallas 01, USA"
+          },
           {
               "value" : "dal02",
               "label": "Dallas 02, USA"
@@ -143,28 +157,32 @@
               "value" : "wdc04",
               "label": "Washington, D.C. 04, USA"
           }
-        ]
-    }, 
+        ],
+        "group": "virtualmachine"
+    },
     {
-        "default": "debian-small", 
-        "description": "Hostname of the first virtual instance (small flavor) to be deployed", 
-        "hidden": false, 
-        "immutable": false, 
-        "label": "First Hostname", 
-        "name": "first_hostname", 
-        "required": true, 
-        "secured": false, 
-        "type": "string"
-    }, 
+        "default": "debian-small",
+        "description": "Hostname of the first virtual instance (small flavor) to be deployed",
+        "hidden": false,
+        "immutable": false,
+        "label": "First Hostname",
+        "name": "first_hostname",
+        "required": true,
+        "secured": false,
+        "type": "string",
+        "group": "virtualmachine"
+    },
     {
-        "default": "debian-medium", 
-        "description": "Hostname of the second virtual instance (medium flavor) to be deployed", 
-        "hidden": false, 
-        "immutable": false, 
-        "label": "Second Hostname", 
-        "name": "second_hostname", 
-        "required": true, 
-        "secured": false, 
-        "type": "string"
+        "default": "debian-medium",
+        "description": "Hostname of the second virtual instance (medium flavor) to be deployed",
+        "hidden": false,
+        "immutable": false,
+        "label": "Second Hostname",
+        "name": "second_hostname",
+        "required": true,
+        "secured": false,
+        "type": "string",
+        "group": "virtualmachine"
     }
-]
+  ]
+}
