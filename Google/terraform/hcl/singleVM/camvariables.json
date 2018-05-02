@@ -71,8 +71,8 @@
     {
       "name": "unique_resource_name",
       "description": "A unique name for the resource, required by GCE.",
-      "default": "googlevm",
       "type": "string",
+      "regex": "(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?)",
       "required": true,
       "secured": false,
       "label": "unique_resource_name",

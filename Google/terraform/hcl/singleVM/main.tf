@@ -5,7 +5,6 @@ provider "google" {
 
 variable "unique_resource_name" {
   description = "A unique name for the resource, required by GCE."
-  default = "googleVM"
 }
 
 variable "machine_type" {
