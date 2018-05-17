@@ -1,14 +1,75 @@
 [
     {
-        "default": "us-east-1",
-        "description": "AWS region to launch servers.",
-        "hidden": false,
-        "immutable": false,
-        "label": "AWS Region",
         "name": "aws_region",
-        "required": true,
+        "type": "string",
+        "description": "AWS Region Name",
+        "default": "us-east-1",
+        "hidden": false,
+        "label": "AWS Region Name",
         "secured": false,
-        "type": "string"
+        "options": [
+            {
+                "value": "us-east-1",
+                "label": "US East (N. Virginia)",
+                "default": true
+            },
+            {
+                "value": "us-east-2",
+                "label": "US East (Ohio)"
+            },
+            {
+                "value": "us-west-1",
+                "label": "US West (N. California)"
+            },
+            {
+                "value": "us-west-2",
+                "label": "US West (Oregon)"
+            },
+            {
+                "value": "us-gov-west-1",
+                "label": "US GovCloud Region"
+            },
+            {
+                "value": "ca-central-1",
+                "label": "Canada (Central)"
+            },
+            {
+                "value": "eu-west-1",
+                "label": "EU (Ireland)"
+            },
+            {
+                "value": "eu-central-1",
+                "label": "EU (Frankfurt)"
+            },
+            {
+                "value": "eu-west-2",
+                "label": "EU (London)"
+            },
+            {
+                "value": "ap-northeast-1",
+                "label": "Asia Pacific (Tokyo)"
+            },
+            {
+                "value": "ap-northeast-2",
+                "label": "Asia Pacific (Seoul)"
+            },
+            {
+                "value": "ap-southeast-1",
+                "label": "Asia Pacific (Singapore)"
+            },
+            {
+                "value": "ap-southeast-2",
+                "label": "Asia Pacific (Sydney)"
+            },
+            {
+                "value": "ap-south-1",
+                "label": "Asia Pacific (Mumbai)"
+            },
+            {
+                "value": "sa-east-1",
+                "label": "South America (São Paulo)"
+            }
+        ]
     },
     {
         "name": "aws_image",
@@ -17,6 +78,17 @@
         "default": "ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*",
         "hidden": false,
         "label": "Operating System ID",
+        "secured": false,
+        "required": true,
+        "immutable": false
+    },
+    {
+        "name": "aws_image_size",
+        "type": "string",
+        "description": "AWS Image Instance Size",
+        "default": "t2.small",
+        "hidden": false,
+        "label": "AWS Image Instance Size",
         "secured": false,
         "required": true,
         "immutable": false
@@ -43,11 +115,11 @@
         "type": "string"
     },
     {
-        "description": "subnet cidr",
+        "description": "Subnet Name",
         "hidden": false,
         "immutable": false,
-        "label": "Subnet CIDR",
-        "name": "subnet_cidr",
+        "label": "Subnet Name",
+        "name": "subnet_name",
         "required": true,
         "secured": false,
         "type": "string"

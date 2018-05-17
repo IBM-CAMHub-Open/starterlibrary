@@ -46,6 +46,10 @@
           "label": "US West (Oregon)"
         },
         {
+          "value": "us-gov-west-1",
+          "label": "US GovCloud Region"
+        },
+        {
           "value": "ca-central-1",
           "label": "Canada (Central)"
         },

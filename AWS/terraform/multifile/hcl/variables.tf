@@ -3,6 +3,11 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "aws_image_size" {
+  description = "AWS Image Instance Size"
+  default     = "t2.small"
+}
+
 variable "public_ssh_key" {
   description = "Public SSH key used to connect to the virtual guest"
 }

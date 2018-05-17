@@ -144,7 +144,7 @@
         "name": "aws_access_key",
         "required": true,
         "secured": true,
-        "type": "string"
+        "type": "password"
     },
     {
         "description": "AWS secret key to request access to AWS account",
@@ -154,7 +154,7 @@
         "name": "aws_secret_key",
         "required": true,
         "secured": true,
-        "type": "string"
+        "type": "password"
     },
     {
         "description": "AWS region to launch servers",

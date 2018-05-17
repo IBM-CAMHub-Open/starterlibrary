@@ -25,8 +25,13 @@ variable "vpc_name_tag" {
   description = "Name of the Virtual Private Cloud (VPC) this resource is going to be deployed into"
 }
 
-variable "subnet_cidr" {
-  description = "Subnet cidr"
+variable "subnet_name" {
+  description = "Subnet Name"
+}
+
+variable "aws_image_size" {
+  description = "AWS Image Instance Size"
+  default     = "t2.small"
 }
 
 data "aws_vpc" "selected" {
@@ -39,9 +44,10 @@ data "aws_vpc" "selected" {
 }
 
 data "aws_subnet" "selected" {
-  state      = "available"
-  vpc_id     = "${data.aws_vpc.selected.id}"
-  cidr_block = "${var.subnet_cidr}"
+  filter {
+    name   = "tag:Name"
+    values = ["${var.subnet_name}"]
+  }
 }
 
 variable "public_ssh_key_name" {
@@ -54,23 +60,25 @@ variable "public_ssh_key" {
 
 #Variable : AWS image name
 variable "aws_image" {
-  type = "string"
+  type        = "string"
   description = "Operating system image id / template that should be used when creating the virtual image"
-  default = "ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"
+  default     = "ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"
 }
 
 variable "aws_ami_owner_id" {
   description = "AWS AMI Owner ID"
-  default = "099720109477"
+  default     = "099720109477"
 }
 
 # Lookup for AMI based on image name and owner ID
 data "aws_ami" "aws_ami" {
   most_recent = true
+
   filter {
-    name = "name"
+    name   = "name"
     values = ["${var.aws_image}*"]
   }
+
   owners = ["${var.aws_ami_owner_id}"]
 }
 
@@ -80,7 +88,7 @@ resource "aws_key_pair" "orpheus_public_key" {
 }
 
 resource "aws_instance" "orpheus_ubuntu_micro" {
-  instance_type = "t2.micro"
+  instance_type = "${var.aws_image_size}"
   ami           = "${data.aws_ami.aws_ami.id}"
   subnet_id     = "${data.aws_subnet.selected.id}"
   key_name      = "${aws_key_pair.orpheus_public_key.id}"
