@@ -20,7 +20,7 @@
         "required": true,
         "secured": false,
         "type": "string",
-	      "regex": "ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3} ([^@]+@[^@]+)",
+	      "regex": "^ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}( [^@]+@[^@]+| [^@]+){0,1}$",
         "group": "virtualmachine"
     },
     {
@@ -158,6 +158,18 @@
               "label": "Washington, D.C. 04, USA"
           }
         ],
+        "group": "virtualmachine"
+    },
+    {
+        "default": "debian-small",
+        "description": "Hostname of the virtual instance (small flavor) to be deployed",
+        "hidden": false,
+        "immutable": false,
+        "label": "Hostname",
+        "name": "hostname",
+        "required": true,
+        "secured": false,
+        "type": "string",
         "group": "virtualmachine"
     },
     {

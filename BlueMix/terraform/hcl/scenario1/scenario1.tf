@@ -1,5 +1,4 @@
-provider "ibm" {
-}
+provider "ibm" {}
 
 variable "public_ssh_key" {
   description = "Public SSH key used to connect to the virtual guest"
@@ -21,11 +20,15 @@ resource "ibm_compute_ssh_key" "orpheus_public_key" {
   public_key = "${var.public_ssh_key}"
 }
 
+variable "domain" {
+  description = "VM domain"
+}
+
 # Create a new virtual guest using image "Debian"
 resource "ibm_compute_vm_instance" "debian_small_virtual_guest" {
   hostname                 = "${var.hostname}"
   os_reference_code        = "DEBIAN_7_64"
-  domain                   = "cam.ibm.com"
+  domain                   = "${var.domain}"
   datacenter               = "${var.datacenter}"
   network_speed            = 10
   hourly_billing           = true
@@ -37,4 +40,8 @@ resource "ibm_compute_vm_instance" "debian_small_virtual_guest" {
   dedicated_acct_host_only = false
   local_disk               = false
   ssh_key_ids              = ["${ibm_compute_ssh_key.orpheus_public_key.id}"]
+}
+
+output "vm_ip" {
+  value = "Public : ${ibm_compute_vm_instance.debian_small_virtual_guest.ipv4_address}"
 }

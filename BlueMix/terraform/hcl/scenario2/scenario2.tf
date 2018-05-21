@@ -1,5 +1,4 @@
-provider "ibm" {
-}
+provider "ibm" {}
 
 variable "public_ssh_key" {
   description = "Public SSH key used to connect to the virtual guest"
@@ -19,6 +18,10 @@ variable "second_hostname" {
   default     = "ubuntu-medium"
 }
 
+variable "domain" {
+  description = "VM domain"
+}
+
 data "ibm_compute_image_template" "debian_8_6_64" {
   name = "100GB - Debian / Debian / 8.0.0-64 Minimal for VSI"
 }
@@ -34,7 +37,7 @@ resource "ibm_compute_ssh_key" "orpheus_public_key" {
 resource "ibm_compute_vm_instance" "debian_small_virtual_guest" {
   hostname                 = "${var.first_hostname}"
   image_id                 = "${data.ibm_compute_image_template.debian_8_6_64.id}"
-  domain                   = "cam.ibm.com"
+  domain                   = "${var.domain}"
   datacenter               = "${var.datacenter}"
   network_speed            = 10
   hourly_billing           = true
@@ -53,7 +56,7 @@ resource "ibm_compute_vm_instance" "ubuntu_medium_virtual_guest" {
 
   #image_id = "${data.ibm_compute_image_template.ubuntu_16_04_01_64.id}"
   os_reference_code        = "UBUNTU_16_64"
-  domain                   = "cam.ibm.com"
+  domain                   = "${var.domain}"
   datacenter               = "${var.datacenter}"
   network_speed            = 10
   hourly_billing           = true
@@ -64,4 +67,12 @@ resource "ibm_compute_vm_instance" "ubuntu_medium_virtual_guest" {
   dedicated_acct_host_only = false
   local_disk               = false
   ssh_key_ids              = ["${ibm_compute_ssh_key.orpheus_public_key.id}"]
+}
+
+output "debian_vm_ip" {
+  value = "Public : ${ibm_compute_vm_instance.debian_small_virtual_guest.ipv4_address}"
+}
+
+output "ubuntu_vm_ip" {
+  value = "Public : ${ibm_compute_vm_instance.ubuntu_medium_virtual_guest.ipv4_address}"
 }

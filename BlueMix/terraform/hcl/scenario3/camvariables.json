@@ -183,6 +183,18 @@
         "secured": false,
         "type": "string",
         "group": "virtualmachine"
+    },
+    {
+        "default": "sample.com",
+        "description": "Domain of the virtual instance to be deployed",
+        "hidden": false,
+        "immutable": false,
+        "label": "VM Domain",
+        "name": "domain",
+        "required": true,
+        "secured": false,
+        "type": "string",
+        "group": "virtualmachine"
     }
   ]
 }
