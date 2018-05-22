@@ -9,6 +9,10 @@
     }
   ],
   "output_groups": [
+    {
+      "name": "content_template_output",
+      "label": "Outputs"
+    }
   ],
   "template_input_params": [
     {
@@ -173,12 +177,12 @@
         "group": "virtualmachine"
     },
     {
-        "default": "debian-small",
-        "description": "Hostname of the virtual instance (small flavor) to be deployed",
+        "default": "sample.com",
+        "description": "Domain of the virtual instance to be deployed",
         "hidden": false,
         "immutable": false,
-        "label": "Hostname",
-        "name": "hostname",
+        "label": "VM Domain",
+        "name": "domain",
         "required": true,
         "secured": false,
         "type": "string",
