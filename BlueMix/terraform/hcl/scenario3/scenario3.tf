@@ -72,5 +72,5 @@ output "debian_small_vm_ip" {
 }
 
 output "debian_medium_vm_ip" {
-  value = "Public : ${ibm_compute_vm_instance.ubuntu_medium_virtual_guest.ipv4_address}"
+  value = "Public : ${ibm_compute_vm_instance.debian_medium_virtual_guest.ipv4_address}"
 }
