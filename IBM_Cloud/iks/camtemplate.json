@@ -1,0 +1,26 @@
+{
+  "name": "IBM Cloud Kubernetes Service",
+  "description": "IBM Cloud Kubernetes Service",
+  "version": "1.0",
+  "type": "prebuilt",
+  "manifest": {
+    "template_type": "Terraform",
+    "template_format": "HCL",
+    "template_provider": "IBM",
+    "template": {
+      "templateData": "",
+      "templateVariables": "",
+      "templateOutput": ""
+    },
+    "template_source": {
+      "githubRepoUrl": "",
+      "githubAccessToken": "",
+      "relativePathToTemplateFolder": "IBM_Cloud/iks",
+      "templateFileName": "main.tf"
+    }
+  },
+  "metadata": {
+      "displayName": "IBM Cloud Kubernetes Service",
+      "longDescription": "Kubernetes cluster to be deployed in IBM Cloud"
+  }
+}

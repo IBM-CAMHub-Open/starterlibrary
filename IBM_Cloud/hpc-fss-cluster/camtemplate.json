@@ -1,0 +1,39 @@
+{
+    "description": "An IBM Cloud Schematics template to launch an HPC (High Performance Computing) cluster for FSS (Financial Services Sector) Tech Preview.",
+    "name": "IBM Spectrum Symphony CWS LSF Cluster Template hpc-fss-cluster",
+    "type": "prebuilt",
+    "manifest": {
+        "template_type": "Terraform",
+        "template_format": "HCL",
+        "template_provider": "Other",
+        "template": {
+            "templateData": "",
+            "templateVariables": "",
+            "templateOutput": ""
+          },
+          "template_source": {
+            "githubRepoUrl": "",
+            "githubAccessToken": "",
+            "relativePathToTemplateFolder": "IBM_Cloud/hpc-fss-cluster",
+            "templateFileName": "main.tf"
+          }
+    },
+    "metadata": {
+        "displayName": "IBM Spectrum Symphony CWS LSF Cluster Template hpc-fss-cluster",
+        "providerDisplayName": "IBM",
+        "longDescription": "An IBM Cloud Schematics template to launch an HPC (High Performance Computing) cluster for FSS (Financial Services Sector) Tech Preview. Schematics uses Terraform as the infrastructure as code engine. With this template, you can provision and manage infrastructure as a single unit.",
+        "bullets": [{
+            "title": "Clouds",
+            "description": "IBM Cloud<br>"
+        }, {
+            "title": "Software Deployed",
+            "description": "IBM Spectrum Symphony/CWS/LSF Cluster on Schematics<br>"
+        }, {
+            "title": "Supported Product Version",
+            "description": "Symphony latest (7.2.0.x), CWS latest (2.2.0.x), LSF latest (10.1)<br>"
+        }, {
+            "title": "Usage and Special Notes",
+            "description": "To create the resources that this template requests, your <a href=\"https://console.bluemix.net/docs/iam/mnginfra.html#managing-infrastructure-access\" target=\"_blank\">IBM Cloud Infrastructure (Softlayer) account</a> and <a href=\"https://console.bluemix.net/docs/iam/mngiam.html#iammanidaccser\" target=\"_blank\">IBM Cloud account</a> must have sufficient permissions.<br>"
+        }]
+    }
+}

@@ -1,0 +1,77 @@
+{
+  "template_input_params": [
+    {
+      "name": "servicename",
+      "description": "Specify the service name you want to create",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "Service Name",
+      "hidden": false,
+      "immutable": false,
+      "default": "watson_vision_combined"
+    },
+    {
+      "name": "plan",
+      "description": "Specify the corresponding plan for the service you selected",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "Plan",
+      "hidden": false,
+      "immutable": false,
+      "default": "lite"
+    },
+    {
+      "name": "org",
+      "description": "Your Bluemix ORG",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "Organization",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "space",
+      "description": "Your Bluemix Space",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "Space",
+      "hidden": false,
+      "immutable": false,
+      "default": "dev"
+    },
+    {
+      "name": "region",
+      "description": "Bluemix region",
+      "default": "us-south",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "Region",
+      "hidden": false,
+      "immutable": false
+    }
+
+
+  ],
+  "template_output_params": [
+    {
+      "name": "access_urls",
+      "label": "access_urls",
+      "description": "",
+      "secured": false,
+      "hidden": false
+    },
+    {
+      "name": "IBM Cloud Dashboard",
+      "label": "IBM Cloud Dashboard",
+      "description": "IBM  Cloud Dashboard url",
+      "secured": false,
+      "hidden": false,
+      "type":"url"
+    }
+  ]
+}

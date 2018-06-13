@@ -1,0 +1,26 @@
+{
+  "name": "Helm Tiller",
+  "description": "Helm Tiller",
+  "version": "1.0",
+  "type": "prebuilt",
+  "manifest": {
+    "template_type": "Terraform",
+    "template_format": "HCL",
+    "template_provider": "Other",
+    "template": {
+      "templateData": "",
+      "templateVariables": "",
+      "templateOutput": ""
+    },
+    "template_source": {
+      "githubRepoUrl": "",
+      "githubAccessToken": "",
+      "relativePathToTemplateFolder": "IBM_Cloud/helm-tiller",
+      "templateFileName": "main.tf"
+    }
+  },
+  "metadata": {
+      "displayName": "Helm Tiller",
+      "longDescription": "Helm Tiller to be deployed in an IBM Cloud Kubernetes cluster"
+  }
+}
