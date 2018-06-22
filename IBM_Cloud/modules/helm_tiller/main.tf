@@ -10,6 +10,7 @@ resource "null_resource" "tiller" {
       HELM_VERSION = "${var.helm_version}"
       CLUSTER_CERTIFICATE_AUTHORITY = "${base64decode(var.cluster_certificate_authority)}"
       CLUSTER_CONFIG = "${base64decode(var.cluster_config)}"
+      SCRIPTS_PATH = "${path.module}/scripts"
     }
   }
 
@@ -21,6 +22,7 @@ resource "null_resource" "tiller" {
       HELM_VERSION = "${var.helm_version}"
       CLUSTER_CERTIFICATE_AUTHORITY = "${base64decode(var.cluster_certificate_authority)}"
       CLUSTER_CONFIG = "${base64decode(var.cluster_config)}"
+      SCRIPTS_PATH = "${path.module}/scripts"
     }
     when = "destroy"
   } 

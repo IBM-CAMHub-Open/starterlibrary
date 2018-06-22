@@ -1,5 +1,4 @@
 #!/bin/bash
-
 mkdir -p $CLUSTER_NAME
 
 # persist the cluster config .yaml file
@@ -14,6 +13,13 @@ wget --quiet https://storage.googleapis.com/kubernetes-helm/helm-v$HELM_VERSION-
 && tar -xzvf $CLUSTER_NAME/helm-v$HELM_VERSION-linux-amd64.tar.gz -C $CLUSTER_NAME
 
 # helm reset
-export KUBECONFIG=$CLUSTER_NAME/config.yaml \
-    && $CLUSTER_NAME/linux-amd64/helm reset --force --tiller-connection-timeout 60
+source $SCRIPTS_PATH/functions.sh
+vercomp $HELM_VERSION '2.8.2'
+case $? in
+    0)  TILLER_CONNECTION_TIMEOUT=' --tiller-connection-timeout 60';;
+    1)  TILLER_CONNECTION_TIMEOUT=' --tiller-connection-timeout 60';;
+    2)  TILLER_CONNECTION_TIMEOUT=''
+esac
 
+export KUBECONFIG=$CLUSTER_NAME/config.yaml \
+    && $CLUSTER_NAME/linux-amd64/helm reset --force $TILLER_CONNECTION_TIMEOUT

@@ -1,5 +1,4 @@
 #!/bin/bash
-
 mkdir -p $CLUSTER_NAME
 
 # persist the cluster config .yaml file
@@ -15,6 +14,20 @@ wget --quiet https://storage.googleapis.com/kubernetes-helm/helm-v$HELM_VERSION-
 && tar -xzvf $CLUSTER_NAME/helm-v$HELM_VERSION-linux-amd64.tar.gz -C $CLUSTER_NAME
 
 # helm init
-export KUBECONFIG=$CLUSTER_NAME/config.yaml \
-    && $CLUSTER_NAME/linux-amd64/helm init --upgrade --force-upgrade --tiller-connection-timeout 300 --service-account=default
+source $SCRIPTS_PATH/functions.sh
+vercomp $HELM_VERSION '2.8.2'
+case $? in
+    0)  TILLER_CONNECTION_TIMEOUT=' --tiller-connection-timeout 300';;
+    1)  TILLER_CONNECTION_TIMEOUT=' --tiller-connection-timeout 300';;
+    2)  TILLER_CONNECTION_TIMEOUT=''
+esac
 
+vercomp $HELM_VERSION '2.7.2'
+case $? in
+    0)  FORCE_UPGRADE=' --force-upgrade';;
+    1)  FORCE_UPGRADE=' --force-upgrade';;
+    2)  FORCE_UPGRADE=''
+esac
+
+export KUBECONFIG=$CLUSTER_NAME/config.yaml \
+    && $CLUSTER_NAME/linux-amd64/helm init --upgrade $FORCE_UPGRADE $TILLER_CONNECTION_TIMEOUT --service-account=default
