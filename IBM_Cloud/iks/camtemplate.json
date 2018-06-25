@@ -21,6 +21,44 @@
   },
   "metadata": {
       "displayName": "IBM Cloud Kubernetes Service",
-      "longDescription": "Kubernetes cluster to be deployed in IBM Cloud"
+      "providerDisplayName": "IBM",
+      "longDescription": "Kubernetes cluster to be deployed in IBM Cloud",
+      "bullets": [
+        {
+          "title": "Clouds",
+          "description": "IBM Cloud/Softlayer"
+        },
+        {
+          "title": "Topology",
+          "description": "IBM Cloud: 1 Kubernetes cluster with a configurable number of worker nodes and Helm tiller installed"
+        },
+        {
+          "title": "Software deployed",
+          "description": "<table style=\"width:100%\"><tr><td width=\"20%\" valign=\"top\">1. Kubernetes cluster:</td><td>IBM CLoud Service Kubernetes cluster</td></tr><tr><td width=\"20%\" valign=\"top\">2. Helm Tiller:</td><td>Server-side component of Helm that runs insite the Kubernetes cluster and manages releases(deployments) of Helm charts</td></tr></table>"
+        }
+      ],
+      "featuredImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
+      "imageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
+      "mediumImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_32.png",
+      "smallImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_24.png",
+      "documentationUrl": "https://console.stage1.ng.bluemix.net/docs/services/CloudAutomationManager/index.html",
+      "termsUrl": "http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm-7448-01",
+      "media": [
+        {
+          "type": "image",
+          "thumbnailUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_1.png",
+          "url": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_1_large.png",
+          "caption": ""
+        },
+        {
+          "type": "image",
+          "thumbnailUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_2.png",
+          "url": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_2_large.png",
+          "caption": ""
+        }
+      ]
+    },
+    "toolchain": {
+      "git": "https://github.com/ibmcam/cam-toolchain"
+    }      
   }
-}
