@@ -32,12 +32,16 @@
          "description": "<ul style=\"list-style-type: disc; margin-left: 12px;\"><li>IBM Cloud</li></ul>"
        },
        {
-         "title": "Free Starter Membership Plan (Beta)",
-         "description": "<ul style=\"list-style-type: disc; margin-left: 12px;\"><li>One-click setup and a fully functional kick starter network that is configured with 2 organizations and 1 peer per organization</li><li>Easy development environment, sample applications, ordering service and certificate authority.</li><li>Free during Beta period, low-cost after general availability.</li></ul>"
+         "title": "Starter Membership Plan",
+         "description": "<ul style=\"list-style-type: disc; margin-left: 12px;\"><li>One-click setup and a fully functional kick starter network that is configured with 2 organizations and 1 peer per organization</li><li>Easy development environment, sample applications, ordering service and certificate authority.</li></ul>"
        },
        {
          "title": "Default Capabilities",
          "description": "<ul style=\"list-style-type: disc; margin-left: 12px;\"><li>Ability to create an application in Composer and easily import the resulting BNA file.</li><li>Easy migration of chaincode to Enterprise Plan.</li></ul>"
+       },
+       {
+         "title": "Low Cost",
+         "description": "<ul style=\"list-style-type: disc; margin-left: 12px;\"><li>Lower pricing than the Enterprise Membership Plan</li></ul>"
        }
      ],
      "featuredImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",

@@ -13,7 +13,7 @@ resource "ibm_service_instance" "ibm-blockchain-net" {
   name       = "${var.service_name}"
   space_guid = "${data.ibm_space.spacedata.id}"
   service    = "ibm-blockchain-5-prod"
-  plan       = "ibm-blockchain-plan-v1-starter-prod"
+  plan       = "ibm-blockchain-plan-v1-ga1-starter-prod"
 }
 
 output service_name {
