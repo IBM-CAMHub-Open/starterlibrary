@@ -1,6 +1,6 @@
 provider "ibm" {
   region = "${var.region}"
-  version = "~> 0.10"
+  version = "~> 0.10.0"
 }
 
 data "ibm_org" "org" {
@@ -26,6 +26,7 @@ resource "ibm_container_cluster" "kubecluster" {
   public_vlan_id = "${var.public_vlan_id}"
   private_vlan_id = "${var.private_vlan_id}"
   subnet_id = "${var.subnet_id}"
+  isolation    = "${var.isolation}"
   #no_subnet    = true
 
   workers = "${var.workers[var.num_workers]}"

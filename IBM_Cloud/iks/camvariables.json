@@ -307,7 +307,7 @@
                     "label": "Virtual Dedicated"
                 },
                 {
-                    "value": "baremeta",
+                    "value": "baremetal",
                     "label": "Bare Metal"
                 }
             ]
