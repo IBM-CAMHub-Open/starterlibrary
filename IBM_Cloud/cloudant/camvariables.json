@@ -3,35 +3,38 @@
     "output_namespace": "",
     "template_input_params": [
         {
-            "name": "region",
+            "name": "servicename",
             "type": "string",
-            "description": "IBM Cloud region.",
+            "description": "Specify the service name you want to create",
             "hidden": false,
-            "label": "Organization",
+            "label": "Service Name",
+            "default": "cloudantNoSQLDB",
+            "secured": false,
+            "required": true,
+            "immutable": false
+        },
+        {
+            "name": "plan",
+            "type": "string",
+            "description": "Serivce Plan",
+            "hidden": false,
+            "label": "Service Plan",
             "secured": false,
             "required": true,
             "immutable": false,
             "options": [
                 {
-                    "value": "us-south",
-                    "label": "US South",
+                    "value": "Lite",
+                    "label": "Lite",
                     "default": "true"
                 },
                 {
-                    "value": "us-east",
-                    "label": "US East"
+                    "value": "Standard",
+                    "label": "Standard"
                 },
                 {
-                    "value": "au-syd",
-                    "label": "Sydney"
-                },
-                {
-                    "value": "eu-de",
-                    "label": "Germany"
-                },
-                {
-                    "value": "eu-gb",
-                    "label": "United Kingdomydney"
+                    "value": "Dedicated Hardware",
+                    "label": "Dedicated Hardware"
                 }
             ]
         },
@@ -56,27 +59,35 @@
             "immutable": false
         },
         {
-            "name": "plan",
+            "name": "region",
             "type": "string",
-            "description": "Cloudant Serivce Plans.",
+            "description": "IBM Cloud region.",
             "hidden": false,
-            "label": "Plan",
+            "label": "Region",
             "secured": false,
             "required": true,
             "immutable": false,
             "options": [
                 {
-                    "value": "Lite",
-                    "label": "Lite",
+                    "value": "us-south",
+                    "label": "US South",
                     "default": "true"
                 },
                 {
-                    "value": "Standard",
-                    "label": "Standard"
+                    "value": "us-east",
+                    "label": "US East"
                 },
                 {
-                    "value": "Dedicated Hardware",
-                    "label": "Dedicated Hardware"
+                    "value": "au-syd",
+                    "label": "Sydney"
+                },
+                {
+                    "value": "eu-de",
+                    "label": "Germany"
+                },
+                {
+                    "value": "eu-gb",
+                    "label": "United Kingdomydney"
                 }
             ]
         }
