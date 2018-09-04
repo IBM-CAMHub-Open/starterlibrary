@@ -40,6 +40,7 @@ variable "public_ssh_key" {
   description = "Public SSH key used to connect to the virtual guest"
 }
 
+
 ##############################################################
 # Create public key in Devices>Manage>SSH Keys in SL console
 ##############################################################
@@ -83,6 +84,12 @@ resource "ibm_compute_vm_instance" "softlayer_virtual_guest" {
     user        = "root"
     private_key = "${tls_private_key.ssh.private_key_pem}"
     host        = "${self.ipv4_address}"
+    bastion_host        = "${var.bastion_host}"
+    bastion_user        = "${var.bastion_user}"
+    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
+    bastion_port        = "${var.bastion_port}"
+    bastion_host_key    = "${var.bastion_host_key}"
+    bastion_password    = "${var.bastion_password}"
   }
 
   # Create the installation script

@@ -1,6 +1,6 @@
 
 module "cluster" {
-  source  = "git::https://github.com/IBM-CAMHub-Open/starterlibrary.git?ref=2.0//IBM_Cloud/modules/ibm_cloud_kubernetes_cluster"
+  source  = "git::https://github.com/IBM-CAMHub-Open/starterlibrary.git?ref=2.1//IBM_Cloud/modules/ibm_cloud_kubernetes_cluster"
   org = "${var.org}"
   space = "${var.space}" 
   cluster_name = "${var.cluster_name}" 

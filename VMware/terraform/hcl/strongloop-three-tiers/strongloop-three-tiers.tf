@@ -8,6 +8,7 @@ variable "allow_unverified_ssl" {
   default     = "true"
 }
 
+
 ##############################################################
 # Define the vsphere provider
 ##############################################################
@@ -220,6 +221,19 @@ variable "angular_vm-image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
+module "provision_proxy_angular_vm" {
+  source 							= "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=1.0//vmware/proxy"
+  ip                  = "${var.angular_vm_ipv4_address}"
+  id									= "${vsphere_virtual_machine.angular_vm.id}"
+  ssh_user     				= "${var.angularjs_ssh_user}"
+  ssh_password 				= "${var.angularjs_ssh_user_password}"
+  http_proxy_host     = "${var.http_proxy_host}"
+  http_proxy_user     = "${var.http_proxy_user}"
+  http_proxy_password = "${var.http_proxy_password}"
+  http_proxy_port     = "${var.http_proxy_port}"
+  enable							= "${ length(var.http_proxy_host) > 0 ? "true" : "false"}"
+}
+
 # vsphere vm
 resource "vsphere_virtual_machine" "angular_vm" {
   name             = "${var.angular_vm_name}"
@@ -387,6 +401,19 @@ variable "mongodb_vm_image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
+module "provision_proxy_mongodb_vm" {
+  source 							= "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=1.0//vmware/proxy"
+  ip                  = "${var.mongodb_vm_ipv4_address}"
+  id									= "${vsphere_virtual_machine.mongodb_vm.id}"
+  ssh_user     				= "${var.mongodb_ssh_user}"
+  ssh_password 				= "${var.mongodb_ssh_user_password}"
+  http_proxy_host     = "${var.http_proxy_host}"
+  http_proxy_user     = "${var.http_proxy_user}"
+  http_proxy_password = "${var.http_proxy_password}"
+  http_proxy_port     = "${var.http_proxy_port}"
+  enable							= "${ length(var.http_proxy_host) > 0 ? "true" : "false"}"
+}
+
 # vsphere vm
 resource "vsphere_virtual_machine" "mongodb_vm" {
   name             = "${var.mongodb_vm_name}"
@@ -429,11 +456,21 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
     keep_on_remove = "${var.mongodb_vm_root_disk_keep_on_remove}"
     datastore_id   = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
   }
+}
 
+resource "null_resource" "install_mongodb" {
+  depends_on = ["vsphere_virtual_machine.mongodb_vm", "module.provision_proxy_mongodb_vm"]
   connection {
     type     = "ssh"
     user     = "${var.mongodb_ssh_user}"
+    host     = "${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
     password = "${var.mongodb_ssh_user_password}"
+    bastion_host        = "${var.bastion_host}"
+    bastion_user        = "${var.bastion_user}"
+    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
+    bastion_port        = "${var.bastion_port}"
+    bastion_host_key    = "${var.bastion_host_key}"
+    bastion_password    = "${var.bastion_password}"
   }
 
   provisioner "file" {
@@ -494,7 +531,7 @@ EOF
     inline = [
       "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${var.mongodb_user_password}\"",
     ]
-  }
+  }  
 }
 
 #########################################################
@@ -593,6 +630,19 @@ variable "strongloop_vm-image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
+module "provision_proxy_strongloop_vm" {
+  source 							= "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=1.0//vmware/proxy"
+  ip                  = "${var.strongloop_vm_ipv4_address}"
+  id									= "${vsphere_virtual_machine.strongloop_vm.id}"
+  ssh_user     				= "${var.strongloop_ssh_user}"
+  ssh_password 				= "${var.strongloop_ssh_user_password}"
+  http_proxy_host     = "${var.http_proxy_host}"
+  http_proxy_user     = "${var.http_proxy_user}"
+  http_proxy_password = "${var.http_proxy_password}"
+  http_proxy_port     = "${var.http_proxy_port}"
+  enable							= "${ length(var.http_proxy_host) > 0 ? "true" : "false"}"
+}
+
 # vsphere vm
 resource "vsphere_virtual_machine" "strongloop_vm" {
   name             = "${var.strongloop_vm_name}"
@@ -638,11 +688,18 @@ resource "vsphere_virtual_machine" "strongloop_vm" {
 }
 
 resource "null_resource" "install_strongloop" {
+  depends_on = ["module.provision_proxy_strongloop_vm"]
   # Specify the ssh connection
   connection {
     user     = "${var.strongloop_ssh_user}"
     password = "${var.strongloop_ssh_user_password}"
     host     = "${vsphere_virtual_machine.strongloop_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+    bastion_host        = "${var.bastion_host}"
+    bastion_user        = "${var.bastion_user}"
+    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
+    bastion_port        = "${var.bastion_port}"
+    bastion_host_key    = "${var.bastion_host_key}"
+    bastion_password    = "${var.bastion_password}"
   }
 
   # Create the installation script
@@ -678,6 +735,20 @@ echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1
 #install strongloop
 echo "---start installing strongloop---" | tee -a $LOGFILE 2>&1
 yum groupinstall 'Development Tools' -y                            >> $LOGFILE 2>&1 || { echo "---Failed to install development tools---" | tee -a $LOGFILE; exit 1; }
+set +o nounset
+if [[ -z "$${http_proxy}" ]]; then
+  echo "No http proxy to set"
+else
+	echo "Set http proxy"
+  npm config set proxy $${http_proxy}
+fi
+if [[ -z "$${https_proxy}" ]]; then
+  echo "No https proxy to set"
+else
+	echo "Set https proxy"
+  npm config set https-proxy $${https_proxy}
+fi
+set -o nounset
 npm install -g strongloop                                          >> $LOGFILE 2>&1 || { echo "---Failed to install strongloop---" | tee -a $LOGFILE; exit 1; }
 echo "---finish installing strongloop---" | tee -a $LOGFILE 2>&1
 #install sample application
@@ -792,11 +863,18 @@ EOF
 }
 
 resource "null_resource" "install_angularjs" {
+	depends_on = ["module.provision_proxy_angular_vm"]
   # Specify the ssh connection
   connection {
     user     = "${var.angularjs_ssh_user}"
     password = "${var.angularjs_ssh_user_password}"
     host     = "${vsphere_virtual_machine.angular_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+    bastion_host        = "${var.bastion_host}"
+    bastion_user        = "${var.bastion_user}"
+    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
+    bastion_port        = "${var.bastion_port}"
+    bastion_host_key    = "${var.bastion_host_key}"
+    bastion_password    = "${var.bastion_password}"
   }
 
   # Create the installation script
@@ -833,7 +911,19 @@ retryInstall "yum install gcc-c++ make -y"                                 >> $L
 curl -sL https://rpm.nodesource.com/setup_7.x | bash -                     >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
 retryInstall "yum install nodejs -y"                                       >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
 echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1
+if [[ -z "$${http_proxy}" ]]; then
+  echo "No http proxy to set"
+else
+	echo "Set http proxy"
+  npm config set proxy $${http_proxy}
+fi
 
+if [[ -z "$${https_proxy}" ]]; then
+  echo "No https proxy to set"
+else
+	echo "Set https proxy"
+  npm config set https-proxy $${https_proxy}
+fi
 #install angularjs
 
 echo "---start installing angularjs---" | tee -a $LOGFILE 2>&1

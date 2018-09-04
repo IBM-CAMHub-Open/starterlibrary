@@ -8,6 +8,7 @@ variable "allow_unverified_ssl" {
   default     = "true"
 }
 
+
 ##############################################################
 # Define the vsphere provider
 ##############################################################
@@ -159,6 +160,19 @@ variable "mariadb_vm_image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
+module "provision_proxy_mariadb_vm" {
+  source 							= "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=1.0//vmware/proxy"
+  ip                  = "${var.mariadb_vm_ipv4_address}"
+  id									= "${vsphere_virtual_machine.mariadb_vm.id}"
+  ssh_user     				= "${var.ssh_user}"
+  ssh_password 				= "${var.ssh_user_password}"
+  http_proxy_host     = "${var.http_proxy_host}"
+  http_proxy_user     = "${var.http_proxy_user}"
+  http_proxy_password = "${var.http_proxy_password}"
+  http_proxy_port     = "${var.http_proxy_port}"
+  enable							= "${ length(var.http_proxy_host) > 0 ? "true" : "false"}"
+}
+
 # vsphere vm
 resource "vsphere_virtual_machine" "mariadb_vm" {
   name             = "${var.mariadb_vm_name}"
@@ -201,11 +215,21 @@ resource "vsphere_virtual_machine" "mariadb_vm" {
     keep_on_remove = "${var.mariadb_vm_root_disk_keep_on_remove}"
     datastore_id   = "${data.vsphere_datastore.mariadb_vm_datastore.id}"
   }
+}
 
+resource "null_resource" "mariadb_vm_install_mariadb" {
+	depends_on = ["vsphere_virtual_machine.mariadb_vm", "module.provision_proxy_mariadb_vm"]
   connection {
     type     = "ssh"
     user     = "${var.ssh_user}"
     password = "${var.ssh_user_password}"
+    host     = "${vsphere_virtual_machine.mariadb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+    bastion_host        = "${var.bastion_host}"
+    bastion_user        = "${var.bastion_user}"
+    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
+    bastion_port        = "${var.bastion_port}"
+    bastion_host_key    = "${var.bastion_host_key}"
+    bastion_password    = "${var.bastion_password}"
   }
 
   provisioner "file" {
@@ -241,7 +265,7 @@ EOF
     inline = [
       "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
-  }
+  }	
 }
 
 #########################################################

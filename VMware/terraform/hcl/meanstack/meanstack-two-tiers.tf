@@ -35,6 +35,7 @@ variable "allow_unverified_ssl" {
   default     = "true"
 }
 
+
 ##############################################################
 # Define the vsphere provider
 ##############################################################
@@ -294,6 +295,12 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
     type     = "ssh"
     user     = "${var.mongodb_vm_os_admin_user}"
     password = "${var.mongodb_vm_os_password}"
+    bastion_host        = "${var.bastion_host}"
+    bastion_user        = "${var.bastion_user}"
+    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
+    bastion_port        = "${var.bastion_port}"
+    bastion_host_key    = "${var.bastion_host_key}"
+    bastion_password    = "${var.bastion_password}"
   }
 
   provisioner "file" {
@@ -376,6 +383,12 @@ resource "null_resource" "mongodb_vm_install_mongodb" {
     user     = "${var.mongodb_vm_os_admin_user}"
     password = "${var.mongodb_vm_os_password}"
     host     = "${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+    bastion_host        = "${var.bastion_host}"
+    bastion_user        = "${var.bastion_user}"
+    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
+    bastion_port        = "${var.bastion_port}"
+    bastion_host_key    = "${var.bastion_host_key}"
+    bastion_password    = "${var.bastion_password}"
   }
 
   provisioner "file" {
@@ -583,6 +596,12 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
     type     = "ssh"
     user     = "${var.nodejs_vm_os_admin_user}"
     password = "${var.nodejs_vm_os_password}"
+    bastion_host        = "${var.bastion_host}"
+    bastion_user        = "${var.bastion_user}"
+    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
+    bastion_port        = "${var.bastion_port}"
+    bastion_host_key    = "${var.bastion_host_key}"
+    bastion_password    = "${var.bastion_password}"
   }
 
   provisioner "file" {
@@ -665,6 +684,12 @@ resource "null_resource" "nodejs_vm_install_nodejs" {
     user     = "${var.nodejs_vm_os_admin_user}"
     password = "${var.nodejs_vm_os_password}"
     host     = "${vsphere_virtual_machine.nodejs_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+    bastion_host        = "${var.bastion_host}"
+    bastion_user        = "${var.bastion_user}"
+    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
+    bastion_port        = "${var.bastion_port}"
+    bastion_host_key    = "${var.bastion_host_key}"
+    bastion_password    = "${var.bastion_password}"
   }
 
   provisioner "file" {

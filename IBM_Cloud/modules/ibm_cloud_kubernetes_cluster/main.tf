@@ -1,6 +1,6 @@
 provider "ibm" {
   region = "${var.region}"
-  version = ">= 0.9.3, <= 0.11.1"
+  version = ">= 0.9.3, <= 0.11.3"
 }
 
 data "ibm_org" "org" {
@@ -16,20 +16,22 @@ data "ibm_account" "account" {
   org_guid = "${data.ibm_org.org.id}"
 }
 
+resource "random_id" "name" {
+  byte_length = 4
+}
+
 resource "ibm_container_cluster" "kubecluster" {
   name         = "${var.cluster_name}"
   datacenter   = "${var.datacenter}"
   org_guid     = "${data.ibm_org.org.id}"
   space_guid   = "${data.ibm_space.space.id}"
   account_guid = "${data.ibm_account.account.id}"
-  machine_type = "${var.machine_type}"
-  public_vlan_id = "${var.public_vlan_id}"
-  private_vlan_id = "${var.private_vlan_id}"
-  subnet_id = "${var.subnet_id}"
-  isolation    = "${var.isolation}"
-  #no_subnet    = true
-
-  workers = "${var.workers[var.num_workers]}"
+  hardware         = "${var.isolation}"
+  machine_type     = "${var.machine_type}"
+  public_vlan_id   = "${var.public_vlan_id}"
+  private_vlan_id  = "${var.private_vlan_id}"
+  subnet_id        = "${var.subnet_id}"
+  default_pool_size = "${var.num_workers}"
 }
 
 data "ibm_container_cluster_config" "cluster_config" {

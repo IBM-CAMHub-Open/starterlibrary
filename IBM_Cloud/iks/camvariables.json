@@ -298,12 +298,12 @@
             "immutable": false,
             "options": [
                 {
-                    "value": "public",
+                    "value": "shared",
                     "label": "Virtual Shared",
                     "default": "true"
                 },
                 {
-                    "value": "private",
+                    "value": "dedicated",
                     "label": "Virtual Dedicated"
                 },
                 {

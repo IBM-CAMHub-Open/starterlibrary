@@ -8,6 +8,7 @@ variable "allow_unverified_ssl" {
   default     = "true"
 }
 
+
 ##############################################################
 # Define the vsphere provider
 ##############################################################
@@ -159,6 +160,19 @@ variable "strongloop_vm_image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
+module "provision_proxy_strongloop_vm" {
+  source 							= "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=1.0//vmware/proxy"
+  ip                  = "${var.strongloop_vm_ipv4_address}"
+  id									= "${vsphere_virtual_machine.strongloop_vm.id}"
+  ssh_user     				= "${var.ssh_user}"
+  ssh_password 				= "${var.ssh_user_password}"
+  http_proxy_host     = "${var.http_proxy_host}"
+  http_proxy_user     = "${var.http_proxy_user}"
+  http_proxy_password = "${var.http_proxy_password}"
+  http_proxy_port     = "${var.http_proxy_port}"
+  enable							= "${ length(var.http_proxy_host) > 0 ? "true" : "false"}"
+}
+
 # vsphere vm
 resource "vsphere_virtual_machine" "strongloop_vm" {
   name             = "${var.strongloop_vm_name}"
@@ -201,11 +215,22 @@ resource "vsphere_virtual_machine" "strongloop_vm" {
     keep_on_remove = "${var.strongloop_vm_root_disk_keep_on_remove}"
     datastore_id   = "${data.vsphere_datastore.strongloop_vm_datastore.id}"
   }
+}
 
+resource "null_resource" "strongloop_vm_install_strongloop" {
+	depends_on = ["vsphere_virtual_machine.strongloop_vm", "module.provision_proxy_strongloop_vm"]
+	
   connection {
     type     = "ssh"
     user     = "${var.ssh_user}"
     password = "${var.ssh_user_password}"
+    host     = "${vsphere_virtual_machine.strongloop_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+    bastion_host        = "${var.bastion_host}"
+    bastion_user        = "${var.bastion_user}"
+    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
+    bastion_port        = "${var.bastion_port}"
+    bastion_host_key    = "${var.bastion_host_key}"
+    bastion_password    = "${var.bastion_password}"
   }
 
   provisioner "file" {
@@ -249,6 +274,20 @@ retryInstall "yum install gcc-c++ make -y"                                      
 curl -sL https://rpm.nodesource.com/setup_7.x | bash -                             >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
 retryInstall "yum install nodejs -y"                                               >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
 echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1
+set +o nounset
+if [[ -z "$${http_proxy}" ]]; then
+  echo "No http proxy to set"
+else
+	echo "Set http proxy"
+  npm config set proxy $${http_proxy}
+fi
+if [[ -z "$${https_proxy}" ]]; then
+  echo "No https proxy to set"
+else
+	echo "Set https proxy"
+  npm config set https-proxy $${https_proxy}
+fi
+set -o nounset
 #install angularjs
 echo "---start installing angularjs---" | tee -a $LOGFILE 2>&1
 npm install -g grunt-cli bower yo generator-karma generator-angular                >> $LOGFILE 2>&1 || { echo "---Failed to install angular tools---" | tee -a $LOGFILE; exit 1; }
@@ -518,7 +557,7 @@ EOF
     inline = [
       "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
-  }
+  }	
 }
 
 #########################################################

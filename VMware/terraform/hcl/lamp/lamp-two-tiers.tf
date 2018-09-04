@@ -8,6 +8,8 @@ variable "allow_unverified_ssl" {
   default     = "true"
 }
 
+
+
 ##############################################################
 # Define the vsphere provider
 ##############################################################
@@ -211,6 +213,19 @@ variable "mariadb_vm_image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
+module "provision_proxy_mariadb_vm" {
+  source 							= "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=1.0//vmware/proxy"
+  ip                  = "${var.mariadb_vm_ipv4_address}"
+  id									= "${vsphere_virtual_machine.mariadb_vm.id}"
+  ssh_user     				= "${var.mariadb_ssh_user}"
+  ssh_password 				= "${var.mariadb_ssh_user_password}"  
+  http_proxy_host     = "${var.http_proxy_host}"
+  http_proxy_user     = "${var.http_proxy_user}"
+  http_proxy_password = "${var.http_proxy_password}"
+  http_proxy_port     = "${var.http_proxy_port}"
+  enable							= "${ length(var.http_proxy_host) > 0 ? "true" : "false"}"
+}
+
 # vsphere vm
 resource "vsphere_virtual_machine" "mariadb_vm" {
   name             = "${var.mariadb_vm_name}"
@@ -351,6 +366,19 @@ variable "php_vm_image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
+module "provision_proxy_php_vm" {
+  source 							= "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=1.0//vmware/proxy"
+  ip                  = "${var.php_vm_ipv4_address}"
+  id									= "${vsphere_virtual_machine.php_vm.id}"
+  ssh_user     				= "${var.php_ssh_user}"
+  ssh_password 				= "${var.php_ssh_user_password}"
+  http_proxy_host     = "${var.http_proxy_host}"
+  http_proxy_user     = "${var.http_proxy_user}"
+  http_proxy_password = "${var.http_proxy_password}"
+  http_proxy_port     = "${var.http_proxy_port}"
+  enable							= "${ length(var.http_proxy_host) > 0 ? "true" : "false"}"
+}
+
 # vsphere vm
 resource "vsphere_virtual_machine" "php_vm" {
   depends_on = ["vsphere_virtual_machine.mariadb_vm"]
@@ -397,12 +425,19 @@ resource "vsphere_virtual_machine" "php_vm" {
   }
 }
 
-resource "null_resource" "install_mariadb" {
+resource "null_resource" "install_mariadb" {	
+	depends_on = ["module.provision_proxy_mariadb_vm"]
   # Specify the ssh connection
   connection {
     user     = "${var.mariadb_ssh_user}"
     password = "${var.mariadb_ssh_user_password}"
     host     = "${vsphere_virtual_machine.mariadb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+    bastion_host        = "${var.bastion_host}"
+    bastion_user        = "${var.bastion_user}"
+    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
+    bastion_port        = "${var.bastion_port}"
+    bastion_host_key    = "${var.bastion_host_key}"
+    bastion_password    = "${var.bastion_password}"
   }
 
   # Create the installation script
@@ -452,13 +487,19 @@ EOF
 }
 
 resource "null_resource" "install_php" {
-  depends_on = ["null_resource.install_mariadb"]
+  depends_on = ["null_resource.install_mariadb", "module.provision_proxy_php_vm"]
 
   # Specify the ssh connection
   connection {
     user     = "${var.php_ssh_user}"
     password = "${var.php_ssh_user_password}"
     host     = "${vsphere_virtual_machine.php_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+    bastion_host        = "${var.bastion_host}"
+    bastion_user        = "${var.bastion_user}"
+    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
+    bastion_port        = "${var.bastion_port}"
+    bastion_host_key    = "${var.bastion_host_key}"
+    bastion_password    = "${var.bastion_password}"
   }
 
   # Create the installation script
