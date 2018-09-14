@@ -9,9 +9,16 @@ echo "$CLUSTER_CONFIG" > $CLUSTER_NAME/config.yaml
 export CLUSTER_CERTIFICATE_AUTHORITY_FILENAME=`echo "$CLUSTER_CONFIG" | grep certificate-authority | cut -d ":" -f 2 | tr -d '[:space:]'` \
 && echo "$CLUSTER_CERTIFICATE_AUTHORITY" > $CLUSTER_NAME/$CLUSTER_CERTIFICATE_AUTHORITY_FILENAME
 
+#determine the platform architecture
+ARCH=`uname -a | rev | cut -d ' ' -f2 | rev`
+case $ARCH in
+    x86_64)     PLATFORM='linux-amd64';;
+    ppc64le)    PLATFORM='linux-ppc64le';;
+esac
+
 # install helm locally  
-wget --quiet https://storage.googleapis.com/kubernetes-helm/helm-v$HELM_VERSION-linux-amd64.tar.gz -P $CLUSTER_NAME \
-&& tar -xzvf $CLUSTER_NAME/helm-v$HELM_VERSION-linux-amd64.tar.gz -C $CLUSTER_NAME
+wget --quiet https://storage.googleapis.com/kubernetes-helm/helm-v$HELM_VERSION-$PLATFORM.tar.gz -P $CLUSTER_NAME \
+&& tar -xzvf $CLUSTER_NAME/helm-v$HELM_VERSION-$PLATFORM.tar.gz -C $CLUSTER_NAME
 
 # helm init
 source $SCRIPTS_PATH/functions.sh
@@ -30,4 +37,4 @@ case $? in
 esac
 
 export KUBECONFIG=$CLUSTER_NAME/config.yaml \
-    && $CLUSTER_NAME/linux-amd64/helm init --upgrade $FORCE_UPGRADE $TILLER_CONNECTION_TIMEOUT --service-account=default
+    && $CLUSTER_NAME/$PLATFORM/helm init --upgrade $FORCE_UPGRADE $TILLER_CONNECTION_TIMEOUT --service-account=default
