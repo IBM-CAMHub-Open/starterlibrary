@@ -15,7 +15,7 @@ module "cluster" {
 }
 
 module "tiller" {
-  source  = "git::https://github.com/IBM-CAMHub-Open/starterlibrary.git?ref=2.0//IBM_Cloud/modules/helm_tiller"
+  source  = "git::https://github.com/IBM-CAMHub-Open/starterlibrary.git?ref=2.1//IBM_Cloud/modules/helm_tiller"
   cluster_name = "${var.cluster_name}"
   cluster_config = "${module.cluster.cluster_config}"
   cluster_certificate_authority = "${module.cluster.cluster_certificate_authority}"
