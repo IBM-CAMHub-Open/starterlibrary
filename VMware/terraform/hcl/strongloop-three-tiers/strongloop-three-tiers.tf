@@ -911,6 +911,7 @@ retryInstall "yum install gcc-c++ make -y"                                 >> $L
 curl -sL https://rpm.nodesource.com/setup_7.x | bash -                     >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
 retryInstall "yum install nodejs -y"                                       >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
 echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1
+set +o nounset
 if [[ -z "$${http_proxy}" ]]; then
   echo "No http proxy to set"
 else
@@ -924,6 +925,7 @@ else
 	echo "Set https proxy"
   npm config set https-proxy $${https_proxy}
 fi
+set -o nounset
 #install angularjs
 
 echo "---start installing angularjs---" | tee -a $LOGFILE 2>&1
