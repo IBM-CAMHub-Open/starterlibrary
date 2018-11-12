@@ -1,0 +1,102 @@
+{
+	"input_groups": [
+		{
+			"name": "VMwareNSXT",
+			"label": "VMware NSX-T Variables"
+		}
+	],
+	"template_input_params": [
+		{
+			"name": "nsxt_tag_scope",
+			"group_name": "VMwareNSXT",
+			"type": "string",
+			"hidden": false,
+			"label": "Tag Scope",
+			"description": "Tag scope is similar to the Key attribute of the tagging mechanism.",
+			"secured": false,
+			"required": false
+		},
+		{
+			"name": "nsxt_tag",
+			"group_name": "VMwareNSXT",			
+			"type": "string",
+			"hidden": false,
+			"label": "Tag Value",
+			"description": "Tag value is similar to the value attribute of the tagging mechanism.",
+			"secured": false,
+			"required": false
+		},
+		{
+			"name": "nsxt_transport_zone",
+			"group_name": "VMwareNSXT",			
+			"type": "string",
+			"hidden": false,
+			"label": "Tansport Zone Name",
+			"description": "The name of the Transport Zone to be used by the logical switch.",
+			"secured": false,
+			"required": true
+		},
+		{
+			"name": "nsxt_logical_switch_name",
+			"group_name": "VMwareNSXT",			
+			"type": "string",
+			"hidden": false,
+			"label": "Logical Switch Name",
+			"description": "The Display Name of the logical switch to create.",
+			"secured": false,
+			"required": true
+		},
+		{
+			"name": "nsxt_logical_switch_desc",
+			"group_name": "VMwareNSXT",			
+			"type": "string",
+			"hidden": false,
+			"label": "Logical Switch Description",
+			"description": "Description of the logical switch.",
+			"secured": false,
+			"required": false
+		},
+		{
+			"name": "nsxt_logical_switch_state",
+			"group_name": "VMwareNSXT",
+			"type": "string",
+			"hidden": false,
+			"label": "Logical Switch State",
+			"description": "Admin state for the logical switch.",
+			"secured": false,
+			"required": true,
+			"default": "UP",
+			"options": [
+				{
+					"value": "UP",
+					"label": "UP"
+				},
+				{
+					"value": "DOWN",
+					"label": "DOWN"
+				}
+			]
+		},
+		{
+			"name": "nsxt_logical_switch_repl_mode",
+			"group_name": "VMwareNSXT",			
+			"type": "string",
+			"hidden": false,
+			"label": "Replication mode of the Logical Switch",
+			"description": "Replication mode of the Logical Switch.",
+			"secured": false,
+			"required": true,
+			"default": "MTEP",
+			"options": [
+				{
+					"value": "MTEP",
+					"label": "MTEP"
+				},
+				{
+					"value": "SOURCE",
+					"label": "SOURCE"
+				}
+			]			
+		}
+	]
+}

@@ -1,0 +1,50 @@
+{
+	"name": "VMware NSX-T Sample to create a logical switch",
+	"description": "Creates a sample logical switch",
+	"version": "1.0",
+	"imageUrl": "",
+	"image": "",
+	"type": "prebuilt",
+	"status": "active",
+	"manifest": {
+		"template_type": "Terraform",
+		"template_format": "HCL",
+		"template_provider": "VMware NSX-T",
+		"template": {
+			"templateData": "",
+			"templateVariables": "",
+			"templateOutput": ""
+		},
+		"template_source": {
+			"githubRepoUrl": "",
+			"githubAccessToken": "",
+			"relativePathToTemplateFolder": "VMwareNSX-T/terraform/switch",
+			"templateFileName": "switch.tf"
+		}
+	},
+	"metadata": {
+		"displayName": "VMware NSX-T Sample to create a logical switch",
+		"providerDisplayName": "VMware NSX-T",
+		"longDescription": "This template creates a sample logical switch.",
+		"bullets": [
+			{
+				"title": "Clouds",
+				"description": "<ul><li> Other</li>"
+			},
+			{
+				"title": "Usage and Special Notes",
+				"description": "<ol class=\"list-numbering\"><li>The user is responsible for obtaining the appropriate software licenses and downloads prior to template deployment.</li>"
+			}
+		],
+		"featuredImageUrl": "",
+		"imageUrl": "",
+		"mediumImageUrl": "",
+		"smallImageUrl": "",
+		"documentationUrl": "",
+		"termsUrl": "",
+		"media": []
+	},
+	"toolchain": {
+		"git": "https://github.com/ibmcam/cam-toolchain"
+	}
+}

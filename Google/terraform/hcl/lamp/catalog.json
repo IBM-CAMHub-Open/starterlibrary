@@ -1,0 +1,52 @@
+{
+   "name": "Google Cloud LAMP stack deployment",
+   "description": "LAMP - A fully-integrated environment for full stack PHP web development.",
+   "version": "1.0",
+   "type": "prebuilt",
+   "manifest": {
+     "template_type": "Terraform",
+     "template_format": "HCL",
+     "template_provider": "Google Cloud",
+     "template": {
+       "templateData": "",
+       "templateVariables": "",
+       "templateOutput": ""
+     },
+     "template_source": {
+       "githubRepoUrl": "",
+       "githubAccessToken": "",
+       "relativePathToTemplateFolder": "Google/terraform/hcl/lamp",
+       "templateFileName": "lamp-two-tiers.tf"
+     }
+   },
+   "metadata": {
+     "displayName": "Google Cloud LAMP stack deployment",
+     "longDescription": "Deploys a LAMP Stack (Linux, Apache, MariaDB, PHP) in VMware providing a complete development environment. This deployment also deploys a simple sample application to validate the stack is operational.",
+     "bullets": [
+       {
+         "title": "Clouds",
+         "description": "Google Cloud"
+       },
+       {
+         "title": "Operating systems supported",
+         "description": "Red Hat Enterprise Linux 7"
+       },
+       {
+         "title": "Topology",
+         "description": "Google Cloud: 2 virtual machines: <ul><li>- Apache and PHP;</li><li>- MariaDB</li></ul>"
+       },
+       {
+         "title": "Software deployed",
+         "description": "<table style=\"width:100%\"><tr><td width=\"18%\" valign=\"top\">1. Apache:</td><td>a secure, efficient and extensible open-source HTTP server</td></tr><tr><td>2. MariaDB:</td><td>an open source software as a relational database providing an SQL interface for accessing data.</td></tr><tr><td>3. PHP:</td><td>a server-side scripting language designed for web development</td></tr></table>"
+       },
+       {
+         "title": "Default virtual machine settings",
+         "description": "<ul><li>Google Cloud:<ul style=\"margin-left: 20px;\"><li>Flavor:<ul style=\"margin-left: 20px;\"><li>MariaDB:<ul style=\"margin-left: 20px;\"><li>Cores - 1</li><li>Memory - 1GB</li><li>Storage - Depends on Image</li></ul></li><li>Front end:<ul style=\"margin-left: 20px;\"><li>Cores - 1</li><li>Memory - 1GB</li><li>Storage - Depends on Image</li></ul></li></ul></li><li>Network:<ul style=\"margin-left: 20px;\"><li>Private IP:<ul style=\"margin-left: 20px;\"><li>Availability - Customer Provided</li><li>Ingress - Via VPN</li><li>Egress - Not required</li></ul></li><li>Public IP:<ul style=\"margin-left: 20px;\"><li>Availability - None</li></ul></li></ul></li><li>Firewall:<ul style=\"margin-left: 20px;\"><li>MariaDB:<ul style=\"margin-left: 20px;\"><li>Ingress - Allows SSH, and TCP 3306 from all sources</li><li>Egress - All</li></ul></li><li>Front end:<ul style=\"margin-left: 20px;\"><li>Ingress - Allows SSH, and HTTP from all sources</li><li>Egress - All</li></ul></li></ul></li></ul></li></ul>"
+       },
+       {
+         "title": "Usage and special notes",
+         "description": "<ul><li>1. The template expects a firewall rule in GCE that allows access through port 80 (HTTP) on guest VMs that have the tag http-server</li></ul>"
+       }
+     ]
+   }
+ }

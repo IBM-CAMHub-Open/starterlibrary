@@ -1,0 +1,279 @@
+{
+  "input_datatypes": [
+    {
+      "name": "bastionhost",
+      "label": "Bastion Data"
+    }
+  ],
+  "input_groups": [
+    {
+      "name": "bastion",
+      "label": "Bastion host variables"
+    }
+  ],
+  "template_input_params": [
+      {
+        "name": "bastion_host",
+        "type": "string",
+        "group_name": "bastion",
+        "hidden": true,
+        "description": "Bastion host for ssh proxy",
+        "default": "${bastionhost.bastion_host}",
+        "label": "Bastion host",
+        "secured": false,
+        "required": false
+      },
+      {
+        "name": "bastion_port",
+        "type": "string",
+        "group_name": "bastion",
+        "hidden": true,
+        "description": "Bastion port for ssh proxy",
+        "default": "${bastionhost.bastion_port}",
+        "label": "Bastion port",
+        "secured": false,
+        "required": false
+      },
+      {
+        "name": "bastion_user",
+        "type": "string",
+        "group_name": "bastion",
+        "hidden": true,
+        "description": "Bastion user for ssh proxy",
+        "default": "${bastionhost.bastion_user}",
+        "label": "Bastion user",
+        "secured": false,
+        "required": false
+      },
+      {
+        "name": "bastion_private_key",
+        "type": "string",
+        "group_name": "bastion",
+        "hidden": true,
+        "description": "Bastion private key for ssh proxy",
+        "default": "${bastionhost.bastion_private_key}",
+        "label": "Bastion private key",
+        "secured": true,
+        "required": false
+      },
+      {
+        "name": "bastion_password",
+        "type": "string",
+        "group_name": "bastion",
+        "hidden": true,
+        "description": "Bastion user password for ssh proxy",
+        "default": "${bastionhost.bastion_password}",
+        "label": "Bastion user password",
+        "secured": true,
+        "required": false
+      },
+      {
+        "name": "bastion_host_key",
+        "type": "string",
+        "group_name": "bastion",
+        "hidden": true,
+        "description": "Bastion host public key for ssh proxy",
+        "default": "${bastionhost.bastion_host_key}",
+        "label": "Bastion host key",
+        "secured": false,
+        "required": false
+      },    
+      {
+        "name": "boot_disk",
+        "description": "The boot disk for the instance.",
+        "options": [
+          {
+            "value": "rhel-cloud/rhel-7",
+            "label": "RHEL 7",
+            "default": true
+          },
+          {
+            "value": "centos-cloud/centos-7",
+            "label": "CentOS 7"
+          }
+        ],
+        "type": "string",
+        "required": true,
+        "secured": false,
+        "label": "Instance Boot Disk",
+        "hidden": false,
+        "immutable": false
+      },
+      {
+        "name": "machine_type",
+        "description": "The machine type to create.",
+        "default": "n1-standard-1",
+        "options": [
+          {
+            "value": "n1-standard-1",
+            "label": "n1-standard-1 (1 vCPU, 3.75 Memory(GB))",
+            "default": true
+          },
+          {
+            "value": "n1-standard-2",
+            "label": "n1-standard-2 (2 vCPU, 7.50 Memory(GB))"
+          },
+          {
+            "value": "n1-highmem-2",
+            "label": "n1-highmem-2 (2 vCPU, 13 Memory(GB))"
+          },
+          {
+            "value": "n1-highcpu-2",
+            "label": "n1-highcpu-2 (2 vCPU, 1.80 Memory(GB))"
+          },
+          {
+            "value": "n1-highcpu-4",
+            "label": "n1-highcpu-4 (4 vCPU, 3.60 Memory(GB))"
+          }
+        ],
+        "type": "string",
+        "required": true,
+        "secured": false,
+        "label": "Instance Machine Type",
+        "hidden": false,
+        "immutable": false
+      },
+      {
+        "name": "zone",
+        "description": "The zone the resource should be created in.",
+        "default": "us-central1-a",
+        "options": [
+          {
+            "value": "us-central1-a",
+            "label": "us-central1-a (Iowa, USA)",
+            "default": true
+          },
+          {
+            "value": "us-west1-a",
+            "label": "us-west1-a (Oregon, USA)"
+          },
+          {
+            "value": "us-east1-c",
+            "label": "us-east1-c (South Carolina, USA)"
+          },
+          {
+            "value": "europe-west3-a",
+            "label": "europe-west3-a (Frankfurt, Germany)"
+          },
+          {
+            "value": "asia-south1-a",
+            "label": "asia-south1-a (Mumbai, India)"
+          }
+        ],
+        "type": "string",
+        "required": true,
+        "secured": false,
+        "label": "Zone",
+        "hidden": false,
+        "immutable": false
+      },
+      {
+        "name": "mariadb_hostname",
+        "description": "A unique name for the MariaDB VM, required by GCE.",
+        "type": "string",
+        "regex": "(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?)",
+        "required": true,
+        "secured": false,
+        "label": "Mariadb Hostname",
+        "hidden": false,
+        "immutable": false
+      },
+      {
+        "name": "mariadb_user",
+        "label": "Mariadb User",
+        "description": "User to be added into db and sshed into servers; Allow 1 to 16 alphanumeric characters with beginning at letters",
+        "default": "camuser",
+        "hidden": false,
+        "immutable": false,
+        "required": true,
+        "secured": false,
+        "type": "string",
+        "regex": "^[A-Za-z][A-Za-z0-9]{0,15}$"
+      },
+      {
+        "name": "mariadb_pwd",
+        "label": "Mariadb Password",
+        "description": "User password for cam user; Allow 8 to 16 alphanumeric characters",
+        "hidden": false,
+        "immutable": false,
+        "required": true,
+        "secured": true,
+        "type": "password",
+        "regex": "^[0-9A-Za-z]{8,16}$"
+      },      
+      {
+        "name": "php_hostname",
+        "description": "A unique name for the PHP VM, required by GCE.",
+        "type": "string",
+        "regex": "(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?)",
+        "required": true,
+        "secured": false,
+        "label": "PHP Hostname",
+        "hidden": false,
+        "immutable": false
+      },
+      {
+        "name": "gce_ssh_user",
+        "description": "User name to connect to the deployed VMs",
+        "default": "camuser",
+        "type": "string",
+        "required": true,
+        "secured": false,
+        "label": "SSH User Name",
+        "hidden": false,
+        "immutable": false
+      },
+      {
+        "name": "gce_ssh_public_key",
+        "description": "Public SSH key to be injected into the authorized_keys of the guest VM",
+        "type": "string",
+        "required": true,
+        "secured": false,
+        "label": "SSH Public Key",
+        "hidden": false,
+        "immutable": false
+      },
+      {
+        "name": "gce_ssh_private_key",
+        "description": "Private SSH key to connect to the deployed VMs (base64 encoded)",
+        "type": "string",
+        "required": true,
+        "secured": true,
+        "label": "SSH Private Key (base64 encoded)",
+        "hidden": false,
+        "immutable": false
+      }
+    ],
+    "template_output_params": [
+      {
+        "name": "mariadb_IP",
+        "type": "string",
+        "description": "External IP of the mariadb virtual machine",
+        "hidden": false,
+        "label": "Mariadb IP",
+        "secured": false,
+        "required": true,
+        "immutable": false
+      },
+      {
+        "name": "php_IP",
+        "type": "string",
+        "description": "External IP of the PHP virtual machine",
+        "hidden": false,
+        "label": "PHP IP",
+        "secured": false,
+        "required": true,
+        "immutable": false
+      },
+      {
+        "name": "test_url",
+        "type": "url",
+        "description": "URL of the test routine for the LAMP stack",
+        "hidden": false,
+        "label": "LAMP stack verification URL",
+        "secured": false,
+        "required": true,
+        "immutable": false
+      }     
+    ]
+}

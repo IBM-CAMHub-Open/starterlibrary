@@ -80,14 +80,14 @@ data "vsphere_virtual_machine" "php_vm_template" {
 variable "mariadb_vm_name" {
   type        = "string"
   description = "Generated"
-  default     = "mariadb_vm"
+  default     = "mariadb-vm"
 }
 
 #Variable : php_vm_name
 variable "php_vm_name" {
   type        = "string"
   description = "Generated"
-  default     = "php_vm"
+  default     = "php-vm"
 }
 
 #########################################################
