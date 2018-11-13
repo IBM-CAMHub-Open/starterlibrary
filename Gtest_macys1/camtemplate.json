@@ -1,0 +1,14 @@
+{
+   "name": "Gtest_macys1",
+   "description": "Description for Gtest_macys1.",
+   "type": "userCreated",
+   "manifest": {
+     "template_type": "Terraform",
+     "template_format": "HCL",
+     "template_provider": "Other"
+   },
+   "metadata": {
+     "displayName": "Gtest_macys1",
+     "bullets": []
+   }
+ }

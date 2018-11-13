@@ -1,0 +1,157 @@
+{
+  "input_datatypes": [ ],
+  "input_namespaces": [ ],
+  "output_namespace": "",
+  "input_groups": [
+    {
+      "name": "Instances-aws_instance.Gaws_macys_instance",
+      "label": "Instances - aws_instance.Gaws_macys_instance"
+    },
+    {
+      "name": "Other",
+      "label": "Other"
+    },
+    {
+      "name": "Other-aws",
+      "label": "Other - aws"
+    },
+    {
+      "name": "instances",
+      "label": "Instances"
+    },
+    {
+      "name": "networking",
+      "label": "Networking"
+    }
+  ],
+  "output_groups": [ ],
+  "template_input_params": [
+    {
+      "name": "aws_access_id",
+      "label": "Aws Access Id",
+      "description": "Generated",
+      "type": "string",
+      "default": "",
+      "validation": "",
+      "group_name": "instances",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "immutable_after_create": false
+    },
+    {
+      "name": "aws_secret_key",
+      "label": "Aws Secret Key",
+      "description": "Generated",
+      "type": "string",
+      "default": "",
+      "validation": "",
+      "group_name": "instances",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "immutable_after_create": false
+    },
+    {
+      "name": "region",
+      "label": "Region",
+      "description": "Generated",
+      "type": "string",
+      "default": "",
+      "validation": "",
+      "group_name": "instances",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "immutable_after_create": false
+    },
+    {
+      "name": "Gaws_macys_instance_ami",
+      "label": "Gaws Macys Instance Ami",
+      "description": "Generated",
+      "type": "string",
+      "default": "",
+      "validation": "",
+      "group_name": "instances",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "immutable_after_create": false
+    },
+    {
+      "name": "Gaws_macys_instance_aws_instance_type",
+      "label": "Gaws Macys Instance Aws Instance Type",
+      "description": "Generated",
+      "type": "string",
+      "default": "",
+      "validation": "",
+      "group_name": "instances",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "immutable_after_create": false
+    },
+    {
+      "name": "availability_zone",
+      "label": "Availability Zone",
+      "description": "Generated",
+      "type": "string",
+      "default": "",
+      "validation": "",
+      "group_name": "instances",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "immutable_after_create": false
+    },
+    {
+      "name": "Gaws_macys_instance_name",
+      "label": "Gaws Macys Instance Name",
+      "description": "Generated",
+      "type": "string",
+      "default": "",
+      "validation": "",
+      "group_name": "instances",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "immutable_after_create": false
+    },
+    {
+      "name": "aws_key_pair_name",
+      "label": "Aws Key Pair Name",
+      "description": "Generated",
+      "type": "string",
+      "default": "",
+      "validation": "",
+      "group_name": "instances",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "immutable_after_create": false
+    },
+    {
+      "name": "network_name_prefix",
+      "label": "Network Name Prefix",
+      "description": "Generated",
+      "type": "string",
+      "default": "",
+      "validation": "",
+      "group_name": "networking",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "immutable_after_create": false
+    }
+  ],
+  "template_output_params": [ ]
+}
