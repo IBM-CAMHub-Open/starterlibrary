@@ -45,7 +45,7 @@
        },
        {
          "title": "Usage and special notes",
-         "description": "<ul><li>1. Creates a virtual server with an ssh key provided by the user into an existing virtual private cloud specified by the user.</li><li>2. Deployment takes approximately 5 minutes to complete.</li><li>3. To access the application and virtual machines, please see the instructions in the output log.</li></ul>"
+         "description": "<ol class=\"list-numbering\"><li>Creates a virtual server with an ssh key provided by the user into an existing virtual private cloud specified by the user.</li><li>Deployment takes approximately 5 minutes to complete.</li><li>To access the application and virtual machines, please see the instructions in the output log.</li></ol>"
        }
      ],
       "featuredImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",

@@ -37,7 +37,7 @@
        },
        {
          "title": "Software deployed",
-         "description": "<table style=\"width:100%\"><tr><td width=\"20%\" valign=\"top\">Tomcat:</td><td>an open source implementation of the Java Servlet, JavaServer Pages, Java Expression Language and Java WebSocket technologies</td></tr></table>"
+         "description": "<ol class=\"list-numbering\"><li>Tomcat: an open source implementation of the Java Servlet, JavaServer Pages, Java Expression Language and Java WebSocket technologies</li></ol>"
        },
        {
          "title": "Default virtual machine settings",
@@ -45,7 +45,7 @@
        },
        {
          "title": "Usage and special notes",
-         "description": "<ul><li>1. Downloads latest releases of software.</li><li>2. To access the application and virtual machines, please see the instructions in the output log.</li><li>3. More details of software can be found in <a href=\"https://tomcat.apache.org/\">https://tomcat.apache.org/</a>.</li></ul>"
+         "description": "<ol class=\"list-numbering\"><li>Downloads latest releases of software.</li><li>To access the application and virtual machines, please see the instructions in the output log.</li><li>More details of software can be found in <a href=\"https://tomcat.apache.org/\">https://tomcat.apache.org/</a>.</li></ol>"
        }
      ]
    }

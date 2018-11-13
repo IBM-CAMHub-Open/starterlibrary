@@ -37,11 +37,11 @@
        },
        {
          "title": "Topology",
-         "description": "Hybrid: 2 virtual machines: <ul><li>- IBM Cloud with Apache and PHP;</li><li>- AWS with MySQL</li></ul>"
+         "description": "Hybrid: 2 virtual machines: <ul class=\"unordered-list-style\"><li>IBM Cloud with Apache and PHP;</li><li>AWS with MySQL</li></ul>"
        },
        {
          "title": "Software deployed",
-         "description": "<table style=\"width:100%\"><tr><td width=\"18%\" valign=\"top\">1. Apache:</td><td>a secure, efficient and extensible open-source HTTP server</td></tr><tr><td>2. MySQL:</td><td>a multithreaded, multi-user, SQL database management system (DBMS)</td></tr><tr><td>3. PHP:</td><td>a server-side scripting language designed for web development</td></tr></table>"
+         "description": "<ol class=\"list-numbering\"><li>Apache: a secure, efficient and extensible open-source HTTP server</li><li>MySQL: a multithreaded, multi-user, SQL database management system (DBMS)</li><li>PHP: a server-side scripting language designed for web development</li></ol>"
        },
        {
          "title": "Default virtual machine settings",
@@ -49,7 +49,7 @@
        },
        {
          "title": "Usage and special notes",
-         "description": "<ul><li>1. Downloads latest releases of software.</li><li>2. Deployment takes approximately 10 minutes to complete.</li><li>3. To access the application and virtual machines, please see the instructions in the output log.</li><li>4. More details of software can be found in <a href=\"https://httpd.apache.org/\">https://httpd.apache.org/</a>, <a href=\"https://www.mysql.com/\">https://www.mysql.com/</a> and <a href=\"https://secure.php.net/\">https://secure.php.net/</a>.</li></ul>"
+         "description": "<ol class=\"list-numbering\"><li>Downloads latest releases of software.</li><li>Deployment takes approximately 10 minutes to complete.</li><li>To access the application and virtual machines, please see the instructions in the output log.</li><li>More details of software can be found in <a href=\"https://httpd.apache.org/\">https://httpd.apache.org/</a>, <a href=\"https://www.mysql.com/\">https://www.mysql.com/</a> and <a href=\"https://secure.php.net/\">https://secure.php.net/</a>.</li></ol>"
        }
      ],
      "featuredImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",

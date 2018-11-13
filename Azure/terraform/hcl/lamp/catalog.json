@@ -33,11 +33,11 @@
        },
        {
          "title": "Topology",
-         "description": "Microsoft Azure: <ul><li>1 virtual machine - Apache and PHP;</li><li>1 Service - Microsoft SQL Server</li></ul>"
+         "description": "Microsoft Azure: <ul class=\"unordered-list-style\"><li>1 virtual machine - Apache and PHP;</li><li>1 Service - Microsoft SQL Server</li></ul>"
        },
        {
          "title": "Software deployed",
-         "description": "<table style=\"width:100%\"><tr><td width=\"18%\" valign=\"top\">1. Apache:</td><td>a secure, efficient and extensible open-source HTTP server</td></tr><tr><td>2. SQL Server:</td><td>a relational database management system developed by Microsoft</td></tr><tr><td>3. PHP:</td><td>a server-side scripting language designed for web development</td></tr></table>"
+         "description": "<ol class=\"list-numbering\"><li>Apache: a secure, efficient and extensible open-source HTTP server</li><li>SQL Server: a relational database management system developed by Microsoft</li><li>PHP: a server-side scripting language designed for web development</li></ol>"
        },
        {
          "title": "Default virtual machine settings",
@@ -45,7 +45,7 @@
        },
        {
          "title": "Usage and special notes",
-         "description": "<ul><li>1. Downloads latest releases of software.</li><li>2. To access the application and virtual machine, please see the instructions in the output log.</li><li>3. To access the SQL database service, please log into the front-end VM and then use SQL client for operations.</li><li>4. More details of software can be found in <a href=\"https://httpd.apache.org/\">https://httpd.apache.org/</a>, <a href=\"https://azure.microsoft.com/en-us/services/sql-database/\">https://azure.microsoft.com/en-us/services/sql-database/</a> and <a href=\"https://secure.php.net/\">https://secure.php.net/</a>.</li></ul>"
+         "description": "<ol class=\"list-numbering\"><li>Downloads latest releases of software.</li><li>To access the application and virtual machine, please see the instructions in the output log.</li><li>To access the SQL database service, please log into the front-end VM and then use SQL client for operations.</li><li>More details of software can be found in <a href=\"https://httpd.apache.org/\">https://httpd.apache.org/</a>, <a href=\"https://azure.microsoft.com/en-us/services/sql-database/\">https://azure.microsoft.com/en-us/services/sql-database/</a> and <a href=\"https://secure.php.net/\">https://secure.php.net/</a>.</li></ol>"
        }
      ]
    }

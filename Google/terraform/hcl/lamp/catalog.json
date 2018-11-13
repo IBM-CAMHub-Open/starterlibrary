@@ -33,11 +33,11 @@
        },
        {
          "title": "Topology",
-         "description": "Google Cloud: 2 virtual machines: <ul><li>- Apache and PHP;</li><li>- MariaDB</li></ul>"
+         "description": "Google Cloud: 2 virtual machines: <ul class=\"unordered-list-style\"><li>Apache and PHP;</li><li>MariaDB</li></ul>"
        },
        {
          "title": "Software deployed",
-         "description": "<table style=\"width:100%\"><tr><td width=\"18%\" valign=\"top\">1. Apache:</td><td>a secure, efficient and extensible open-source HTTP server</td></tr><tr><td>2. MariaDB:</td><td>an open source software as a relational database providing an SQL interface for accessing data.</td></tr><tr><td>3. PHP:</td><td>a server-side scripting language designed for web development</td></tr></table>"
+         "description": "<ol class=\"list-numbering\"><li>Apache: a secure, efficient and extensible open-source HTTP server</li><li>MariaDB: an open source software as a relational database providing an SQL interface for accessing data.</li><li>PHP: a server-side scripting language designed for web development</li></ol>"
        },
        {
          "title": "Default virtual machine settings",
@@ -45,7 +45,7 @@
        },
        {
          "title": "Usage and special notes",
-         "description": "<ul><li>1. The template expects a firewall rule in GCE that allows access through port 80 (HTTP) on guest VMs that have the tag http-server</li></ul>"
+         "description": "<ol class=\"list-numbering\"><li>The template expects a firewall rule in GCE that allows access through port 80 (HTTP) on guest VMs that have the tag http-server</li></ol>"
        }
      ]
    }

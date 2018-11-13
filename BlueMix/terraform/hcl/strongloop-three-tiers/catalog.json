@@ -37,11 +37,11 @@
        },
        {
          "title": "Topology",
-         "description": "IBM Cloud: 3 virtual machines:<ul><li>- MongoDB,</li><li>- Strongloop/Node.js,</li><li>- Angular.js/Express.js/Node.js</li></ul>"
+         "description": "IBM Cloud: 3 virtual machines:<ul class=\"unordered-list-style\"><li>MongoDB,</li><li>Strongloop/Node.js,</li><li>Angular.js/Express.js/Node.js</li></ul>"
        },
        {
          "title": "Software deployed",
-         "description": "<table style=\"width:100%\"><tr><td width=\"22%\" valign=\"top\">1. MongoDB:</td><td>a NoSQL database</td></tr><tr><td>2. Strongloop:</td><td>a complete solution that addresses all aspects of the API lifecycle, for both on-premises and cloud environments</td></tr><tr><td>3. Node.js:</td><td>an execution environment for event-driven server-side and networking applications</td></tr><tr><td>4. Express.js:</td><td>a web application framework that runs on Node.js</td></tr><tr><td>5. Angular.js:</td><td>a JavaScript MVC framework that runs in browser JavaScript engines</td></tr></table>"
+         "description": "<ol class=\"list-numbering\"><li>MongoDB: a NoSQL database</li><li>Sliongloop: a complete solution that addresses all aspects of the API lifecycle, for both on-premises and cloud environments</li><li>Node.js: an execution environment for event-driven server-side and networking applications</li><li>Express.js: a web application framework that runs on Node.js</li><li>Angular.js: a JavaScript MVC framework that runs in browser JavaScript engines</li></ol>"
        },
        {
          "title": "Default virtual machine settings",
@@ -49,7 +49,7 @@
        },
        {
          "title": "Usage and special notes",
-         "description": "<ul><li>1. Downloads latest releases of software.</li><li>2. Deployment takes approximately 20 minutes to complete.</li><li>3. To access the application and virtual machines, please see the instructions in the output log.</li><li>4. The sample application in this deployment is partially from the open source project <a href=\"https://github.com/strongloop/loopback-example-angular\">https://github.com/strongloop/loopback-example-angular</a> and more details of software can be found in <a href=\"https://www.mongodb.com/\">https://www.mongodb.com/</a>, <a href=\"https://strongloop.com/\">https://strongloop.com/</a>, <a href=\"https://nodejs.org/en/\">https://nodejs.org/en/</a>, and <a href=\"https://angularjs.org/\">https://angularjs.org/</a>.</li></ul>"
+         "description": "<ol class=\"list-numbering\"><li>Downloads latest releases of software.</li><li>Deployment takes approximately 20 minutes to complete.</li><li>To access the application and virtual machines, please see the instructions in the output log.</li><li>The sample application in this deployment is partially from the open source project <a href=\"https://github.com/strongloop/loopback-example-angular\">https://github.com/strongloop/loopback-example-angular</a> and more details of software can be found in <a href=\"https://www.mongodb.com/\">https://www.mongodb.com/</a>, <a href=\"https://strongloop.com/\">https://strongloop.com/</a>, <a href=\"https://nodejs.org/en/\">https://nodejs.org/en/</a>, and <a href=\"https://angularjs.org/\">https://angularjs.org/</a>.</li></ol>"
        }
      ],
      "featuredImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
