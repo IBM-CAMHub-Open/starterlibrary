@@ -25,15 +25,15 @@
 	"metadata": {
 		"displayName": "VMware NSX-T Sample to create a logical switch",
 		"providerDisplayName": "VMware NSX-T",
-		"longDescription": "This template creates a sample logical switch.",
+		"longDescription": "This template creates a sample logical switch on an existing VMware NSX-T platform.",
 		"bullets": [
 			{
 				"title": "Clouds",
-				"description": "<ul><li> Other</li>"
+				"description": "<ul><li> VMware NSX-T</li>"
 			},
 			{
 				"title": "Usage and Special Notes",
-				"description": "<ol class=\"list-numbering\"><li>The user is responsible for obtaining the appropriate software licenses and downloads prior to template deployment.</li>"
+				"description": "<ol class=\"list-numbering\"><li>The user must have a transport zone created on VMware NSX-T before using this template.</li><li>The user is responsible for obtaining the appropriate software licenses and downloads prior to template deployment.</li>"
 			}
 		],
 		"featuredImageUrl": "",

@@ -1,0 +1,219 @@
+{
+  "template_input_params": [
+    {
+      "name": "admin_password",
+      "description": "Windows admin password",
+      "type": "password",
+      "required": true,
+      "secured": true,
+      "label": "admin_password",
+      "hidden": false,
+      "immutable": false,
+      "default": ""
+    },
+    {
+      "name": "dependsOn",
+      "description": "Boolean for dependency",
+      "default": "true",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "dependsOn",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "enable_vm",
+      "default": "true",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "enable_vm",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "hostName",
+      "description": "VM hostanme",
+      "type": "list",
+      "required": true,
+      "secured": false,
+      "label": "hostName",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vm_adapter_type",
+      "description": "Network adapter type for vNIC Configuration",
+      "default": "vmxnet3",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "vm_adapter_type",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vm_disk1_datastore",
+      "description": "Data store or storage cluster name for target virtual machine's disks",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "vm_disk1_datastore",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vm_disk1_keep_on_remove",
+      "description": "Delete template disk volume when the virtual machine is deleted",
+      "default": "false",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "vm_disk1_keep_on_remove",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vm_disk1_size",
+      "description": "Size of template disk volume",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "vm_disk1_size",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vm_dns_servers",
+      "description": "DNS servers for the virtual network adapter",
+      "type": "list",
+      "required": true,
+      "secured": false,
+      "label": "vm_dns_servers",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vm_folder",
+      "description": "Target vSphere folder for virtual machine",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "vm_folder",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vm_ipv4_address",
+      "description": "IPv4 address for vNIC configuration",
+      "default": [],
+      "type": "list",
+      "required": true,
+      "secured": false,
+      "label": "vm_ipv4_address",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vm_ipv4_gateway",
+      "description": "IPv4 gateway for vNIC configuration",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "vm_ipv4_gateway",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vm_ipv4_prefix_length",
+      "description": "IPv4 prefix length for vNIC configuration. The value must be a number between 8 and 32",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "vm_ipv4_prefix_length",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vm_memory",
+      "description": "VM memory",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "vm_memory",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vm_name",
+      "type": "list",
+      "required": true,
+      "secured": false,
+      "label": "vm_name",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vm_network_interface_label",
+      "description": "vSphere port group or network label for virtual machine's vNIC",
+      "default": "VM Network",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "vm_network_interface_label",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vm_template",
+      "description": "Target vSphere folder for virtual machine",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "vm_template",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vm_vcpu",
+      "description": "VM Vcpu count",
+      "default": "2",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "vm_vcpu",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vsphere_datacenter",
+      "description": "Target vSphere datacenter for virtual machine creation",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "vsphere_datacenter",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "vsphere_resource_pool",
+      "description": "Target vSphere Resource Pool to host the virtual machine",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "vsphere_resource_pool",
+      "hidden": false,
+      "immutable": false
+    }
+  ],
+  "template_output_params": [
+    {
+      "name": "address",
+      "label": "address",
+      "description": "",
+      "secured": false,
+      "hidden": false
+    }
+  ]
+}

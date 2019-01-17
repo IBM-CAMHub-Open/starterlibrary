@@ -1,6 +1,6 @@
 provider "ibm" {
   region = "${var.region}"
-  version = ">= 0.9.3, <= 0.11.3"
+  version = ">= 0.9.3"
 }
 
 data "ibm_org" "org" {
