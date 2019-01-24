@@ -113,6 +113,17 @@
             "immutable": false
         },
         {
+            "name": "resource_group_name",
+            "type": "string",
+            "description": "Name of the IBM Cloud resource group. You must have access to atleast one resource group in IBM Cloud.",
+            "default": "default",
+            "hidden": false,
+            "label": "IBM Cloud Resource Group Name",
+            "secured": false,
+            "required": true,
+            "immutable": false
+        },        
+        {
             "name": "private_vlan_id",
             "type": "string",
             "description": "Virtual network that allows private communication between worker nodes in this cluster. Can be retrieved by running bx cs vlans <location>.",

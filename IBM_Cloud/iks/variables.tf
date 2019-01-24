@@ -49,3 +49,9 @@ variable "subnet_id" {
 variable "helm_version" {
   description = "Helm version to be used to deploy the tiller into the Kubernetes cluster"
 }
+
+variable "resource_group_name" {
+  type = "string"
+  description = " The name of the IBM Cloud resource group."
+  default = "default"
+}
