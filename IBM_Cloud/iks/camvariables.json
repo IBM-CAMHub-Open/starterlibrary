@@ -324,6 +324,17 @@
             ]
         },
         {
+            "name": "kube_version",
+            "type": "string",
+            "description": "Kubernetes version for the cluster.",
+            "default": "1.11.6",
+            "hidden": false,
+            "label": "Kubernetes version",
+            "secured": false,
+            "required": true,
+            "immutable": false
+        },        
+        {
             "name": "helm_version",
             "type": "string",
             "description": "Helm version to be used to deploy the tiller into the Kubernetes cluster",

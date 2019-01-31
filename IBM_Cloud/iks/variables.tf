@@ -55,3 +55,9 @@ variable "resource_group_name" {
   description = " The name of the IBM Cloud resource group."
   default = "default"
 }
+
+variable "kube_version" {
+  type = "string"
+  description = "Kubernetes version for the cluster."
+  default = "1.11.6"
+}

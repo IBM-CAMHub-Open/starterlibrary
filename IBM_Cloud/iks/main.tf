@@ -13,6 +13,7 @@ module "cluster" {
   public_vlan_id = "${var.public_vlan_id}" 
   subnet_id = "${var.subnet_id}" 
   resource_group_name = "${var.resource_group_name}" 
+  kube_version = "${var.kube_version}" 
 }
 
 module "tiller" {
