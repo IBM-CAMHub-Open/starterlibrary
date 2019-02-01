@@ -10,3 +10,8 @@ variable "cluster_certificate_authority" {
 variable "helm_version" {
   description = "Helm version to be used to deploy the tiller into the Kubernetes cluster"
 }
+variable "deploy_tiller" {
+  type = "string"
+  description = "Indicates whether tiller should be deployed."
+  default = "true"
+}

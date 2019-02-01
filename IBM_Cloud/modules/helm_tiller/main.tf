@@ -1,4 +1,6 @@
 resource "null_resource" "tiller" {  
+  count = "${var.deploy_tiller == "true" ? 1 : 0}"
+
   triggers {
     helm_version = "${var.helm_version}"
   }

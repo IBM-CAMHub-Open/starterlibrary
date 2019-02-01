@@ -61,3 +61,9 @@ variable "kube_version" {
   description = "Kubernetes version for the cluster."
   default = "1.11.6"
 }
+
+variable "deploy_tiller" {
+  type = "string"
+  description = "Indicates whether tiller should be deployed."
+  default = "true"
+}
