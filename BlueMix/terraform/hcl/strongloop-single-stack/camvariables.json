@@ -245,5 +245,17 @@
       "secured": false,
       "required": false
     }
-  ]
+  ],
+  "template_output_params": [
+    {
+      "name": "application_url",
+      "label": "Please access the strongloop-single-stack sample application using the following url",
+      "description": "",
+      "group_name": "",
+      "secured": false,
+      "hidden": false,
+      "shortname": "",
+      "type": "url"
+    }
+  ]  
 }
