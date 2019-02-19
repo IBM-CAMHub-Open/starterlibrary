@@ -26,6 +26,13 @@ provider "azurerm" {
 }
 
 #########################################################
+# Helper module for tagging
+#########################################################
+module "camtags" {
+  source = "../Modules/camtags"
+}
+
+#########################################################
 # Define the variables
 #########################################################
 variable "azure_region" {
@@ -63,6 +70,7 @@ resource "random_id" "default" {
 resource "azurerm_resource_group" "default" {
   name     = "${var.name_prefix}-${random_id.default.hex}-rg"
   location = "${var.azure_region}"
+  tags     = "${module.camtags.tagsmap}"
 }
 
 resource "azurerm_virtual_network" "default" {
@@ -91,6 +99,7 @@ resource "azurerm_public_ip" "db" {
   location                     = "${var.azure_region}"
   resource_group_name          = "${azurerm_resource_group.default.name}"
   public_ip_address_allocation = "static"
+  tags                         = "${module.camtags.tagsmap}"
 }
 
 resource "azurerm_public_ip" "web" {
@@ -98,12 +107,14 @@ resource "azurerm_public_ip" "web" {
   location                     = "${var.azure_region}"
   resource_group_name          = "${azurerm_resource_group.default.name}"
   public_ip_address_allocation = "static"
+  tags                         = "${module.camtags.tagsmap}"
 }
 
 resource "azurerm_network_security_group" "db" {
   name                = "${var.name_prefix}-db-nsg"
   location            = "${var.azure_region}"
   resource_group_name = "${azurerm_resource_group.default.name}"
+  tags                = "${module.camtags.tagsmap}"
 
   security_rule {
     name                       = "ssh-allow"
@@ -134,6 +145,7 @@ resource "azurerm_network_security_group" "web" {
   name                = "${var.name_prefix}-web-nsg"
   location            = "${var.azure_region}"
   resource_group_name = "${azurerm_resource_group.default.name}"
+  tags                = "${module.camtags.tagsmap}"
 
   security_rule {
     name                       = "ssh-allow"
@@ -165,6 +177,7 @@ resource "azurerm_network_interface" "db" {
   location                  = "${var.azure_region}"
   resource_group_name       = "${azurerm_resource_group.default.name}"
   network_security_group_id = "${azurerm_network_security_group.db.id}"
+  tags                      = "${module.camtags.tagsmap}"
 
   ip_configuration {
     name                          = "${var.name_prefix}-db-nic1-ipc"
@@ -179,6 +192,7 @@ resource "azurerm_network_interface" "web" {
   location                  = "${var.azure_region}"
   resource_group_name       = "${azurerm_resource_group.default.name}"
   network_security_group_id = "${azurerm_network_security_group.web.id}"
+  tags                      = "${module.camtags.tagsmap}"
 
   ip_configuration {
     name                          = "${var.name_prefix}-web-nic1-ipc"
@@ -196,6 +210,7 @@ resource "azurerm_storage_account" "default" {
   resource_group_name = "${azurerm_resource_group.default.name}"
   location            = "${var.azure_region}"
   account_type        = "Standard_LRS"
+  tags                = "${module.camtags.tagsmap}"
 }
 
 resource "azurerm_storage_container" "default" {
@@ -215,6 +230,7 @@ resource "azurerm_virtual_machine" "web" {
   resource_group_name   = "${azurerm_resource_group.default.name}"
   network_interface_ids = ["${azurerm_network_interface.web.id}"]
   vm_size               = "Standard_A2"
+  tags                  = "${module.camtags.tagsmap}"
 
   storage_image_reference {
     publisher = "Canonical"
@@ -253,6 +269,7 @@ resource "azurerm_virtual_machine" "web-alternative" {
   resource_group_name   = "${azurerm_resource_group.default.name}"
   network_interface_ids = ["${azurerm_network_interface.web.id}"]
   vm_size               = "Standard_A2"
+  tags                  = "${module.camtags.tagsmap}"
 
   storage_image_reference {
     publisher = "Canonical"
@@ -286,6 +303,7 @@ resource "azurerm_virtual_machine" "db" {
   resource_group_name   = "${azurerm_resource_group.default.name}"
   network_interface_ids = ["${azurerm_network_interface.db.id}"]
   vm_size               = "Standard_A1"
+  tags                  = "${module.camtags.tagsmap}"
 
   storage_image_reference {
     publisher = "Canonical"
@@ -324,6 +342,7 @@ resource "azurerm_virtual_machine" "db-alternative" {
   resource_group_name   = "${azurerm_resource_group.default.name}"
   network_interface_ids = ["${azurerm_network_interface.db.id}"]
   vm_size               = "Standard_A1"
+  tags                  = "${module.camtags.tagsmap}"
 
   storage_image_reference {
     publisher = "Canonical"

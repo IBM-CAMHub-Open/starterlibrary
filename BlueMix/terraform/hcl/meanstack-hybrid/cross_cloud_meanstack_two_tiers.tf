@@ -36,6 +36,13 @@ provider "ibm" {
 }
 
 #########################################################
+# Helper module for tagging
+#########################################################
+module "camtags" {
+  source = "../Modules/camtags"
+}
+
+#########################################################
 # Define the variables
 #########################################################
 variable "aws_access_key" {
@@ -109,26 +116,20 @@ resource "aws_vpc" "default" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
 
-  tags {
-    Name = "${var.network_name_prefix}-vpc"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.network_name_prefix}-vpc"))}"
 }
 
 resource "aws_internet_gateway" "default" {
   vpc_id = "${aws_vpc.default.id}"
 
-  tags {
-    Name = "${var.network_name_prefix}-gateway"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.network_name_prefix}-gateway"))}"
 }
 
 resource "aws_subnet" "default" {
   vpc_id     = "${aws_vpc.default.id}"
   cidr_block = "10.0.1.0/24"
 
-  tags {
-    Name = "${var.network_name_prefix}-subnet"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.network_name_prefix}-subnet"))}"
 }
 
 resource "aws_route_table" "default" {
@@ -139,9 +140,7 @@ resource "aws_route_table" "default" {
     gateway_id = "${aws_internet_gateway.default.id}"
   }
 
-  tags {
-    Name = "${var.network_name_prefix}-route-table"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.network_name_prefix}-route-table"))}"
 }
 
 resource "aws_route_table_association" "default" {
@@ -182,9 +181,7 @@ resource "aws_security_group" "meanstack_nodejs" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags {
-    Name = "${var.network_name_prefix}-security-group-meanstack-nodejs"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.network_name_prefix}-security-group-meanstack-nodejs"))}"
 }
 
 ##############################################################
@@ -234,6 +231,7 @@ resource "ibm_compute_vm_instance" "mongodb_server" {
   dedicated_acct_host_only = false
   local_disk               = false
   ssh_key_ids              = ["${ibm_compute_ssh_key.cam_public_key.id}", "${ibm_compute_ssh_key.temp_public_key.id}"]
+  tags                     = ["${module.camtags.tagslist}"]
 
   # Specify the ssh connection
   connection {
@@ -301,9 +299,7 @@ resource "aws_instance" "nodejs_server" {
   key_name                    = "${aws_key_pair.temp_public_key.id}"
   associate_public_ip_address = true
 
-  tags {
-    Name = "${var.hostname-nodejs}"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.hostname-nodejs}"))}"
 
   # Specify the ssh connection
   connection {

@@ -1,5 +1,9 @@
 provider "ibm" {}
 
+module "camtags" {
+  source = "../Modules/camtags"
+}
+
 variable "public_ssh_key" {
   description = "Public SSH key used to connect to the virtual guest"
 }
@@ -48,6 +52,7 @@ resource "ibm_compute_vm_instance" "debian_small_virtual_guest" {
   dedicated_acct_host_only = false
   local_disk               = false
   ssh_key_ids              = ["${ibm_compute_ssh_key.orpheus_public_key.id}"]
+  tags                     = ["${module.camtags.tagslist}"]
 }
 
 # Create a new virtual guest using image "Debian"
@@ -65,6 +70,7 @@ resource "ibm_compute_vm_instance" "debian_medium_virtual_guest" {
   dedicated_acct_host_only = false
   local_disk               = false
   ssh_key_ids              = ["${ibm_compute_ssh_key.orpheus_public_key.id}"]
+  tags                     = ["${module.camtags.tagslist}"]
 }
 
 output "debian_small_vm_ip" {

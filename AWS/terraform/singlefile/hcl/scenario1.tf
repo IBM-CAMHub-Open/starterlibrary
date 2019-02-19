@@ -16,6 +16,10 @@ provider "aws" {
   region  = "${var.aws_region}"
 }
 
+module "camtags" {
+  source = "../Modules/camtags"
+}
+
 variable "aws_region" {
   description = "AWS region to launch servers."
   default     = "us-east-1"
@@ -92,4 +96,5 @@ resource "aws_instance" "orpheus_ubuntu_micro" {
   ami           = "${data.aws_ami.aws_ami.id}"
   subnet_id     = "${data.aws_subnet.selected.id}"
   key_name      = "${aws_key_pair.orpheus_public_key.id}"
+  tags          = "${module.camtags.tagsmap}"
 }

@@ -26,6 +26,13 @@ provider "ibm" {
 }
 
 #########################################################
+# Helper module for tagging
+#########################################################
+module "camtags" {
+  source = "../Modules/camtags"
+}
+
+#########################################################
 # Define the variables
 #########################################################
 variable "datacenter" {
@@ -93,6 +100,7 @@ resource "ibm_compute_vm_instance" "mongodb_vm" {
   dedicated_acct_host_only = false
   local_disk               = false
   ssh_key_ids              = ["${ibm_compute_ssh_key.cam_public_key.id}", "${ibm_compute_ssh_key.temp_public_key.id}"]
+  tags                     = ["${module.camtags.tagslist}"]
 
   # Specify the ssh connection
   connection {
@@ -176,6 +184,7 @@ resource "ibm_compute_vm_instance" "strongloop_vm" {
   dedicated_acct_host_only = false
   local_disk               = false
   ssh_key_ids              = ["${ibm_compute_ssh_key.cam_public_key.id}", "${ibm_compute_ssh_key.temp_public_key.id}"]
+  tags                     = ["${module.camtags.tagslist}"]
 }
 
 ##############################################################
@@ -195,6 +204,7 @@ resource "ibm_compute_vm_instance" "angularjs_vm" {
   dedicated_acct_host_only = false
   local_disk               = false
   ssh_key_ids              = ["${ibm_compute_ssh_key.cam_public_key.id}", "${ibm_compute_ssh_key.temp_public_key.id}"]
+  tags                     = ["${module.camtags.tagslist}"]
 }
 
 ##############################################################

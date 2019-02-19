@@ -24,6 +24,13 @@ provider "aws" {
 }
 
 #########################################################
+# Helper module for tagging
+#########################################################
+module "camtags" {
+  source = "../Modules/camtags"
+}
+
+#########################################################
 # Define the variables
 #########################################################
 variable "aws_region" {
@@ -94,17 +101,13 @@ resource "aws_vpc" "default" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
 
-  tags {
-    Name = "${var.network_name_prefix}-vpc"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.network_name_prefix}-vpc"))}"
 }
 
 resource "aws_internet_gateway" "default" {
   vpc_id = "${aws_vpc.default.id}"
 
-  tags {
-    Name = "${var.network_name_prefix}-gateway"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.network_name_prefix}-gateway"))}"
 }
 
 resource "aws_subnet" "primary" {
@@ -112,9 +115,7 @@ resource "aws_subnet" "primary" {
   cidr_block        = "10.0.1.0/24"
   availability_zone = "${var.aws_region}b"
 
-  tags {
-    Name = "${var.network_name_prefix}-subnet"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.network_name_prefix}-subnet"))}"
 }
 
 resource "aws_subnet" "secondary" {
@@ -122,18 +123,14 @@ resource "aws_subnet" "secondary" {
   cidr_block        = "10.0.2.0/24"
   availability_zone = "${var.aws_region}c"
 
-  tags {
-    Name = "${var.network_name_prefix}-subnet2"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.network_name_prefix}-subnet2"))}"
 }
 
 resource "aws_db_subnet_group" "default" {
   name       = "${var.network_name_prefix}-db_subnet"
   subnet_ids = ["${aws_subnet.primary.id}", "${aws_subnet.secondary.id}"]
 
-  tags {
-    Name = "${var.network_name_prefix}-db_subnet"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.network_name_prefix}-db_subnet"))}"
 }
 
 resource "aws_route_table" "default" {
@@ -144,9 +141,7 @@ resource "aws_route_table" "default" {
     gateway_id = "${aws_internet_gateway.default.id}"
   }
 
-  tags {
-    Name = "${var.network_name_prefix}-route-table"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.network_name_prefix}-route-table"))}"
 }
 
 resource "aws_route_table_association" "primary" {
@@ -213,9 +208,7 @@ resource "aws_security_group" "application" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags {
-    Name = "${var.network_name_prefix}-security-group-application"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.network_name_prefix}-security-group-application"))}"
 }
 
 resource "aws_security_group" "database" {
@@ -258,9 +251,7 @@ resource "aws_security_group" "database" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags {
-    Name = "${var.network_name_prefix}-security-group-database"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.network_name_prefix}-security-group-database"))}"
 }
 
 ##############################################################
@@ -295,9 +286,7 @@ resource "aws_instance" "php_server" {
   key_name                    = "${aws_key_pair.temp_public_key.id}"
   associate_public_ip_address = true
 
-  tags {
-    Name = "${var.php_instance_name}"
-  }
+  tags = "${merge(module.camtags.tagsmap, map("Name", "${var.php_instance_name}"))}"
 
   # Specify the ssh connection
   connection {
@@ -390,6 +379,7 @@ resource "aws_db_instance" "mysql" {
   publicly_accessible    = true
   vpc_security_group_ids = ["${aws_security_group.database.id}"]
   skip_final_snapshot    = true
+  tags                   = "${merge(module.camtags.tagsmap, map("Name", "${var.db_instance_name}"))}"
 }
 
 ##############################################################
