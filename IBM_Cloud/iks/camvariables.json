@@ -327,7 +327,7 @@
             "name": "kube_version",
             "type": "string",
             "description": "Kubernetes version for the cluster.",
-            "default": "1.11.6",
+            "default": "1.11.7",
             "hidden": false,
             "label": "Kubernetes version",
             "secured": false,
