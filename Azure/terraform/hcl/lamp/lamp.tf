@@ -362,7 +362,7 @@ echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 source ~/.bashrc
 
 echo "---install php driver for SQL server---" | tee -a $LOGFILE 2>&1
-pecl install sqlsrv pdo_sqlsrv                                                                                         >> $LOGFILE 2>&1 || { echo "---Failed to install php drivers---" | tee -a $LOGFILE; exit 1; }
+pecl install sqlsrv-5.3.0 pdo_sqlsrv-5.3.0                                                                                         >> $LOGFILE 2>&1 || { echo "---Failed to install php drivers---" | tee -a $LOGFILE; exit 1; }
 PHP_INI=/etc/php/7.0/apache2/php.ini
 echo "extension= pdo_sqlsrv.so" | tee -a $PHP_INI                                                                      >> $LOGFILE 2>&1 || { echo "---Failed to update php_ini---" | tee -a $LOGFILE; exit 1; }
 echo "extension= sqlsrv.so" | tee -a $PHP_INI                                                                          >> $LOGFILE 2>&1 || { echo "---Failed to update php_ini---" | tee -a $LOGFILE; exit 1; }
@@ -426,6 +426,6 @@ output "LAMP SQL Service FQDN" {
   value = "${azurerm_sql_server.db.fully_qualified_domain_name}"
 }
 
-output "Please Verify LAMP Installation" {
+output "application_url" {
   value = "http://${azurerm_public_ip.web.ip_address}/test.php"
 }

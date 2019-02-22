@@ -158,5 +158,17 @@
       "secured": false,
       "required": false
     }
+  ],
+  "template_output_params": [
+    {
+      "name": "application_url",
+      "label": "Please Verify LAMP Installation",
+      "description": "",
+      "group_name": "",
+      "secured": false,
+      "hidden": false,
+      "shortname": "",
+      "type": "url"
+    }
   ]
 }
