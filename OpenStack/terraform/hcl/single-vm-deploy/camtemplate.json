@@ -1,0 +1,79 @@
+{
+   "name": "OpenStack Single Virtual Machine Example",
+   "description": "IOpenStack example to instantiate virtual machine.",
+   "version": "1.0",
+   "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
+   "image": "tp_WAS_standalone.png",
+   "type": "prebuilt",
+   "status": "active",
+   "manifest": {
+     "template_type": "Terraform",
+     "template_format": "HCL",
+     "template_provider": "OpenStack",
+     "template": {
+       "templateData": "",
+       "templateVariables": "",
+       "templateOutput": ""
+     },
+     "template_source": {
+     "githubRepoUrl": "",
+     "githubAccessToken": "",
+     "relativePathToTemplateFolder": "OpenStack/terraform/hcl/single-vm-deploy",
+     "templateFileName": "main.tf"
+      }
+   },
+   "metadata": {
+     "displayName": "OpenStack Single Virtual Machine Example",
+     "providerDisplayName": "OpenStack",
+     "longDescription": "OpenStack Single Virtual Machine Example",
+     "bullets": [
+      {
+        "title": "Clouds",
+        "description": "OpenStack"
+      },
+      {
+        "title": "Template version",
+        "description": "1.0<br>"
+      },
+      {
+        "title": "Operating systems supported",
+        "description": "Ubuntu 14.4.01 x64"
+      },
+      {
+        "title": "Topology",
+        "description": "OpenStack: Single virtual machines"
+      },
+      {
+        "title": "Default virtual machine settings",
+        "description": "<ul><li>Openstack:<ul style=\"margin-left: 20px;\"><li>Ubuntu 16.04</li><ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 1, Memory = 1GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Computed</li></ul></ul>"
+      },
+      {
+        "title": "Usage and special notes",
+        "description": "<ul><li>1. Creates N+1 virtual servers in a OpenStack environment specified by the user.</li><li>2. Deployment takes approximately 10 minutes to complete.</li></ul>"
+      }
+     ],
+     "featuredImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
+     "imageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
+     "mediumImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_32.png",
+     "smallImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_24.png",
+     "documentationUrl": "https://console.stage1.ng.bluemix.net/docs/services/CloudAutomationManager/index.html",
+     "termsUrl": "http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm-7448-01",
+     "media": [
+       {
+         "type": "image",
+         "thumbnailUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_1.png",
+         "url": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_1_large.png",
+         "caption": ""
+       },
+       {
+         "type": "image",
+         "thumbnailUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_2.png",
+         "url": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_2_large.png",
+         "caption": ""
+       }
+     ]
+   },
+   "toolchain": {
+     "git": "https://github.com/ibmcam/cam-toolchain"
+   }
+ }

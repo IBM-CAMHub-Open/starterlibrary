@@ -1,0 +1,117 @@
+{
+  "input_datatypes": [],
+  "output_datatype": "content_template_output",
+  "input_groups": [
+    {
+      "name": "cloud",
+      "label": "Cloud Input Variables"
+    },
+    {
+      "name": "virtualmachine",
+      "label": "Virtual Machine Input Variables"
+    },
+    {
+      "name": "ssh_keys",
+      "label": "SSH Keys"
+    },
+    {
+      "name": "environment",
+      "label": "Environment"
+    }
+  ],
+  "output_groups": [
+    {
+      "name": "content_template_output",
+      "label": "Outputs"
+    }
+  ],
+  "template_input_params": [
+    {
+      "name": "ibm_stack_name",
+      "type": "string",
+      "description": "A unique stack name.",
+      "hidden": true,
+      "label": "A unique stack name.",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "environment"
+    },
+    {
+      "name":  "openstack_image_id",
+      "type": "string",
+      "description": "The ID of the image to be used for deploy operations.",
+      "hidden": false,
+      "label": "Openstack Image ID",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name":  "openstack_flavor_id",
+      "type": "string",
+      "description": "The ID of the flavor to be used for deploy operations.",
+      "hidden": false,
+      "label": "Openstack Flavor ID",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name":  "openstack_network_name",
+      "type": "string",
+      "description": "The name of the network to be used for deploy operations.",
+      "hidden": false,
+      "label": "Openstack Network Name",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name":  "image_id_username",
+      "type": "string",
+      "description": "The username to SSH into image ID",
+      "hidden": false,
+      "label": "Openstack Image Username",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name":  "image_id_password",
+      "type": "password",
+      "description": "The password of the username to SSH into image ID",
+      "hidden": false,
+      "label": "Openstack Image Password",
+      "secured": true,
+      "required": true,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    }
+
+  ],
+  "template_output_params": [
+    {
+      "name": "single-vm-ip",
+      "label": "IP Addresss of Virtual Machine",
+      "description": "The Public and Public IP address",
+      "type": "string",
+      "hidden": false,
+      "secured": false,
+      "group_name": "content_template_output"
+    },
+    {
+      "name": "stack_id",
+      "label": "Generated Stack ID",
+      "description": "The generated stack id",
+      "type": "string",
+      "hidden": false,
+      "secured": false,
+      "group_name": "content_template_output"
+    }
+  ]
+}
