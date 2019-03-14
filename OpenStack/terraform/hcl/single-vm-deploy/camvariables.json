@@ -36,7 +36,7 @@
       "required": true,
       "immutable": false,
       "group_name": "environment"
-    },
+    }, 
     {
       "name":  "openstack_image_id",
       "type": "string",
@@ -88,11 +88,32 @@
       "hidden": false,
       "label": "Openstack Image Password",
       "secured": true,
-      "required": true,
+      "required": false,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },
+    {
+      "name": "instance_name",
+      "type": "string",
+      "description": "A unique instance name. If a name is not provided a name would be generated.",
+      "hidden": false,
+      "label": "Instance name",
+      "secured": false,
+      "required": false,
+      "immutable": false,
+      "group_name": "virtualmachine"
+    },       
+    {
+      "name":  "key_pair_name",
+      "type": "string",
+      "description": "The name of a ssh key pair which will be injected into the instance when they are created. The key pair must already be created and associated with the tenant's account. Changing key pair name creates a new instance.",
+      "hidden": false,
+      "label": "Key pair name",
+      "secured": false,
+      "required": false,
       "immutable": false,
       "group_name": "virtualmachine"
     }
-
   ],
   "template_output_params": [
     {

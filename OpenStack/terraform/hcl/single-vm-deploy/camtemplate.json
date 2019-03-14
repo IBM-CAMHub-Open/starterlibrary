@@ -1,6 +1,6 @@
 {
    "name": "OpenStack Single Virtual Machine Example",
-   "description": "IOpenStack example to instantiate virtual machine.",
+   "description": "OpenStack example to instantiate virtual machine.",
    "version": "1.0",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
    "image": "tp_WAS_standalone.png",
