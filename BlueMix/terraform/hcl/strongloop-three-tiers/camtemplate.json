@@ -1,5 +1,5 @@
 {
-   "name": "Strongloop 3 Tier Deployment",
+   "name": "Strongloop 3 Tier Deployment on IBM Cloud",
    "description": "Strongloop - An Easy starting point for full stack JavaScript web development.",
    "version": "1.0",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",

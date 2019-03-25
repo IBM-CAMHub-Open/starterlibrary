@@ -1,5 +1,5 @@
 {
-   "name": "LAMP stack deployment",
+   "name": "LAMP stack deployment on AWS",
    "description": "LAMP - A fully-integrated environment for full stack PHP web development.",
    "version": "1.0",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",

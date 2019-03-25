@@ -1,6 +1,6 @@
 {
-   "name": "Strongloop Stack on a Single VM",
-   "description": "Strongloop - An Easy starting point for full stack JavaScript web development.",
+   "name": "Node.js on a Single VM on IBM Cloud",
+   "description": "Node.js - An execution environment for event-driven server-side applications.",
    "version": "1.0",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
    "image": "tp_WAS_standalone.png",
@@ -18,14 +18,14 @@
      "template_source": {
        "githubRepoUrl": "",
        "githubAccessToken": "",
-       "relativePathToTemplateFolder": "BlueMix/terraform/hcl/strongloop-single-stack",
-       "templateFileName": "strongloop-single-stack.tf"
+       "relativePathToTemplateFolder": "BlueMix/terraform/hcl/nodejs",
+       "templateFileName": "nodejs.tf"
      }
    },
    "metadata": {
-     "displayName": "Strongloop Stack on a Single VM",
+     "displayName": "Node.js on a Single VM",
      "providerDisplayName": "IBM",
-     "longDescription": "Deploys a Strongloop/Loopback framework and recommended software (Node.js, Angular.js, MongoDB) in Bluemix. This deployment also deploys a simple sample application to validate the deployment is operational.",
+     "longDescription": "Deploys a single node of Node.js in IBM Cloud for development use, where Node.js is an execution environment for event-driven server-side and networking applications.",
      "bullets": [
        {
          "title": "Clouds",
@@ -37,19 +37,19 @@
        },
        {
          "title": "Topology",
-         "description": "IBM Cloud: 1 virtual machine: MongoDB, Strongloop, Node.js, and Angular.js"
+         "description": "IBM Cloud: 1 virtual machine: Node.js"
        },
        {
          "title": "Software deployed",
-         "description": "<ol class=\"list-numbering\"><li>MongoDB: a NoSQL database</li><li>Sliongloop: a complete solution that addresses all aspects of the API lifecycle, for both on-premises and cloud environments</li><li>Node.js: an execution environment for event-driven server-side and networking applications</li><li>Angular.js: a JavaScript MVC framework that runs in browser JavaScript engines</li></ol>"
+         "description": "<ol class=\"list-numbering\"><li>Node.js: an execution environment for event-driven server-side and networking applications</li></ol>"
        },
        {
          "title": "Default virtual machine settings",
-         "description": "<ul><li>IBM Cloud:<ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 2, Memory = 4GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Computed</li><li>Firewall: Not enabled</li></ul></li></ul>"
+         "description": "<ul><li>IBM Cloud:<ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 1, Memory = 1GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Computed</li><li>Firewall: Not enabled</li></ul></li></ul>"
        },
        {
          "title": "Usage and special notes",
-         "description": "<ol class=\"list-numbering\"><li>Downloads latest releases of software.</li><li>Deployment takes approximately 10 minutes to complete.</li><li>To access the application and virtual machines, please see the instructions in the output log.</li><li>The sample application in this deployment is partially from the open source project <a href=\"https://github.com/strongloop/loopback-example-angular\">https://github.com/strongloop/loopback-example-angular</a> and more details of software can be found in <a href=\"https://www.mongodb.com/\">https://www.mongodb.com/</a>, <a href=\"https://strongloop.com/\">https://strongloop.com/</a>, <a href=\"https://nodejs.org/en/\">https://nodejs.org/en/</a>, and <a href=\"https://angularjs.org/\">https://angularjs.org/</a>.</li></ol>"
+         "description": "<ol class=\"list-numbering\"><li>Downloads latest releases of software.</li><li>Deployment takes approximately 5 minutes to complete.</li><li>To access the application and virtual machines, please see the instructions in the output log.</li><li>More details of software can be found in <a href=\"https://nodejs.org/en/\">https://nodejs.org/en/</a>.</li></ol>"
        }
      ],
      "featuredImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",

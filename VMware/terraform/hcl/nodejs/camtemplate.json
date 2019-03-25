@@ -1,5 +1,5 @@
 {
-   "name": "Node.js on a Single VM",
+   "name": "Node.js on a Single VM on VMware",
    "description": "Node.js - An execution environment for event-driven server-side applications.",
    "version": "1.0",
    "type": "prebuilt",
