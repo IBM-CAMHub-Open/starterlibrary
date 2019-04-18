@@ -21,9 +21,8 @@
 #########################################################
 # Define the Azure provider
 #########################################################
-provider "azurerm" {
-  version = "~> 0.2.2"
-}
+provider "azurerm" { }
+
 
 #########################################################
 # Helper module for tagging
@@ -74,44 +73,44 @@ resource "azurerm_resource_group" "default" {
 }
 
 resource "azurerm_virtual_network" "default" {
-  name                = "${var.name_prefix}-vnet"
+  name                = "${var.name_prefix}-${random_id.default.hex}-vnet"
   address_space       = ["10.0.0.0/16"]
   location            = "${var.azure_region}"
   resource_group_name = "${azurerm_resource_group.default.name}"
 }
 
 resource "azurerm_subnet" "db" {
-  name                 = "${var.name_prefix}-subnet-db"
+  name                 = "${var.name_prefix}-${random_id.default.hex}-subnet-db"
   resource_group_name  = "${azurerm_resource_group.default.name}"
   virtual_network_name = "${azurerm_virtual_network.default.name}"
   address_prefix       = "10.0.1.0/24"
 }
 
 resource "azurerm_subnet" "web" {
-  name                 = "${var.name_prefix}-subnet-web"
+  name                 = "${var.name_prefix}-${random_id.default.hex}-subnet-web"
   resource_group_name  = "${azurerm_resource_group.default.name}"
   virtual_network_name = "${azurerm_virtual_network.default.name}"
   address_prefix       = "10.0.2.0/24"
 }
 
 resource "azurerm_public_ip" "db" {
-  name                         = "${var.name_prefix}-db-pip"
+  name                         = "${var.name_prefix}-${random_id.default.hex}-db-pip"
   location                     = "${var.azure_region}"
   resource_group_name          = "${azurerm_resource_group.default.name}"
-  public_ip_address_allocation = "static"
+  allocation_method 		   = "Static"
   tags                         = "${module.camtags.tagsmap}"
 }
 
 resource "azurerm_public_ip" "web" {
-  name                         = "${var.name_prefix}-web-pip"
+  name                         = "${var.name_prefix}-${random_id.default.hex}-web-pip"
   location                     = "${var.azure_region}"
   resource_group_name          = "${azurerm_resource_group.default.name}"
-  public_ip_address_allocation = "static"
+  allocation_method 		   = "Static"
   tags                         = "${module.camtags.tagsmap}"
 }
 
 resource "azurerm_network_security_group" "db" {
-  name                = "${var.name_prefix}-db-nsg"
+  name                = "${var.name_prefix}-${random_id.default.hex}-db-nsg"
   location            = "${var.azure_region}"
   resource_group_name = "${azurerm_resource_group.default.name}"
   tags                = "${module.camtags.tagsmap}"
@@ -142,7 +141,7 @@ resource "azurerm_network_security_group" "db" {
 }
 
 resource "azurerm_network_security_group" "web" {
-  name                = "${var.name_prefix}-web-nsg"
+  name                = "${var.name_prefix}-${random_id.default.hex}-web-nsg"
   location            = "${var.azure_region}"
   resource_group_name = "${azurerm_resource_group.default.name}"
   tags                = "${module.camtags.tagsmap}"
@@ -173,14 +172,14 @@ resource "azurerm_network_security_group" "web" {
 }
 
 resource "azurerm_network_interface" "db" {
-  name                      = "${var.name_prefix}-db-nic1"
+  name                      = "${var.name_prefix}-${random_id.default.hex}-db-nic1"
   location                  = "${var.azure_region}"
   resource_group_name       = "${azurerm_resource_group.default.name}"
   network_security_group_id = "${azurerm_network_security_group.db.id}"
   tags                      = "${module.camtags.tagsmap}"
 
   ip_configuration {
-    name                          = "${var.name_prefix}-db-nic1-ipc"
+    name                          = "${var.name_prefix}-${random_id.default.hex}-db-nic1-ipc"
     subnet_id                     = "${azurerm_subnet.db.id}"
     private_ip_address_allocation = "dynamic"
     public_ip_address_id          = "${azurerm_public_ip.db.id}"
@@ -188,14 +187,14 @@ resource "azurerm_network_interface" "db" {
 }
 
 resource "azurerm_network_interface" "web" {
-  name                      = "${var.name_prefix}-web-nic1"
+  name                      = "${var.name_prefix}-${random_id.default.hex}-web-nic1"
   location                  = "${var.azure_region}"
   resource_group_name       = "${azurerm_resource_group.default.name}"
   network_security_group_id = "${azurerm_network_security_group.web.id}"
   tags                      = "${module.camtags.tagsmap}"
 
   ip_configuration {
-    name                          = "${var.name_prefix}-web-nic1-ipc"
+    name                          = "${var.name_prefix}-${random_id.default.hex}-web-nic1-ipc"
     subnet_id                     = "${azurerm_subnet.web.id}"
     private_ip_address_allocation = "dynamic"
     public_ip_address_id          = "${azurerm_public_ip.web.id}"
@@ -206,11 +205,14 @@ resource "azurerm_network_interface" "web" {
 # Deploy the storage resources
 #########################################################
 resource "azurerm_storage_account" "default" {
-  name                = "${format("st%s",random_id.default.hex)}"
-  resource_group_name = "${azurerm_resource_group.default.name}"
-  location            = "${var.azure_region}"
-  account_type        = "Standard_LRS"
+  name                		= "${format("st%s",random_id.default.hex)}"
+  resource_group_name 		= "${azurerm_resource_group.default.name}"
+  location           	 	= "${var.azure_region}"
+  account_tier        		= "Standard"  
+  account_replication_type  = "LRS"
+  
   tags                = "${module.camtags.tagsmap}"
+  
 }
 
 resource "azurerm_storage_container" "default" {
@@ -225,7 +227,7 @@ resource "azurerm_storage_container" "default" {
 #########################################################
 resource "azurerm_virtual_machine" "web" {
   count                 = "${var.user_public_key != "None" ? 1 : 0}"
-  name                  = "${var.name_prefix}-web-vm"
+  name                  = "${var.name_prefix}-${random_id.default.hex}-web-vm"
   location              = "${var.azure_region}"
   resource_group_name   = "${azurerm_resource_group.default.name}"
   network_interface_ids = ["${azurerm_network_interface.web.id}"]
@@ -240,14 +242,14 @@ resource "azurerm_virtual_machine" "web" {
   }
 
   storage_os_disk {
-    name          = "${var.name_prefix}-web-os-disk1"
-    vhd_uri       = "${azurerm_storage_account.default.primary_blob_endpoint}${azurerm_storage_container.default.name}/${var.name_prefix}-web-os-disk1.vhd"
+    name          = "${var.name_prefix}-${random_id.default.hex}-web-os-disk1"
+    vhd_uri       = "${azurerm_storage_account.default.primary_blob_endpoint}${azurerm_storage_container.default.name}/${var.name_prefix}-${random_id.default.hex}-web-os-disk1.vhd"
     caching       = "ReadWrite"
     create_option = "FromImage"
   }
 
   os_profile {
-    computer_name  = "${var.name_prefix}-web"
+    computer_name  = "${var.name_prefix}-${random_id.default.hex}-web"
     admin_username = "${var.admin_user}"
     admin_password = "${var.admin_user_password}"
   }
@@ -264,7 +266,7 @@ resource "azurerm_virtual_machine" "web" {
 
 resource "azurerm_virtual_machine" "web-alternative" {
   count                 = "${var.user_public_key == "None" ? 1 : 0}"
-  name                  = "${var.name_prefix}-web-vm"
+  name                  = "${var.name_prefix}-${random_id.default.hex}-web-vm"
   location              = "${var.azure_region}"
   resource_group_name   = "${azurerm_resource_group.default.name}"
   network_interface_ids = ["${azurerm_network_interface.web.id}"]
@@ -279,14 +281,14 @@ resource "azurerm_virtual_machine" "web-alternative" {
   }
 
   storage_os_disk {
-    name          = "${var.name_prefix}-web-os-disk1"
-    vhd_uri       = "${azurerm_storage_account.default.primary_blob_endpoint}${azurerm_storage_container.default.name}/${var.name_prefix}-web-os-disk1.vhd"
+    name          = "${var.name_prefix}-${random_id.default.hex}-web-os-disk1"
+    vhd_uri       = "${azurerm_storage_account.default.primary_blob_endpoint}${azurerm_storage_container.default.name}/${var.name_prefix}-${random_id.default.hex}-web-os-disk1.vhd"
     caching       = "ReadWrite"
     create_option = "FromImage"
   }
 
   os_profile {
-    computer_name  = "${var.name_prefix}-web"
+    computer_name  = "${var.name_prefix}-${random_id.default.hex}-web"
     admin_username = "${var.admin_user}"
     admin_password = "${var.admin_user_password}"
   }
@@ -298,7 +300,7 @@ resource "azurerm_virtual_machine" "web-alternative" {
 
 resource "azurerm_virtual_machine" "db" {
   count                 = "${var.user_public_key != "None" ? 1 : 0}"
-  name                  = "${var.name_prefix}-db-vm"
+  name                  = "${var.name_prefix}-${random_id.default.hex}-db-vm"
   location              = "${var.azure_region}"
   resource_group_name   = "${azurerm_resource_group.default.name}"
   network_interface_ids = ["${azurerm_network_interface.db.id}"]
@@ -313,14 +315,14 @@ resource "azurerm_virtual_machine" "db" {
   }
 
   storage_os_disk {
-    name          = "${var.name_prefix}-db-os-disk1"
-    vhd_uri       = "${azurerm_storage_account.default.primary_blob_endpoint}${azurerm_storage_container.default.name}/${var.name_prefix}-db-os-disk1.vhd"
+    name          = "${var.name_prefix}-${random_id.default.hex}-db-os-disk1"
+    vhd_uri       = "${azurerm_storage_account.default.primary_blob_endpoint}${azurerm_storage_container.default.name}/${var.name_prefix}-${random_id.default.hex}-db-os-disk1.vhd"
     caching       = "ReadWrite"
     create_option = "FromImage"
   }
 
   os_profile {
-    computer_name  = "${var.name_prefix}-db"
+    computer_name  = "${var.name_prefix}-${random_id.default.hex}-db"
     admin_username = "${var.admin_user}"
     admin_password = "${var.admin_user_password}"
   }
@@ -337,7 +339,7 @@ resource "azurerm_virtual_machine" "db" {
 
 resource "azurerm_virtual_machine" "db-alternative" {
   count                 = "${var.user_public_key == "None" ? 1 : 0}"
-  name                  = "${var.name_prefix}-db-vm"
+  name                  = "${var.name_prefix}-${random_id.default.hex}-db-vm"
   location              = "${var.azure_region}"
   resource_group_name   = "${azurerm_resource_group.default.name}"
   network_interface_ids = ["${azurerm_network_interface.db.id}"]
@@ -352,14 +354,14 @@ resource "azurerm_virtual_machine" "db-alternative" {
   }
 
   storage_os_disk {
-    name          = "${var.name_prefix}-db-os-disk1"
-    vhd_uri       = "${azurerm_storage_account.default.primary_blob_endpoint}${azurerm_storage_container.default.name}/${var.name_prefix}-db-os-disk1.vhd"
+    name          = "${var.name_prefix}-${random_id.default.hex}-db-os-disk1"
+    vhd_uri       = "${azurerm_storage_account.default.primary_blob_endpoint}${azurerm_storage_container.default.name}/${var.name_prefix}-${random_id.default.hex}-db-os-disk1.vhd"
     caching       = "ReadWrite"
     create_option = "FromImage"
   }
 
   os_profile {
-    computer_name  = "${var.name_prefix}-db"
+    computer_name  = "${var.name_prefix}-${random_id.default.hex}-db"
     admin_username = "${var.admin_user}"
     admin_password = "${var.admin_user_password}"
   }
