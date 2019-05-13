@@ -50,7 +50,7 @@ resource "random_id" "random_padding" {
 
 provider "openstack" {
   insecure = true
-  version  = "~> 0.3"
+  #version  = "~> 0.3"
 }
 
 resource "openstack_compute_instance_v2" "single-vm" {	
