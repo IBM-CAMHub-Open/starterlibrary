@@ -2,6 +2,9 @@ output "access_urls" {
   value = "${ibm_service_key.serviceKey.credentials}"
 }
 
+output "service_instance_name" {
+  value = "${ibm_service_instance.service.name}"
+}
 /*
 output "host" {
   value = "${ibm_service_key.serviceKey.credentials.host}"

@@ -18,3 +18,6 @@ output "url" {
 output "username" {
   value = "${module.cloudant_service.access_urls["username"]}"
 }
+output "service_instance_name" {
+  value = "${module.cloudant_service.service_instance_name}"
+}
