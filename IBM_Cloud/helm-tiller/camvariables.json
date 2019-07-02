@@ -35,7 +35,7 @@
             "secured": false,
             "hidden": false,
             "required": true,
-            "default": "2.9.0",
+            "default": "2.14.1",
             "immutable": false
         }
     ],
