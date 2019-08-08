@@ -24,15 +24,6 @@ variable "openstack_network_name" {
   description = "The name of the network to be used for deploy operations."
 }
 
-variable "image_id_username" {
-  description = "The username to SSH into image ID"
-}
-
-variable "image_id_password" {
-  description = "The password of the username to SSH into image ID"
-  default = ""
-}
-
 variable "key_pair_name" {
   description = "The name of a ssh key pair which will be injected into the instance when they are created. The key pair must already be created and associated with the tenant's account. Changing key pair name creates a new instance."
   default = ""  

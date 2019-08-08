@@ -71,28 +71,6 @@
       "group_name": "virtualmachine"
     },
     {
-      "name":  "image_id_username",
-      "type": "string",
-      "description": "The username to SSH into image ID",
-      "hidden": false,
-      "label": "OpenStack Image Username",
-      "secured": false,
-      "required": true,
-      "immutable": false,
-      "group_name": "virtualmachine"
-    },
-    {
-      "name":  "image_id_password",
-      "type": "password",
-      "description": "The password of the username to SSH into image ID",
-      "hidden": false,
-      "label": "OpenStack Image Password",
-      "secured": true,
-      "required": false,
-      "immutable": false,
-      "group_name": "virtualmachine"
-    },
-    {
       "name": "instance_name",
       "type": "string",
       "description": "A unique instance name. If a name is not provided a name would be generated.",

@@ -158,5 +158,57 @@
       "secured": false,
       "required": false
     }
+  ],
+  "template_output_params": [
+    {
+      "name": "meanstack_web_vm_public_ip",
+      "type": "string",
+      "hidden": false,
+      "label": "Meanstack Web VM Public IP",
+      "secured": false,
+      "system": false,
+      "required": false,
+      "immutable": false
+    },     
+    {
+      "name": "meanstack_web_vm_private_ip",
+      "type": "string",
+      "hidden": false,
+      "label": "Meanstack Web VM Private IP",
+      "secured": false,
+      "system": false,
+      "required": false,
+      "immutable": false
+    },     
+    {
+      "name": "meanstack_db_vm_public_ip",
+      "type": "string",
+      "hidden": false,
+      "label": "Meanstack DB VM Public IP",
+      "secured": false,
+      "system": false,
+      "required": false,
+      "immutable": false
+    },     
+    {
+      "name": "meanstack_db_vm_private_ip",
+      "type": "string",
+      "hidden": false,
+      "label": "Meanstack DB VM Private IP",
+      "secured": false,
+      "system": false,
+      "required": false,
+      "immutable": false
+    },     
+    {
+      "name": "meanstack_sample_application_url",
+      "type": "url",
+      "hidden": false,
+      "label": "Meanstack Sample Application URL",
+      "secured": false,
+      "system": false,
+      "required": false,
+      "immutable": false
+    }
   ]
 }

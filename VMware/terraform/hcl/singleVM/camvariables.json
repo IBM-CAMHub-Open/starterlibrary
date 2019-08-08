@@ -313,7 +313,6 @@
       "name": "vm_1_adapter_type",
       "type": "string",
       "description": "Network adapter type for vNIC Configuration",
-      "default": "vmxnet3",
       "hidden": false,
       "label": "vSphere Network Adapter Type - vm_1",
       "secured": false,
@@ -325,7 +324,7 @@
         },
         {
           "value": "e1000",
-          "default": "e1000"
+          "label": "e1000"
         }
       ],
       "required": true,

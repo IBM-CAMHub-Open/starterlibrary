@@ -580,22 +580,22 @@ EOF
 #########################################################
 # Output
 #########################################################
-output "Meanstack Web VM Public IP" {
+output "meanstack_web_vm_public_ip" {
   value = "${azurerm_public_ip.web.ip_address}"
 }
 
-output "Meanstack Web VM Private IP" {
+output "meanstack_web_vm_private_ip" {
   value = "${azurerm_network_interface.web.private_ip_address}"
 }
 
-output "Meanstack DB VM Public IP" {
+output "meanstack_db_vm_public_ip" {
   value = "${azurerm_public_ip.db.ip_address}"
 }
 
-output "Meanstack DB VM Private IP" {
+output "meanstack_db_vm_private_ip" {
   value = "${azurerm_network_interface.db.private_ip_address}"
 }
 
-output "Please Access the Meanstack Sample Application" {
+output "meanstack_sample_application_url" {
   value = "http://${azurerm_public_ip.web.ip_address}:8443"
 }
