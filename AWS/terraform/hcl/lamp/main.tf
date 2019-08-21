@@ -528,10 +528,10 @@ EOF
 #########################################################
 # Output
 #########################################################
-output "AWS PHP address" {
+output "aws_php_address" {
   value = "http://${aws_instance.php_server.public_ip}/test.php"
 }
 
-output "MySQL address" {
+output "mysql_address" {
   value = "${aws_db_instance.mysql.address}"
 }

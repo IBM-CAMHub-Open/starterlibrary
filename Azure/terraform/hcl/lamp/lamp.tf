@@ -415,15 +415,15 @@ EOF
 #########################################################
 # Output
 #########################################################
-output "LAMP Web VM Public IP" {
+output "lamp_web_vm_public_ip" {
   value = "${azurerm_public_ip.web.ip_address}"
 }
 
-output "LAMP Web VM Private IP" {
+output "lamp_web_vm_private_ip" {
   value = "${azurerm_network_interface.web.private_ip_address}"
 }
 
-output "LAMP SQL Service FQDN" {
+output "lamp_sql_service_fqdn" {
   value = "${azurerm_sql_server.db.fully_qualified_domain_name}"
 }
 

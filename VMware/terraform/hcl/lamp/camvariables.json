@@ -837,5 +837,20 @@
       "required": false
     }
   ],
-  "template_output_params": []
+  "template_output_params": [
+    {
+      "name": "vmware_php_address",
+      "label": "Sample Application URL",
+      "secured": false,
+      "type": "url",
+      "hidden": false
+    },    
+    {
+      "name": "mariadb_address",
+      "label": "MariaDB address",
+      "secured": false,
+      "type": "string",
+      "hidden": false
+    }
+  ]
 }

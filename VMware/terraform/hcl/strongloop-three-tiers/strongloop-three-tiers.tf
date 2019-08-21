@@ -1306,15 +1306,15 @@ EOF
 #########################################################
 # Output
 #########################################################
-output "The mongodb server's ip addresses" {
+output "db_server_ip_address" {
   value = "${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }
 
-output "The strongloop server's ip addresses" {
+output "strongloop_server_ip_address" {
   value = "${vsphere_virtual_machine.strongloop_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }
 
-output "The angular server's ip addresses" {
+output "angularjs_server_ip_address" {
   value = "${vsphere_virtual_machine.angular_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }
 

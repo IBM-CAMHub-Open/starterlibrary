@@ -140,6 +140,6 @@ EOF
 #########################################################
 # Output
 #########################################################
-output "The IP address of the VM with MongoDB installed" {
+output "db_server_ip_address" {
   value = "${ibm_compute_vm_instance.softlayer_virtual_guest.ipv4_address}"
 }

@@ -786,15 +786,15 @@ EOF
 #########################################################
 # Output
 #########################################################
-output "The mongodb server's ip addresses" {
+output "db_server_ip_address" {
   value = "${ibm_compute_vm_instance.mongodb_vm.ipv4_address}"
 }
 
-output "The strongloop server's ip addresses" {
+output "strongloop_server_ip_address" {
   value = "${ibm_compute_vm_instance.strongloop_vm.ipv4_address}"
 }
 
-output "The angular server's ip addresses" {
+output "angularjs_server_ip_address" {
   value = "${ibm_compute_vm_instance.angularjs_vm.ipv4_address}"
 }
 

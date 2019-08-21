@@ -410,10 +410,10 @@ EOF
 #########################################################
 # Output
 #########################################################
-output "AWS PHP address" {
+output "ibm_php_address" {
   value = "http://${ibm_compute_vm_instance.php_server.ipv4_address}/test.php"
 }
 
-output "MySQL address" {
+output "mysql_address" {
   value = "${aws_db_instance.mysql.address}"
 }

@@ -271,6 +271,6 @@ EOF
 #########################################################
 # Output
 #########################################################
-output "The IP address of the VM with MariaDB installed" {
+output "db_server_ip_address" {
   value = "${vsphere_virtual_machine.mariadb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }

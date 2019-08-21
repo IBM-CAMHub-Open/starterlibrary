@@ -59,16 +59,16 @@
   ],
   "template_output_params": [
     {
-      "name": "access_urls",
-      "label": "access_urls",
-      "description": "",
+      "name": "service_credentials",
+      "label": "Service Credentials",
       "secured": false,
-      "hidden": false
+      "hidden": false,
+      "type": "string"
     },
     {
-      "name": "IBM Cloud Dashboard",
+      "name": "ibm_cloud_dashboard",
       "label": "IBM Cloud Dashboard",
-      "description": "IBM  Cloud Dashboard url",
+      "description": "IBM  Cloud Dashboard URL",
       "secured": false,
       "hidden": false,
       "type":"url"

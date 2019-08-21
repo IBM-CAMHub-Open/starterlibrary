@@ -124,7 +124,7 @@
             "name": "url",
             "label": "url ",
             "description": "url",
-            "type": "string",
+            "type": "url",
             "hidden": false,
             "secured": false,
             "group_name": "output_group"

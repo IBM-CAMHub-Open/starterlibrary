@@ -77,7 +77,6 @@
       "name": "vm_1_root_disk_keep_on_remove",
       "type": "string",
       "description": "Delete template disk volume when the virtual machine is deleted",
-      "default": "false",
       "hidden": true,
       "label": "Delete template disk volume when the virtual machine is deleted - vm_1",
       "secured": false,
@@ -134,7 +133,6 @@
       "name": "vm_1_root_disk_controller_type",
       "type": "string",
       "description": "Type of template disk controller",
-      "default": "scsi",
       "hidden": false,
       "label": "Template Disk Controller - vm_1",
       "secured": false,
@@ -184,7 +182,6 @@
       "name": "vm_1_root_disk_type",
       "type": "string",
       "description": "Type of template disk volume",
-      "default": "eager_zeroed",
       "hidden": false,
       "label": "Template Disk Type - vm_1",
       "secured": false,
@@ -200,8 +197,7 @@
         },
         {
           "value": "thin",
-          "label": "Thin Provision",
-          "group_name": "virtualmachine"
+          "label": "Thin Provision"
         }
       ],
       "required": true,

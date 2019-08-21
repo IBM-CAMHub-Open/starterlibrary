@@ -594,10 +594,10 @@ EOF
   }
 }
 
-output "IBM Cloud PHP address" {
+output "vmware_php_address" {
   value = "http://${vsphere_virtual_machine.php_vm.clone.0.customize.0.network_interface.0.ipv4_address}/test.php"
 }
 
-output "MariaDB address" {
+output "mariadb_address" {
   value = "${vsphere_virtual_machine.mariadb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }

@@ -275,6 +275,6 @@ EOF
 #########################################################
 # Output
 #########################################################
-output "The IP address of the VM with NodeJs installed" {
+output "nodejs_server_ip_address" {
   value = "${vsphere_virtual_machine.nodejs_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
 }

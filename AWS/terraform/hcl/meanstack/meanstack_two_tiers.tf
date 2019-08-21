@@ -532,14 +532,14 @@ EOF
 #########################################################
 # Output
 #########################################################
-output "Meanstack DB Server IP Address" {
+output "meanstack_db_server_ip_address" {
   value = "${aws_instance.mongodb_server.public_ip}"
 }
 
-output "Meanstack NodeJS Server IP Address" {
+output "meanstack_nodejs_server_ip_address" {
   value = "${aws_instance.nodejs_server.public_ip}"
 }
 
-output "Please access the meanstack sample application" {
+output "meanstack_sample_application_url" {
   value = "http://${aws_instance.nodejs_server.public_ip}:8443"
 }

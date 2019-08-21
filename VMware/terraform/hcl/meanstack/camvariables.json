@@ -811,5 +811,27 @@
       "required": false
     }
   ],
-  "template_output_params": []
+  "template_output_params": [
+    {
+      "name": "meanstack_db_server_ip_address",
+      "type": "string",
+      "hidden": false,
+      "label": "DB Server IP Address",
+      "secured": false
+    },     
+    {
+      "name": "meanstack_nodejs_server_ip_address",
+      "type": "string",
+      "hidden": false,
+      "label": "NodeJS Server IP Address",
+      "secured": false
+    },     
+    {
+      "name": "meanstack_sample_application_url",
+      "type": "url",
+      "hidden": false,
+      "label": "Sample Application URL",
+      "secured": false
+    }
+  ]
 }

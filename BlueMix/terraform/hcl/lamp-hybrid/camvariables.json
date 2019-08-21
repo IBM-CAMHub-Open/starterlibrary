@@ -334,5 +334,21 @@
       "secured": false,
       "required": false
     }
+  ],
+  "template_output_params": [
+    {
+      "name": "ibm_php_address",
+      "type": "url",
+      "hidden": false,
+      "label": "Sample Application URL",
+      "secured": false
+    },     
+    {
+      "name": "mysql_address",
+      "type": "string",
+      "hidden": false,
+      "label": "MySQL address",
+      "secured": false
+    }
   ]
 }

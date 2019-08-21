@@ -247,5 +247,14 @@
       "secured": false,
       "required": false
     }
+  ],
+  "template_output_params": [
+    {
+        "name": "meanstack_nodejs_server_ip_address",
+        "type": "string",
+        "hidden": false,
+        "label": "NodeJS Server IP Address",
+        "secured": false  
+    }
   ]
 }

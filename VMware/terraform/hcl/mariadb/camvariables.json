@@ -485,5 +485,13 @@
       "required": false
     }
   ],
-  "template_output_params": []
+  "template_output_params": [
+    {
+      "name": "db_server_ip_address",
+      "type": "string",
+      "hidden": false,
+      "label": "DB Server IP Address",
+      "secured": false
+    }
+  ]
 }

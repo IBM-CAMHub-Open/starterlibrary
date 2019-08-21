@@ -510,5 +510,13 @@
       "required": false
     }
   ],
-  "template_output_params": []
+  "template_output_params": [
+    {
+      "name": "tomcat_web_management_url",
+      "label": "Tomcat web management URL",
+      "secured": false,
+      "type": "url",
+      "hidden": false
+    }
+  ]
 }

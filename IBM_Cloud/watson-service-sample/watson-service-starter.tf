@@ -745,10 +745,10 @@ provider "ibm" {
 ################################################
 # outputs
 ################################################
-output "access_urls" {
+output "service_credentials" {
   value = "${ibm_service_key.serviceKey.credentials}"
 }
 
-output "IBM Cloud Dashboard" {
+output "ibm_cloud_dashboard" {
   value = "https://console.bluemix.net/dashboard/apps/?search=visual"
 }

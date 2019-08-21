@@ -289,6 +289,6 @@ EOF
 #########################################################
 # Output
 #########################################################
-output "Please access Tomcat web management" {
+output "tomcat_web_management_url" {
   value = "http://${vsphere_virtual_machine.tomcat_vm.clone.0.customize.0.network_interface.0.ipv4_address}:8080"
 }

@@ -281,5 +281,21 @@
         "regex": "^[0-9A-Za-z]{8,16}$",
         "group_name": "virtualmachine"
     }
+  ],
+  "template_output_params": [
+    {
+      "name": "aws_php_address",
+      "type": "url",
+      "hidden": false,
+      "label": "Sample Application URL",
+      "secured": false
+    },
+    {
+        "name": "mysql_address",
+        "type": "string",
+        "hidden": false,
+        "label": "MySQL address",
+        "secured": false
+      }
   ]
 }

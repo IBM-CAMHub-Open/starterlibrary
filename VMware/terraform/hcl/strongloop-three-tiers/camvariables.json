@@ -1150,13 +1150,31 @@
   ],
   "template_output_params": [
     {
+      "name": "db_server_ip_address",
+      "type": "string",
+      "hidden": false,
+      "label": "DB Server IP Address",
+      "secured": false
+    },     
+    {
+      "name": "strongloop_server_ip_address",
+      "type": "string",
+      "hidden": false,
+      "label": "NodeJS Server IP Address",
+      "secured": false
+    },     
+    {
+      "name": "angularjs_server_ip_address",
+      "type": "string",
+      "hidden": false,
+      "label": "NodeJS Server IP Address",
+      "secured": false
+    },     
+    {
       "name": "application_url",
-      "label": "Please access the strongloop-three-tiers sample application using the following url",
-      "description": "",
-      "group_name": "",
+      "label": "Sample Application URL",
       "secured": false,
       "hidden": false,
-      "shortname": "",
       "type": "url"
     }
   ]
