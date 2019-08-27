@@ -1,5 +1,5 @@
 {
-    "name": "VMware vRealize Automation single node catalog deployment.",
+    "name": "VMware vRealize Automation single node catalog deployment",
     "description": "This template will deploy a vRA catalog containing a single server component.",
     "version": "1.0",
     "imageUrl": "",
@@ -23,7 +23,7 @@
       }
     },
     "metadata": {
-      "displayName": "This template will deploy a vRA catalog containing a single server component.",
+      "displayName": "This template will deploy a vRA catalog containing a single server component",
       "providerDisplayName": "VMware vRealize Automation",
       "longDescription": "This template will deploy a vRA catalog containing a single server component. Connection information derived from catalog properties will be used to execute a remote exec command.",
       "bullets": [{
