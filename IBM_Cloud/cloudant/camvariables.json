@@ -24,36 +24,27 @@
             "immutable": false,
             "options": [
                 {
-                    "value": "Lite",
+                    "value": "lite",
                     "label": "Lite",
                     "default": "true"
                 },
                 {
-                    "value": "Standard",
+                    "value": "standard",
                     "label": "Standard"
                 },
                 {
-                    "value": "Dedicated Hardware",
+                    "value": "dedicated hardware",
                     "label": "Dedicated Hardware"
                 }
             ]
         },
         {
-            "name": "org",
+            "name": "group",
             "type": "string",
-            "description": "Organization to place service under.",
+            "description": "Resource group to place the service.",
             "hidden": false,
-            "label": "Organization",
-            "secured": false,
-            "required": true,
-            "immutable": false
-        },
-        {
-            "name": "space",
-            "type": "string",
-            "description": "Organization space to create the service.",
-            "hidden": false,
-            "label": "Space",
+            "label": "Resource Group",
+            "default": "default",
             "secured": false,
             "required": true,
             "immutable": false

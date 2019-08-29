@@ -6,41 +6,51 @@
 ################################################
 # Load org data
 ################################################
-data "ibm_org" "orgData" {
-  org                         = "${var.org}"
-}
+# data "ibm_org" "orgData" {
+#   org                         = "${var.org}"
+# }
 
 ################################################
 # Load space data
 ################################################
-data "ibm_space" "spaceData" {
-  space                       = "${var.space}"
-  org                         = "${data.ibm_org.orgData.org}"
-}
+# data "ibm_space" "spaceData" {
+#   space                       = "${var.space}"
+#   org                         = "${data.ibm_org.orgData.org}"
+# }
 
 ################################################
 # Load account data
 ################################################
-data "ibm_account" "accountData" {
-  org_guid                    = "${data.ibm_org.orgData.id}"
+# data "ibm_account" "accountData" {
+#   org_guid                    = "${data.ibm_org.orgData.id}"
+# }
+
+################################################
+# Load resource group
+################################################
+data "ibm_resource_group" "group" {
+  name = "${var.group}"
 }
 
 ################################################
 # Create cloudant instance
 ################################################
-resource "ibm_service_instance" "service" {
+resource "ibm_resource_instance" "service" {
   name                        = "${var.servicename}-${random_pet.service.id}"
-  space_guid                  = "${data.ibm_space.spaceData.id}"
-  service                     = "${var.servicename}"
+  service                     = "cloudantnosqldb"
   plan                        = "${var.plan}"
+  location                    = "${var.region}"
+  resource_group_id           = "${data.ibm_resource_group.group.id}"
+  
 }
 
 ################################################
 # Generate access info
 ################################################
-resource "ibm_service_key" "serviceKey" {
+resource "ibm_resource_key" "resourceKey" {
   name                        = "${var.servicename}-${random_pet.service.id}"
-  service_instance_guid       = "${ibm_service_instance.service.id}"
+  role                        = "Manager"
+  resource_instance_id        = "${ibm_resource_instance.service.id}"
 }
 
 ################################################
