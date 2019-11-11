@@ -1,4 +1,5 @@
 {
+  "terraform_engine": "~> 0.11.0",
   "output_namespace": "content_template_output",
   "template_input_params": [
     {

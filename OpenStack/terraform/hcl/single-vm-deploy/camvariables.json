@@ -1,4 +1,5 @@
 {
+  "terraform_engine": "~> 0.11.0",
   "input_datatypes": [],
   "output_datatype": "content_template_output",
   "input_groups": [
@@ -26,17 +27,6 @@
     }
   ],
   "template_input_params": [
-    {
-      "name": "ibm_stack_name",
-      "type": "string",
-      "description": "A unique stack name.",
-      "hidden": true,
-      "label": "A unique stack name.",
-      "secured": false,
-      "required": true,
-      "immutable": false,
-      "group_name": "environment"
-    }, 
     {
       "name":  "openstack_image_id",
       "type": "string",

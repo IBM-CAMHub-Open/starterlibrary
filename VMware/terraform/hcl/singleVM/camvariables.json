@@ -1,4 +1,5 @@
 {
+  "terraform_engine": "~> 0.11.0",
   "input_datatypes": [
   ],
   "output_datatype": "content_template_output",
