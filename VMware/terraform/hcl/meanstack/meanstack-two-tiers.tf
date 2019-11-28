@@ -726,7 +726,7 @@ retryInstall () {
 }
 echo "---Install nodejs---" | tee -a $LOGFILE 2>&1
 retryInstall "yum install gcc-c++ make -y"                                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install build tools---" | tee -a $LOGFILE; exit 1; }
-curl -sL https://rpm.nodesource.com/setup_7.x | bash -                                                            >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
+curl -sL https://rpm.nodesource.com/setup_12.x | bash -                                                            >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
 retryInstall "yum install nodejs -y"                                                                              >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
 npm install -g bower gulp                                                                                         >> $LOGFILE 2>&1 || { echo "---Failed to install bower and gulp---" | tee -a $LOGFILE; exit 1; }
 echo "---Install mean sample application---" | tee -a $LOGFILE 2>&1
@@ -735,7 +735,7 @@ git clone https://github.com/meanjs/mean.git mean                               
 cd mean
 yum groupinstall 'Development Tools' -y                                                                           >> $LOGFILE 2>&1 || { echo "---Failed to install development tools---" | tee -a $LOGFILE; exit 1; }
 retryInstall "yum install -y libpng-devel"                                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install libpng---" | tee -a $LOGFILE; exit 1; }
-npm install                                                                                                       >> $LOGFILE 2>&1 || { echo "---Failed to install node modules---" | tee -a $LOGFILE; exit 1; }
+npm install --unsafe-perm=true                                                                                    >> $LOGFILE 2>&1 || { echo "---Failed to install node modules---" | tee -a $LOGFILE; exit 1; }
 bower --allow-root --config.interactive=false install                                                             >> $LOGFILE 2>&1 || { echo "---Failed to install bower---" | tee -a $LOGFILE; exit 1; }
 PRODCONF=config/env/production.js
 sed -i -e "/    uri: process.env.MONGOHQ_URL/a\ \ \ \ uri: \'mongodb:\/\/"$DBADDRESS":27017/mean\'," $PRODCONF    >> $LOGFILE 2>&1 || { echo "---Failed to update db config---" | tee -a $LOGFILE; exit 1; }
