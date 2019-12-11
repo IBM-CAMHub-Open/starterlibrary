@@ -8,8 +8,7 @@
       "options": [
         {
           "value": "centos-cloud/centos-7",
-          "label": "CentOS 7",
-          "default": true
+          "label": "CentOS 7"
         },
         {
           "value": "rhel-cloud/rhel-7",
@@ -25,7 +24,8 @@
         },
         {
           "value": "ubuntu-os-cloud/ubuntu-1604-lts",
-          "label": "Ubuntu 16.04"
+          "label": "Ubuntu 16.04",
+          "default": true
         }
       ],
       "type": "string",
@@ -87,8 +87,8 @@
       "options": [
         {
           "value": "us-central1-a",
-          "label": "us-central1-a (Iowa, USA)",
-          "default": true
+          "label": "us-central1-a (Iowa, USA)"
+         
         },
         {
           "value": "us-west1-a",
@@ -96,7 +96,8 @@
         },
         {
           "value": "us-east1-c",
-          "label": "us-east1-c (South Carolina, USA)"
+          "label": "us-east1-c (South Carolina, USA)",
+          "default": true
         },
         {
           "value": "europe-west3-a",
@@ -117,7 +118,7 @@
     {
       "name": "gce_ssh_user",
       "description": "User name to connect to the deployed VMs",
-      "default": "camuser",
+      "default": "ubuntu",
       "type": "string",
       "required": true,
       "secured": false,
