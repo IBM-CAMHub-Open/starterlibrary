@@ -4,16 +4,11 @@
     {
       "name": "boot_disk",
       "description": "The boot disk for the instance.",
-      "default": "centos-cloud/centos-7",
       "options": [
         {
           "value": "ubuntu-os-cloud/ubuntu-1604-lts",
           "label": "Ubuntu 16.04",
           "default": true
-        },
-        {
-          "value": "centos-cloud/centos-7",
-          "label": "CentOS 7"
         },
         {
           "value": "rhel-cloud/rhel-7",
@@ -38,7 +33,6 @@
     {
       "name": "machine_type",
       "description": "The machine type to create.",
-      "default": "n1-standard-1",
       "options": [
         {
           "value": "n1-standard-1",
@@ -83,7 +77,6 @@
     {
       "name": "zone",
       "description": "The zone the resource should be created in.",
-      "default": "us-central1-a",
       "options": [
         {
           "value": "us-central1-a",
