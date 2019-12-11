@@ -113,6 +113,27 @@
       "label": "zone",
       "hidden": false,
       "immutable": false
+    },
+    {
+      "name": "gce_ssh_user",
+      "description": "User name to connect to the deployed VMs",
+      "default": "camuser",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "SSH User Name",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "gce_ssh_public_key",
+      "description": "Public SSH key to be injected into the authorized_keys of the guest VM",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "SSH Public Key",
+      "hidden": false,
+      "immutable": false
     }
   ],
   "template_output_params": [

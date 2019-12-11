@@ -22,6 +22,13 @@ variable "zone" {
   default = "us-central1-a"
 }
 
+variable "gce_ssh_user" {
+  description = "A user name used to connect to the deployed VM in GCE."
+}
+variable "gce_ssh_public_key" {
+  description = "Public key used to connect to the deployed VM in GCE."
+}
+
 // Create a new compute engine resource
 resource "google_compute_instance" "default" {
   name         = "${var.unique_resource_name}"
@@ -38,6 +45,9 @@ resource "google_compute_instance" "default" {
     access_config {
       // Ephemeral IP
     }
+  }
+  metadata {
+    sshKeys = "${var.gce_ssh_user}:${var.gce_ssh_public_key}"
   }
 }
 
