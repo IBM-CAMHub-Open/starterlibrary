@@ -1,5 +1,5 @@
 {
-  "terraform_engine": "~> 0.11.0",
+  "terraform_version": "~> 0.11.0",
   "template_input_params": [
     {
       "name": "servicename",
