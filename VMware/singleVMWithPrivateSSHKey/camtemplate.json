@@ -1,0 +1,44 @@
+{
+  "name": "SingleVirtualMachineWithPrivateSSHKey",
+  "description": "Create Virtual Machine and outputs a generated private SSH key",
+  "type": "prebuilt",
+  "version": "1.0",
+  "manifest": {
+    "template_type": "Terraform",
+    "template_format": "HCL",
+    "template_provider": "VMware vSphere",
+    "template": {
+      "templateOutput": "",
+      "templateVariables": "",
+      "templateData": ""
+    },
+    "template_source": {
+      "githubRepoUrl": "",
+      "githubAccessToken": "",
+      "relativePathToTemplateFolder": "VMware/terraform/hcl/singleVMWithPrivateSSHKey",
+      "templateFileName": "main.tf"
+    }
+  },
+  "metadata": {
+      "displayName": "Single Virtual Machine with Private SSh Key",
+      "longDescription": "Create Virtual Machine and outputs a generated private SSH key",
+      "bullets": [
+       {
+         "title": "Clouds",
+         "description": "VMware"
+       },
+       {
+         "title": "Topology",
+         "description": "Single virtual machine"
+       },
+       {
+         "title": "Default Virtual Machine settings",
+         "description": "Standard machine type with 1 virtual CPU and 1 GB of memory."
+       },
+       {
+         "title": "Usage and special notes",
+         "description": "A typical deployment takes < 1 minute."
+       }
+      ]
+  }
+}
