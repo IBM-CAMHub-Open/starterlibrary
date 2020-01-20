@@ -1,5 +1,5 @@
 {
-  "name": "SingleVirtualMachineWithPrivateSSHKey",
+  "name": "Single Virtual Machine with Private SSH Key",
   "description": "Create Virtual Machine and outputs a generated private SSH key",
   "type": "prebuilt",
   "version": "1.0",
