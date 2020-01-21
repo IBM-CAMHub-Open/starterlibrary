@@ -11,8 +11,12 @@ provider "random" {
 }
 
 locals{
-	private_ssh_key="${tls_private_key.generate.private_key_pem}"
-	public_ssh_key="${tls_private_key.generate.public_key_openssh}"
+
+  private_ssh_key         = "${length(var.vm_os_private_ssh_key) == 0 ? "${tls_private_key.generate.private_key_pem}"     : "${base64decode(var.vm_os_private_ssh_key)}"}"
+  public_ssh_key          = "${length(var.vm_os_private_ssh_key)  == 0 ? "${tls_private_key.generate.public_key_openssh}"  : "${var.vm_os_public_ssh_key}"}"
+
+	#private_ssh_key="${tls_private_key.generate.private_key_pem}"
+	#public_ssh_key="${tls_private_key.generate.public_key_openssh}"
 }
 
 resource "random_string" "random-dir" {
@@ -161,6 +165,7 @@ resource "null_resource" "add_ssh_key" {
     type     = "ssh"
     user     = "${var.vm_os_user}"
     password = "${var.vm_os_password}"
+    private_key = "${var.vm_os_private_ssh_key}"
     timeout = "30m"
     host     = "${var.vm_ipv4_address}"
   }
@@ -170,7 +175,7 @@ resource "null_resource" "add_ssh_key" {
     inline = [
       "set -e",
       "bash -c 'chmod +x VM_add_ssh_key.sh'",
-      "bash -c './VM_add_ssh_key.sh  \"${var.vm_os_user}\" \"${local.public_ssh_key}\" \"${local.public_ssh_key}\">> VM_add_ssh_key.log 2>&1'",
+      "bash -c './VM_add_ssh_key.sh  \"${var.vm_os_user}\" \"${local.public_ssh_key}\" \"${local.private_ssh_key}\">> VM_add_ssh_key.log 2>&1'",
     ]
   }
 }
