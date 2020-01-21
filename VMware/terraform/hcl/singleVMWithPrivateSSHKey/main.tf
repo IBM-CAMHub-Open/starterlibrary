@@ -84,7 +84,7 @@ resource "vsphere_virtual_machine" "vm" {
     type     = "ssh"
     user     = "${var.vm_os_user}"
     password = "${var.vm_os_password}"
-    private_key = "${length(var.vm_os_private_ssh_key) == 0 ? "${tls_private_key.generate.private_key_pem}" : ""}"
+    private_key = "${length(var.vm_os_private_ssh_key) == 0 ? "" :  "${base64decode(var.vm_os_private_ssh_key)}"}"
     timeout = "5m"
   }
 
