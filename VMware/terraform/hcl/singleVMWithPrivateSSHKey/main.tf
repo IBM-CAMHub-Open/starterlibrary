@@ -84,8 +84,8 @@ resource "vsphere_virtual_machine" "vm" {
     type     = "ssh"
     user     = "${var.vm_os_user}"
     password = "${var.vm_os_password}"
-    private_key = "${var.vm_os_private_ssh_key}"
-    timeout = "30m"
+    private_key = "${length(var.vm_os_private_ssh_key) == 0 ? "${tls_private_key.generate.private_key_pem}" : ""}"
+    timeout = "5m"
   }
 
   provisioner "file" {
@@ -157,21 +157,7 @@ rm -rf $user_auth_key_file_private_temp
 
 EOF
   }
-}
 
-resource "null_resource" "add_ssh_key" {
-  depends_on = ["vsphere_virtual_machine.vm"]
-  # Specify the connection
-  connection {
-    type     = "ssh"
-    user     = "${var.vm_os_user}"
-    password = "${var.vm_os_password}"
-    private_key = "${var.vm_os_private_ssh_key}"
-    timeout = "30m"
-    host     = "${var.vm_ipv4_address}"
-  }
-  
-  # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
       "set -e",
