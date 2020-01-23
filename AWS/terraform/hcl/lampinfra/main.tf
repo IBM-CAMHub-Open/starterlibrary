@@ -204,22 +204,11 @@ resource "aws_security_group" "database" {
 ##############################################################
 # Create user-specified public key in AWS
 ##############################################################
-resource "aws_key_pair" "cam_public_key" {
+resource "aws_key_pair" "public_key" {
   key_name   = "${var.public_key_name}"
   public_key = "${var.public_key}"
 }
 
-##############################################################
-# Create temp public key for ssh connection
-##############################################################
-resource "tls_private_key" "ssh" {
-  algorithm = "RSA"
-}
-
-resource "aws_key_pair" "temp_public_key" {
-  key_name   = "${var.public_key_name}-temp"
-  public_key = "${tls_private_key.ssh.public_key_openssh}"
-}
 
 ##############################################################
 # Create a server for php
@@ -230,7 +219,7 @@ resource "aws_instance" "web_server" {
   ami                         = "${data.aws_ami.aws_ami.id}"
   subnet_id                   = "${aws_subnet.primary.id}"
   vpc_security_group_ids      = ["${aws_security_group.application.id}"]
-  key_name                    = "${aws_key_pair.temp_public_key.id}"
+  key_name                    = "${aws_key_pair.public_key.id}"
   associate_public_ip_address = true
 
   tags = "${merge(module.camtags.tagsmap, map("Name", "${var.php_instance_name}"))}"
@@ -243,7 +232,7 @@ resource "aws_instance" "db_server" {
   ami                         = "${data.aws_ami.aws_ami.id}"
   subnet_id                   = "${aws_subnet.primary.id}"
   vpc_security_group_ids      = ["${aws_security_group.application.id}"]
-  key_name                    = "${aws_key_pair.temp_public_key.id}"
+  key_name                    = "${aws_key_pair.public_key.id}"
   associate_public_ip_address = true
 
   tags = "${merge(module.camtags.tagsmap, map("Name", "${var.db_instance_name}"))}"

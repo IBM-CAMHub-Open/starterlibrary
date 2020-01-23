@@ -1,5 +1,5 @@
 {
-   "name": "LAMP infrastructure  deployment on AWS",
+   "name": "LAMP infrastructure deployment on AWS",
    "description": "Deploys a fully-integrated environment for full stack PHP web development. This template only deploys the AWS infrastructure required by LAMP ",
    "version": "1.0",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
@@ -23,7 +23,7 @@
      }
    },
    "metadata": {
-     "displayName": "LAMP stack infrastructure deployment",
+     "displayName": "LAMP infrastructure deployment",
      "providerDisplayName": "IBM",
      "longDescription": "Deploys a fully-integrated environment for full stack PHP web development. This template only deploys the AWS infrastructure required by LAMP.",
      "bullets": [
