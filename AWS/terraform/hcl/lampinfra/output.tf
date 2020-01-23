@@ -8,3 +8,7 @@ output "webserver_ip_address" {
 output "dbserver_ip_address" {
   value = "${aws_instance.db_server.public_ip}"
 }
+
+output "private_key" {
+  value = "${base64decode(var.private_key)}"
+}

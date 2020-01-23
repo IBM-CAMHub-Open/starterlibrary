@@ -41,3 +41,7 @@ variable "public_key_name" {
 variable "public_key" {
   description = "Public SSH key used to connect to the servers"
 }
+
+variable "private_key" {
+  description = "Private SSH key used to connect to the servers"
+}
