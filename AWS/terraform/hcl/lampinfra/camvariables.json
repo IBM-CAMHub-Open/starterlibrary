@@ -180,7 +180,18 @@
         "type": "string",
         "regex": "^ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}( [^@]+@[^@]+| [^@]+){0,1}$",
         "group_name": "ssh_keys"
-    }
+    },
+    {
+      "description": "Private SSH key used to connect to the virtual guest, base64 encoded; Allow the openSSH format key with optional comment (with optional email)",
+      "hidden": false,
+      "immutable": false,
+      "label": "Private SSH Key (base64 encoded)",
+      "name": "private_key",
+      "required": true,
+      "secured": true,
+      "type": "string",
+      "group_name": "ssh_keys"
+  }
   ],
   "template_output_params": [
     {
@@ -198,10 +209,10 @@
         "secured": false
       },
       {
-        "description": "Private SSH key used to connect to the virtual guest, base64 encoded; Allow the openSSH format key with optional comment (with optional email)",
+        "description": "Private SSH key used to connect to the virtual guest",
         "hidden": false,
         "immutable": false,
-        "label": "Private SSH Key (base64 encoded)",
+        "label": "Private SSH Key",
         "name": "private_key",
         "required": true,
         "secured": true,
