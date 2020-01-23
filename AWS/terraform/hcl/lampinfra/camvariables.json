@@ -1,0 +1,201 @@
+{
+  "terraform_version": "~> 0.11.0",
+  "output_datatype": "content_template_output",
+  "input_groups": [
+    {
+      "name": "cloud",
+      "label": "Cloud Input Variables"
+    },
+    {
+      "name": "ssh_keys",
+      "label": "SSH Keys"
+    },
+    {
+      "name": "virtualmachine",
+      "label": "Virtual Machine Input Variables"
+    }
+  ],
+  "output_groups": [
+  ],
+  "template_input_params": [
+    {
+      "name": "aws_region",
+      "type": "string",
+      "description": "AWS Region Name",
+      "default": "us-east-1",
+      "hidden": false,
+      "label": "AWS Region Name",
+      "secured": false,
+      "options": [
+        {
+          "value": "us-east-1",
+          "label": "US East (N. Virginia)",
+          "default": true
+        },
+        {
+          "value": "us-east-2",
+          "label": "US East (Ohio)"
+        },
+        {
+          "value": "us-west-1",
+          "label": "US West (N. California)"
+        },
+        {
+          "value": "us-west-2",
+          "label": "US West (Oregon)"
+        },
+        {
+          "value": "us-gov-west-1",
+          "label": "US GovCloud Region"
+        },
+        {
+          "value": "ca-central-1",
+          "label": "Canada (Central)"
+        },
+        {
+          "value": "eu-west-1",
+          "label": "EU (Ireland)"
+        },
+        {
+          "value": "eu-central-1",
+          "label": "EU (Frankfurt)"
+        },
+        {
+          "value": "eu-west-2",
+          "label": "EU (London)"
+        },
+        {
+          "value": "ap-northeast-1",
+          "label": "Asia Pacific (Tokyo)"
+        },
+        {
+          "value": "ap-northeast-2",
+          "label": "Asia Pacific (Seoul)"
+        },
+        {
+          "value": "ap-southeast-1",
+          "label": "Asia Pacific (Singapore)"
+        },
+        {
+          "value": "ap-southeast-2",
+          "label": "Asia Pacific (Sydney)"
+        },
+        {
+          "value": "ap-south-1",
+          "label": "Asia Pacific (Mumbai)"
+        },
+        {
+          "value": "sa-east-1",
+          "label": "South America (São Paulo)"
+        }
+      ],
+      "required": true,
+      "immutable": false,
+      "group_name": "cloud"
+    },
+    {
+        "name": "aws_image",
+        "type": "string",
+        "description": "Operating system image id / template that should be used when creating the virtual image",
+        "default": "ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*",
+        "hidden": false,
+        "label": "Operating System ID",
+        "secured": false,
+        "required": true,
+        "immutable": false,
+        "group_name": "cloud"
+    },
+    {
+        "name": "aws_ami_owner_id",
+        "type": "string",
+        "description": "AWS AMI Owner ID",
+        "default": "099720109477",
+        "hidden": false,
+        "label": "AWS AMI Owner ID",
+        "secured": false,
+        "required": true,
+        "immutable": false,
+        "group_name": "cloud"
+    },
+    {
+        "default": "lampPhp",
+        "description": "The hostname of server with php; Allow 1 to 255 alphanumeric characters and special characters +=._:/@- as tag value that is not starting with aws",
+        "hidden": false,
+        "immutable": false,
+        "label": "Hostname of PHP Server",
+        "name": "php_instance_name",
+        "required": true,
+        "secured": false,
+        "type": "string",
+        "regex": "^(?![Aa][Ww][Ss])[A-Za-z0-9 +=._:\/@-]{1,255}$",
+        "group_name": "virtualmachine"
+    },
+    {
+        "default": "lampDb",
+        "description": "The hostname of server with mysql; Allow 1 to 64 alphanumeric characters",
+        "hidden": false,
+        "immutable": false,
+        "label": "Hostname of MySQL Server",
+        "name": "db_instance_name",
+        "required": true,
+        "secured": false,
+        "type": "string",
+        "regex": "^[A-Za-z0-9]{1,64}$",
+        "group_name": "virtualmachine"
+    },
+    {
+        "default": "opencontent-lamp",
+        "description": "The prefix of names for VPC, Gateway, Subnet and Security Group; Allow 1 to 240 alphanumeric characters and special characters +=._:/@- as tag value that is not starting with aws",
+        "hidden": false,
+        "immutable": false,
+        "label": "Network Name Prefix",
+        "name": "network_name_prefix",
+        "required": true,
+        "secured": false,
+        "type": "string",
+        "regex": "^(?![Aa][Ww][Ss])[A-Za-z0-9 +=._:\/@-]{1,240}$",
+        "group_name": "virtualmachine"
+    },
+    {
+        "default": "cam-public-key-lamp",
+        "description": "Name of the public SSH key used to connect to the virtual guests; Allow 1 to 65 printable ASCII characters",
+        "hidden": false,
+        "immutable": false,
+        "label": "Public SSH Key Name",
+        "name": "public_key_name",
+        "required": true,
+        "secured": false,
+        "type": "string",
+        "regex": "^[ -~]{1,65}$",
+        "group_name": "ssh_keys"
+    },
+    {
+        "description": "Public SSH key used to connect to the virtual guest; Allow the openSSH format key with optional comment (with optional email)",
+        "hidden": false,
+        "immutable": false,
+        "label": "Public SSH Key",
+        "name": "public_key",
+        "required": true,
+        "secured": false,
+        "type": "string",
+        "regex": "^ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}( [^@]+@[^@]+| [^@]+){0,1}$",
+        "group_name": "ssh_keys"
+    }
+  ],
+  "template_output_params": [
+    {
+      "name": "webserver_ip_address",
+      "type": "string",
+      "hidden": false,
+      "label": "Web Server IP address",
+      "secured": false
+    },
+    {
+        "name": "dbserver_ip_address",
+        "type": "string",
+        "hidden": false,
+        "label": "Database Server IP address",
+        "secured": false
+      }
+  ]
+}

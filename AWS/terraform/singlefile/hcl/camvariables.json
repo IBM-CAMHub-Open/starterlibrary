@@ -125,5 +125,14 @@
 			"secured": false,
 			"type": "string"
 		}
+	],
+	"template_output_params": [
+	  {
+		  "name": "ip_address",
+		  "type": "string",
+		  "hidden": false,
+		  "label": "VM IP address",
+		  "secured": false
+		}
 	]
 }

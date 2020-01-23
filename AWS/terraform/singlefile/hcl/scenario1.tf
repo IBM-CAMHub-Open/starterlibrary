@@ -98,3 +98,7 @@ resource "aws_instance" "orpheus_ubuntu_micro" {
   key_name      = "${aws_key_pair.orpheus_public_key.id}"
   tags          = "${module.camtags.tagsmap}"
 }
+
+output "ip_address" {
+  value = "${aws_instance.orpheus_ubuntu_micro.address}"
+}
