@@ -100,5 +100,5 @@ resource "aws_instance" "orpheus_ubuntu_micro" {
 }
 
 output "ip_address" {
-  value = "${aws_instance.orpheus_ubuntu_micro.address}"
+  value = "${length(aws_instance.orpheus_ubuntu_micro.public_ip) > 0 ? aws_instance.orpheus_ubuntu_micro.public_ip : aws_instance.orpheus_ubuntu_micro.private_ip}"
 }
