@@ -12,7 +12,7 @@ variable "allow_unverified_ssl" {
 # Define the vsphere provider 
 ##############################################################
 provider "vsphere" {
-  allow_unverified_ssl = "${var.allow_unverified_ssl}"
+  allow_unverified_ssl = var.allow_unverified_ssl
   version              = "~> 1.3"
 }
 
@@ -28,34 +28,34 @@ provider "camc" {
 # Vsphere data for provider
 ##############################################################
 data "vsphere_datacenter" "vm_1_datacenter" {
-  name = "${var.vm_1_datacenter}"
+  name = var.vm_1_datacenter
 }
 
 data "vsphere_datastore" "vm_1_datastore" {
-  name          = "${var.vm_1_root_disk_datastore}"
-  datacenter_id = "${data.vsphere_datacenter.vm_1_datacenter.id}"
+  name          = var.vm_1_root_disk_datastore
+  datacenter_id = data.vsphere_datacenter.vm_1_datacenter.id
 }
 
 data "vsphere_resource_pool" "vm_1_resource_pool" {
-  name          = "${var.vm_1_resource_pool}"
-  datacenter_id = "${data.vsphere_datacenter.vm_1_datacenter.id}"
+  name          = var.vm_1_resource_pool
+  datacenter_id = data.vsphere_datacenter.vm_1_datacenter.id
 }
 
 data "vsphere_network" "vm_1_network" {
-  name          = "${var.vm_1_network_interface_label}"
-  datacenter_id = "${data.vsphere_datacenter.vm_1_datacenter.id}"
+  name          = var.vm_1_network_interface_label
+  datacenter_id = data.vsphere_datacenter.vm_1_datacenter.id
 }
 
 data "vsphere_virtual_machine" "vm_1_template" {
-  name          = "${var.vm_1-image}"
-  datacenter_id = "${data.vsphere_datacenter.vm_1_datacenter.id}"
+  name          = var.vm_1-image
+  datacenter_id = data.vsphere_datacenter.vm_1_datacenter.id
 }
 
 ##### Image Parameters variables #####
 
 #Variable : vm_1_name
 variable "vm_1_name" {
-  type        = "string"
+  type        = string
   description = "Generated"
   default     = "vm_1"
 }
@@ -95,12 +95,12 @@ variable "vm_1_resource_pool" {
 }
 
 variable "vm_1_dns_suffixes" {
-  type        = "list"
+  type        = list(string)
   description = "Name resolution suffixes for the virtual network adapter"
 }
 
 variable "vm_1_dns_servers" {
-  type        = "list"
+  type        = list(string)
   description = "DNS servers for the virtual network adapter"
 }
 
@@ -130,19 +130,19 @@ variable "vm_1_root_disk_datastore" {
 }
 
 variable "vm_1_root_disk_type" {
-  type        = "string"
+  type        = string
   description = "Type of template disk volume"
   default     = "eager_zeroed"
 }
 
 variable "vm_1_root_disk_controller_type" {
-  type        = "string"
+  type        = string
   description = "Type of template disk controller"
   default     = "scsi"
 }
 
 variable "vm_1_root_disk_keep_on_remove" {
-  type        = "string"
+  type        = string
   description = "Delete template disk volume when the virtual machine is deleted"
   default     = "false"
 }
@@ -158,44 +158,45 @@ variable "vm_1-image" {
 
 # vsphere vm
 resource "vsphere_virtual_machine" "vm_1" {
-  name             = "${var.vm_1_name}"
-  folder           = "${var.vm_1_folder}"
-  num_cpus         = "${var.vm_1_number_of_vcpu}"
-  memory           = "${var.vm_1_memory}"
-  resource_pool_id = "${data.vsphere_resource_pool.vm_1_resource_pool.id}"
-  datastore_id     = "${data.vsphere_datastore.vm_1_datastore.id}"
-  guest_id         = "${data.vsphere_virtual_machine.vm_1_template.guest_id}"
-  scsi_type        = "${data.vsphere_virtual_machine.vm_1_template.scsi_type}"
+  name             = var.vm_1_name
+  folder           = var.vm_1_folder
+  num_cpus         = var.vm_1_number_of_vcpu
+  memory           = var.vm_1_memory
+  resource_pool_id = data.vsphere_resource_pool.vm_1_resource_pool.id
+  datastore_id     = data.vsphere_datastore.vm_1_datastore.id
+  guest_id         = data.vsphere_virtual_machine.vm_1_template.guest_id
+  scsi_type        = data.vsphere_virtual_machine.vm_1_template.scsi_type
 
   clone {
-    template_uuid = "${data.vsphere_virtual_machine.vm_1_template.id}"
+    template_uuid = data.vsphere_virtual_machine.vm_1_template.id
 
     customize {
       linux_options {
-        domain    = "${var.vm_1_domain}"
-        host_name = "${var.vm_1_name}"
+        domain    = var.vm_1_domain
+        host_name = var.vm_1_name
       }
 
       network_interface {
-        ipv4_address = "${var.vm_1_ipv4_address}"
-        ipv4_netmask = "${var.vm_1_ipv4_prefix_length}"
+        ipv4_address = var.vm_1_ipv4_address
+        ipv4_netmask = var.vm_1_ipv4_prefix_length
       }
 
-      ipv4_gateway    = "${var.vm_1_ipv4_gateway}"
-      dns_suffix_list = "${var.vm_1_dns_suffixes}"
-      dns_server_list = "${var.vm_1_dns_servers}"
+      ipv4_gateway    = var.vm_1_ipv4_gateway
+      dns_suffix_list = var.vm_1_dns_suffixes
+      dns_server_list = var.vm_1_dns_servers
     }
   }
 
   network_interface {
-    network_id   = "${data.vsphere_network.vm_1_network.id}"
-    adapter_type = "${var.vm_1_adapter_type}"
+    network_id   = data.vsphere_network.vm_1_network.id
+    adapter_type = var.vm_1_adapter_type
   }
 
   disk {
     label          = "${var.vm_1_name}0.vmdk"
-    size           = "${var.vm_1_root_disk_size}"
-    keep_on_remove = "${var.vm_1_root_disk_keep_on_remove}"
-    datastore_id   = "${data.vsphere_datastore.vm_1_datastore.id}"
+    size           = var.vm_1_root_disk_size
+    keep_on_remove = var.vm_1_root_disk_keep_on_remove
+    datastore_id   = data.vsphere_datastore.vm_1_datastore.id
   }
 }
+

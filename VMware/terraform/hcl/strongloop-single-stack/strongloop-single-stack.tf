@@ -8,12 +8,11 @@ variable "allow_unverified_ssl" {
   default     = "true"
 }
 
-
 ##############################################################
 # Define the vsphere provider
 ##############################################################
 provider "vsphere" {
-  allow_unverified_ssl = "${var.allow_unverified_ssl}"
+  allow_unverified_ssl = var.allow_unverified_ssl
   version              = "~> 1.3"
 }
 
@@ -24,34 +23,34 @@ provider "vsphere" {
 # Vsphere data for provider
 ##############################################################
 data "vsphere_datacenter" "strongloop_vm_datacenter" {
-  name = "${var.strongloop_vm_datacenter}"
+  name = var.strongloop_vm_datacenter
 }
 
 data "vsphere_datastore" "strongloop_vm_datastore" {
-  name          = "${var.strongloop_vm_root_disk_datastore}"
-  datacenter_id = "${data.vsphere_datacenter.strongloop_vm_datacenter.id}"
+  name          = var.strongloop_vm_root_disk_datastore
+  datacenter_id = data.vsphere_datacenter.strongloop_vm_datacenter.id
 }
 
 data "vsphere_resource_pool" "strongloop_vm_resource_pool" {
-  name          = "${var.strongloop_vm_resource_pool}"
-  datacenter_id = "${data.vsphere_datacenter.strongloop_vm_datacenter.id}"
+  name          = var.strongloop_vm_resource_pool
+  datacenter_id = data.vsphere_datacenter.strongloop_vm_datacenter.id
 }
 
 data "vsphere_network" "strongloop_vm_network" {
-  name          = "${var.strongloop_vm_network_interface_label}"
-  datacenter_id = "${data.vsphere_datacenter.strongloop_vm_datacenter.id}"
+  name          = var.strongloop_vm_network_interface_label
+  datacenter_id = data.vsphere_datacenter.strongloop_vm_datacenter.id
 }
 
 data "vsphere_virtual_machine" "strongloop_vm_template" {
-  name          = "${var.strongloop_vm_image}"
-  datacenter_id = "${data.vsphere_datacenter.strongloop_vm_datacenter.id}"
+  name          = var.strongloop_vm_image
+  datacenter_id = data.vsphere_datacenter.strongloop_vm_datacenter.id
 }
 
 ##### Image Parameters variables #####
 
 #Variable : strongloop_vm_name
 variable "strongloop_vm_name" {
-  type        = "string"
+  type        = string
   description = "Generated"
   default     = "strongloop Vm"
 }
@@ -99,12 +98,12 @@ variable "strongloop_vm_resource_pool" {
 }
 
 variable "strongloop_vm_dns_suffixes" {
-  type        = "list"
+  type        = list(string)
   description = "Name resolution suffixes for the virtual network adapter"
 }
 
 variable "strongloop_vm_dns_servers" {
-  type        = "list"
+  type        = list(string)
   description = "DNS servers for the virtual network adapter"
 }
 
@@ -134,19 +133,19 @@ variable "strongloop_vm_root_disk_datastore" {
 }
 
 variable "strongloop_vm_root_disk_type" {
-  type        = "string"
+  type        = string
   description = "Type of template disk volume"
   default     = "eager_zeroed"
 }
 
 variable "strongloop_vm_root_disk_controller_type" {
-  type        = "string"
+  type        = string
   description = "Type of template disk controller"
   default     = "scsi"
 }
 
 variable "strongloop_vm_root_disk_keep_on_remove" {
-  type        = "string"
+  type        = string
   description = "Delete template disk volume when the virtual machine is deleted"
   default     = "false"
 }
@@ -161,76 +160,79 @@ variable "strongloop_vm_image" {
 }
 
 module "provision_proxy_strongloop_vm" {
-  source 							= "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=1.0//vmware/proxy"
-  ip                  = "${var.strongloop_vm_ipv4_address}"
-  id									= "${vsphere_virtual_machine.strongloop_vm.id}"
-  ssh_user     				= "${var.ssh_user}"
-  ssh_password 				= "${var.ssh_user_password}"
-  http_proxy_host     = "${var.http_proxy_host}"
-  http_proxy_user     = "${var.http_proxy_user}"
-  http_proxy_password = "${var.http_proxy_password}"
-  http_proxy_port     = "${var.http_proxy_port}"
-  enable							= "${ length(var.http_proxy_host) > 0 ? "true" : "false"}"
+  source              = "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git//vmware/proxy?ref=1.0"
+  ip                  = var.strongloop_vm_ipv4_address
+  id                  = vsphere_virtual_machine.strongloop_vm.id
+  ssh_user            = var.ssh_user
+  ssh_password        = var.ssh_user_password
+  http_proxy_host     = var.http_proxy_host
+  http_proxy_user     = var.http_proxy_user
+  http_proxy_password = var.http_proxy_password
+  http_proxy_port     = var.http_proxy_port
+  enable              = length(var.http_proxy_host) > 0 ? "true" : "false"
 }
 
 # vsphere vm
 resource "vsphere_virtual_machine" "strongloop_vm" {
-  name             = "${var.strongloop_vm_name}"
-  folder           = "${var.strongloop_vm_folder}"
-  num_cpus         = "${var.strongloop_vm_number_of_vcpu}"
-  memory           = "${var.strongloop_vm_memory}"
-  resource_pool_id = "${data.vsphere_resource_pool.strongloop_vm_resource_pool.id}"
-  datastore_id     = "${data.vsphere_datastore.strongloop_vm_datastore.id}"
-  guest_id         = "${data.vsphere_virtual_machine.strongloop_vm_template.guest_id}"
-  scsi_type        = "${data.vsphere_virtual_machine.strongloop_vm_template.scsi_type}"
+  name             = var.strongloop_vm_name
+  folder           = var.strongloop_vm_folder
+  num_cpus         = var.strongloop_vm_number_of_vcpu
+  memory           = var.strongloop_vm_memory
+  resource_pool_id = data.vsphere_resource_pool.strongloop_vm_resource_pool.id
+  datastore_id     = data.vsphere_datastore.strongloop_vm_datastore.id
+  guest_id         = data.vsphere_virtual_machine.strongloop_vm_template.guest_id
+  scsi_type        = data.vsphere_virtual_machine.strongloop_vm_template.scsi_type
 
   clone {
-    template_uuid = "${data.vsphere_virtual_machine.strongloop_vm_template.id}"
+    template_uuid = data.vsphere_virtual_machine.strongloop_vm_template.id
 
     customize {
       linux_options {
-        domain    = "${var.strongloop_vm_domain}"
-        host_name = "${var.strongloop_vm_name}"
+        domain    = var.strongloop_vm_domain
+        host_name = var.strongloop_vm_name
       }
 
       network_interface {
-        ipv4_address = "${var.strongloop_vm_ipv4_address}"
-        ipv4_netmask = "${var.strongloop_vm_ipv4_prefix_length}"
+        ipv4_address = var.strongloop_vm_ipv4_address
+        ipv4_netmask = var.strongloop_vm_ipv4_prefix_length
       }
 
-      ipv4_gateway    = "${var.strongloop_vm_ipv4_gateway}"
-      dns_suffix_list = "${var.strongloop_vm_dns_suffixes}"
-      dns_server_list = "${var.strongloop_vm_dns_servers}"
+      ipv4_gateway    = var.strongloop_vm_ipv4_gateway
+      dns_suffix_list = var.strongloop_vm_dns_suffixes
+      dns_server_list = var.strongloop_vm_dns_servers
     }
   }
 
   network_interface {
-    network_id   = "${data.vsphere_network.strongloop_vm_network.id}"
-    adapter_type = "${var.strongloop_vm_adapter_type}"
+    network_id   = data.vsphere_network.strongloop_vm_network.id
+    adapter_type = var.strongloop_vm_adapter_type
   }
 
   disk {
     label          = "${var.strongloop_vm_name}0.vmdk"
-    size           = "${var.strongloop_vm_root_disk_size}"
-    keep_on_remove = "${var.strongloop_vm_root_disk_keep_on_remove}"
-    datastore_id   = "${data.vsphere_datastore.strongloop_vm_datastore.id}"
+    size           = var.strongloop_vm_root_disk_size
+    keep_on_remove = var.strongloop_vm_root_disk_keep_on_remove
+    datastore_id   = data.vsphere_datastore.strongloop_vm_datastore.id
   }
 }
 
 resource "null_resource" "strongloop_vm_install_strongloop" {
-	depends_on = ["vsphere_virtual_machine.strongloop_vm", "module.provision_proxy_strongloop_vm"]
-	
+  depends_on = [
+    vsphere_virtual_machine.strongloop_vm,
+    module.provision_proxy_strongloop_vm,
+  ]
+
   connection {
-    type     = "ssh"
-    user     = "${var.ssh_user}"
-    password = "${var.ssh_user_password}"
-    host     = "${vsphere_virtual_machine.strongloop_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
-    bastion_host        = "${var.bastion_host}"
-    bastion_user        = "${var.bastion_user}"
-    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
-    bastion_port        = "${var.bastion_port}"
-    bastion_host_key    = "${var.bastion_host_key}"
-    bastion_password    = "${var.bastion_password}"
+    type                = "ssh"
+    user                = var.ssh_user
+    password            = var.ssh_user_password
+    host                = vsphere_virtual_machine.strongloop_vm.clone[0].customize[0].network_interface[0].ipv4_address
+    bastion_host        = var.bastion_host
+    bastion_user        = var.bastion_user
+    bastion_private_key = length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key
+    bastion_port        = var.bastion_port
+    bastion_host_key    = var.bastion_host_key
+    bastion_password    = var.bastion_password
   }
 
   provisioner "file" {
@@ -559,20 +561,23 @@ echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
 
 EOF
 
+
     destination = "/tmp/installation.sh"
   }
 
+  # Execute the script remotely
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
-  }	
+  }
 }
 
 #########################################################
 # Output
 #########################################################
 output "application_url" {
-  value = "http://${vsphere_virtual_machine.strongloop_vm.clone.0.customize.0.network_interface.0.ipv4_address}:3000"
+  value = "http://${vsphere_virtual_machine.strongloop_vm.clone[0].customize[0].network_interface[0].ipv4_address}:3000"
 }
+

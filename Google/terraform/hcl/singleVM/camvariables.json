@@ -1,13 +1,13 @@
 {
+  "terraform_version": "~> 0.11.0",
   "template_input_params": [
     {
       "name": "boot_disk",
       "description": "The boot disk for the instance.",
-      "default": "centos-cloud/centos-7",
       "options": [
         {
-          "value": "centos-cloud/centos-7",
-          "label": "CentOS 7",
+          "value": "ubuntu-os-cloud/ubuntu-1604-lts",
+          "label": "Ubuntu 16.04",
           "default": true
         },
         {
@@ -21,23 +21,18 @@
         {
           "value": "suse-cloud/sles-12",
           "label": "SLES 12"
-        },
-        {
-          "value": "ubuntu-os-cloud/ubuntu-1604-lts",
-          "label": "Ubuntu 16.04"
         }
       ],
       "type": "string",
       "required": true,
       "secured": false,
-      "label": "boot_disk",
+      "label": "Operating System",
       "hidden": false,
       "immutable": false
     },
     {
       "name": "machine_type",
       "description": "The machine type to create.",
-      "default": "n1-standard-1",
       "options": [
         {
           "value": "n1-standard-1",
@@ -64,7 +59,7 @@
       "type": "string",
       "required": true,
       "secured": false,
-      "label": "machine_type",
+      "label": "Machine Type",
       "hidden": false,
       "immutable": false
     },
@@ -75,19 +70,18 @@
       "regex": "(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?)",
       "required": true,
       "secured": false,
-      "label": "unique_resource_name",
+      "label": "VM Name",
       "hidden": false,
       "immutable": false
     },
     {
       "name": "zone",
       "description": "The zone the resource should be created in.",
-      "default": "us-central1-a",
       "options": [
         {
           "value": "us-central1-a",
-          "label": "us-central1-a (Iowa, USA)",
-          "default": true
+          "label": "us-central1-a (Iowa, USA)"
+         
         },
         {
           "value": "us-west1-a",
@@ -95,7 +89,8 @@
         },
         {
           "value": "us-east1-c",
-          "label": "us-east1-c (South Carolina, USA)"
+          "label": "us-east1-c (South Carolina, USA)",
+          "default": true
         },
         {
           "value": "europe-west3-a",
@@ -109,7 +104,28 @@
       "type": "string",
       "required": true,
       "secured": false,
-      "label": "zone",
+      "label": "Availability Zone",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "gce_ssh_user",
+      "description": "User name to connect to the deployed VMs",
+      "default": "ubuntu",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "SSH User Name",
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "gce_ssh_public_key",
+      "description": "Public SSH key to be injected into the authorized_keys of the guest VM",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "SSH Public Key",
       "hidden": false,
       "immutable": false
     }

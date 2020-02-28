@@ -1,4 +1,5 @@
 {
+  "terraform_version": "~> 0.11.0",
   "input_datatypes": [ ],
   "input_namespaces": [ ],
   "output_namespace": "",

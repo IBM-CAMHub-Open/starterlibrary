@@ -8,12 +8,11 @@ variable "allow_unverified_ssl" {
   default     = "true"
 }
 
-
 ##############################################################
 # Define the vsphere provider
 ##############################################################
 provider "vsphere" {
-  allow_unverified_ssl = "${var.allow_unverified_ssl}"
+  allow_unverified_ssl = var.allow_unverified_ssl
   version              = "~> 1.3"
 }
 
@@ -24,34 +23,34 @@ provider "vsphere" {
 # Vsphere data for provider
 ##############################################################
 data "vsphere_datacenter" "mongodb_vm_datacenter" {
-  name = "${var.mongodb_vm_datacenter}"
+  name = var.mongodb_vm_datacenter
 }
 
 data "vsphere_datastore" "mongodb_vm_datastore" {
-  name          = "${var.mongodb_vm_root_disk_datastore}"
-  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
+  name          = var.mongodb_vm_root_disk_datastore
+  datacenter_id = data.vsphere_datacenter.mongodb_vm_datacenter.id
 }
 
 data "vsphere_resource_pool" "mongodb_vm_resource_pool" {
-  name          = "${var.mongodb_vm_resource_pool}"
-  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
+  name          = var.mongodb_vm_resource_pool
+  datacenter_id = data.vsphere_datacenter.mongodb_vm_datacenter.id
 }
 
 data "vsphere_network" "mongodb_vm_network" {
-  name          = "${var.mongodb_vm_network_interface_label}"
-  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
+  name          = var.mongodb_vm_network_interface_label
+  datacenter_id = data.vsphere_datacenter.mongodb_vm_datacenter.id
 }
 
 data "vsphere_virtual_machine" "mongodb_vm_template" {
-  name          = "${var.mongodb_vm_image}"
-  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
+  name          = var.mongodb_vm_image
+  datacenter_id = data.vsphere_datacenter.mongodb_vm_datacenter.id
 }
 
 ##### Image Parameters variables #####
 
 #Variable : mongodb_vm_name
 variable "mongodb_vm_name" {
-  type        = "string"
+  type        = string
   description = "Generated"
   default     = "mongodb Vm"
 }
@@ -99,12 +98,12 @@ variable "mongodb_vm_resource_pool" {
 }
 
 variable "mongodb_vm_dns_suffixes" {
-  type        = "list"
+  type        = list(string)
   description = "Name resolution suffixes for the virtual network adapter"
 }
 
 variable "mongodb_vm_dns_servers" {
-  type        = "list"
+  type        = list(string)
   description = "DNS servers for the virtual network adapter"
 }
 
@@ -134,19 +133,19 @@ variable "mongodb_vm_root_disk_datastore" {
 }
 
 variable "mongodb_vm_root_disk_type" {
-  type        = "string"
+  type        = string
   description = "Type of template disk volume"
   default     = "eager_zeroed"
 }
 
 variable "mongodb_vm_root_disk_controller_type" {
-  type        = "string"
+  type        = string
   description = "Type of template disk controller"
   default     = "scsi"
 }
 
 variable "mongodb_vm_root_disk_keep_on_remove" {
-  type        = "string"
+  type        = string
   description = "Delete template disk volume when the virtual machine is deleted"
   default     = "false"
 }
@@ -161,75 +160,78 @@ variable "mongodb_vm_image" {
 }
 
 module "provision_proxy_mongodb_vm" {
-  source 							= "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git?ref=1.0//vmware/proxy"
-  ip                  = "${var.mongodb_vm_ipv4_address}"
-  id									= "${vsphere_virtual_machine.mongodb_vm.id}"
-  ssh_user     				= "${var.ssh_user}"
-  ssh_password 				= "${var.ssh_user_password}"
-  http_proxy_host     = "${var.http_proxy_host}"
-  http_proxy_user     = "${var.http_proxy_user}"
-  http_proxy_password = "${var.http_proxy_password}"
-  http_proxy_port     = "${var.http_proxy_port}"
-  enable							= "${ length(var.http_proxy_host) > 0 ? "true" : "false"}"
+  source              = "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git//vmware/proxy?ref=1.0"
+  ip                  = var.mongodb_vm_ipv4_address
+  id                  = vsphere_virtual_machine.mongodb_vm.id
+  ssh_user            = var.ssh_user
+  ssh_password        = var.ssh_user_password
+  http_proxy_host     = var.http_proxy_host
+  http_proxy_user     = var.http_proxy_user
+  http_proxy_password = var.http_proxy_password
+  http_proxy_port     = var.http_proxy_port
+  enable              = length(var.http_proxy_host) > 0 ? "true" : "false"
 }
 
 # vsphere vm
 resource "vsphere_virtual_machine" "mongodb_vm" {
-  name             = "${var.mongodb_vm_name}"
-  folder           = "${var.mongodb_vm_folder}"
-  num_cpus         = "${var.mongodb_vm_number_of_vcpu}"
-  memory           = "${var.mongodb_vm_memory}"
-  resource_pool_id = "${data.vsphere_resource_pool.mongodb_vm_resource_pool.id}"
-  datastore_id     = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
-  guest_id         = "${data.vsphere_virtual_machine.mongodb_vm_template.guest_id}"
-  scsi_type        = "${data.vsphere_virtual_machine.mongodb_vm_template.scsi_type}"
+  name             = var.mongodb_vm_name
+  folder           = var.mongodb_vm_folder
+  num_cpus         = var.mongodb_vm_number_of_vcpu
+  memory           = var.mongodb_vm_memory
+  resource_pool_id = data.vsphere_resource_pool.mongodb_vm_resource_pool.id
+  datastore_id     = data.vsphere_datastore.mongodb_vm_datastore.id
+  guest_id         = data.vsphere_virtual_machine.mongodb_vm_template.guest_id
+  scsi_type        = data.vsphere_virtual_machine.mongodb_vm_template.scsi_type
 
   clone {
-    template_uuid = "${data.vsphere_virtual_machine.mongodb_vm_template.id}"
+    template_uuid = data.vsphere_virtual_machine.mongodb_vm_template.id
 
     customize {
       linux_options {
-        domain    = "${var.mongodb_vm_domain}"
-        host_name = "${var.mongodb_vm_name}"
+        domain    = var.mongodb_vm_domain
+        host_name = var.mongodb_vm_name
       }
 
       network_interface {
-        ipv4_address = "${var.mongodb_vm_ipv4_address}"
-        ipv4_netmask = "${var.mongodb_vm_ipv4_prefix_length}"
+        ipv4_address = var.mongodb_vm_ipv4_address
+        ipv4_netmask = var.mongodb_vm_ipv4_prefix_length
       }
 
-      ipv4_gateway    = "${var.mongodb_vm_ipv4_gateway}"
-      dns_suffix_list = "${var.mongodb_vm_dns_suffixes}"
-      dns_server_list = "${var.mongodb_vm_dns_servers}"
+      ipv4_gateway    = var.mongodb_vm_ipv4_gateway
+      dns_suffix_list = var.mongodb_vm_dns_suffixes
+      dns_server_list = var.mongodb_vm_dns_servers
     }
   }
 
   network_interface {
-    network_id   = "${data.vsphere_network.mongodb_vm_network.id}"
-    adapter_type = "${var.mongodb_vm_adapter_type}"
+    network_id   = data.vsphere_network.mongodb_vm_network.id
+    adapter_type = var.mongodb_vm_adapter_type
   }
 
   disk {
     label          = "${var.mongodb_vm_name}0.vmdk"
-    size           = "${var.mongodb_vm_root_disk_size}"
-    keep_on_remove = "${var.mongodb_vm_root_disk_keep_on_remove}"
-    datastore_id   = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
+    size           = var.mongodb_vm_root_disk_size
+    keep_on_remove = var.mongodb_vm_root_disk_keep_on_remove
+    datastore_id   = data.vsphere_datastore.mongodb_vm_datastore.id
   }
 }
 
 resource "null_resource" "mongodb_vm_install_mongodb" {
-  depends_on = ["vsphere_virtual_machine.mongodb_vm", "module.provision_proxy_mongodb_vm"]
+  depends_on = [
+    vsphere_virtual_machine.mongodb_vm,
+    module.provision_proxy_mongodb_vm,
+  ]
   connection {
-    type     = "ssh"
-    user     = "${var.ssh_user}"
-    password = "${var.ssh_user_password}"
-    host     = "${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
-    bastion_host        = "${var.bastion_host}"
-    bastion_user        = "${var.bastion_user}"
-    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
-    bastion_port        = "${var.bastion_port}"
-    bastion_host_key    = "${var.bastion_host_key}"
-    bastion_password    = "${var.bastion_password}"
+    type                = "ssh"
+    user                = var.ssh_user
+    password            = var.ssh_user_password
+    host                = vsphere_virtual_machine.mongodb_vm.clone[0].customize[0].network_interface[0].ipv4_address
+    bastion_host        = var.bastion_host
+    bastion_user        = var.bastion_user
+    bastion_private_key = length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key
+    bastion_port        = var.bastion_port
+    bastion_host_key    = var.bastion_host_key
+    bastion_password    = var.bastion_password
   }
 
   provisioner "file" {
@@ -275,20 +277,23 @@ fi
 
 EOF
 
+
     destination = "/tmp/installation.sh"
   }
 
+  # Execute the script remotely
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
     ]
-  }  
+  }
 }
 
 #########################################################
 # Output
 #########################################################
 output "db_server_ip_address" {
-  value = "${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+  value = vsphere_virtual_machine.mongodb_vm.clone[0].customize[0].network_interface[0].ipv4_address
 }
+

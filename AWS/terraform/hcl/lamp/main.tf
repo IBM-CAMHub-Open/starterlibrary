@@ -19,7 +19,7 @@
 # Define the AWS provider
 #########################################################
 provider "aws" {
-  version = "~> 1.2"
+  version = "~> 2.0"
   region  = "${var.aws_region}"
 }
 

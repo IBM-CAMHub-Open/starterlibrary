@@ -1,147 +1,138 @@
-[
-    {
-        "name": "aws_region",
-        "type": "string",
-        "description": "AWS Region Name",
-        "default": "us-east-1",
-        "hidden": false,
-        "label": "AWS Region Name",
-        "secured": false,
-        "options": [
-            {
-                "value": "us-east-1",
-                "label": "US East (N. Virginia)",
-                "default": true
-            },
-            {
-                "value": "us-east-2",
-                "label": "US East (Ohio)"
-            },
-            {
-                "value": "us-west-1",
-                "label": "US West (N. California)"
-            },
-            {
-                "value": "us-west-2",
-                "label": "US West (Oregon)"
-            },
-            {
-                "value": "us-gov-west-1",
-                "label": "US GovCloud Region"
-            },
-            {
-                "value": "ca-central-1",
-                "label": "Canada (Central)"
-            },
-            {
-                "value": "eu-west-1",
-                "label": "EU (Ireland)"
-            },
-            {
-                "value": "eu-central-1",
-                "label": "EU (Frankfurt)"
-            },
-            {
-                "value": "eu-west-2",
-                "label": "EU (London)"
-            },
-            {
-                "value": "ap-northeast-1",
-                "label": "Asia Pacific (Tokyo)"
-            },
-            {
-                "value": "ap-northeast-2",
-                "label": "Asia Pacific (Seoul)"
-            },
-            {
-                "value": "ap-southeast-1",
-                "label": "Asia Pacific (Singapore)"
-            },
-            {
-                "value": "ap-southeast-2",
-                "label": "Asia Pacific (Sydney)"
-            },
-            {
-                "value": "ap-south-1",
-                "label": "Asia Pacific (Mumbai)"
-            },
-            {
-                "value": "sa-east-1",
-                "label": "South America (São Paulo)"
-            }
-        ]
-    },
-    {
-        "name": "aws_image",
-        "type": "string",
-        "description": "Operating system image id / template that should be used when creating the virtual image",
-        "default": "ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*",
-        "hidden": false,
-        "label": "Operating System ID",
-        "secured": false,
-        "required": true,
-        "immutable": false
-    },
-    {
-        "name": "aws_image_size",
-        "type": "string",
-        "description": "AWS Image Instance Size",
-        "default": "t2.small",
-        "hidden": false,
-        "label": "AWS Image Instance Size",
-        "secured": false,
-        "required": true,
-        "immutable": false
-    },
-    {
-        "name": "aws_ami_owner_id",
-        "type": "string",
-        "description": "AWS AMI Owner ID",
-        "default": "099720109477",
-        "hidden": false,
-        "label": "AWS AMI Owner ID",
-        "secured": false,
-        "required": true,
-        "immutable": false
-    },
-    {
-        "description": "Name of the Virtual Private Cloud (VPC) this resource is going to be deployed into",
-        "hidden": false,
-        "immutable": false,
-        "label": "Virtual Private Cloud",
-        "name": "vpc_name_tag",
-        "required": true,
-        "secured": false,
-        "type": "string"
-    },
-    {
-        "description": "Subnet Name",
-        "hidden": false,
-        "immutable": false,
-        "label": "Subnet Name",
-        "name": "subnet_name",
-        "required": true,
-        "secured": false,
-        "type": "string"
-    },
-    {
-        "description": "Name of the public SSH key used to connect to the virtual guest",
-        "hidden": false,
-        "immutable": false,
-        "label": "Public SSH Key Name",
-        "name": "public_ssh_key_name",
-        "required": true,
-        "secured": false,
-        "type": "string"
-    },
-    {
-        "description": "Public SSH key used to connect to the virtual guest",
-        "hidden": false,
-        "immutable": false,
-        "label": "Public SSH Key",
-        "name": "public_ssh_key",
-        "required": true,
-        "secured": false,
-        "type": "string"
-    }
-]
+{
+	"terraform_version": "~> 0.11.0",
+	"template_input_params": [
+		{
+			"name": "aws_region",
+			"type": "string",
+			"description": "AWS Region Name",
+			"default": "us-east-1",
+			"hidden": false,
+			"label": "AWS Region Name",
+			"secured": false,
+			"options": [
+				{
+					"value": "us-east-1",
+					"label": "US East (N. Virginia)",
+					"default": true
+				}, {
+					"value": "us-east-2",
+					"label": "US East (Ohio)"
+				}, {
+					"value": "us-west-1",
+					"label": "US West (N. California)"
+				}, {
+					"value": "us-west-2",
+					"label": "US West (Oregon)"
+				}, {
+					"value": "us-gov-west-1",
+					"label": "US GovCloud Region"
+				}, {
+					"value": "ca-central-1",
+					"label": "Canada (Central)"
+				}, {
+					"value": "eu-west-1",
+					"label": "EU (Ireland)"
+				}, {
+					"value": "eu-central-1",
+					"label": "EU (Frankfurt)"
+				}, {
+					"value": "eu-west-2",
+					"label": "EU (London)"
+				}, {
+					"value": "ap-northeast-1",
+					"label": "Asia Pacific (Tokyo)"
+				}, {
+					"value": "ap-northeast-2",
+					"label": "Asia Pacific (Seoul)"
+				}, {
+					"value": "ap-southeast-1",
+					"label": "Asia Pacific (Singapore)"
+				}, {
+					"value": "ap-southeast-2",
+					"label": "Asia Pacific (Sydney)"
+				}, {
+					"value": "ap-south-1",
+					"label": "Asia Pacific (Mumbai)"
+				}, {
+					"value": "sa-east-1",
+					"label": "South America (São Paulo)"
+				}
+			]
+		}, {
+			"name": "aws_image",
+			"type": "string",
+			"description": "Operating system image id / template that should be used when creating the virtual image",
+			"default": "ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*",
+			"hidden": false,
+			"label": "Operating System ID",
+			"secured": false,
+			"required": true,
+			"immutable": false
+		}, {
+			"name": "aws_image_size",
+			"type": "string",
+			"description": "AWS Image Instance Size",
+			"default": "t2.small",
+			"hidden": false,
+			"label": "AWS Image Instance Size",
+			"secured": false,
+			"required": true,
+			"immutable": false
+		}, {
+			"name": "aws_ami_owner_id",
+			"type": "string",
+			"description": "AWS AMI Owner ID",
+			"default": "099720109477",
+			"hidden": false,
+			"label": "AWS AMI Owner ID",
+			"secured": false,
+			"required": true,
+			"immutable": false
+		}, {
+			"description": "Name of the Virtual Private Cloud (VPC) this resource is going to be deployed into",
+			"hidden": false,
+			"immutable": false,
+			"label": "Virtual Private Cloud",
+			"name": "vpc_name_tag",
+			"required": true,
+			"secured": false,
+			"type": "string"
+		}, {
+			"description": "Subnet Name",
+			"hidden": false,
+			"immutable": false,
+			"label": "Subnet Name",
+			"name": "subnet_name",
+			"required": true,
+			"secured": false,
+			"type": "string"
+		}, {
+			"description": "Name of the public SSH key used to connect to the virtual guest",
+			"hidden": false,
+			"immutable": false,
+			"label": "Public SSH Key Name",
+			"name": "public_ssh_key_name",
+			"required": true,
+			"secured": false,
+			"type": "string"
+		}, {
+			"description": "Public SSH key used to connect to the virtual guest",
+			"hidden": false,
+			"immutable": false,
+			"label": "Public SSH Key",
+			"name": "public_ssh_key",
+			"required": true,
+			"secured": false,
+			"type": "string"
+		}
+	],
+	"template_output_params": [
+	  {
+		  "name": "ip_address",
+		  "type": "string",
+		  "hidden": false,
+		  "label": "VM IP address",
+		  "secured": false
+		}
+	]
+}

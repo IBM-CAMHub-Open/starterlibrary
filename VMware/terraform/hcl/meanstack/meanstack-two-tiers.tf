@@ -21,7 +21,7 @@
 # Keys - CAMC (public/private) & optional User Key (public)
 ##############################################################
 variable "user_public_ssh_key" {
-  type        = "string"
+  type        = string
   description = "User defined public SSH key used to connect to the virtual machine. The format must be in openSSH."
   default     = "None"
 }
@@ -35,12 +35,11 @@ variable "allow_unverified_ssl" {
   default     = "true"
 }
 
-
 ##############################################################
 # Define the vsphere provider
 ##############################################################
 provider "vsphere" {
-  allow_unverified_ssl = "${var.allow_unverified_ssl}"
+  allow_unverified_ssl = var.allow_unverified_ssl
   version              = "~> 1.3"
 }
 
@@ -56,54 +55,54 @@ variable "ibm_stack_name" {
 # Vsphere data for provider
 ##############################################################
 data "vsphere_datacenter" "mongodb_vm_datacenter" {
-  name = "${var.mongodb_vm_datacenter}"
+  name = var.mongodb_vm_datacenter
 }
 
 data "vsphere_datastore" "mongodb_vm_datastore" {
-  name          = "${var.mongodb_vm_root_disk_datastore}"
-  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
+  name          = var.mongodb_vm_root_disk_datastore
+  datacenter_id = data.vsphere_datacenter.mongodb_vm_datacenter.id
 }
 
 data "vsphere_resource_pool" "mongodb_vm_resource_pool" {
-  name          = "${var.mongodb_vm_resource_pool}"
-  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
+  name          = var.mongodb_vm_resource_pool
+  datacenter_id = data.vsphere_datacenter.mongodb_vm_datacenter.id
 }
 
 data "vsphere_network" "mongodb_vm_network" {
-  name          = "${var.mongodb_vm_network_interface_label}"
-  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
+  name          = var.mongodb_vm_network_interface_label
+  datacenter_id = data.vsphere_datacenter.mongodb_vm_datacenter.id
 }
 
 data "vsphere_virtual_machine" "mongodb_vm_template" {
-  name          = "${var.mongodb_vm_image}"
-  datacenter_id = "${data.vsphere_datacenter.mongodb_vm_datacenter.id}"
+  name          = var.mongodb_vm_image
+  datacenter_id = data.vsphere_datacenter.mongodb_vm_datacenter.id
 }
 
 ##############################################################
 # Vsphere data for provider
 ##############################################################
 data "vsphere_datacenter" "nodejs_vm_datacenter" {
-  name = "${var.nodejs_vm_datacenter}"
+  name = var.nodejs_vm_datacenter
 }
 
 data "vsphere_datastore" "nodejs_vm_datastore" {
-  name          = "${var.nodejs_vm_root_disk_datastore}"
-  datacenter_id = "${data.vsphere_datacenter.nodejs_vm_datacenter.id}"
+  name          = var.nodejs_vm_root_disk_datastore
+  datacenter_id = data.vsphere_datacenter.nodejs_vm_datacenter.id
 }
 
 data "vsphere_resource_pool" "nodejs_vm_resource_pool" {
-  name          = "${var.nodejs_vm_resource_pool}"
-  datacenter_id = "${data.vsphere_datacenter.nodejs_vm_datacenter.id}"
+  name          = var.nodejs_vm_resource_pool
+  datacenter_id = data.vsphere_datacenter.nodejs_vm_datacenter.id
 }
 
 data "vsphere_network" "nodejs_vm_network" {
-  name          = "${var.nodejs_vm_network_interface_label}"
-  datacenter_id = "${data.vsphere_datacenter.nodejs_vm_datacenter.id}"
+  name          = var.nodejs_vm_network_interface_label
+  datacenter_id = data.vsphere_datacenter.nodejs_vm_datacenter.id
 }
 
 data "vsphere_virtual_machine" "nodejs_vm_template" {
-  name          = "${var.nodejs_vm_image}"
-  datacenter_id = "${data.vsphere_datacenter.nodejs_vm_datacenter.id}"
+  name          = var.nodejs_vm_image
+  datacenter_id = data.vsphere_datacenter.nodejs_vm_datacenter.id
 }
 
 ##### Image Parameters variables #####
@@ -111,38 +110,38 @@ data "vsphere_virtual_machine" "nodejs_vm_template" {
 ##### mongodb_vm variables #####
 #Variable : mongodb_vm_image
 variable "mongodb_vm_image" {
-  type        = "string"
+  type        = string
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
 #Variable : mongodb_vm_name
 variable "mongodb_vm_name" {
-  type        = "string"
+  type        = string
   description = "Short hostname of virtual machine"
 }
 
 #Variable : mongodb_vm_os_admin_user
 variable "mongodb_vm_os_admin_user" {
-  type        = "string"
+  type        = string
   description = "Name of the admin user account in the virtual machine that will be accessed via SSH"
 }
 
 ##### nodejs_vm variables #####
 #Variable : nodejs_vm_image
 variable "nodejs_vm_image" {
-  type        = "string"
+  type        = string
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
 
 #Variable : nodejs_vm_name
 variable "nodejs_vm_name" {
-  type        = "string"
+  type        = string
   description = "Short hostname of virtual machine"
 }
 
 #Variable : nodejs_vm_os_admin_user
 variable "nodejs_vm_os_admin_user" {
-  type        = "string"
+  type        = string
   description = "Name of the admin user account in the virtual machine that will be accessed via SSH"
 }
 
@@ -155,7 +154,7 @@ variable "nodejs_vm_os_admin_user" {
 #########################################################
 
 variable "mongodb_vm_os_password" {
-  type        = "string"
+  type        = string
   description = "Operating System Password for the Operating System User to access virtual machine"
 }
 
@@ -190,12 +189,12 @@ variable "mongodb_vm_resource_pool" {
 }
 
 variable "mongodb_vm_dns_suffixes" {
-  type        = "list"
+  type        = list(string)
   description = "Name resolution suffixes for the virtual network adapter"
 }
 
 variable "mongodb_vm_dns_servers" {
-  type        = "list"
+  type        = list(string)
   description = "DNS servers for the virtual network adapter"
 }
 
@@ -225,19 +224,19 @@ variable "mongodb_vm_root_disk_datastore" {
 }
 
 variable "mongodb_vm_root_disk_type" {
-  type        = "string"
+  type        = string
   description = "Type of template disk volume"
   default     = "eager_zeroed"
 }
 
 variable "mongodb_vm_root_disk_controller_type" {
-  type        = "string"
+  type        = string
   description = "Type of template disk controller"
   default     = "scsi"
 }
 
 variable "mongodb_vm_root_disk_keep_on_remove" {
-  type        = "string"
+  type        = string
   description = "Delete template disk volume when the virtual machine is deleted"
   default     = "false"
 }
@@ -249,58 +248,60 @@ variable "mongodb_vm_root_disk_size" {
 
 # vsphere vm
 resource "vsphere_virtual_machine" "mongodb_vm" {
-  name             = "${var.mongodb_vm_name}"
-  folder           = "${var.mongodb_vm_folder}"
-  num_cpus         = "${var.mongodb_vm_number_of_vcpu}"
-  memory           = "${var.mongodb_vm_memory}"
-  resource_pool_id = "${data.vsphere_resource_pool.mongodb_vm_resource_pool.id}"
-  datastore_id     = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
-  guest_id         = "${data.vsphere_virtual_machine.mongodb_vm_template.guest_id}"
-  scsi_type        = "${data.vsphere_virtual_machine.mongodb_vm_template.scsi_type}"
+  name             = var.mongodb_vm_name
+  folder           = var.mongodb_vm_folder
+  num_cpus         = var.mongodb_vm_number_of_vcpu
+  memory           = var.mongodb_vm_memory
+  resource_pool_id = data.vsphere_resource_pool.mongodb_vm_resource_pool.id
+  datastore_id     = data.vsphere_datastore.mongodb_vm_datastore.id
+  guest_id         = data.vsphere_virtual_machine.mongodb_vm_template.guest_id
+  scsi_type        = data.vsphere_virtual_machine.mongodb_vm_template.scsi_type
 
   clone {
-    template_uuid = "${data.vsphere_virtual_machine.mongodb_vm_template.id}"
+    template_uuid = data.vsphere_virtual_machine.mongodb_vm_template.id
 
     customize {
       linux_options {
-        domain    = "${var.mongodb_vm_domain}"
-        host_name = "${var.mongodb_vm_name}"
+        domain    = var.mongodb_vm_domain
+        host_name = var.mongodb_vm_name
       }
 
       network_interface {
-        ipv4_address = "${var.mongodb_vm_ipv4_address}"
-        ipv4_netmask = "${var.mongodb_vm_ipv4_prefix_length}"
+        ipv4_address = var.mongodb_vm_ipv4_address
+        ipv4_netmask = var.mongodb_vm_ipv4_prefix_length
       }
 
-      ipv4_gateway    = "${var.mongodb_vm_ipv4_gateway}"
-      dns_suffix_list = "${var.mongodb_vm_dns_suffixes}"
-      dns_server_list = "${var.mongodb_vm_dns_servers}"
+      ipv4_gateway    = var.mongodb_vm_ipv4_gateway
+      dns_suffix_list = var.mongodb_vm_dns_suffixes
+      dns_server_list = var.mongodb_vm_dns_servers
     }
   }
 
   network_interface {
-    network_id   = "${data.vsphere_network.mongodb_vm_network.id}"
-    adapter_type = "${var.mongodb_vm_adapter_type}"
+    network_id   = data.vsphere_network.mongodb_vm_network.id
+    adapter_type = var.mongodb_vm_adapter_type
   }
 
   disk {
     label          = "${var.mongodb_vm_name}0.vmdk"
-    size           = "${var.mongodb_vm_root_disk_size}"
-    keep_on_remove = "${var.mongodb_vm_root_disk_keep_on_remove}"
-    datastore_id   = "${data.vsphere_datastore.mongodb_vm_datastore.id}"
+    size           = var.mongodb_vm_root_disk_size
+    keep_on_remove = var.mongodb_vm_root_disk_keep_on_remove
+    datastore_id   = data.vsphere_datastore.mongodb_vm_datastore.id
   }
 
   # Specify the connection
+  # Specify the connection
   connection {
-    type     = "ssh"
-    user     = "${var.mongodb_vm_os_admin_user}"
-    password = "${var.mongodb_vm_os_password}"
-    bastion_host        = "${var.bastion_host}"
-    bastion_user        = "${var.bastion_user}"
-    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
-    bastion_port        = "${var.bastion_port}"
-    bastion_host_key    = "${var.bastion_host_key}"
-    bastion_password    = "${var.bastion_password}"
+    host                = self.default_ip_address
+    type                = "ssh"
+    user                = var.mongodb_vm_os_admin_user
+    password            = var.mongodb_vm_os_password
+    bastion_host        = var.bastion_host
+    bastion_user        = var.bastion_user
+    bastion_private_key = length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key
+    bastion_port        = var.bastion_port
+    bastion_host_key    = var.bastion_host_key
+    bastion_password    = var.bastion_password
   }
 
   provisioner "file" {
@@ -360,8 +361,10 @@ fi
 fi
 
 EOF
+
   }
 
+  # Execute the script remotely
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
@@ -376,19 +379,20 @@ EOF
 #########################################################
 
 resource "null_resource" "mongodb_vm_install_mongodb" {
-  depends_on = ["vsphere_virtual_machine.mongodb_vm"]
+  depends_on = [vsphere_virtual_machine.mongodb_vm]
 
   # Specify the ssh connection
+  # Specify the ssh connection
   connection {
-    user     = "${var.mongodb_vm_os_admin_user}"
-    password = "${var.mongodb_vm_os_password}"
-    host     = "${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
-    bastion_host        = "${var.bastion_host}"
-    bastion_user        = "${var.bastion_user}"
-    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
-    bastion_port        = "${var.bastion_port}"
-    bastion_host_key    = "${var.bastion_host_key}"
-    bastion_password    = "${var.bastion_password}"
+    user                = var.mongodb_vm_os_admin_user
+    password            = var.mongodb_vm_os_password
+    host                = vsphere_virtual_machine.mongodb_vm.clone[0].customize[0].network_interface[0].ipv4_address
+    bastion_host        = var.bastion_host
+    bastion_user        = var.bastion_user
+    bastion_private_key = length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key
+    bastion_port        = var.bastion_port
+    bastion_host_key    = var.bastion_host_key
+    bastion_password    = var.bastion_password
   }
 
   provisioner "file" {
@@ -397,6 +401,7 @@ resource "null_resource" "mongodb_vm_install_mongodb" {
     content = <<EOF
 
 EOF
+
   }
 
   provisioner "file" {
@@ -441,6 +446,7 @@ if hash iptables 2>/dev/null; then
 fi
 EOF
 
+
     destination = "/tmp/installation.sh"
   }
 
@@ -456,7 +462,7 @@ EOF
 #########################################################
 
 variable "nodejs_vm_os_password" {
-  type        = "string"
+  type        = string
   description = "Operating System Password for the Operating System User to access virtual machine"
 }
 
@@ -491,12 +497,12 @@ variable "nodejs_vm_resource_pool" {
 }
 
 variable "nodejs_vm_dns_suffixes" {
-  type        = "list"
+  type        = list(string)
   description = "Name resolution suffixes for the virtual network adapter"
 }
 
 variable "nodejs_vm_dns_servers" {
-  type        = "list"
+  type        = list(string)
   description = "DNS servers for the virtual network adapter"
 }
 
@@ -526,19 +532,19 @@ variable "nodejs_vm_root_disk_datastore" {
 }
 
 variable "nodejs_vm_root_disk_type" {
-  type        = "string"
+  type        = string
   description = "Type of template disk volume"
   default     = "eager_zeroed"
 }
 
 variable "nodejs_vm_root_disk_controller_type" {
-  type        = "string"
+  type        = string
   description = "Type of template disk controller"
   default     = "scsi"
 }
 
 variable "nodejs_vm_root_disk_keep_on_remove" {
-  type        = "string"
+  type        = string
   description = "Delete template disk volume when the virtual machine is deleted"
   default     = "false"
 }
@@ -550,58 +556,60 @@ variable "nodejs_vm_root_disk_size" {
 
 # vsphere vm
 resource "vsphere_virtual_machine" "nodejs_vm" {
-  name             = "${var.nodejs_vm_name}"
-  folder           = "${var.nodejs_vm_folder}"
-  num_cpus         = "${var.nodejs_vm_number_of_vcpu}"
-  memory           = "${var.nodejs_vm_memory}"
-  resource_pool_id = "${data.vsphere_resource_pool.nodejs_vm_resource_pool.id}"
-  datastore_id     = "${data.vsphere_datastore.nodejs_vm_datastore.id}"
-  guest_id         = "${data.vsphere_virtual_machine.nodejs_vm_template.guest_id}"
-  scsi_type        = "${data.vsphere_virtual_machine.nodejs_vm_template.scsi_type}"
+  name             = var.nodejs_vm_name
+  folder           = var.nodejs_vm_folder
+  num_cpus         = var.nodejs_vm_number_of_vcpu
+  memory           = var.nodejs_vm_memory
+  resource_pool_id = data.vsphere_resource_pool.nodejs_vm_resource_pool.id
+  datastore_id     = data.vsphere_datastore.nodejs_vm_datastore.id
+  guest_id         = data.vsphere_virtual_machine.nodejs_vm_template.guest_id
+  scsi_type        = data.vsphere_virtual_machine.nodejs_vm_template.scsi_type
 
   clone {
-    template_uuid = "${data.vsphere_virtual_machine.nodejs_vm_template.id}"
+    template_uuid = data.vsphere_virtual_machine.nodejs_vm_template.id
 
     customize {
       linux_options {
-        domain    = "${var.nodejs_vm_domain}"
-        host_name = "${var.nodejs_vm_name}"
+        domain    = var.nodejs_vm_domain
+        host_name = var.nodejs_vm_name
       }
 
       network_interface {
-        ipv4_address = "${var.nodejs_vm_ipv4_address}"
-        ipv4_netmask = "${var.nodejs_vm_ipv4_prefix_length}"
+        ipv4_address = var.nodejs_vm_ipv4_address
+        ipv4_netmask = var.nodejs_vm_ipv4_prefix_length
       }
 
-      ipv4_gateway    = "${var.nodejs_vm_ipv4_gateway}"
-      dns_suffix_list = "${var.nodejs_vm_dns_suffixes}"
-      dns_server_list = "${var.nodejs_vm_dns_servers}"
+      ipv4_gateway    = var.nodejs_vm_ipv4_gateway
+      dns_suffix_list = var.nodejs_vm_dns_suffixes
+      dns_server_list = var.nodejs_vm_dns_servers
     }
   }
 
   network_interface {
-    network_id   = "${data.vsphere_network.nodejs_vm_network.id}"
-    adapter_type = "${var.nodejs_vm_adapter_type}"
+    network_id   = data.vsphere_network.nodejs_vm_network.id
+    adapter_type = var.nodejs_vm_adapter_type
   }
 
   disk {
     label          = "${var.nodejs_vm_name}.vmdk"
-    size           = "${var.nodejs_vm_root_disk_size}"
-    keep_on_remove = "${var.nodejs_vm_root_disk_keep_on_remove}"
-    datastore_id   = "${data.vsphere_datastore.nodejs_vm_datastore.id}"
+    size           = var.nodejs_vm_root_disk_size
+    keep_on_remove = var.nodejs_vm_root_disk_keep_on_remove
+    datastore_id   = data.vsphere_datastore.nodejs_vm_datastore.id
   }
 
   # Specify the connection
+  # Specify the connection
   connection {
-    type     = "ssh"
-    user     = "${var.nodejs_vm_os_admin_user}"
-    password = "${var.nodejs_vm_os_password}"
-    bastion_host        = "${var.bastion_host}"
-    bastion_user        = "${var.bastion_user}"
-    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
-    bastion_port        = "${var.bastion_port}"
-    bastion_host_key    = "${var.bastion_host_key}"
-    bastion_password    = "${var.bastion_password}"
+    host                = self.default_ip_address
+    type                = "ssh"
+    user                = var.nodejs_vm_os_admin_user
+    password            = var.nodejs_vm_os_password
+    bastion_host        = var.bastion_host
+    bastion_user        = var.bastion_user
+    bastion_private_key = length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key
+    bastion_port        = var.bastion_port
+    bastion_host_key    = var.bastion_host_key
+    bastion_password    = var.bastion_password
   }
 
   provisioner "file" {
@@ -661,8 +669,10 @@ fi
 fi
 
 EOF
+
   }
 
+  # Execute the script remotely
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
@@ -677,19 +687,20 @@ EOF
 #########################################################
 
 resource "null_resource" "nodejs_vm_install_nodejs" {
-  depends_on = ["vsphere_virtual_machine.nodejs_vm"]
+  depends_on = [vsphere_virtual_machine.nodejs_vm]
 
   # Specify the ssh connection
+  # Specify the ssh connection
   connection {
-    user     = "${var.nodejs_vm_os_admin_user}"
-    password = "${var.nodejs_vm_os_password}"
-    host     = "${vsphere_virtual_machine.nodejs_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
-    bastion_host        = "${var.bastion_host}"
-    bastion_user        = "${var.bastion_user}"
-    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
-    bastion_port        = "${var.bastion_port}"
-    bastion_host_key    = "${var.bastion_host_key}"
-    bastion_password    = "${var.bastion_password}"
+    user                = var.nodejs_vm_os_admin_user
+    password            = var.nodejs_vm_os_password
+    host                = vsphere_virtual_machine.nodejs_vm.clone[0].customize[0].network_interface[0].ipv4_address
+    bastion_host        = var.bastion_host
+    bastion_user        = var.bastion_user
+    bastion_private_key = length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key
+    bastion_port        = var.bastion_port
+    bastion_host_key    = var.bastion_host_key
+    bastion_password    = var.bastion_password
   }
 
   provisioner "file" {
@@ -698,11 +709,10 @@ resource "null_resource" "nodejs_vm_install_nodejs" {
     content = <<EOF
 
 EOF
+
   }
 
   provisioner "file" {
-    destination = "nodejs_vm_install_nodejs.sh"
-
     content = <<EOF
   #!/bin/bash
 set -o errexit
@@ -726,7 +736,7 @@ retryInstall () {
 }
 echo "---Install nodejs---" | tee -a $LOGFILE 2>&1
 retryInstall "yum install gcc-c++ make -y"                                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install build tools---" | tee -a $LOGFILE; exit 1; }
-curl -sL https://rpm.nodesource.com/setup_7.x | bash -                                                            >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
+curl -sL https://rpm.nodesource.com/setup_12.x | bash -                                                            >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
 retryInstall "yum install nodejs -y"                                                                              >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
 npm install -g bower gulp                                                                                         >> $LOGFILE 2>&1 || { echo "---Failed to install bower and gulp---" | tee -a $LOGFILE; exit 1; }
 echo "---Install mean sample application---" | tee -a $LOGFILE 2>&1
@@ -735,7 +745,7 @@ git clone https://github.com/meanjs/mean.git mean                               
 cd mean
 yum groupinstall 'Development Tools' -y                                                                           >> $LOGFILE 2>&1 || { echo "---Failed to install development tools---" | tee -a $LOGFILE; exit 1; }
 retryInstall "yum install -y libpng-devel"                                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install libpng---" | tee -a $LOGFILE; exit 1; }
-npm install                                                                                                       >> $LOGFILE 2>&1 || { echo "---Failed to install node modules---" | tee -a $LOGFILE; exit 1; }
+npm install --unsafe-perm=true                                                                                    >> $LOGFILE 2>&1 || { echo "---Failed to install node modules---" | tee -a $LOGFILE; exit 1; }
 bower --allow-root --config.interactive=false install                                                             >> $LOGFILE 2>&1 || { echo "---Failed to install bower---" | tee -a $LOGFILE; exit 1; }
 PRODCONF=config/env/production.js
 sed -i -e "/    uri: process.env.MONGOHQ_URL/a\ \ \ \ uri: \'mongodb:\/\/"$DBADDRESS":27017/mean\'," $PRODCONF    >> $LOGFILE 2>&1 || { echo "---Failed to update db config---" | tee -a $LOGFILE; exit 1; }
@@ -766,12 +776,13 @@ fi
 echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
 EOF
 
+
     destination = "/tmp/installation.sh"
   }
 
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}\"",
+      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh \"${vsphere_virtual_machine.mongodb_vm.clone[0].customize[0].network_interface[0].ipv4_address}\"",
     ]
   }
 }
@@ -780,13 +791,14 @@ EOF
 # Output
 #########################################################
 output "meanstack_db_server_ip_address" {
-  value = "${vsphere_virtual_machine.mongodb_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+  value = vsphere_virtual_machine.mongodb_vm.clone[0].customize[0].network_interface[0].ipv4_address
 }
 
 output "meanstack_nodejs_server_ip_address" {
-  value = "${vsphere_virtual_machine.nodejs_vm.clone.0.customize.0.network_interface.0.ipv4_address}"
+  value = vsphere_virtual_machine.nodejs_vm.clone[0].customize[0].network_interface[0].ipv4_address
 }
 
 output "meanstack_sample_application_url" {
-  value = "http://${vsphere_virtual_machine.nodejs_vm.clone.0.customize.0.network_interface.0.ipv4_address}:8443"
+  value = "http://${vsphere_virtual_machine.nodejs_vm.clone[0].customize[0].network_interface[0].ipv4_address}:8443"
 }
+
