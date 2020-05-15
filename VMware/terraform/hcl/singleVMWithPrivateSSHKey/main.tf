@@ -11,12 +11,37 @@ provider "random" {
   version = "~> 2.1"
 }
 
+module "camtags" {
+  source = "../Modules/camtags"
+}
+
 locals {
   private_ssh_key = length(var.vm_os_private_ssh_key) == 0 ? tls_private_key.generate.private_key_pem : base64decode(var.vm_os_private_ssh_key)
   public_ssh_key  = length(var.vm_os_private_ssh_key) == 0 ? tls_private_key.generate.public_key_openssh : var.vm_os_public_ssh_key
   #private_ssh_key="${tls_private_key.generate.private_key_pem}"
   #public_ssh_key="${tls_private_key.generate.public_key_openssh}"
 }
+
+resource "vsphere_tag_category" "ibm_terraform_automation_category" {
+  count = length(module.camtags.tagslist) > 0 ? 1 : 0
+  name        = format("%s %s", "IBM Terraform Automation Tags for", var.vm_name)
+  description = "Category for IBM Terraform Automation"
+  cardinality = "MULTIPLE"
+
+  associable_types = [
+    "VirtualMachine",
+    "Datastore",
+    "Networks"
+  ]
+}
+
+resource "vsphere_tag" "ibm_terraform_automation_tags" {
+  count = length(module.camtags.tagslist)
+  name        = element(module.camtags.tagslist, count.index)
+  category_id = element(vsphere_tag_category.ibm_terraform_automation_category.*.id, 0)
+  description = "Managed by IBM Terraform Automation"
+}
+
 
 resource "random_string" "random-dir" {
   length  = 8
@@ -37,7 +62,7 @@ resource "vsphere_virtual_machine" "vm" {
   datastore_id     = data.vsphere_datastore.datastore.id
   guest_id         = data.vsphere_virtual_machine.vm_image_template.guest_id
   scsi_type        = data.vsphere_virtual_machine.vm_image_template.scsi_type
-
+  tags = vsphere_tag.ibm_terraform_automation_tags[*].id
   clone {
     template_uuid = data.vsphere_virtual_machine.vm_image_template.id
     timeout       = var.vm_clone_timeout

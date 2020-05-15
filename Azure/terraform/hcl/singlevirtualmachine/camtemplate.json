@@ -1,0 +1,49 @@
+{
+    "name": "Virtual Machine with SSH key on Microsoft Azure",
+    "description": "Deploys virtual machine with SSH key on Microsoft Azure",
+    "version": "2.4",
+    "type": "prebuilt",
+    "manifest": {
+      "template_type": "Terraform",
+      "template_format": "HCL",
+      "template_provider": "Microsoft Azure",
+      "template": {
+        "templateData": "",
+        "templateVariables": "",
+        "templateOutput": ""
+      },
+      "template_source": {
+        "githubRepoUrl": "",
+        "githubAccessToken": "",
+        "relativePathToTemplateFolder": "Azure/terraform/hcl/singlevirtualmachine",
+        "templateFileName": "main.tf"
+      }
+    },
+    "metadata": {
+      "displayName": "Azure Virtual Server with SSH key",
+      "providerDisplayName": "Microsoft Azure",
+      "longDescription": "Deploys virtual machine with SSH key on Microsoft Azure",
+      "bullets": [
+       {
+         "title": "Clouds",
+         "description": "Microsoft Azure"
+       },
+       {
+         "title": "Operating systems supported",
+         "description": "Azure: Ubuntu Canonical"
+       },
+       {
+         "title": "Topology",
+         "description": "Azure: 1 virtual machine"
+       },
+       {
+         "title": "Default virtual machines settings",
+         "description": "<ul><li>Azure: Standard A2</li><li>Network: Private IP - Computed, Public IP - Computed</li></ul></li></ul>"
+       },
+       {
+         "title": "Usage and special notes",
+         "description": "<ol class=\"list-numbering\"><li>Creates a virtual server with an ssh key provided by the user in a datacenter specified by the user.</li><li>Deployment takes approximately 5 minutes to complete.</li></ol>"
+       }
+     ]
+    }
+  }
