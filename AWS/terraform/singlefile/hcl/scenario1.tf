@@ -74,6 +74,12 @@ variable "aws_ami_owner_id" {
   default     = "099720109477"
 }
 
+#Stack name (CAM instance name) to be used as AWS name.
+variable "ibm_stack_name" {
+	type = "string"
+	default = "awssinglevm"
+}
+
 # Lookup for AMI based on image name and owner ID
 data "aws_ami" "aws_ami" {
   most_recent = true
@@ -96,7 +102,7 @@ resource "aws_instance" "orpheus_ubuntu_micro" {
   ami           = "${data.aws_ami.aws_ami.id}"
   subnet_id     = "${data.aws_subnet.selected.id}"
   key_name      = "${aws_key_pair.orpheus_public_key.id}"
-  tags          = "${module.camtags.tagsmap}"
+  tags          = "${merge(module.camtags.tagsmap, map("Name", "${var.ibm_stack_name}"))}"
 }
 
 output "ip_address" {
