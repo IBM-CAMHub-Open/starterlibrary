@@ -2,7 +2,7 @@
 # Terraform template that will deploy:
 #    * Ubuntu VM on Microsoft Azure
 #
-# Version: 1.0
+# Version: 2.4
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,7 +20,9 @@
 # Define the Azure provider
 #########################################################
 provider "azurerm" {
-  version = "~> 2.0"
+  #azurerm_subnet uses address_prefixes from 2.9.0
+  #so pin this template to >= 2.9.0
+  version = ">= 2.9.0"
   features {}
 }
 
@@ -78,7 +80,7 @@ resource "azurerm_virtual_network" "default" {
   resource_group_name = azurerm_resource_group.default.name
 
   tags = {
-    environment = "Terraform BasicVM Ago Demo"
+    environment = "Terraform Basic VM"
   }
 }
 
@@ -86,7 +88,7 @@ resource "azurerm_subnet" "vm" {
   name                 = "${var.name_prefix}-subnet-${random_id.default.hex}-vm"
   resource_group_name  = azurerm_resource_group.default.name
   virtual_network_name = azurerm_virtual_network.default.name
-  address_prefix       = "10.0.1.0/24"
+  address_prefixes     = ["10.0.1.0/24"]
 }
 
 resource "azurerm_public_ip" "vm" {
