@@ -1,5 +1,4 @@
 {
-  "terraform_version": "~> 0.12.0",
   "input_datatypes": [
     {
       "name": "bastionhost",

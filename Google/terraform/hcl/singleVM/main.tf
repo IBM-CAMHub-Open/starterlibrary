@@ -3,10 +3,6 @@ provider "google" {
   version = "~> 1.5"
 }
 
-module "camtags" {
-  source = "../Modules/camtags"
-}
-
 variable "unique_resource_name" {
   description = "A unique name for the resource, required by GCE."
 }
@@ -26,13 +22,6 @@ variable "zone" {
   default = "us-central1-a"
 }
 
-variable "gce_ssh_user" {
-  description = "A user name used to connect to the deployed VM in GCE."
-}
-variable "gce_ssh_public_key" {
-  description = "Public key used to connect to the deployed VM in GCE."
-}
-
 // Create a new compute engine resource
 resource "google_compute_instance" "default" {
   name         = "${var.unique_resource_name}"
@@ -50,10 +39,6 @@ resource "google_compute_instance" "default" {
       // Ephemeral IP
     }
   }
-  metadata {
-    sshKeys = "${var.gce_ssh_user}:${var.gce_ssh_public_key}"
-  }
-  labels = "${module.camtags.tagsmap}"
 }
 
 output "Name" {

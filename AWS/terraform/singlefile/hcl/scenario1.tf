@@ -12,7 +12,7 @@
 #################################################################
 
 provider "aws" {
-  version = "~> 2.0"
+  version = "~> 1.2"
   region  = "${var.aws_region}"
 }
 
@@ -97,8 +97,4 @@ resource "aws_instance" "orpheus_ubuntu_micro" {
   subnet_id     = "${data.aws_subnet.selected.id}"
   key_name      = "${aws_key_pair.orpheus_public_key.id}"
   tags          = "${module.camtags.tagsmap}"
-}
-
-output "ip_address" {
-  value = "${length(aws_instance.orpheus_ubuntu_micro.public_ip) > 0 ? aws_instance.orpheus_ubuntu_micro.public_ip : aws_instance.orpheus_ubuntu_micro.private_ip}"
 }

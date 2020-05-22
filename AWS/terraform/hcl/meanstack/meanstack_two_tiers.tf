@@ -22,7 +22,7 @@
 # Define the AWS provider
 #########################################################
 provider "aws" {
-  version = "~> 2.0"
+  version = "~> 1.2"
   region  = "${var.aws_region}"
 }
 
@@ -408,14 +408,14 @@ LOGFILE="/var/log/install_nodejs.log"
 DBADDRESS=$1
 
 echo "---Install nodejs---" | tee -a $LOGFILE 2>&1
-curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -                                                   >> $LOGFILE 2>&1 || { echo "---Failed to run node script to set up repo---" | tee -a $LOGFILE; exit 1; }
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -                                                    >> $LOGFILE 2>&1 || { echo "---Failed to run node script to set up repo---" | tee -a $LOGFILE; exit 1; }
 apt-get install -y nodejs build-essential                                                                         >> $LOGFILE 2>&1 || { echo "---Failed to install nodejs and build essential---" | tee -a $LOGFILE; exit 1; }
 npm install -g bower gulp                                                                                         >> $LOGFILE 2>&1 || { echo "---Failed to install bower and gulp---" | tee -a $LOGFILE; exit 1; }
 
 echo "---Install mean sample application---" | tee -a $LOGFILE 2>&1
 git clone https://github.com/meanjs/mean.git mean                                                                 >> $LOGFILE 2>&1 || { echo "---Failed to clone mean sample project---" | tee -a $LOGFILE; exit 1; }
 cd mean
-npm install --unsafe-perm=true                                                                                    >> $LOGFILE 2>&1 || { echo "---Failed to install node modules---" | tee -a $LOGFILE; exit 1; }
+npm install                                                                                                       >> $LOGFILE 2>&1 || { echo "---Failed to install node modules---" | tee -a $LOGFILE; exit 1; }
 bower --allow-root --config.interactive=false install                                                             >> $LOGFILE 2>&1 || { echo "---Failed to install bower---" | tee -a $LOGFILE; exit 1; }
 
 PRODCONF=config/env/production.js
