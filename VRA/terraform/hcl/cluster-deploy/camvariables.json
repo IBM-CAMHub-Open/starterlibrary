@@ -1,0 +1,78 @@
+{
+	"terraform_version": "~> 0.12.0",
+	"input_datatypes": [],
+	"input_namespaces": [],
+	"output_namespace": "",
+	"input_groups": [
+		{
+			"name": "vra7_deployment_vra_catalog",
+			"label": "VRA7 Deployment Catalog"
+		}
+	],
+	"output_groups": [],
+	"template_input_params": [
+		{
+			"name": "single_vmware_node_cluster_size",
+			"label": "Single VMware Node Cluster Size",
+			"description": "Number of Single VMware Node to deploy.",
+			"type": "string",
+			"default": "1",
+			"required": true,
+			"secured": false,
+			"hidden": false,
+			"immutable": false,
+			"group_name": "vra7_deployment_vra_catalog",
+			"immutable_after_create": false
+		}, {
+			"name": "single_vmware_node_timeout",
+			"label": "Single VMware Node Timeout",
+			"description": "Time to wait (in minutes) for a vRA deployment to complete successfully",
+			"type": "string",
+			"required": true,
+			"secured": false,
+			"hidden": false,
+			"immutable": false,
+			"immutable_after_create": false
+		}, {
+			"name": "vSphere__vCenter__Machine_1_user",
+			"label": "vSphere vCenter Machine 1 User",
+			"description": "Host username",
+			"type": "string",
+			"group_name": "vra7_deployment_vra_catalog",
+			"required": true,
+			"secured": false,
+			"hidden": false,
+			"immutable": false,
+			"immutable_after_create": false
+		}, {
+			"name": "vSphere__vCenter__Machine_1_password",
+			"label": "vSphere vCenter Machine 1 Password",
+			"description": "Host password",
+			"type": "string",
+			"group_name": "vra7_deployment_vra_catalog",
+			"required": true,
+			"secured": true,
+			"hidden": false,
+			"immutable": false,
+			"immutable_after_create": false
+		}
+	],
+	"template_output_params": [
+		{
+			"name": "vra7_deployment_single_vmware_node",
+			"label": "Cluster Node IP address list",
+			"description": "Lists the IP address of deployed node cluster",
+			"secured": false,
+			"hidden": false,
+			"type": "string"
+		},
+		{
+			"name": "vra7_deployment_single_vmware_node_map",
+			"label": "Cluster Node IP address map",
+			"description": "Map of cluster node and the IP address of deployed node cluster",
+			"secured": false,
+			"hidden": false,
+			"type": "string"
+		}		
+	]
+}
