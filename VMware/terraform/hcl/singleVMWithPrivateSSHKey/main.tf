@@ -1,5 +1,5 @@
 provider "vsphere" {
-  version              = "~> 1.3"
+  version              = ">= 1.3.0, <= 1.18.3"
   allow_unverified_ssl = "true"
 }
 
@@ -31,7 +31,7 @@ resource "vsphere_tag_category" "ibm_terraform_automation_category" {
   associable_types = [
     "VirtualMachine",
     "Datastore",
-    "Networks"
+    "Network",
   ]
 }
 
