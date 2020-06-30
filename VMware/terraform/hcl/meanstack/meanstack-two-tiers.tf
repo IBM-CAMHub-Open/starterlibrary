@@ -580,7 +580,7 @@ variable "nodejs_vm_root_disk_size" {
 
 resource "vsphere_tag_category" "ibm_terraform_automation_nodejs_vm_category" {
   count = length(module.camtags.tagslist) > 0 ? 1 : 0
-  name        = format("%s %s", "IBM Terraform Automation Tags for", var.nodejs_vm)
+  name        = format("%s %s", "IBM Terraform Automation Tags for", var.nodejs_vm_name)
   description = "Category for IBM Terraform Automation"
   cardinality = "MULTIPLE"
 
