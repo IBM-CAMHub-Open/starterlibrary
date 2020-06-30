@@ -17,6 +17,10 @@
 
 # This is a terraform generated template generated from LAMPStarter
 
+module "camtags" {
+  source = "../Modules/camtags"
+}
+
 ##############################################################
 # Keys - CAMC (public/private) & optional User Key (public)
 ##############################################################
@@ -40,7 +44,7 @@ variable "allow_unverified_ssl" {
 ##############################################################
 provider "vsphere" {
   allow_unverified_ssl = var.allow_unverified_ssl
-  version              = "~> 1.3"
+  version              = ">= 1.3.0, <= 1.18.3"
 }
 
 ##############################################################
@@ -246,6 +250,26 @@ variable "mongodb_vm_root_disk_size" {
   default     = "25"
 }
 
+resource "vsphere_tag_category" "ibm_terraform_automation_mongodb_vm_category" {
+  count = length(module.camtags.tagslist) > 0 ? 1 : 0
+  name        = format("%s %s", "IBM Terraform Automation Tags for", var.mongodb_vm_name)
+  description = "Category for IBM Terraform Automation"
+  cardinality = "MULTIPLE"
+
+  associable_types = [
+    "VirtualMachine",
+    "Datastore",
+    "Network",
+  ]
+}
+
+resource "vsphere_tag" "ibm_terraform_automation_mongodb_vm_tags" {
+  count = length(module.camtags.tagslist)
+  name        = element(module.camtags.tagslist, count.index)
+  category_id = element(vsphere_tag_category.ibm_terraform_automation_mongodb_vm_category.*.id, 0)
+  description = "Managed by IBM Terraform Automation"
+}
+
 # vsphere vm
 resource "vsphere_virtual_machine" "mongodb_vm" {
   name             = var.mongodb_vm_name
@@ -256,7 +280,7 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
   datastore_id     = data.vsphere_datastore.mongodb_vm_datastore.id
   guest_id         = data.vsphere_virtual_machine.mongodb_vm_template.guest_id
   scsi_type        = data.vsphere_virtual_machine.mongodb_vm_template.scsi_type
-
+  tags = vsphere_tag.ibm_terraform_automation_mongodb_vm_tags[*].id
   clone {
     template_uuid = data.vsphere_virtual_machine.mongodb_vm_template.id
 
@@ -554,6 +578,26 @@ variable "nodejs_vm_root_disk_size" {
   default     = "25"
 }
 
+resource "vsphere_tag_category" "ibm_terraform_automation_nodejs_vm_category" {
+  count = length(module.camtags.tagslist) > 0 ? 1 : 0
+  name        = format("%s %s", "IBM Terraform Automation Tags for", var.nodejs_vm)
+  description = "Category for IBM Terraform Automation"
+  cardinality = "MULTIPLE"
+
+  associable_types = [
+    "VirtualMachine",
+    "Datastore",
+    "Network",
+  ]
+}
+
+resource "vsphere_tag" "ibm_terraform_automation_nodejs_vm_tags" {
+  count = length(module.camtags.tagslist)
+  name        = element(module.camtags.tagslist, count.index)
+  category_id = element(vsphere_tag_category.ibm_terraform_automation_nodejs_vm_category.*.id, 0)
+  description = "Managed by IBM Terraform Automation"
+}
+
 # vsphere vm
 resource "vsphere_virtual_machine" "nodejs_vm" {
   name             = var.nodejs_vm_name
@@ -564,7 +608,7 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
   datastore_id     = data.vsphere_datastore.nodejs_vm_datastore.id
   guest_id         = data.vsphere_virtual_machine.nodejs_vm_template.guest_id
   scsi_type        = data.vsphere_virtual_machine.nodejs_vm_template.scsi_type
-
+  tags = vsphere_tag.ibm_terraform_automation_nodejs_vm_tags[*].id
   clone {
     template_uuid = data.vsphere_virtual_machine.nodejs_vm_template.id
 
