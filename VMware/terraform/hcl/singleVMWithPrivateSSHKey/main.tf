@@ -194,3 +194,21 @@ EOF
   }
 }
 
+module "add_ilmt_file" {
+  source = "github.com/IBM-CAMHub-Open/terraform_module_ilmt.git//terraform12?ref=5.0.0"
+  
+  private_key          = length(var.vm_os_private_ssh_key) == 0 ? "" : base64decode(var.vm_os_private_ssh_key)
+  vm_os_password       = var.vm_os_password
+  vm_os_user           = var.vm_os_user
+  vm_ipv4_address_list = [var.vm_ipv4_address]
+  #######
+  bastion_host        = var.bastion_host
+  bastion_user        = var.bastion_user
+  bastion_private_key = length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key
+  bastion_port        = var.bastion_port
+  bastion_host_key    = var.bastion_host_key
+  bastion_password    = var.bastion_password
+  #######    
+  dependsOn           = vsphere_virtual_machine.vm.id
+}
+

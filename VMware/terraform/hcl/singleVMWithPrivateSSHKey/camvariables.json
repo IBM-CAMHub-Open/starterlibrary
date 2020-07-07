@@ -2,6 +2,14 @@
   "terraform_version": "~> 0.12.0",
   "input_datatypes": [
     {
+      "name": "bastionhost",
+      "label": "Bastion Data"
+    },
+    {
+      "name": "httpproxy",
+      "label": "HTTP Proxy Data"
+    },  
+    {
       "name": "vsphere_managed_inventory_definition",
       "label": "vSphere Managed Inventory Definition"
     }
@@ -24,6 +32,46 @@
     }
   ],
   "template_input_params": [
+    {
+      "name": "http_proxy_host",
+      "type": "string",
+      "hidden": true,
+      "label": "HTTP Proxy Host",
+      "description": "HTTP proxy host name.",
+      "secured": false,
+      "required": false,
+      "default": "${httpproxy.host}"
+    },
+    {
+      "name": "http_proxy_user",
+      "type": "string",
+      "hidden": true,
+      "label": "HTTP Proxy User",
+      "description": "HTTP proxy host user",
+      "secured": false,
+      "required": false,   
+      "default": "${httpproxy.user}"
+    },
+    {
+      "name": "http_proxy_password",
+      "type": "string",
+      "hidden": true,
+      "label": "HTTP Proxy Password",
+      "description": "HTTP proxy host user password.",
+      "secured": true,
+      "required": false,   
+      "default": "${httpproxy.password}"
+    },
+    {
+      "name": "http_proxy_port",
+      "type": "string",
+      "hidden": true,
+      "label": "HTTP Proxy Port",
+      "description": "HTTP proxy host port.",
+      "secured": false,
+      "required": false,    
+      "default": "${httpproxy.port}"
+    },      
     {
       "name": "vm_name",
       "type": "string",
@@ -289,6 +337,72 @@
       "hidden": true,
       "immutable": false,
       "group_name": "vsphere_managed_inventory_definition"
+    },
+    {
+      "name": "bastion_host",
+      "type": "string",
+      "group_name": "bastion",
+      "hidden": true,
+      "description": "Bastion host for ssh proxy",
+      "default": "${bastionhost.bastion_host}",
+      "label": "Bastion host",
+      "secured": false,
+      "required": false
+    },
+    {
+      "name": "bastion_port",
+      "type": "string",
+      "group_name": "bastion",
+      "hidden": true,
+      "description": "Bastion port for ssh proxy",
+      "default": "${bastionhost.bastion_port}",
+      "label": "Bastion port",
+      "secured": false,
+      "required": false
+    },
+    {
+      "name": "bastion_user",
+      "type": "string",
+      "group_name": "bastion",
+      "hidden": true,
+      "description": "Bastion user for ssh proxy",
+      "default": "${bastionhost.bastion_user}",
+      "label": "Bastion user",
+      "secured": false,
+      "required": false
+    },
+    {
+      "name": "bastion_private_key",
+      "type": "string",
+      "group_name": "bastion",
+      "hidden": true,
+      "description": "Bastion private key for ssh proxy",
+      "default": "${bastionhost.bastion_private_key}",
+      "label": "Bastion private key",
+      "secured": true,
+      "required": false
+    },
+    {
+      "name": "bastion_password",
+      "type": "string",
+      "group_name": "bastion",
+      "hidden": true,
+      "description": "Bastion user password for ssh proxy",
+      "default": "${bastionhost.bastion_password}",
+      "label": "Bastion user password",
+      "secured": true,
+      "required": false
+    },
+    {
+      "name": "bastion_host_key",
+      "type": "string",
+      "group_name": "bastion",
+      "hidden": true,
+      "description": "Bastion host public key for ssh proxy",
+      "default": "${bastionhost.bastion_host_key}",
+      "label": "Bastion host key",
+      "secured": false,
+      "required": false
     }
   ],
   "template_output_params": [
