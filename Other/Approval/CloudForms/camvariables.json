@@ -1,0 +1,67 @@
+{
+	"terraform_version": "~> 0.12.0",
+	"input_datatypes": [
+		{
+		  "name": "cf_auth_details",
+		  "label": "CloudForms Authentication Details"
+		}
+	],
+	"template_input_params": [{
+		"name": "url",
+		"label": "URL",
+		"description": "URL to retrieve approval status",
+		"hidden": false,
+		"immutable": false,
+		"required": true,
+		"secured": false,
+		"type": "string"
+	},{
+		"name": "username",
+		"label": "Username",
+		"default":"${cf_auth_details.username}",
+		"description": "Username to connect to cloudform",
+		"hidden": false,
+		"immutable": false,
+		"required": true,
+		"secured": false,
+		"type": "string"
+	},{
+		"name": "password",
+		"label": "Password",
+		"default":"${cf_auth_details.password}",
+		"description": "Password to connect to cloudform",
+		"hidden": false,
+		"immutable": false,
+		"required": true,
+		"secured": true,
+		"type": "string"
+	},{
+		"name": "curl_option",
+		"label": "CURL Option",
+		"description": "Options for curl command used to retrieve status from cloudform e.g. --insecure",
+		"hidden": false,
+		"immutable": false,
+		"required": true,
+		"secured": false,
+		"type": "string"
+	},{
+		"name": "wait_time",
+		"label": "Wait Time (In Seconds)",
+		"description": "Wait time in seconds i.e. time after which poll should again happen to retrieve the approval status",
+		"hidden": false,
+		"immutable": false,
+		"required": true,
+		"secured": false,
+		"type": "string"
+	}],
+	"template_output_params": [{
+		"name": "approval_status",
+		"label": "approval_status",
+		"description": "Approval Status from Cloudform",
+		"group_name": "",
+		"secured": false,
+		"hidden": false,
+		"shortname": "",
+		"type": "string"
+	}]
+}
