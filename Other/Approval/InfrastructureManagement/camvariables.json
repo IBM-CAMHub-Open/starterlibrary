@@ -2,8 +2,8 @@
 	"terraform_version": "~> 0.12.0",
 	"input_datatypes": [
 		{
-		  "name": "cf_auth_details",
-		  "label": "CloudForms Authentication Details"
+		  "name": "im_auth",
+		  "label": "Infrastructure Management Authentication Details"
 		}
 	],
 	"template_input_params": [{
@@ -18,8 +18,8 @@
 	},{
 		"name": "username",
 		"label": "Username",
-		"default":"${cf_auth_details.username}",
-		"description": "Username to connect to cloudform",
+		"default":"${im_auth.username}",
+		"description": "Username to connect to Infrastructure Management",
 		"hidden": false,
 		"immutable": false,
 		"required": true,
@@ -28,8 +28,8 @@
 	},{
 		"name": "password",
 		"label": "Password",
-		"default":"${cf_auth_details.password}",
-		"description": "Password to connect to cloudform",
+		"default":"${im_auth.password}",
+		"description": "Password to connect to Infrastructure Management",
 		"hidden": false,
 		"immutable": false,
 		"required": true,
@@ -38,10 +38,10 @@
 	},{
 		"name": "curl_option",
 		"label": "CURL Option",
-		"description": "Options for curl command used to retrieve status from cloudform e.g. --insecure",
+		"description": "Options for curl command used to retrieve status from Infrastructure Management e.g. --insecure",
 		"hidden": false,
 		"immutable": false,
-		"required": true,
+		"required": false,
 		"secured": false,
 		"type": "string"
 	},{
@@ -57,7 +57,7 @@
 	"template_output_params": [{
 		"name": "approval_status",
 		"label": "approval_status",
-		"description": "Approval Status from Cloudform",
+		"description": "Approval Status from Infrastructure Management",
 		"group_name": "",
 		"secured": false,
 		"hidden": false,

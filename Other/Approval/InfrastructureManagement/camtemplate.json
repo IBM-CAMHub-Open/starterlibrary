@@ -1,6 +1,6 @@
 {
-    "name": "Poll CloudForms for Approval",
-    "description": "Polls CloudForms for Approval before provisioning resources",
+    "name": "Poll Infrastructure Management for Approval",
+    "description": "Polls Infrastructure Management for Approval before provisioning resources",
     "version": "1.0",
     "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
     "image": "tp_WAS_standalone.png",
@@ -18,14 +18,14 @@
       "template_source": {
         "githubRepoUrl": "",
         "githubAccessToken": "",
-        "relativePathToTemplateFolder": "Other/Approval/CloudForms",
+        "relativePathToTemplateFolder": "Other/Approval/InfrastructureManagement",
         "templateFileName": "main.tf"
       }
     },
     "metadata": {
-      "displayName": "Poll CloudForms for Approval",
+      "displayName": "Poll Infrastructure Management for Approval",
       "providerDisplayName": "Other",
-      "longDescription": "Use this template to poll CloudForms for approval before provisioning resources",
+      "longDescription": "Use this template to poll Infrastructure Management for approval before provisioning resources",
       "bullets": [
      ],
       "featuredImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",

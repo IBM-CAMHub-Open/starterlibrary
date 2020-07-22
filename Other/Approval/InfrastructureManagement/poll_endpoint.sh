@@ -1,5 +1,5 @@
 #################################################################
-# Script to poll Cloudform for approval status
+# Script to poll Infrastructure Management for approval status
 #
 # Version: 2.4
 #
@@ -31,7 +31,7 @@ SetParams() {
    printf "File Path: %s\n" $FILE
 }
 
-PollCloudform() {
+PollInfrastructureManagement() {
    # Set params
    SetParams $1 $2 $3 $4 $5 $6
 
@@ -48,5 +48,5 @@ PollCloudform() {
    printf $result > $FILE
 }
 
-PollCloudform $1 $2 $3 $4 $5 $6
+PollInfrastructureManagement $1 $2 $3 $4 $5 $6
 

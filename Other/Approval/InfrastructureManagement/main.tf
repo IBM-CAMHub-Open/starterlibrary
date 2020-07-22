@@ -1,5 +1,5 @@
 #################################################################
-# Terraform template that will poll Cloudform for approval
+# Terraform template that will poll Infrastructure Management for approval
 #
 # Version: 2.4
 #
@@ -30,15 +30,16 @@ variable "url" {
 }
 
 variable "username" {
-    description = "Username to connect to CloudForms"
+    description = "Username to connect to Infrastructure Management"
 }
 
 variable "password" {
-    description = "Password to connect to CloudForms"
+    description = "Password to connect to Infrastructure Management"
 }
 
 variable "curl_option" {
-    description = "Options for curl command used to retrieve status from CloudForms e.g. --insecure"
+    default = ""
+    description = "Options for curl command used to retrieve status from Infrastructure Management e.g. --insecure"
 }
 
 variable "wait_time" {
@@ -55,7 +56,7 @@ resource "local_file" "approval_status" {
 }
 
 #########################################################
-# Poll Cloudform for approval status
+# Poll Infrastructure Management for approval status
 #########################################################
 resource "null_resource" "poll_endpoint" {
  provisioner "local-exec" {
