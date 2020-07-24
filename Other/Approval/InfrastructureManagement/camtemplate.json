@@ -18,7 +18,7 @@
       "template_source": {
         "githubRepoUrl": "",
         "githubAccessToken": "",
-        "relativePathToTemplateFolder": "Other/Approval/CloudForms",
+        "relativePathToTemplateFolder": "Other/Approval/InfrastructureManagement",
         "templateFileName": "main.tf"
       }
     },
