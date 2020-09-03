@@ -142,19 +142,38 @@ npm install -g grunt-cli bower yo generator-karma generator-angular             
 #yum install gcc ruby ruby-devel rubygems -y                                        >> $LOGFILE 2>&1 || { echo "---Failed to install ruby---" | tee -a $LOGFILE; exit 1; }
 echo "---start installing ruby pre-reqs---" | tee -a $LOGFILE 2>&1
 yum install curl gpg gcc gcc-c++ make patch autoconf automake bison libffi-devel libtool patch readline-devel sqlite-devel zlib-devel openssl-devel gdbm -y >> $LOGFILE 2>&1 || { echo "---Failed to install ruby pre-reqs---" | tee -a $LOGFILE; exit 1; }
-echo "---Download, make and install ruby 2.2.10---" | tee -a $LOGFILE 2>&1
-wget https://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.10.tar.gz
-tar -zxvf ruby-2.2.10.tar.gz
-cd ruby-2.2.10
-./configure																		   >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
-make																			   >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
-sudo make install																   >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
+echo "---Download, make and install ruby 2.7.1---" | tee -a $LOGFILE 2>&1
+wget https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.1.tar.gz
+echo "---untar ruby 2.7.0---" | tee -a $LOGFILE 2>&1
+tar -zxvf ruby-2.7.1.tar.gz
+cd ruby-2.7.1
+echo "---configire ruby 2.7.0---" | tee -a $LOGFILE 2>&1
+./configure >> $LOGFILE 2>&1 
+if [ $? -ne 0 ]; then
+    echo "---Failed to configure ruby---"| tee -a $LOGFILE
+    exit 1
+fi
+echo "---make ruby 2.7.0---" | tee -a $LOGFILE 2>&1
+make >> $LOGFILE 2>&1 
+if [ $? -ne 0 ]; then
+    echo "---Failed to configure ruby---"| tee -a $LOGFILE
+    exit 1
+fi
+echo "---make install ruby 2.7.0---" | tee -a $LOGFILE 2>&1
+make install >> $LOGFILE 2>&1 
+if [ $? -ne 0 ]; then
+    echo "---Failed to configure ruby---"| tee -a $LOGFILE
+    exit 1
+fi
 echo "---start installing compass---" | tee -a $LOGFILE 2>&1
-gem install compass                                                                >> $LOGFILE 2>&1 || { echo "---Failed to install compass---" | tee -a $LOGFILE; exit 1; }
+gem install -V compass >> $LOGFILE 2>&1                                                               
+if [ $? -ne 0 ]; then
+    echo "---Failed to configure ruby---"| tee -a $LOGFILE
+    exit 1
+fi
 echo "---finish installing compass and angularjs---" | tee -a $LOGFILE 2>&1
 
 #install strongloop
-
 echo "---start installing strongloop---" | tee -a $LOGFILE 2>&1
 yum groupinstall 'Development Tools' -y                                            >> $LOGFILE 2>&1 || { echo "---Failed to install development tools---" | tee -a $LOGFILE; exit 1; }
 npm install -g strongloop                                                          >> $LOGFILE 2>&1 || { echo "---Failed to install strongloop---" | tee -a $LOGFILE; exit 1; }
