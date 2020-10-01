@@ -51,7 +51,7 @@ resource "google_compute_instance" "default" {
     }
   }
   metadata {
-    sshKeys = "${var.gce_ssh_user}:${var.gce_ssh_public_key}"
+    ssh-keys = "${var.gce_ssh_user}:${var.gce_ssh_public_key}"
   }
   labels = "${module.camtags.tagsmap}"
 }
