@@ -45,7 +45,7 @@ resource "google_compute_instance" "php" {
     }
   }
   metadata {
-    sshKeys = "${var.gce_ssh_user}:${var.gce_ssh_public_key}"
+    ssh-keys = "${var.gce_ssh_user}:${var.gce_ssh_public_key}"
   }
 
 }
