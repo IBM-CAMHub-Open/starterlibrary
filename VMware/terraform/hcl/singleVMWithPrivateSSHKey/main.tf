@@ -2,13 +2,6 @@ provider "vsphere" {
   version              = "~> 1.3"
   allow_unverified_ssl = "true"
 }
-provider "tls" {
-  version = "~> 1.0"
-}
-
-provider "random" {
-  version = "~> 1.0"
-}
 
 locals{
 
