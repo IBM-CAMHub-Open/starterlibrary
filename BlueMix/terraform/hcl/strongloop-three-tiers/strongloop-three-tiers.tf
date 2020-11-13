@@ -62,6 +62,12 @@ variable "mongodb_user_password" {
   description = "The password of an user in mongodb for sample application"
 }
 
+variable "os_reference_code" {
+  type = "string"
+  description = "Operating system image id / template that should be used when creating the virtual image"
+  default = "CENTOS_7_64"
+}
+
 
 ##############################################################
 # Create public key in Devices>Manage>SSH Keys in SL console
@@ -88,7 +94,7 @@ resource "ibm_compute_ssh_key" "temp_public_key" {
 ##############################################################
 resource "ibm_compute_vm_instance" "mongodb_vm" {
   hostname                 = "${var.mongodb-server-hostname}"
-  os_reference_code        = "CENTOS_7_64"
+  os_reference_code        = "${var.os_reference_code}"
   domain                   = "cam.ibm.com"
   datacenter               = "${var.datacenter}"
   network_speed            = 10
@@ -172,7 +178,7 @@ EOF
 ##############################################################
 resource "ibm_compute_vm_instance" "strongloop_vm" {
   hostname                 = "${var.strongloop-server-hostname}"
-  os_reference_code        = "CENTOS_7_64"
+  os_reference_code        = "${var.os_reference_code}"
   domain                   = "cam.ibm.com"
   datacenter               = "${var.datacenter}"
   network_speed            = 10
@@ -192,7 +198,7 @@ resource "ibm_compute_vm_instance" "strongloop_vm" {
 ##############################################################
 resource "ibm_compute_vm_instance" "angularjs_vm" {
   hostname                 = "${var.angular-server-hostname}"
-  os_reference_code        = "CENTOS_7_64"
+  os_reference_code        = "${var.os_reference_code}"
   domain                   = "cam.ibm.com"
   datacenter               = "${var.datacenter}"
   network_speed            = 10

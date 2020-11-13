@@ -17,6 +17,12 @@ variable "hostname" {
   default     = "debian-small"
 }
 
+variable "os_reference_code" {
+  type = "string"
+  description = "Operating system image id / template that should be used when creating the virtual image"
+  default = "DEBIAN_9_64"
+}
+
 # This will create a new SSH key that will show up under the \
 # Devices>Manage>SSH Keys in the SoftLayer console.
 resource "ibm_compute_ssh_key" "orpheus_public_key" {
@@ -31,7 +37,7 @@ variable "domain" {
 # Create a new virtual guest using image "Debian"
 resource "ibm_compute_vm_instance" "debian_small_virtual_guest" {
   hostname                 = "${var.hostname}"
-  os_reference_code        = "DEBIAN_9_64"
+  os_reference_code        = "${var.os_reference_code}"
   domain                   = "${var.domain}"
   datacenter               = "${var.datacenter}"
   network_speed            = 10

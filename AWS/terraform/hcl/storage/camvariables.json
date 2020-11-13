@@ -1,0 +1,107 @@
+{
+    "terraform_version": "~> 0.12.0",
+	"template_input_params": [
+ 		{	
+			"name": "name",
+			"label": "Bucket name",
+			"type": "string",
+			"description": "The name of the bucket to put the files in.",
+			"required": true,
+			"secured": false,
+			"hidden": false,
+			"immutable": false,
+			"default": "cam-bucket"
+		},	
+		{
+			"name": "acl",
+			"label": "Canned ACL",
+			"type": "string",
+			"description": "The canned ACL to apply. Defaults to private.",
+			"required": true,
+			"secured": false,
+			"hidden": false,
+			"immutable": false,
+			"default": "private"
+		}, {
+			"name": "aws_region",
+			"type": "string",
+			"description": "AWS Region Name",
+			"default": "us-east-1",
+			"hidden": false,
+			"label": "AWS Region Name",
+			"secured": false,
+			"options": [
+				{
+					"value": "us-east-1",
+					"label": "US East (N. Virginia)",
+					"default": true
+				}, {
+					"value": "us-east-2",
+					"label": "US East (Ohio)"
+				}, {
+					"value": "us-west-1",
+					"label": "US West (N. California)"
+				}, {
+					"value": "us-west-2",
+					"label": "US West (Oregon)"
+				}, {
+					"value": "us-gov-west-1",
+					"label": "US GovCloud Region"
+				}, {
+					"value": "ca-central-1",
+					"label": "Canada (Central)"
+				}, {
+					"value": "eu-west-1",
+					"label": "EU (Ireland)"
+				}, {
+					"value": "eu-central-1",
+					"label": "EU (Frankfurt)"
+				}, {
+					"value": "eu-west-2",
+					"label": "EU (London)"
+				}, {
+					"value": "ap-northeast-1",
+					"label": "Asia Pacific (Tokyo)"
+				}, {
+					"value": "ap-northeast-2",
+					"label": "Asia Pacific (Seoul)"
+				}, {
+					"value": "ap-southeast-1",
+					"label": "Asia Pacific (Singapore)"
+				}, {
+					"value": "ap-southeast-2",
+					"label": "Asia Pacific (Sydney)"
+				}, {
+					"value": "ap-south-1",
+					"label": "Asia Pacific (Mumbai)"
+				}, {
+					"value": "sa-east-1",
+					"label": "South America (São Paulo)"
+				}
+			],
+			"required": true,
+			"immutable": false
+		}
+	],
+	"template_output_params": [
+		{
+			"name": "bucket_arn",
+			"label": "Bucket ARN",
+			"description": "The ARN of the bucket. Will be of format arn:aws:s3:::bucketname.",
+			"secured": false,
+			"hidden": false
+		}, {
+			"name": "bucket_id",
+			"label": "Bucket name",
+			"description": "The name of the bucket",
+			"secured": false,
+			"hidden": false
+		}, {
+			"name": "bucket_tags",
+			"label": "Bucket tags",
+			"description": "A map of tags to assign to the bucket.",
+			"secured": false,
+			"hidden": false
+		}
+	]
+}

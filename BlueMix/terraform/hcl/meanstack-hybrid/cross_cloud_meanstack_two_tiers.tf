@@ -108,6 +108,12 @@ variable "softlayer_datacenter" {
   description = "Softlayer datacenter where infrastructure resources will be deployed"
 }
 
+variable "os_reference_code" {
+  type = "string"
+  description = "Operating system image id / template that should be used when creating the virtual image"
+  default = "CENTOS_7_64"
+}
+
 
 #########################################################
 # Build network
@@ -219,7 +225,7 @@ resource "ibm_compute_ssh_key" "temp_public_key" {
 ##############################################################
 resource "ibm_compute_vm_instance" "mongodb_server" {
   hostname                 = "${var.hostname-db}"
-  os_reference_code        = "CENTOS_7_64"
+  os_reference_code        = "${var.os_reference_code}"
   domain                   = "cam.ibm.com"
   datacenter               = "${var.softlayer_datacenter}"
   network_speed            = 10

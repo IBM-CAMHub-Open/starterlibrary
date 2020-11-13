@@ -105,6 +105,12 @@ variable "cam_pwd" {
   description = "user password for cam user (minimal length is 8)"
 }
 
+variable "os_reference_code" {
+  type = "string"
+  description = "Operating system image id / template that should be used when creating the virtual image"
+  default = "UBUNTU_16_64"
+}
+
 
 #########################################################
 # Build network
@@ -228,7 +234,7 @@ resource "ibm_compute_ssh_key" "temp_public_key" {
 ##############################################################
 resource "ibm_compute_vm_instance" "php_server" {
   hostname                 = "${var.php_instance_name}"
-  os_reference_code        = "UBUNTU_16_64"
+  os_reference_code        = "${var.os_reference_code}"
   domain                   = "cam.ibm.com"
   datacenter               = "${var.softlayer_datacenter}"
   network_speed            = 10

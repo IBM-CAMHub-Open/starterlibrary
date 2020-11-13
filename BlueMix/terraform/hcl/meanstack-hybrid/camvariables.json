@@ -8,6 +8,18 @@
   ],
   "template_input_params": [
     {
+        "name": "os_reference_code",
+        "type": "string",
+        "description": "Operating system image id / template that should be used when creating the virtual image",
+        "default": "CENTOS_7_64",
+        "hidden": false,
+        "label": "Operating System ID",
+        "secured": false,
+        "required": true,
+        "immutable": false,
+        "group_name": "virtualmachine"
+    },       
+    {
         "description": "AWS access key to request access to AWS account",
         "hidden": false,
         "immutable": false,

@@ -26,9 +26,21 @@ variable "domain" {
   description = "VM domain"
 }
 
-data "ibm_compute_image_template" "debian_8_6_64" {
-  name = "100GB - Debian / Debian / 8.0.0-64 Minimal for VSI"
+variable "os_reference_code" {
+  type = "string"
+  description = "Operating system image id / template that should be used when creating the virtual image"
+  default = "UBUNTU_16_64"
 }
+
+variable "os_reference_code_debian" {
+  type = "string"
+  description = "Operating system image id / template that should be used when creating the virtual image"
+  default = "DEBIAN_9_64"
+}
+
+#data "ibm_compute_image_template" "debian_8_6_64" {
+#  name = "100GB - Debian / Debian / 8.0.0-64 Minimal for VSI"
+#}
 
 # This will create a new SSH key that will show up under the \
 # Devices>Manage>SSH Keys in the SoftLayer console.
@@ -40,7 +52,8 @@ resource "ibm_compute_ssh_key" "orpheus_public_key" {
 # Create a new virtual guest using image "Debian"
 resource "ibm_compute_vm_instance" "debian_small_virtual_guest" {
   hostname                 = "${var.first_hostname}"
-  image_id                 = "${data.ibm_compute_image_template.debian_8_6_64.id}"
+  #image_id                 = "${data.ibm_compute_image_template.debian_8_6_64.id}"
+  os_reference_code        = "${var.os_reference_code_debian}"
   domain                   = "${var.domain}"
   datacenter               = "${var.datacenter}"
   network_speed            = 10
@@ -60,7 +73,7 @@ resource "ibm_compute_vm_instance" "ubuntu_medium_virtual_guest" {
   hostname = "${var.second_hostname}"
 
   #image_id = "${data.ibm_compute_image_template.ubuntu_16_04_01_64.id}"
-  os_reference_code        = "UBUNTU_16_64"
+  os_reference_code        = "${var.os_reference_code}"
   domain                   = "${var.domain}"
   datacenter               = "${var.datacenter}"
   network_speed            = 10

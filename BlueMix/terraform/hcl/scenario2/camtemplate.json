@@ -25,7 +25,7 @@
     "metadata": {
       "displayName": "2 Virtual Servers with SSH keys",
       "providerDisplayName": "IBM",
-      "longDescription": "Use this cloud resource template to quickly provision one Debian 7 64 bit virtual server and one Ubuntu 16 64 bit virtual server both with ssh keys in a datacenter of your choice.  Both virtual servers are connected to both private and public networks",
+      "longDescription": "Use this cloud resource template to quickly provision one Debian 9 64 bit virtual server and one Ubuntu 16 64 bit virtual server both with ssh keys in a datacenter of your choice.  Both virtual servers are connected to both private and public networks",
       "bullets": [
        {
          "title": "Clouds",
@@ -33,7 +33,7 @@
        },
        {
          "title": "Operating systems supported",
-         "description": "IBM Cloud: Debian 8.6 x64 and Ubuntu 16.4.01 x64"
+         "description": "IBM Cloud: Debian 9 x64 and Ubuntu 16.4.01 x64"
        },
        {
          "title": "Topology",
@@ -41,7 +41,7 @@
        },
        {
          "title": "Default virtual machine settings",
-         "description": "<ul><li>IBM Cloud:<ul style=\"margin-left: 20px;\"><li>Debian 8.6</li><ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 1, Memory = 1GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Computed</li></ul></ul><ul style=\"margin-left: 20px;\"><li>Ubuntu 16.4.01</li><ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 2, Memory = 4GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Computed</li></ul></ul></li></ul>"
+         "description": "<ul><li>IBM Cloud:<ul style=\"margin-left: 20px;\"><li>Debian 9</li><ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 1, Memory = 1GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Computed</li></ul></ul><ul style=\"margin-left: 20px;\"><li>Ubuntu 16.4.01</li><ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 2, Memory = 4GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Computed</li></ul></ul></li></ul>"
        },
        {
          "title": "Usage and special notes",

@@ -25,7 +25,7 @@
     "metadata": {
       "displayName": "1 Virtual Server with SSH Key",
       "providerDisplayName": "IBM",
-      "longDescription": "Use this cloud resource template to quickly provision a Debian 7 64 bit virtual server with ssh key in a datacenter of your choice.",
+      "longDescription": "Use this cloud resource template to quickly provision a Debian 9 64 bit virtual server with ssh key in a datacenter of your choice.",
       "bullets": [
        {
          "title": "Clouds",
@@ -33,7 +33,7 @@
        },
        {
          "title": "Operating systems supported",
-         "description": "IBM Cloud: Debian 7"
+         "description": "IBM Cloud: Debian 9"
        },
        {
          "title": "Topology",

@@ -8,6 +8,18 @@
   ],
   "template_input_params": [
     {
+        "name": "os_reference_code",
+        "type": "string",
+        "description": "Operating system image id / template that should be used when creating the virtual image",
+        "default": "UBUNTU_16_64",
+        "hidden": false,
+        "label": "Operating System ID",
+        "secured": false,
+        "required": true,
+        "immutable": false,
+        "group_name": "virtualmachine"
+    },      
+    {
         "description": "Softlayer datacenter where infrastructure resources will be deployed",
         "hidden": false,
         "immutable": false,

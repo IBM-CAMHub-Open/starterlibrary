@@ -1,0 +1,230 @@
+{
+  "terraform_version": "~> 0.12.0",
+  "template_input_params": [
+    {
+      "name": "resource_group",
+      "label": "Resource Group",
+      "type": "string",
+      "description": "IBM Cloud resource group.",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false
+    },
+    {
+      "name": "db_location",
+      "type": "string",
+      "description": "IBM Cloud region.",
+      "hidden": false,
+      "label": "Region",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "options": [
+        {
+          "value": "us-south",
+          "label": "US South",
+          "default": "true"
+        },
+        {
+          "value": "us-east",
+          "label": "US East"
+        },
+        {
+          "value": "au-syd",
+          "label": "Sydney"
+        },
+        {
+          "value": "eu-de",
+          "label": "Germany"
+        },
+        {
+          "value": "eu-gb",
+          "label": "United Kingdom"
+        },
+        {
+          "value": "jp-tok",
+          "label": "Tokyo"
+        },
+        {
+          "value": "oslo01",
+          "label": "Oslo"
+        }
+      ]
+    },
+    {
+      "name": "db_service",
+      "label": "Database Service",
+      "type": "string",
+      "description": "IBM Database Service to use.",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "options": [
+        {
+          "label": "MongoDB",
+          "value": "databases-for-mongodb",
+          "default": true
+        },
+        {
+          "label": "PostgreSQL",
+          "value": "databases-for-postgresql",
+          "default": false
+        },
+        {
+          "label": "Redis",
+          "value": "databases-for-redis",
+          "default": false
+        },
+        {
+          "label": "etcd",
+          "value": "databases-for-etcd",
+          "default": false
+        },
+        {
+          "label": "EnterpriseDB",
+          "value": "databases-for-enterprisedb",
+          "default": false
+        },
+        {
+          "label": "Elasticsearch",
+          "value": "databases-for-elasticsearch",
+          "default": false
+        },
+        {
+          "label": "DataStax",
+          "value": "databases-for-datastax",
+          "default": false
+        }
+      ]
+    },
+    {
+      "name": "db_plan",
+      "label": "Serivce Plan",
+      "type": "string",
+      "description": "Plan for the Database Service.",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "default": "standard"
+    },
+    {
+      "name": "db_version",
+      "label": "Serivce version",
+      "type": "string",
+      "description": "The version of the database to be provisioned. If omitted, the database is created with the most recent major and minor version.",
+      "required": false,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "default": ""
+    },
+    {
+      "name": "db_instance_name",
+      "label": "Database instance name",
+      "type": "string",
+      "description": "Database service instance name.",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "default": "camdb",
+      "regex": "^[A-Za-z][A-Za-z0-9]*$",
+      "regexdesc": "Must begin with a letter and contain only alphanumeric characters."
+    },
+    {
+      "name": "db_admin_password",
+      "label": "Database admin password",
+      "type": "password",
+      "description": "The password for the database administrator.",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "regex": "^((?!['\"/@])[\\x00-\\x7F]){10,32}$",
+      "regexdesc": "At least 10 ASCII characters and maximum of 32 characters. Can't contain any of the following: forward slash, single quote, double quote and @."
+    },
+    {
+      "name": "members_memory_allocation_mb",
+      "label": "Memory allocation (in megabytes)",
+      "type": "string",
+      "description": "The amount of memory in megabytes for the database, split across all members.",
+      "required": false,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "default": ""
+    },
+    {
+      "name": "members_disk_allocation_mb",
+      "label": "Disk allocation (in megabytes)",
+      "type": "string",
+      "description": "The amount of disk space for the database, split across all members.",
+      "required": false,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "default": ""
+    }
+  ],
+  "template_output_params": [
+    {
+      "name": "db_admin_user",
+      "label": "Admin user",
+      "description": "DB Admin user.",
+      "secured": false,
+      "hidden": false
+    },
+    {
+      "name": "db_certname",
+      "label": "certificate name",
+      "description": "certificate name.",
+      "secured": false,
+      "hidden": false
+    },
+    {
+      "name": "db_certbase64",
+      "label": "Certificate in base64",
+      "description": "Certificate in base64 format.",
+      "secured": false,
+      "hidden": false
+    },
+    {
+      "name": "db_connection_composed",
+      "label": "Connection string",
+      "description": "Connection string.",
+      "secured": false,
+      "hidden": false
+    },
+    {
+      "name": "db_database_name",
+      "label": "Database instance name",
+      "description": "Database instance name.",
+      "secured": false,
+      "hidden": false
+    },
+    {
+      "name": "db_database_path",
+      "label": "Database path",
+      "description": "Database path.",
+      "secured": false,
+      "hidden": false
+    },
+    {
+      "name": "db_hosts",
+      "label": "Database hosts",
+      "description": "Database hosts.",
+      "secured": false,
+      "hidden": false
+    },
+    {
+      "name": "db_version",
+      "label": "Database version",
+      "description": "Database version.",
+      "secured": false,
+      "hidden": false
+    }
+  ]
+}

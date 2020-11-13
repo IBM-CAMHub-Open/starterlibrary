@@ -1,0 +1,61 @@
+{
+	"name": "Amazon Relational Database Service Snapshot",
+	"description": "Creates a Amazon Relational Database Service snapshot for existing database.",
+	"version": "2.4",
+	"imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
+	"image": "tp_WAS_standalone.png",
+	"type": "prebuilt",
+	"status": "active",
+	"manifest": {
+		"template_type": "Terraform",
+		"template_format": "HCL",
+		"template_provider": "Amazon EC2",
+		"template": {
+			"templateData": "",
+			"templateVariables": "",
+			"templateOutput": ""
+		},
+		"template_source": {
+			"githubRepoUrl": "",
+			"githubAccessToken": "",
+			"relativePathToTemplateFolder": "AWS/terraform/hcl/rdssnap",
+			"templateFileName": "main.tf"
+		}
+	},
+	"metadata": {
+		"displayName": "Amazon Relational Database Service",
+		"providerDisplayName": "IBM",
+		"longDescription": "Use this cloud resource template to quickly take a snapshot of existing Amazon Relational Database Service (RDS).",
+		"bullets": [
+			{
+				"title": "Clouds",
+				"description": "Amazon Web Services (AWS)"
+			}, {
+				"title": "Topology",
+				"description": "AWS: 1 Amazon Relational Database Service Snapshot"
+			}
+		],
+		"featuredImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
+		"imageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_50.png",
+		"mediumImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_32.png",
+		"smallImageUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/ic_patternengine_24.png",
+		"documentationUrl": "https://console.stage1.ng.bluemix.net/docs/services/CloudAutomationManager/index.html",
+		"termsUrl": "http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm-7448-01",
+		"media": [
+			{
+				"type": "image",
+				"thumbnailUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_1.png",
+				"url": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_1_large.png",
+				"caption": ""
+			}, {
+				"type": "image",
+				"thumbnailUrl": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_2.png",
+				"url": "https://ibmpatternengine-staticcontent-prod.eu-gb.mybluemix.net/screenshots_2_large.png",
+				"caption": ""
+			}
+		]
+	},
+	"toolchain": {
+		"git": "https://github.com/ibmcam/cam-toolchain"
+	}
+}

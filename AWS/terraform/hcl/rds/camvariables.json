@@ -1,0 +1,324 @@
+{
+	"terraform_version": "~> 0.12.0",
+	"input_groups": [
+		{
+			"name": "cloud",
+			"label": "Cloud"
+		},		
+		{
+		  "name": "snapshot",
+		  "label": "Create RDS from snapshot"
+		},
+		{
+		  "name": "new",
+		  "label": "Create new RDS"
+		},
+		{
+		  "name": "common",
+		  "label": "Common Parameters"
+		},
+		{
+		  "name": "network",
+		  "label": "Network"
+		}
+	],	
+	"template_input_params": [
+		{
+			"name": "aws_region",
+			"type": "string",
+			"description": "AWS Region Name",
+			"default": "us-east-1",
+			"hidden": false,
+			"label": "AWS Region Name",
+			"group_name": "cloud",
+			"secured": false,
+			"options": [
+				{
+					"value": "us-east-1",
+					"label": "US East (N. Virginia)",
+					"default": true
+				}, {
+					"value": "us-east-2",
+					"label": "US East (Ohio)"
+				}, {
+					"value": "us-west-1",
+					"label": "US West (N. California)"
+				}, {
+					"value": "us-west-2",
+					"label": "US West (Oregon)"
+				}, {
+					"value": "us-gov-west-1",
+					"label": "US GovCloud Region"
+				}, {
+					"value": "ca-central-1",
+					"label": "Canada (Central)"
+				}, {
+					"value": "eu-west-1",
+					"label": "EU (Ireland)"
+				}, {
+					"value": "eu-central-1",
+					"label": "EU (Frankfurt)"
+				}, {
+					"value": "eu-west-2",
+					"label": "EU (London)"
+				}, {
+					"value": "ap-northeast-1",
+					"label": "Asia Pacific (Tokyo)"
+				}, {
+					"value": "ap-northeast-2",
+					"label": "Asia Pacific (Seoul)"
+				}, {
+					"value": "ap-southeast-1",
+					"label": "Asia Pacific (Singapore)"
+				}, {
+					"value": "ap-southeast-2",
+					"label": "Asia Pacific (Sydney)"
+				}, {
+					"value": "ap-south-1",
+					"label": "Asia Pacific (Mumbai)"
+				}, {
+					"value": "sa-east-1",
+					"label": "South America (São Paulo)"
+				}
+			],
+			"required": true,
+			"immutable": false
+		}, {
+			"group_name": "snapshot",
+			"name": "snapshot_identifier",
+			"label": "ID of an existing snapshot to create this database from.",
+			"type": "string",
+			"description": "Snapshot ID to create the new database from. You must either provide this value or to create a fresh database provide values for Allocated Storage,  Database engine, Master DB user name and Master DB user password",
+			"required": false,
+			"secured": false,
+			"hidden": false,
+			"immutable": false
+		}, {
+			"group_name": "new",
+			"name": "allocated_storage",
+			"label": "Allocated Storage (in gibibytes - required unless a snapshot identifier is provided)",
+			"type": "string",
+			"description": "The allocated storage in gibibytes. Required unless a snapshot identifier is provided.",
+			"required": false,
+			"secured": false,
+			"hidden": false,
+			"immutable": false,
+			"default": 10
+		}, {
+			"group_name": "new",
+			"name": "db_engine",
+			"label": "Database engine (required unless a snapshot identifier is provided)",
+			"type": "string",
+			"description": "The database engine to use. Required unless a snapshot identifier is provided. If provided with snaphsot identifier, then this value must match the snapshot engine name.",
+			"required": false,
+			"secured": false,
+			"hidden": false,
+			"immutable": false,
+			"options": [
+				{
+					"label": "MYSQL",
+					"value": "mysql"
+				}, {
+					"label": "Maria DB",
+					"value": "mariadb"
+				}, {
+					"label": "MS SQL",
+					"value": "sqlserver-ex"
+				}, {
+					"label": "Postgres",
+					"value": "postgres"
+				}, {
+					"label": "Oracle",
+					"value": "oracle-se"
+				}
+			]
+		}, {
+			"group_name": "new",
+			"name": "engine_version",
+			"label": "Database engine version",
+			"type": "string",
+			"description": "The database engine version to use.",
+			"required": false,
+			"secured": false,
+			"hidden": false,
+			"immutable": false
+		}, {
+			"group_name": "common",
+			"name": "instance_class",
+			"label": "Ralational Data Service instance type",
+			"type": "string",
+			"description": "The instance type of the RDS instance.",
+			"required": true,
+			"secured": false,
+			"hidden": false,
+			"immutable": false,
+			"default": "db.t2.micro",
+			"options": [
+				{
+					"label": "db.t2.micro",
+					"value": "db.t2.micro",
+					"default": true
+				}, {
+					"label": "db.t2.small",
+					"value": "db.t2.small",
+					"default": false
+				}, {
+					"label": "db.t2.medium",
+					"value": "db.t2.medium",
+					"default": false
+				}, {
+					"label": "db.t2.large",
+					"value": "db.t2.large",
+					"default": false
+				}
+			]
+		}, {
+			"group_name": "common",
+			"name": "instance_name",
+			"label": "Database name",
+			"type": "string",
+			"description": "The name of the database to create when the DB instance is created. This value is also used as prefix for RDS instance unique identifier.",
+			"required": false,
+			"secured": false,
+			"hidden": false,
+			"immutable": false,
+			"default": "camdb",
+			"regex": "^[A-Za-z][A-Za-z0-9]*$",
+			"regexdesc": "Must begin with a letter and contain only alphanumeric characters."
+		}, {
+			"group_name": "new",
+			"name": "username",
+			"label": "Master DB user name (required unless a snapshot identifier is provided)",
+			"type": "string",
+			"description": "User name for the master DB. Required unless a snapshot identifier is provided.",
+			"required": false,
+			"secured": false,
+			"hidden": false,
+			"immutable": false,
+			"regex": "^[A-Za-z][A-Za-z0-9]{0,15}$",
+			"regexdesc": "Must begin with a letter and contain only alphanumeric characters. Maximum length is 16 characters."
+		}, {
+			"group_name": "new",
+			"name": "password",
+			"label": "Master DB user password (required unless a snapshot identifier is provided)",
+			"type": "password",
+			"description": "Password for the master DB user. Required unless a snapshot identifier is provided.",
+			"required": false,
+			"secured": true,
+			"hidden": false,
+			"immutable": false,
+			"regex": "^((?!['\"/@])[\\x00-\\x7F]){8,}$",
+			"regexdesc": "At least 8 ASCII characters. Can't contain any of the following: forward slash, single quote, double quote and @."
+		}, {
+			"group_name": "common",
+			"name": "publicly_accessible",
+			"label": "Is publicly accessible",
+			"type": "boolean",
+			"description": "Bool to control if instance is publicly accessible. ",
+			"required": false,
+			"secured": false,
+			"hidden": false,
+			"immutable": false,
+			"default": false
+		}, {
+			"group_name": "common",
+			"name": "final_snapshot_identifier",
+			"label": "Name of DB snapshot when this DB instance is deleted (Required if Skip snapshot on delete set to false)",
+			"type": "string",
+			"description": "The name of your final DB snapshot when this DB instance is deleted. Must be provided if skip_final_snapshot is set to false.",
+			"required": false,
+			"secured": false,
+			"hidden": false,
+			"immutable": false,
+			"default": "delete-snapshot",
+			"regex": "^((?!.*--)[A-Za-z][A-Za-z0-9-]*(?<!-))$",
+			"regexdesc": "Only alphanumeric characters and hyphens allowed. First character must be a letter. Cannot end with a hyphen or contain two consecutive hyphens."
+		}, {
+			"group_name": "common",
+			"name": "skip_final_snapshot",
+			"label": "Skip snapshot when DB instance is deleted",
+			"type": "boolean",
+			"description": "",
+			"required": false,
+			"secured": false,
+			"hidden": false,
+			"immutable": false,
+			"default": true
+		}, {
+			"group_name": "network",
+			"name": "subnet_group_name",
+			"label": "Name of DB subnet group",
+			"type": "string",
+			"description": "DB instance will be created in the VPC associated with the DB subnet group. If unspecified, will be created in the default VPC, or in EC2 Classic, if available.",
+			"required": false,
+			"secured": false,
+			"hidden": false,
+			"immutable": false
+		}, {
+			"group_name": "network",
+			"name": "vpc_security_group_ids",
+			"label": "VPC security groups to associate",
+			"type": "list",
+			"description": "List of VPC security groups to associate with RDS.",
+			"required": false,
+			"secured": false,
+			"hidden": false,
+			"immutable": false
+		}, {
+			"group_name": "common",
+			"name": "license_model",
+			"label": "License Model (required for some DB like Oracle SE)",
+			"type": "string",
+			"description": "License model information for this DB instance.",
+			"required": false,
+			"secured": false,
+			"hidden": false,
+			"immutable": false,
+			"options": [
+				{
+					"label": "license-included",
+					"value": "license-included"
+				}, {
+					"label": "bring-your-own-license",
+					"value": "bring-your-own-license"
+				}, {
+					"label": "general-public-license",
+					"value": "general-public-license"
+				}
+			]
+		}
+	],
+	"template_output_params": [
+		{
+			"name": "aws_db_instance_endpoint",
+			"label": "Connection endpoint",
+			"description": "The connection endpoint in address:port format.",
+			"secured": false,
+			"hidden": false
+		}, {
+			"name": "aws_db_instance_engine",
+			"label": "Database engine",
+			"description": "The database engine.",
+			"secured": false,
+			"hidden": false
+		}, {
+			"name": "aws_db_instance_engine_version",
+			"label": "Database engine version",
+			"description": "The database engine version.",
+			"secured": false,
+			"hidden": false
+		}, {
+			"name": "aws_db_instance_identifier",
+			"label": "RDS instance ID",
+			"description": "The RDS instance ID.",
+			"secured": false,
+			"hidden": false
+		}, {
+			"name": "aws_db_instance_status",
+			"label": "RDS instance status",
+			"description": "The RDS instance status",
+			"secured": false,
+			"hidden": false
+		}
+	]
+}
