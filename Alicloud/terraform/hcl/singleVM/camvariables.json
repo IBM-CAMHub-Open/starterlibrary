@@ -1,0 +1,66 @@
+{
+	"terraform_version": "~> 0.12.0",
+	"template_input_params": [
+		{
+			"description": "Name of the virtual instance name. This name is also used in creation of VPC, Security Group, Virtual Switch and Key Name",
+			"hidden": false,
+			"immutable": false,
+			"label": "Virtual Machine Instance Name",
+			"name": "instance_name",
+			"required": true,
+			"secured": false,
+			"type": "string"
+		},
+		{
+			"description": "Host name of the ECS instance.",
+			"hidden": false,
+			"immutable": false,
+			"label": "Host name",
+			"name": "host_name",
+			"required": true,
+			"secured": false,
+			"type": "string"
+		},
+		{
+			"description": "Number of CPUs to be allocated to the virtual machine instance.",
+			"hidden": false,
+			"immutable": false,
+			"label": "CPU Count",
+			"name": "cpu_count",
+			"required": true,
+			"secured": false,
+			"type": "string",
+			"default": "1"
+		},
+		{
+			"description": "Memory of the virtual machine instance.",
+			"hidden": false,
+			"immutable": false,
+			"label": "Memory (GB)",
+			"name": "memory",
+			"required": true,
+			"secured": false,
+			"type": "string",
+			"default": "2"
+		},
+		{
+			"description": "Public SSH key used to connect to the virtual machine",
+			"hidden": false,
+			"immutable": false,
+			"label": "Public SSH Key",
+			"name": "public_key",
+			"required": true,
+			"secured": false,
+			"type": "string"
+		}
+	],
+	"template_output_params": [
+		{
+			"name": "ip_address",
+			"type": "string",
+			"hidden": false,
+			"label": "VM IP address",
+			"secured": false
+		}
+	]
+}
