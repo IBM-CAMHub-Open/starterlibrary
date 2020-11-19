@@ -1,5 +1,5 @@
 provider "alicloud" {
-  version = "~> 1.101.0"
+
 }
 
 module "camtags" {
