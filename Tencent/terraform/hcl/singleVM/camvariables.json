@@ -1,0 +1,161 @@
+{
+	"terraform_version": "~> 0.12.0",
+	"template_input_params": [
+		{
+			"description": "Name of the virtual instance name. This name is also used in key name.",
+			"hidden": false,
+			"immutable": false,
+			"label": "Virtual Machine Instance Name",
+			"name": "instance_name",
+			"required": true,
+			"secured": false,
+			"type": "string"
+		},
+		{
+			"description": "Host name of the instance.",
+			"hidden": false,
+			"immutable": false,
+			"label": "Host name",
+			"name": "host_name",
+			"required": true,
+			"secured": false,
+			"type": "string"
+		},
+		{
+			"description": "Number of CPUs to be allocated to the virtual machine instance.",
+			"hidden": false,
+			"immutable": false,
+			"label": "CPU Count",
+			"name": "cpu_core_count",
+			"required": true,
+			"secured": false,
+			"type": "string",
+			"default": "1"
+		},
+		{
+			"description": "Memory of the virtual machine instance.",
+			"hidden": false,
+			"immutable": false,
+			"label": "Memory (GB)",
+			"name": "memory_size",
+			"required": true,
+			"secured": false,
+			"type": "string",
+			"default": "2"
+		},
+		{
+			"description": "A list of the image type to be queried.",
+			"hidden": false,
+			"immutable": false,
+			"label": "Image Type (Valid values are PUBLIC_IMAGE, PRIVATE_IMAGE, SHARED_IMAGE and MARKET_IMAGE)",
+			"name": "image_type",
+			"required": true,
+			"secured": false,
+			"type": "list",
+			"regex": "^(PUBLIC_IMAGE|PRIVATE_IMAGE|SHARED_IMAGE|MARKET_IMAGE)$",
+			"regexdesc": "Value must be one of the following PUBLIC_IMAGE, PRIVATE_IMAGE, SHARED_IMAGE and MARKET_IMAGE"			
+		},
+		{
+			"description": "A string to apply with fuzzy match to the os_name attribute on the image list returned by TencentCloud.",
+			"hidden": false,
+			"immutable": false,
+			"label": "OS Name Keyword",
+			"name": "os_name",
+			"required": true,
+			"secured": false,
+			"type": "string",
+			"default": "centos"
+		},
+		{
+			"description": "Type of the system disk.",
+			"hidden": false,
+			"immutable": false,
+			"label": "System Disk Type",
+			"name": "system_disk_type",
+			"required": true,
+			"secured": false,
+			"type": "string",
+			"default": "CLOUD_BASIC",
+			"options": [
+				{
+					"label": "CLOUD_BASIC",
+					"value": "CLOUD_BASIC",
+					"default": true
+				}, {
+					"label": "CLOUD_SSD",
+					"value": "CLOUD_SSD",
+					"default": false
+				}, {
+					"label": "CLOUD_PREMIUM",
+					"value": "CLOUD_PREMIUM",
+					"default": false
+				}
+			]			
+		},
+		{
+			"description": "Size of the system disk.",
+			"hidden": false,
+			"immutable": false,
+			"label": "System Disk Size (GB)",
+			"name": "system_disk_size",
+			"required": true,
+			"secured": false,
+			"type": "string",
+			"default": "50",
+			"regex": "^([5-9][0-9]|[1-9][0-9][0-9]|1000)$",
+			"regexdesc": "Value range is 50 to 1000"
+		},
+		{
+			"description": "Associate a public IP address with an virtual machine instance.",
+			"hidden": false,
+			"immutable": false,
+			"label": "Allocate public ip",
+			"name": "allocate_public_ip",
+			"required": true,
+			"secured": false,
+			"type": "string",
+			"default": "true",
+			"options": [
+				{
+					"label": "true",
+					"value": "true",
+					"default": true
+				}, {
+					"label": "false",
+					"value": "false",
+					"default": false
+				}
+			]			
+		},								
+		{
+			"description": "Public SSH key used to connect to the virtual machine instance.",
+			"hidden": false,
+			"immutable": false,
+			"label": "Public SSH Key",
+			"name": "public_key",
+			"required": true,
+			"secured": false,
+			"type": "string"
+		},
+		{
+			"description": "Maximum outgoing bandwidth to the public network, measured in Mbps (Mega bit per second)",
+			"hidden": false,
+			"immutable": false,
+			"name": "internet_max_bandwidth_out",
+			"label": "Maximum outgoing public network bandwidth in Mbps (not required if public ip is not used)",
+			"required": false,
+			"secured": false,
+			"type": "string",
+			"default": "10"
+		}		
+	],
+	"template_output_params": [
+		{
+			"name": "public_ip_address",
+			"type": "string",
+			"hidden": false,
+			"label": "VM Public IP address",
+			"secured": false
+		}		
+	]
+}
