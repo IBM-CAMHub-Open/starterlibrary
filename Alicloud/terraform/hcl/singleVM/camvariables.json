@@ -62,7 +62,9 @@
 			"required": false,
 			"secured": false,
 			"type": "string",
-			"default": "0"
+			"default": "0",
+			"regex": "^([0-9]|[1-9][0-9]|100)$",
+			"regexdesc": "Value range is 0 to 100"
 		}		
 	],
 	"template_output_params": [

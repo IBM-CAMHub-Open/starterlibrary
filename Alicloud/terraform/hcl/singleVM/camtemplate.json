@@ -41,7 +41,7 @@
        },
        {
          "title": "Default virtual machine settings",
-         "description": "<ul><li>Alibaba cloud:<ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 1, Memory = 2GB</li><li>Network: Public IP - Computed</li></ul></li></ul>"
+         "description": "<ul><li>Alibaba cloud:<ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 1, Memory = 2GB</li><li>Network: Public and Private IP - Computed</li></ul></li></ul>"
        },
        {
          "title": "Usage and special notes",

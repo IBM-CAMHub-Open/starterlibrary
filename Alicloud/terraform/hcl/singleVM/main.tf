@@ -30,6 +30,16 @@ resource "alicloud_security_group" "cam_sg" {
   vpc_id 	  = alicloud_vpc.cam_vpc.id
 }
 
+resource "alicloud_security_group_rule" "cam_allow_ssh" {
+  type              = "ingress"
+  ip_protocol       = "all"
+  nic_type          = "intranet"
+  policy            = "accept"
+  priority          = 1
+  security_group_id = alicloud_security_group.cam_sg.id
+  cidr_ip           = "0.0.0.0/0"
+}
+
 resource "alicloud_vswitch" "cam_vswitch" {
   vpc_id            = alicloud_vpc.cam_vpc.id
   cidr_block        = "10.1.0.0/24"
