@@ -52,15 +52,33 @@
 			"required": true,
 			"secured": false,
 			"type": "string"
-		}
+		},
+		{
+			"description": "Maximum outgoing bandwidth to the public network, measured in Mbps (Mega bit per second)",
+			"hidden": false,
+			"immutable": false,
+			"name": "internet_max_bandwidth_out",
+			"label": "Maximum outgoing public network bandwidth in Mbps (non-zero value required if you need public IP)",
+			"required": false,
+			"secured": false,
+			"type": "string",
+			"default": "0"
+		}		
 	],
 	"template_output_params": [
 		{
-			"name": "ip_address",
+			"name": "private_ip_address",
 			"type": "string",
 			"hidden": false,
-			"label": "VM IP address",
+			"label": "VM Private IP address",
 			"secured": false
-		}
+		},
+		{
+			"name": "public_ip_address",
+			"type": "string",
+			"hidden": false,
+			"label": "VM Public IP address",
+			"secured": false
+		}		
 	]
 }

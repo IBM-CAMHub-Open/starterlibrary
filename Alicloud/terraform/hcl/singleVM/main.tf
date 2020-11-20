@@ -51,5 +51,5 @@ resource "alicloud_instance" "ecs_instance" {
   tags				   = "${module.camtags.tagsmap}"
   key_name			   = "${var.instance_name}-cam-key"
   vswitch_id           = alicloud_vswitch.cam_vswitch.id
+  internet_max_bandwidth_out = tonumber(var.internet_max_bandwidth_out)
 }
-
