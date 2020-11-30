@@ -163,6 +163,7 @@ resource "azurerm_storage_container" "default" {
 # Deploy the virtual machine resource
 #########################################################
 resource "azurerm_virtual_machine" "web" {
+  depends_on = ["azurerm_network_security_group.web", "azurerm_network_interface.web"]
   count                 = "${var.user_public_key != "None" ? 1 : 0}"
   name                  = "${var.name_prefix}-web-${random_id.default.hex}-vm"
   location              = "${var.azure_region}"
@@ -202,6 +203,7 @@ resource "azurerm_virtual_machine" "web" {
 }
 
 resource "azurerm_virtual_machine" "web-alternative" {
+  depends_on = ["azurerm_network_security_group.web", "azurerm_network_interface.web"]
   count                 = "${var.user_public_key == "None" ? 1 : 0}"
   name                  = "${var.name_prefix}-${random_id.default.hex}-web-vm"
   location              = "${var.azure_region}"

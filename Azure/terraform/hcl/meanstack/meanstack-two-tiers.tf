@@ -226,6 +226,7 @@ resource "azurerm_storage_container" "default" {
 # Deploy the virtual machine resources
 #########################################################
 resource "azurerm_virtual_machine" "web" {
+  depends_on = ["azurerm_network_security_group.web", "azurerm_network_interface.web"]
   count                 = "${var.user_public_key != "None" ? 1 : 0}"
   name                  = "${var.name_prefix}-${random_id.default.hex}-web-vm"
   location              = "${var.azure_region}"
@@ -265,6 +266,7 @@ resource "azurerm_virtual_machine" "web" {
 }
 
 resource "azurerm_virtual_machine" "web-alternative" {
+  depends_on = ["azurerm_network_security_group.web", "azurerm_network_interface.web"]
   count                 = "${var.user_public_key == "None" ? 1 : 0}"
   name                  = "${var.name_prefix}-${random_id.default.hex}-web-vm"
   location              = "${var.azure_region}"
@@ -299,6 +301,7 @@ resource "azurerm_virtual_machine" "web-alternative" {
 }
 
 resource "azurerm_virtual_machine" "db" {
+  depends_on = ["azurerm_network_security_group.db", "azurerm_network_interface.db"]
   count                 = "${var.user_public_key != "None" ? 1 : 0}"
   name                  = "${var.name_prefix}-${random_id.default.hex}-db-vm"
   location              = "${var.azure_region}"
@@ -338,6 +341,7 @@ resource "azurerm_virtual_machine" "db" {
 }
 
 resource "azurerm_virtual_machine" "db-alternative" {
+  depends_on = ["azurerm_network_security_group.db", "azurerm_network_interface.db"]
   count                 = "${var.user_public_key == "None" ? 1 : 0}"
   name                  = "${var.name_prefix}-${random_id.default.hex}-db-vm"
   location              = "${var.azure_region}"
