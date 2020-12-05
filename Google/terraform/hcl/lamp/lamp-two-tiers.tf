@@ -4,6 +4,14 @@ provider "google" {
   version = "~> 1.5"
 }
 
+data "template_file" "gce_startup_script" {
+  template = "${file("${path.module}/scripts/setkey.sh")}"
+  vars = {
+    gce_ssh_public_key = "${var.gce_ssh_public_key}"
+    gce_ssh_user = "${var.gce_ssh_user}"
+  }
+}
+
 resource "google_compute_instance" "mariadb" {
   name         = "${var.mariadb_hostname}"
   machine_type = "${var.machine_type}"
@@ -23,6 +31,7 @@ resource "google_compute_instance" "mariadb" {
   metadata {
     ssh-keys = "${var.gce_ssh_user}:${var.gce_ssh_public_key}"
   }
+  metadata_startup_script = "${data.template_file.gce_startup_script.rendered}"
 }
 
 resource "google_compute_instance" "php" {
@@ -47,7 +56,7 @@ resource "google_compute_instance" "php" {
   metadata {
     ssh-keys = "${var.gce_ssh_user}:${var.gce_ssh_public_key}"
   }
-
+  metadata_startup_script = "${data.template_file.gce_startup_script.rendered}"
 }
 
 resource "null_resource" "install_mariadb" {	

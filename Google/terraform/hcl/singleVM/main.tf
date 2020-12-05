@@ -33,6 +33,14 @@ variable "gce_ssh_public_key" {
   description = "Public key used to connect to the deployed VM in GCE."
 }
 
+data "template_file" "gce_startup_script" {
+  template = "${file("${path.module}/scripts/setkey.sh")}"
+  vars = {
+    gce_ssh_public_key = "${var.gce_ssh_public_key}"
+    gce_ssh_user = "${var.gce_ssh_user}"
+  }
+}
+
 // Create a new compute engine resource
 resource "google_compute_instance" "default" {
   name         = "${var.unique_resource_name}"
@@ -53,6 +61,9 @@ resource "google_compute_instance" "default" {
   metadata {
     ssh-keys = "${var.gce_ssh_user}:${var.gce_ssh_public_key}"
   }
+
+  metadata_startup_script = "${data.template_file.gce_startup_script.rendered}"
+  
   labels = "${module.camtags.tagsmap}"
 }
 

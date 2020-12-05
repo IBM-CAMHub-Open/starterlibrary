@@ -15,8 +15,8 @@
           "label": "RHEL 7"
         },
         {
-          "value": "debian-cloud/debian-8",
-          "label": "Debian 8"
+          "value": "debian-cloud/debian-9",
+          "label": "Debian 9"
         },
         {
           "value": "suse-cloud/sles-12",
