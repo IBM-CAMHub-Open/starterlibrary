@@ -206,7 +206,7 @@ resource "vsphere_virtual_machine" "Win-vm" {
 
 resource "null_resource" "Win-vm-create_done" {
   depends_on = [vsphere_virtual_machine.Win-vm]
-
+  count = var.enable_vm == "true" ? length(var.vm_ipv4_address) : 0
   provisioner "local-exec" {
     command = "echo '===================== Windows VM creates done for ${var.vm_name[count.index]} ==================X .'"
   }
