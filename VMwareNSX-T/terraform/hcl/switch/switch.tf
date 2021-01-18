@@ -39,7 +39,7 @@ variable "nsxt_logical_switch_repl_mode" {
 # Define the nsxt provider
 ##############################################################
 provider "nsxt" {
-
+  version = ">= 1.1.1, <= 3.1.0"
 }
 
 #
