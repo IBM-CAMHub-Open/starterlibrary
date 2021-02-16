@@ -1,0 +1,23 @@
+variable "region" {
+  type    = string
+  default = "us-east"
+}
+
+variable "public_ssh_key" {
+  type = string
+}
+
+variable "image_name" {
+  type    = string
+  default = "ibm-debian-9-0-64-minimal-for-vsi"
+}
+
+variable "profile" {
+  type    = string
+  default = "bx2-2x8"
+}
+
+variable "zone" {
+  type    = string
+  default = "us-east-1"
+}

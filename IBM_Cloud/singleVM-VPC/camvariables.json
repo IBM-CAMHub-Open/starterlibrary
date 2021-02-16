@@ -1,0 +1,84 @@
+{
+    "terraform_version": ">= 0.13.0",
+    "template_input_params": [
+      {
+        "name": "image_name",
+        "label": "OS Image Name",
+        "description": "The name of the IBM Cloud OS image from which the Virtual Servers for Virtual Private Cloud will be created. See IBM Cloud documentation for more details on valid values for this attribute.",
+        "type": "string",
+        "default": "ibm-debian-9-0-64-minimal-for-vsi",
+        "required": true,
+        "secured": false,
+        "hidden": false,
+        "immutable": false,
+        "immutable_after_create": false
+      },
+      {
+        "name": "profile",
+        "label": "Virtual Server Instance Profile",
+        "description": "IBM Cloud virtual server profile to be applied to your virtual server. A profile is a combination of instance attributes, such as the number of vCPUs, amount of RAM, and more that can be used to start a virtual server instance. See IBM Cloud documentation for more details on valid values for this attribute.",
+        "type": "string",
+        "default": "bx2-2x8",
+        "required": true,
+        "secured": false,
+        "hidden": false,
+        "immutable": false,
+        "immutable_after_create": false
+      },
+      {
+        "name": "region",
+        "label": "Region",
+        "description": "IBM Cloud region to create your virtual server instance in.",
+        "type": "string",
+        "default": "us-east",
+        "required": true,
+        "secured": false,
+        "hidden": false,
+        "immutable": false,
+        "immutable_after_create": false
+      },
+      {
+        "name": "zone",
+        "label": "Availability Zone",
+        "description": "IBM Cloud availability Zone to create your virtual server instance in.",
+        "type": "string",
+        "default": "us-east-1",
+        "required": true,
+        "secured": false,
+        "hidden": false,
+        "immutable": false,
+        "immutable_after_create": false
+      },
+      {
+        "name": "public_ssh_key",
+        "label": "Public SSH key",
+        "description": "Public SSH key to be set in the virtual server instance.",
+        "type": "string",
+        "required": true,
+        "secured": false,
+        "hidden": false,
+        "immutable": false,
+        "immutable_after_create": false
+      }
+    ],
+    "template_output_params": [
+      {
+        "name": "server_floating_ip_address",
+        "label": "Virtual Server Instance Floating IP address",
+        "description": "",
+        "secured": false,
+        "hidden": false,
+        "shortname": "",
+        "type": "string"
+      },
+      {
+        "name": "server_private_ip_address",
+        "label": "Virtual Server Instance Private IP address",
+        "description": "",
+        "secured": false,
+        "hidden": false,
+        "shortname": "",
+        "type": "string"
+      }
+    ]
+  }
