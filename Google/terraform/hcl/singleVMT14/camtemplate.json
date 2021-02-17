@@ -18,7 +18,7 @@
      "template_source": {
      "githubRepoUrl": "",
      "githubAccessToken": "",
-     "relativePathToTemplateFolder": "Google/terraform/hcl/singleVM14",
+     "relativePathToTemplateFolder": "Google/terraform/hcl/singleVMT14",
      "templateFileName": "main.tf"
       }
    },
