@@ -17,13 +17,13 @@ resource "random_integer" "key" {
 
 #Create VPC
 resource "ibm_is_vpc" "cam_vpc" {
-  name = "cam-vpc-${random_integer.key.result}"
+  name = "${var.resource_prefix}-vpc-${random_integer.key.result}"
   tags = module.camtags.tagslist
 }
 
 #Create SG
 resource "ibm_is_security_group" "cam_security_group" {
-  name = "cam-sg-${random_integer.key.result}"
+  name = "${var.resource_prefix}-sg-${random_integer.key.result}"
   vpc  = ibm_is_vpc.cam_vpc.id
 }
 
@@ -42,7 +42,7 @@ resource "ibm_is_security_group_rule" "cam_security_group_rule_outbound_all" {
 
 #Create Subnet
 resource "ibm_is_subnet" "cam_subnet" {
-  name            = "cam-subnet-${random_integer.key.result}"
+  name            = "${var.resource_prefix}-subnet-${random_integer.key.result}"
   vpc             = ibm_is_vpc.cam_vpc.id
   zone            = var.zone
   total_ipv4_address_count = 8
@@ -50,13 +50,13 @@ resource "ibm_is_subnet" "cam_subnet" {
 
 #Create SSHKey
 resource "ibm_is_ssh_key" "cam_sshkey" {
-  name       = "cam-ssh-${random_integer.key.result}"
+  name       = "${var.resource_prefix}-ssh-${random_integer.key.result}"
   public_key = var.public_ssh_key
 }
 
 #Create VSI
 resource "ibm_is_instance" "cam-server" {
-  name    = "cam-server-vsi-${random_integer.key.result}"
+  name    = "${var.resource_prefix}-server-vsi-${random_integer.key.result}"
   image   = data.ibm_is_image.ds_image.id
   profile = var.profile
 
@@ -73,6 +73,6 @@ resource "ibm_is_instance" "cam-server" {
 
 ## Attach floating IP address to VSI
 resource "ibm_is_floating_ip" "cam_floatingip" {
-  name   = "cam-fip-${random_integer.key.result}"
+  name   = "${var.resource_prefix}-fip-${random_integer.key.result}"
   target = ibm_is_instance.cam-server.primary_network_interface[0].id
 }

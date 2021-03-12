@@ -2,6 +2,18 @@
     "terraform_version": ">= 0.13.0",
     "template_input_params": [
       {
+        "name": "resource_prefix",
+        "label": "Instance Name Prefix",
+        "description": "The name to be prefixed to the VPC Server Instance and all the related resources like VPC, Subnet that will be created by this template.",
+        "type": "string",
+        "default": "CAM",
+        "required": true,
+        "secured": false,
+        "hidden": false,
+        "immutable": false,
+        "immutable_after_create": false
+      },      
+      {
         "name": "image_name",
         "label": "OS Image Name",
         "description": "The name of the IBM Cloud OS image from which the Virtual Servers for Virtual Private Cloud will be created. See IBM Cloud documentation for more details on valid values for this attribute.",

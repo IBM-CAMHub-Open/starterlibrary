@@ -21,3 +21,8 @@ variable "zone" {
   type    = string
   default = "us-east-1"
 }
+
+variable "resource_prefix" {
+  type    = string
+  default = "CAM"
+}
