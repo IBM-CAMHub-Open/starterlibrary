@@ -6,12 +6,14 @@
         "label": "Instance Name Prefix",
         "description": "The name to be prefixed to the VPC Server Instance and all the related resources like VPC, Subnet that will be created by this template.",
         "type": "string",
-        "default": "CAM",
+        "default": "cam",
         "required": true,
         "secured": false,
         "hidden": false,
         "immutable": false,
-        "immutable_after_create": false
+        "immutable_after_create": false,
+        "regex": "^([a-z]|[a-z]([-a-z0-9]){0,18}([a-z0-9]))$",
+        "regexdesc": "Use lowercase alphanumeric characters and hyphens only. Must begin with a lower case alphabetic character and end with lowercase alphanumeric character. Maximum length is 20 characters."
       },      
       {
         "name": "image_name",

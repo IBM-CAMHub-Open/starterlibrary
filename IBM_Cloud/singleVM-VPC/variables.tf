@@ -24,5 +24,5 @@ variable "zone" {
 
 variable "resource_prefix" {
   type    = string
-  default = "CAM"
+  default = "cam"
 }
