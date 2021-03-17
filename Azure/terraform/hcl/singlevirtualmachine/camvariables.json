@@ -96,14 +96,13 @@
         {
             "name": "user_public_key",
             "label": "User Public Key",
-            "description": "User-provided public SSH key used to connect to the virtual machine; The provided key must be 'None' or the openSSH format key with optional comment",
-            "default": "None",
+            "description": "User-provided public SSH key used to connect to the virtual machine. Azure only supports RSA SSH2 key signatures of at least 2048 bits in length.",
             "hidden": false,
             "immutable": false,
             "required": true,
             "secured": false,
             "type": "string",
-            "regex": "^None$|^ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}( [^@]+@[^@]+| [^@]+){0,1}$"
+            "regex": "^ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}( [^@]+@[^@]+| [^@]+){0,1}$"
         }
     ],
     "template_output_params": [
