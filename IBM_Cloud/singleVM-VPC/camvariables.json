@@ -44,24 +44,102 @@
         "label": "Region",
         "description": "IBM Cloud region to create your virtual server instance in.",
         "type": "string",
-        "default": "us-east",
         "required": true,
         "secured": false,
         "hidden": false,
         "immutable": false,
-        "immutable_after_create": false
+        "immutable_after_create": false,
+        "options": [
+          {
+            "value": "au-syd",
+            "label": "Australia (Sydney)"
+          }, {
+            "value": "jp-tok",
+            "label": "Japan (Tokyo)"
+          }, {
+            "value": "eu-de",
+            "label": "Germany (Frankfurt)"
+          }, {
+            "value": "eu-gb",
+            "label": "United Kingdom (London)"
+          }, {
+            "value": "us-south",
+            "label": "United States (Dallas)",
+            "default": true
+          }, {
+            "value": "us-east",
+            "label": "United States (Washington DC)"
+          }
+        ]        
       },
       {
         "name": "zone",
-        "label": "Availability Zone",
-        "description": "IBM Cloud availability Zone to create your virtual server instance in.",
+        "label": "Availability Zone (Must match the region selected)",
+        "description": "IBM Cloud availability Zone to create your virtual server instance in. The zone value must be in the selected region.",
         "type": "string",
-        "default": "us-east-1",
         "required": true,
         "secured": false,
         "hidden": false,
         "immutable": false,
-        "immutable_after_create": false
+        "immutable_after_create": false,
+        "options": [
+          {
+            "value": "au-syd-1",
+            "label": "Australia (Sydney 1)"
+          }, 				{
+            "value": "au-syd-2",
+            "label": "Australia (Sydney 2)"
+          },				{
+            "value": "au-syd-3",
+            "label": "Australia (Sydney 3)"
+          },{
+            "value": "jp-tok-1",
+            "label": "Japan (Tokyo 1)"
+          }, {
+            "value": "jp-tok-2",
+            "label": "Japan (Tokyo 2)"
+          },{
+            "value": "jp-tok-3",
+            "label": "Japan (Tokyo 3)"
+          },{
+            "value": "eu-de-1",
+            "label": "Germany (Frankfurt 1)"
+          }, {
+            "value": "eu-de-2",
+            "label": "Germany (Frankfurt 2)"
+          },{
+            "value": "eu-de-3",
+            "label": "Germany (Frankfurt 3)"
+          },{
+            "value": "eu-gb-1",
+            "label": "United Kingdom (London 1)"
+          }, {
+            "value": "eu-gb-2",
+            "label": "United Kingdom (London 2)"
+          },{
+            "value": "eu-gb-3",
+            "label": "United Kingdom (London 3)"
+          },{
+            "value": "us-south-1",
+            "label": "United States (Dallas 1)",
+            "default": true
+          }, {
+            "value": "us-south-2",
+            "label": "United States (Dallas 2)"
+          }, {
+            "value": "us-south-3",
+            "label": "United States (Dallas 3)"
+          }, {
+            "value": "us-east-1",
+            "label": "United States (Washington DC 1)"
+          },{
+            "value": "us-east-2",
+            "label": "United States (Washington DC 2)"
+          },{
+            "value": "us-east-3",
+            "label": "United States (Washington DC 3)"
+          }
+        ]
       },
       {
         "name": "public_ssh_key",

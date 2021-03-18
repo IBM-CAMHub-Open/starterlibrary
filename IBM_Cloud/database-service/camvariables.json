@@ -101,7 +101,7 @@
     },
     {
       "name": "db_plan",
-      "label": "Serivce Plan",
+      "label": "Service Plan",
       "type": "string",
       "description": "Plan for the Database Service.",
       "required": true,
@@ -112,7 +112,7 @@
     },
     {
       "name": "db_version",
-      "label": "Serivce version",
+      "label": "Service Version",
       "type": "string",
       "description": "The version of the database to be provisioned. If omitted, the database is created with the most recent major and minor version.",
       "required": false,
