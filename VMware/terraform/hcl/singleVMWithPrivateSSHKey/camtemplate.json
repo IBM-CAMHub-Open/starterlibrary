@@ -37,7 +37,7 @@
        },
        {
          "title": "Usage and special notes",
-         "description": "A typical deployment takes < 1 minute."
+         "description": "<ol class=\"list-numbering\"><li>This template requires user to provide either the password or SSH keys that was set while creating the image.</li><li>If you provide only password, then template uses this password to login into the VM and set a new generated SSH key. The new generated SSH key is displayed in the Output page.</li><li>If you wish to set your own SSH key, then input the password set in the VM image and also SSH key you wish to set to the VM.</li><li>A typical deployment takes < 10 minutes.</li></ol>"
        }
       ]
   }
