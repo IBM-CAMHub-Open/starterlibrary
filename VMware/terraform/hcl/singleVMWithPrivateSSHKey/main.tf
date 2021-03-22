@@ -15,6 +15,11 @@ module "camtags" {
   source = "../Modules/camtags"
 }
 
+resource "random_integer" "category_key" {
+  min     = 1
+  max     = 50000
+}
+
 locals {
   private_ssh_key = length(var.vm_os_private_ssh_key) == 0 ? tls_private_key.generate.private_key_pem : base64decode(var.vm_os_private_ssh_key)
   public_ssh_key  = length(var.vm_os_private_ssh_key) == 0 ? tls_private_key.generate.public_key_openssh : var.vm_os_public_ssh_key
@@ -24,10 +29,10 @@ locals {
 
 resource "vsphere_tag_category" "ibm_terraform_automation_category" {
   count = length(module.camtags.tagslist) > 0 ? 1 : 0
-  name        = format("%s %s", "IBM Terraform Automation Tags for", var.vm_name)
+  name        = format("%s %s-%s", "IBM Terraform Automation Tags for", var.vm_name, random_integer.category_key.result)
+  #name        = format("%s %s", "IBM Terraform Automation Tags for", var.vm_name)
   description = "Category for IBM Terraform Automation"
   cardinality = "MULTIPLE"
-
   associable_types = [
     "VirtualMachine",
     "Datastore",
