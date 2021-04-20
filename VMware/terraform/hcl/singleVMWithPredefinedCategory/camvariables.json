@@ -1,0 +1,433 @@
+{
+  "terraform_version": "~> 0.12.0",
+  "input_datatypes": [
+    {
+      "name": "bastionhost",
+      "label": "Bastion Data"
+    },
+    {
+      "name": "httpproxy",
+      "label": "HTTP Proxy Data"
+    },  
+    {
+      "name": "vsphere_managed_inventory_definition",
+      "label": "vSphere Managed Inventory Definition"
+    }
+  ],
+  "output_datatype": "content_template_output",
+  "input_groups": [
+    {
+      "name": "custom_vm_attributes",
+      "label": "Customized VM attributes"
+    },
+    {
+      "name": "vsphere_managed_inventory_definition",
+      "label": "vSphere Managed Inventory Definition"
+    }
+  ],
+  "output_groups": [
+    {
+      "name": "content_template_output",
+      "label": "Outputs"
+    }
+  ],
+  "template_input_params": [
+    {
+      "name": "http_proxy_host",
+      "type": "string",
+      "hidden": true,
+      "label": "HTTP Proxy Host",
+      "description": "HTTP proxy host name.",
+      "secured": false,
+      "required": false,
+      "default": "${httpproxy.host}"
+    },
+    {
+      "name": "http_proxy_user",
+      "type": "string",
+      "hidden": true,
+      "label": "HTTP Proxy User",
+      "description": "HTTP proxy host user",
+      "secured": false,
+      "required": false,   
+      "default": "${httpproxy.user}"
+    },
+    {
+      "name": "http_proxy_password",
+      "type": "string",
+      "hidden": true,
+      "label": "HTTP Proxy Password",
+      "description": "HTTP proxy host user password.",
+      "secured": true,
+      "required": false,   
+      "default": "${httpproxy.password}"
+    },
+    {
+      "name": "http_proxy_port",
+      "type": "string",
+      "hidden": true,
+      "label": "HTTP Proxy Port",
+      "description": "HTTP proxy host port.",
+      "secured": false,
+      "required": false,    
+      "default": "${httpproxy.port}"
+    },      
+    {
+      "name": "vm_name",
+      "type": "string",
+      "description": "Hostname of virtual machine",
+      "hidden": false,
+      "label": "Virtual Machine Name",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "custom_vm_attributes"
+    },
+    {
+      "name": "vm_ipv4_address",
+      "type": "string",
+      "description": "IPv4 address for vNIC configuration",
+      "hidden": false,
+      "label": "Virtual Machine IP Address",
+      "secured": false,
+      "required": true,
+      "immutable": false,
+      "group_name": "custom_vm_attributes"
+    },
+    {
+      "name": "vm_memory",
+      "label": "VM Memory Allocation (MB)",
+      "type": "string",
+      "description": "VM Memory Allocation (MB).",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "default": "1024",
+      "group_name": "custom_vm_attributes"
+    },
+    {
+      "name": "vm_vcpu",
+      "label": "VM vCPU Allocation",
+      "type": "string",
+      "description": "VM vCPU Allocation.",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "default": "1",
+      "group_name": "custom_vm_attributes"
+    },
+    {
+      "name": "vm_disk_size",
+      "label": "Disk Size (GB)",
+      "type": "string",
+      "description": "Disk Size (GB).",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "default": "20",
+      "group_name": "custom_vm_attributes"
+    },
+    {
+      "name": "datacenter",
+      "default":"${vsphere_managed_inventory_definition.datacenter}",
+      "description": "The name of a datacenter in which to create the virtual machine and other assets.",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "Datacenter Name",
+      "hidden": false,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    }, 
+    {
+      "name": "resource_pool",
+      "default":"${vsphere_managed_inventory_definition.resource_pool}",
+      "description": "Name of the default resource pool for the cluster. Must be specified as 'cluster_name/resource_pool'",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "Resource Pool Name",
+      "hidden": false,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    }, 
+    {
+      "name": "vm_folder",
+      "default":"${vsphere_managed_inventory_definition.vm_folder}",
+      "description": "vSphere folder name to create the virtual vachine.",
+      "type": "string",
+      "required": false,
+      "secured": false,
+      "label": "Virtual Machine Folder Name",
+      "hidden": false,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    }, 
+    {
+      "name": "vm_image_template",
+      "default":"${vsphere_managed_inventory_definition.vm_image_template}",
+      "description": "Virtual machine image template name. If it is in a folder then include folder name as follows 'folder_name/image_template_name'",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "Virtual Machine Image Template Name",
+      "hidden": false,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    }, 
+    {
+      "name": "vm_domain_name",
+      "default":"${vsphere_managed_inventory_definition.vm_domain_name}",
+      "description": "Virtual machine domain name.",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "Virtual Machine Domain Name",
+      "hidden": false,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    }, 
+    {
+      "name": "vm_os_user",
+      "description": "The user name to connect to the virtual machine.",
+      "default":"${vsphere_managed_inventory_definition.vm_os_user}",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "Virtual Machine Template User Name",
+      "hidden": false,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    },
+    {
+      "name": "vm_os_password",
+      "description": "The user password to connect to the virtual machine.",
+      "default":"${vsphere_managed_inventory_definition.vm_os_password}",
+      "type": "string",
+      "required": false,
+      "secured": true,
+      "label": "Virtual Machine Template User Password",
+      "hidden": false,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    },
+    {
+      "name": "vm_os_private_ssh_key",
+      "description": "The user private key to connect to the virtual machine.",
+      "default": "${vsphere_managed_inventory_definition.vm_os_private_ssh_key}",
+      "type": "string",
+      "required": false,
+      "secured": true,
+      "label": "Virtual Machine Template User Private Key (base64 encoded)",
+      "hidden": false ,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    },
+    {
+      "name": "vm_os_public_ssh_key",
+      "description": "Virtual Machine Template User Public Key to be added to the VM",
+      "default": "${vsphere_managed_inventory_definition.vm_os_public_ssh_key}",
+      "type": "string",
+      "required": false,
+      "secured": false,
+      "label": "Virtual Machine Template User Public Key",
+      "hidden": false,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    },	
+    {
+      "name": "datastore",
+      "default":"${vsphere_managed_inventory_definition.datastore}",
+      "description": "Virtual machine datastore name",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "Datastore Name",
+      "hidden": false,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    }, 
+    {
+      "name": "network",
+      "default":"${vsphere_managed_inventory_definition.network}",
+      "description": "vSphere Network name.",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "Network name",
+      "hidden": false,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    }, 
+    {
+      "name": "adapter_type",
+      "default":"${vsphere_managed_inventory_definition.adapter_type}",
+      "description": "Network adapter type for vNIC Configuration",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "Network Adapter Type",
+      "hidden": true,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    }, 
+    {
+      "name": "dns_servers",
+      "default":"${vsphere_managed_inventory_definition.dns_servers}",
+      "description": "A list of DNS servers to add on the virtual machine.",
+      "type": "list",
+      "required": true,
+      "secured": false,
+      "label": "DNS Servers",
+      "hidden": false,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    }, 
+    {
+      "name": "dns_suffixes",
+      "default":"${vsphere_managed_inventory_definition.dns_suffixes}",
+      "description": "A list of DNS search domains to add to the DNS configuration on the virtual machine.",
+      "type": "list",
+      "required": true,
+      "secured": false,
+      "label": "DNS Suffixes",
+      "hidden": false,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    }, 
+    {
+      "name": "vm_ipv4_gateway",
+      "default":"${vsphere_managed_inventory_definition.vm_ipv4_gateway}",
+      "description": "IPv4 Gateway Address for network customization on the virtual machine.",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "IPv4 Gateway",
+      "hidden": false,
+      "immutable": false,
+      "regex": "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$",
+      "regexdesc": "Provide a Valid IP address for the Virtual Machine Gateway",
+      "group_name": "vsphere_managed_inventory_definition"
+    }, 
+    {
+      "name": "vm_ipv4_netmask",
+      "default":"${vsphere_managed_inventory_definition.vm_ipv4_netmask}",
+      "description": "Integer value between 1 and 32 for the prefix length (CIDR) to use when statically assigning an IPv4 address",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "IPv4 Netmask (CIDR)",
+      "hidden": false,
+      "immutable": false,
+      "regex": "^([8-9]|[1-2][0-9]|3[0-2])$",
+      "regexdesc": "Provide an integer value between 1 and 32",
+      "group_name": "vsphere_managed_inventory_definition"
+    },
+    {
+      "name": "vm_clone_timeout",
+      "description": "The timeout, in minutes, to wait for the virtual machine clone to complete.",
+      "default": "${vsphere_managed_inventory_definition.vm_clone_timeout}",
+      "type": "string",
+      "required": true,
+      "secured": false,
+      "label": "Virtual Machine Clone Timeout",
+      "hidden": true,
+      "immutable": false,
+      "group_name": "vsphere_managed_inventory_definition"
+    },
+    {
+      "name": "bastion_host",
+      "type": "string",
+      "group_name": "bastion",
+      "hidden": true,
+      "description": "Bastion host for ssh proxy",
+      "default": "${bastionhost.bastion_host}",
+      "label": "Bastion host",
+      "secured": false,
+      "required": false
+    },
+    {
+      "name": "bastion_port",
+      "type": "string",
+      "group_name": "bastion",
+      "hidden": true,
+      "description": "Bastion port for ssh proxy",
+      "default": "${bastionhost.bastion_port}",
+      "label": "Bastion port",
+      "secured": false,
+      "required": false
+    },
+    {
+      "name": "bastion_user",
+      "type": "string",
+      "group_name": "bastion",
+      "hidden": true,
+      "description": "Bastion user for ssh proxy",
+      "default": "${bastionhost.bastion_user}",
+      "label": "Bastion user",
+      "secured": false,
+      "required": false
+    },
+    {
+      "name": "bastion_private_key",
+      "type": "string",
+      "group_name": "bastion",
+      "hidden": true,
+      "description": "Bastion private key for ssh proxy",
+      "default": "${bastionhost.bastion_private_key}",
+      "label": "Bastion private key",
+      "secured": true,
+      "required": false
+    },
+    {
+      "name": "bastion_password",
+      "type": "string",
+      "group_name": "bastion",
+      "hidden": true,
+      "description": "Bastion user password for ssh proxy",
+      "default": "${bastionhost.bastion_password}",
+      "label": "Bastion user password",
+      "secured": true,
+      "required": false
+    },
+    {
+      "name": "bastion_host_key",
+      "type": "string",
+      "group_name": "bastion",
+      "hidden": true,
+      "description": "Bastion host public key for ssh proxy",
+      "default": "${bastionhost.bastion_host_key}",
+      "label": "Bastion host key",
+      "secured": false,
+      "required": false
+    }
+  ],
+  "template_output_params": [
+    {
+      "name": "public_ssh_key",
+      "type": "string",
+      "description": "Public key to be used to communicate with the newly instantiated virtual machine.",
+      "hidden": false,
+      "label": "Public Key",
+      "secured": false,
+      "system": false,
+      "required": true,
+      "immutable": false
+    },
+    {
+      "name": "private_ssh_key",
+      "type": "string",
+      "description": "Private key to be used to communicate with the newly instantiated virtual machine. The key will be base64 encoded.",
+      "hidden": false,
+      "label": "Private Key - Base 64 encoded",
+      "secured": true,
+      "system": false,
+      "required": true,
+      "immutable": false,
+      "regex": "(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)$"
+    }    
+  ]
+}
