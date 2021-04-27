@@ -270,12 +270,12 @@ locals {
 }
 
 
-data "vsphere_tag_category" "category" {
+resource "vsphere_tag_category" "category" {
   count = length(local.tagmap)
   name  = keys(local.tagmap)[count.index]
 }
 
-data "vsphere_tag" "tag" {
+resource "vsphere_tag" "tag" {
   count = length(local.tagmap)
   name = values(local.tagmap)[count.index]
   category_id = data.vsphere_tag_category.category[count.index].id
