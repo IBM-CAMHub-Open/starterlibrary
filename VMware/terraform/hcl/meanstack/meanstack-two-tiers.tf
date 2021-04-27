@@ -270,7 +270,7 @@ locals {
 }
 
 
-resource "vsphere_tag_category" "category" {
+data "vsphere_tag_category" "category" {
   count = length(local.tagmap)
   name  = keys(local.tagmap)[count.index]
   cardinality = "MULTIPLE"
