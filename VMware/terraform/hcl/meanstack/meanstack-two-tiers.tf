@@ -273,6 +273,14 @@ locals {
 resource "vsphere_tag_category" "category" {
   count = length(local.tagmap)
   name  = keys(local.tagmap)[count.index]
+  cardinality = "MULTIPLE"
+  description = "Category for IBM Terraform Automation"
+	
+associable_types = [
+    "VirtualMachine",
+    "Datastore",
+    "Network",
+  ]
 }
 
 resource "vsphere_tag" "tag" {
