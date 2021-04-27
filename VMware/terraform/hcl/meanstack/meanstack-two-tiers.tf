@@ -249,26 +249,57 @@ variable "mongodb_vm_root_disk_size" {
   description = "Size of template disk volume. Should be equal to template's disk size"
   default     = "25"
 }
-
-resource "vsphere_tag_category" "ibm_terraform_automation_mongodb_vm_category" {
-  count = length(module.camtags.tagslist) > 0 ? 1 : 0
-  name        = format("%s %s", "IBM Terraform Automation Tags for", var.mongodb_vm_name)
-  description = "Category for IBM Terraform Automation"
-  cardinality = "MULTIPLE"
-
-  associable_types = [
-    "VirtualMachine",
-    "Datastore",
-    "Network",
-  ]
+	
+#List of tags that will be added from service
+variable "service_tag_includes" {
+  type = list
+  default = ["environment", "request_user"]
 }
 
-resource "vsphere_tag" "ibm_terraform_automation_mongodb_vm_tags" {
-  count = length(module.camtags.tagslist)
-  name        = element(module.camtags.tagslist, count.index)
-  category_id = element(vsphere_tag_category.ibm_terraform_automation_mongodb_vm_category.*.id, 0)
-  description = "Managed by IBM Terraform Automation"
+#Filter tags passed by service.
+locals {
+
+ taglist = [
+   for cat in var.service_tag_includes : {
+      for k, v in module.camtags.tagsmap : k => v
+      if k  == cat
+  }
+ ]
+
+ tagmap = {for v in local.taglist : keys(v)[0] => values(v)[0]}
 }
+
+
+data "vsphere_tag_category" "category" {
+  count = length(local.tagmap)
+  name  = keys(local.tagmap)[count.index]
+}
+
+data "vsphere_tag" "tag" {
+  count = length(local.tagmap)
+  name = values(local.tagmap)[count.index]
+  category_id = data.vsphere_tag_category.category[count.index].id
+}
+	      
+# resource "vsphere_tag_category" "ibm_terraform_automation_mongodb_vm_category" {
+#   count = length(module.camtags.tagslist) > 0 ? 1 : 0
+#   name        = format("%s %s", "IBM Terraform Automation Tags for", var.mongodb_vm_name)
+#   description = "Category for IBM Terraform Automation"
+#   cardinality = "MULTIPLE"
+
+#   associable_types = [
+#     "VirtualMachine",
+#     "Datastore",
+#     "Network",
+#   ]
+# }
+
+# resource "vsphere_tag" "ibm_terraform_automation_mongodb_vm_tags" {
+#   count = length(module.camtags.tagslist)
+#   name        = element(module.camtags.tagslist, count.index)
+#   category_id = element(vsphere_tag_category.ibm_terraform_automation_mongodb_vm_category.*.id, 0)
+#   description = "Managed by IBM Terraform Automation"
+# }
 
 # vsphere vm
 resource "vsphere_virtual_machine" "mongodb_vm" {
