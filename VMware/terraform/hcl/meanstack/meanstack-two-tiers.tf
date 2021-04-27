@@ -273,20 +273,19 @@ locals {
 data "vsphere_tag_category" "category" {
   count = length(local.tagmap)
   name  = keys(local.tagmap)[count.index]
-  cardinality = "MULTIPLE"
-  description = "Category for IBM Terraform Automation"
+#   cardinality = "MULTIPLE"
+#   description = "Category for IBM Terraform Automation"
 	
-associable_types = [
-    "VirtualMachine",
-    "Datastore",
-    "Network",
-  ]
+# associable_types = [
+#     "VirtualMachine",
+#     "Datastore",
+#     "Network",
+#   ]
 }
-
-resource "vsphere_tag" "tag" {
+data "vsphere_tag" "tag" {
   count = length(local.tagmap)
   name = values(local.tagmap)[count.index]
-  category_id = vsphere_tag_category.category[count.index].id
+  category_id = data.vsphere_tag_category.category[count.index].id
 }
 	      
 # resource "vsphere_tag_category" "ibm_terraform_automation_mongodb_vm_category" {
@@ -319,7 +318,7 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
   datastore_id     = data.vsphere_datastore.mongodb_vm_datastore.id
   guest_id         = data.vsphere_virtual_machine.mongodb_vm_template.guest_id
   scsi_type        = data.vsphere_virtual_machine.mongodb_vm_template.scsi_type
-  tags = vsphere_tag.tag[*].id
+  tags = data.vsphere_tag.tag.*.id
   clone {
     template_uuid = data.vsphere_virtual_machine.mongodb_vm_template.id
 
@@ -648,7 +647,7 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
   datastore_id     = data.vsphere_datastore.nodejs_vm_datastore.id
   guest_id         = data.vsphere_virtual_machine.nodejs_vm_template.guest_id
   scsi_type        = data.vsphere_virtual_machine.nodejs_vm_template.scsi_type
-  tags = vsphere_tag.tag[*].id
+  tags = data.vsphere_tag.tag.*.id
   clone {
     template_uuid = data.vsphere_virtual_machine.nodejs_vm_template.id
 
