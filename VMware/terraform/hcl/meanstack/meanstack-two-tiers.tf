@@ -286,7 +286,7 @@ associable_types = [
 resource "vsphere_tag" "tag" {
   count = length(local.tagmap)
   name = values(local.tagmap)[count.index]
-  category_id = data.vsphere_tag_category.category[count.index].id
+  category_id = vsphere_tag_category.category[count.index].id
 }
 	      
 # resource "vsphere_tag_category" "ibm_terraform_automation_mongodb_vm_category" {
