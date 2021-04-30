@@ -162,7 +162,7 @@ variable "vm_1-image" {
 #List of tags that will be added from service
 variable "service_tag_includes" {
   type = list
-  default = ["environment", "request_user"]
+  default = ["environment"]
 }
 
 #Filter tags passed by service.
@@ -174,18 +174,18 @@ locals {
       if k  == cat
   }
  ]
-
- tagmap = {for v in local.taglist : keys(v)[0] => values(v)[0]}
+count = length(module.camtags.tagslist)
+tagmap = count==0 ? {} : {for v in local.taglist : keys(v)[0] => values(v)[0]}
 }
 
 
 data "vsphere_tag_category" "category" {
-  count = length(local.tagmap)
+  count = length(local.tagmap) > 0 ? 1 : 0
   name  = keys(local.tagmap)[count.index]
 }
 
 data "vsphere_tag" "tag" {
-  count = length(local.tagmap)
+  count = length(local.tagmap) > 0 ? 1 : 0
   name = values(local.tagmap)[count.index]
   category_id = data.vsphere_tag_category.category[count.index].id
 }
