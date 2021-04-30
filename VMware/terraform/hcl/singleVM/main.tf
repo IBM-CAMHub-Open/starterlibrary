@@ -20,6 +20,10 @@ provider "camc" {
   version = "~> 0.2"
 }
 
+module "camtags" {
+  source = "../Modules/camtags"
+}
+  
 ##############################################################
 # Define pattern variables 
 ##############################################################
