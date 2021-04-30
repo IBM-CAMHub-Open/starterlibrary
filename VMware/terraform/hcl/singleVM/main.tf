@@ -174,8 +174,8 @@ locals {
       if k  == cat
   }
  ]
-count = length(module.camtags.tagslist)
-tagmap = count==0 ? {} : {for v in local.taglist : keys(v)[0] => values(v)[0]}
+
+tagmap = length(module.camtags.tagslist)==0 ? {} : {for v in local.taglist : keys(v)[0] => values(v)[0]}
 }
 
 
