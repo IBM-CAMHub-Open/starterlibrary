@@ -162,7 +162,7 @@ variable "vm_1-image" {
 #List of tags that will be added from service
 variable "service_tag_includes" {
   type = list
-  default = ["environment", "request_user"]
+  default = ["environment"]
 }
 
 #Filter tags passed by service.
