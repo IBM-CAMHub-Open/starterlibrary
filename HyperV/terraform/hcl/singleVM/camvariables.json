@@ -1,0 +1,190 @@
+{
+    "terraform_version": ">= 0.13.0",
+    "template_input_params": [
+        {
+            "name": "instance_name",
+            "label": "Instance name",
+            "type": "string",
+            "description": "Virtual machine name",
+            "required": true,
+            "secured": false,
+            "hidden": false,
+            "immutable": false
+        },
+        {
+            "name": "instance_vhd_path",
+            "label": "Instance Virtual Hard Disk Path",
+            "type": "string",
+            "description": "The path of the hard disk drive file to be added.",
+            "required": true,
+            "secured": false,
+            "hidden": false,
+            "immutable": false,
+            "default": "c:\\users\\public\\documents\\hyper-v\\virtual hard disks\\"
+        },
+        {
+            "name": "instance_vhd_size",
+            "label": "Instance VHD Size",
+            "type": "string",
+            "description": "VHD Size",
+            "required": true,
+            "secured": false,
+            "hidden": false,
+            "immutable": false,
+            "default": 107374182400
+        },
+        {
+            "name": "generation",
+            "label": "Generation",
+            "type": "string",
+            "description": "Virtual machine generation",
+            "required": false,
+            "secured": false,
+            "hidden": false,
+            "immutable": false,
+            "default": 1,
+            "options": [
+                {
+                    "value": "2",
+                    "label": "2"
+                },
+                {
+                    "value": "1",
+                    "label": "1",
+                    "default": true
+                }
+            ]
+        },
+        {
+            "name": "processor_count",
+            "label": "Processor count",
+            "type": "string",
+            "description": "The number of virtual processors for the virtual machine.",
+            "required": false,
+            "secured": false,
+            "hidden": false,
+            "immutable": false,
+            "default": 1
+        },
+        {
+            "name": "static_memory",
+            "label": "Static memory",
+            "type": "boolean",
+            "description": "Does the VM instance use static memory.",
+            "required": false,
+            "secured": false,
+            "hidden": false,
+            "immutable": false,
+            "default": true
+        },
+        {
+            "name": "memory_startup_bytes",
+            "label": "Startup memory (in bytes)",
+            "type": "string",
+            "description": "Amount of memory that the virtual machine is to be allocated upon startup.",
+            "required": false,
+            "secured": false,
+            "hidden": false,
+            "immutable": false,
+            "default": 2147483648
+        },
+        {
+            "name": "wait_timeout",
+            "label": "Timeout",
+            "type": "string",
+            "description": "The amount of time in seconds to wait for to obtain IP or to wait for desired VM state.",
+            "required": false,
+            "secured": false,
+            "hidden": false,
+            "immutable": false,
+            "default": 10
+        },
+        {
+            "name": "hw_thread_count_per_core",
+            "label": "Thread count per core",
+            "type": "string",
+            "description": "The number of virtual SMT threads exposed to the virtual machine..",
+            "required": false,
+            "secured": false,
+            "hidden": false,
+            "immutable": false,
+            "default": 1
+        },
+        {
+            "name": "network_adapter_name",
+            "label": "Network Adapter Name",
+            "type": "string",
+            "description": "The name for the virtual network adapter.",
+            "required": true,
+            "secured": false,
+            "hidden": false,
+            "immutable": false,
+            "default": "Network Adapter"
+        },
+        {
+            "name": "network_switch_name",
+            "label": "Network Switch Name",
+            "type": "string",
+            "description": "Network switch name",
+            "required": true,
+            "secured": false,
+            "hidden": false,
+            "immutable": false,
+            "default": "Intel(R) 82574L Gigabit Network Connection - Virtual Switch"
+        },
+        {
+            "name": "controller_type",
+            "label": "Hard Disk Drive Controller Type (Ide or Scsi)",
+            "type": "string",
+            "description": "The type of the controller to which the hard disk drive is to be added. Valid value are Scsi or Ide.",
+            "required": false,
+            "secured": false,
+            "hidden": false,
+            "immutable": false,
+            "default": "Ide",
+            "options": [
+                {
+                    "value": "Scsi",
+                    "label": "Scsi"
+                },
+                {
+                    "value": "Ide",
+                    "label": "Ide",
+                    "default": true
+                }
+            ]
+        },
+        {
+            "name": "resource_pool_name",
+            "label": "VHD Resource Pool Name",
+            "type": "string",
+            "description": "The resource pool to which this virtual hard disk is to be associated",
+            "required": false,
+            "secured": false,
+            "hidden": false,
+            "immutable": false,
+            "default": "Primordial"
+        },
+        {
+            "name": "iso_path",
+            "label": "VM ISO Path",
+            "type": "string",
+            "description": "Virtual machine iso path",
+            "required": true,
+            "secured": false,
+            "hidden": false,
+            "immutable": false,
+            "default": "C:\\Users\\Administrator\\Downloads\\en_windows_server_2019_updated_jun_2021_x64_dvd_a2a2f782.iso"
+        }
+    ],
+    "template_output_params": [
+        {
+            "name": "ip_address",
+            "type": "string",
+            "description": "Current list of IP addresses on this machine.",
+            "hidden": false,
+            "label": "Current list of IP addresses",
+            "secured": false
+        }
+    ]
+}
