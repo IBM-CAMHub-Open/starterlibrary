@@ -1,4 +1,6 @@
-provider "ibm" {}
+provider "ibm" {
+  version = "~> 0.5"   
+}
 
 variable service_name {}
 variable cf_org {}

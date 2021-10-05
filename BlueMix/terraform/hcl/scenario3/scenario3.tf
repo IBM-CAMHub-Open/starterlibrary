@@ -1,4 +1,6 @@
-provider "ibm" {}
+provider "ibm" {
+  version = "~> 1.14.0"  
+}
 
 module "camtags" {
   source = "../Modules/camtags"
