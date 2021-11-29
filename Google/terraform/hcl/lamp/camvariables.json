@@ -81,22 +81,12 @@
       },    
       {
         "name": "boot_disk",
-        "description": "The boot disk for the instance.",
-        "options": [
-          {
-            "value": "rhel-cloud/rhel-7",
-            "label": "RHEL 7",
-            "default": true
-          },
-          {
-            "value": "centos-cloud/centos-7",
-            "label": "CentOS 7"
-          }
-        ],
+        "description": "The boot disk for the instance. The value must be in the format image_project/image_family. For more details refer to Google cloud Operating System Details documentation.",
+        "default": "rhel-cloud/rhel-7",
         "type": "string",
         "required": true,
         "secured": false,
-        "label": "Instance Boot Disk",
+        "label": "Instance Boot Disk (value must be image_project/image_family)",
         "hidden": false,
         "immutable": false
       },

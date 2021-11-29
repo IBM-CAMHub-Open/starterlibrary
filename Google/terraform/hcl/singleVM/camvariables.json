@@ -3,33 +3,15 @@
   "template_input_params": [
     {
       "name": "boot_disk",
-      "description": "The boot disk for the instance.",
-      "options": [
-        {
-          "value": "ubuntu-os-cloud/ubuntu-1604-lts",
-          "label": "Ubuntu 16.04",
-          "default": true
-        },
-        {
-          "value": "rhel-cloud/rhel-7",
-          "label": "RHEL 7"
-        },
-        {
-          "value": "debian-cloud/debian-9",
-          "label": "Debian 9"
-        },
-        {
-          "value": "suse-cloud/sles-12",
-          "label": "SLES 12"
-        }
-      ],
+      "description": "The boot disk for the instance. The value must be in the format image_project/image_family. For more details refer to Google cloud Operating System Details documentation.",
+      "default": "ubuntu-os-cloud/ubuntu-1804-lts",
       "type": "string",
       "required": true,
       "secured": false,
-      "label": "Operating System",
+      "label": "Operating System (value must be image_project/image_family)",
       "hidden": false,
       "immutable": false
-    },
+    },    
     {
       "name": "machine_type",
       "description": "The machine type to create.",
