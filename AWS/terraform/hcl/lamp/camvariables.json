@@ -220,6 +220,30 @@
         "group_name": "virtualmachine"
     },
     {
+      "default": "8.0.27",
+      "description": "The MySQL engine version",
+      "hidden": false,
+      "immutable": false,
+      "label": "MySQL engine version",
+      "name": "db_engine_version",
+      "required": true,
+      "secured": false,
+      "type": "string",
+      "group_name": "virtualmachine"
+    },
+    {
+      "default": "default.mysql8.0",
+      "description": "Name of the DB parameter group to associate",
+      "hidden": false,
+      "immutable": false,
+      "label": "DB parameter group name",
+      "name": "db_parameter_group_name",
+      "required": true,
+      "secured": false,
+      "type": "string",
+      "group_name": "virtualmachine"
+    },    
+    {
         "default": "opencontent-lamp",
         "description": "The prefix of names for VPC, Gateway, Subnet and Security Group; Allow 1 to 240 alphanumeric characters and special characters +=._:/@- as tag value that is not starting with aws",
         "hidden": false,

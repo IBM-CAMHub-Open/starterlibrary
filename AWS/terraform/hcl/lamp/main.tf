@@ -70,6 +70,16 @@ variable "db_instance_name" {
   default     = "lampDb"
 }
 
+variable "db_engine_version" {
+  description = "The mysql engine version"
+  default     = "8.0.27"
+}
+
+variable "db_parameter_group_name" {
+  description = "The mysql parameter group name"
+  default     = "default.mysql8.0"
+}
+
 variable "network_name_prefix" {
   description = "The prefix of names for VPC, Gateway, Subnet and Security Group"
   default     = "opencontent-lamp"
@@ -368,13 +378,13 @@ resource "aws_db_instance" "mysql" {
   depends_on             = ["aws_route_table_association.primary", "aws_route_table_association.secondary"]
   allocated_storage      = "10"
   engine                 = "mysql"
-  engine_version         = "5.6.34"
+  engine_version         = "${var.db_engine_version}"
   instance_class         = "db.t2.micro"
   name                   = "${var.db_instance_name}"
   username               = "${var.cam_user}"
   password               = "${var.cam_pwd}"
   db_subnet_group_name   = "${aws_db_subnet_group.default.name}"
-  parameter_group_name   = "default.mysql5.6"
+  parameter_group_name   = "${var.db_parameter_group_name}"
   availability_zone      = "${var.aws_region}b"
   publicly_accessible    = true
   vpc_security_group_ids = ["${aws_security_group.database.id}"]
