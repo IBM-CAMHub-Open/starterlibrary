@@ -1,5 +1,5 @@
 provider "ibm" {
-  version = "~> 1.14.0"
+  version = ">= 0.19.0, < 1.15.0"
 }
 
 module "camtags" {
