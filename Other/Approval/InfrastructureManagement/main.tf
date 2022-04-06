@@ -37,6 +37,10 @@ variable "password" {
     description = "Password to connect to Infrastructure Management"
 }
 
+variable "token" {
+    description = "Bearer token to connect to Infrastructure Management"
+}
+
 variable "curl_option" {
     default = ""
     description = "Options for curl command used to retrieve status from Infrastructure Management e.g. --insecure"
@@ -60,11 +64,12 @@ resource "local_file" "approval_status" {
 #########################################################
 resource "null_resource" "poll_endpoint" {
  provisioner "local-exec" {
-    command = "/bin/bash poll_endpoint.sh $URL $USERNAME $PASSWORD $CURL_OPTIONS $WAIT_TIME $FILE"
+    command = "/bin/bash poll_endpoint.sh $URL $USERNAME $PASSWORD $TOKEN $CURL_OPTIONS $WAIT_TIME $FILE"
     environment = {
       URL          = var.url
-      USERNAME     = var.username
-      PASSWORD     = var.password
+      USERNAME     = var.username != "" ? var.username : "DEFAULT_USERNAME"
+      PASSWORD     = var.password != "" ? var.password : "DEFAULT_PASSWORD"
+      TOKEN        = var.token != "" ? var.token : "DEFAULT_TOKEN"
       CURL_OPTIONS = var.curl_option
       WAIT_TIME    = var.wait_time
       FILE         = "${path.module}/approval_status"
