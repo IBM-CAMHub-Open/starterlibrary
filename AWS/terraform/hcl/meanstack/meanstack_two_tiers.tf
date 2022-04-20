@@ -413,6 +413,7 @@ apt-get install -y nodejs build-essential                                       
 npm install -g bower gulp                                                                                         >> $LOGFILE 2>&1 || { echo "---Failed to install bower and gulp---" | tee -a $LOGFILE; exit 1; }
 
 echo "---Install mean sample application---" | tee -a $LOGFILE 2>&1
+git config --global url."https://github.com/".insteadOf git://github.com/                                         >> $LOGFILE 2>&1 || { echo "---Failed to config git to use https protocol---" | tee -a $LOGFILE; exit 1; }
 git clone https://github.com/meanjs/mean.git mean                                                                 >> $LOGFILE 2>&1 || { echo "---Failed to clone mean sample project---" | tee -a $LOGFILE; exit 1; }
 cd mean
 npm install --unsafe-perm=true                                                                                    >> $LOGFILE 2>&1 || { echo "---Failed to install node modules---" | tee -a $LOGFILE; exit 1; }
