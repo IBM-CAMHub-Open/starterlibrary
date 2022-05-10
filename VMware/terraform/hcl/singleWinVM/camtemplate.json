@@ -1,8 +1,8 @@
 {
-  "name": "SingleWindowsVirtualMachine",
+  "name": "SingleWindowsVirtualMachine for Terraform 1.x.x",
   "description": "Create Windows Virtual Machine with single vnic",
   "type": "prebuilt",
-  "version": "1.0",
+  "version": "2.5",
   "manifest": {
     "template_type": "Terraform",
     "template_format": "HCL",

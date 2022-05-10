@@ -1,7 +1,7 @@
 {
-   "name": "LAMP infrastructure deployment on AWS",
+   "name": "LAMP infrastructure deployment on AWS for Terraform 1.x.x",
    "description": "Deploys a fully-integrated environment for full stack PHP web development. This template only deploys the AWS infrastructure required by LAMP ",
-   "version": "1.0",
+   "version": "2.5",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
    "image": "tp_WAS_standalone.png",
    "type": "prebuilt",

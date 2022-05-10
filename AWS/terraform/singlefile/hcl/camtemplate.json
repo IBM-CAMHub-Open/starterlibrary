@@ -1,7 +1,7 @@
  {
-    "name": "Amazon EC2 Virtual Server with SSH key",
+    "name": "Amazon EC2 Virtual Server with SSH key for Terraform 1.x.x",
     "description": "Amazon EC2 Ubuntu 14.04 virtual server under an existing Virtual Private Cloud (VPC).",
-    "version": "1.0",
+    "version": "2.5",
     "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
     "image": "tp_WAS_standalone.png",
     "type": "prebuilt",

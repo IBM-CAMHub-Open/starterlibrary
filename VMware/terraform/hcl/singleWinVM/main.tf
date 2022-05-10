@@ -3,7 +3,6 @@ provider "vsphere" {
   # user = "${var.vsphere_user}"
   # password = "${var.vsphere_password}"
   # vsphere_server = "${var.vsphere_server}"
-  version              = "~> 1.3"
   allow_unverified_ssl = "true"
 }
 
@@ -56,13 +55,15 @@ variable "enable_vm" {
 }
 
 variable "vm_name" {
-  type = list(string)
+  type    = list(string)
+  default = []
 }
 
 #
 variable "hostName" {
   description = "VM hostanme"
   type        = list(string)
+  default     = []
 }
 
 variable "vm_vcpu" {
@@ -97,6 +98,7 @@ variable "vsphere_resource_pool" {
 variable "vm_dns_servers" {
   type        = list(string)
   description = "DNS servers for the virtual network adapter"
+  default     = []
 }
 
 variable "vm_network_interface_label" {

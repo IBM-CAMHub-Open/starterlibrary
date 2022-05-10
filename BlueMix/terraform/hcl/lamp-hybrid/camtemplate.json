@@ -1,7 +1,7 @@
 {
-   "name": "LAMP stack deployment (hybrid-cloud)",
+   "name": "LAMP stack deployment (hybrid-cloud) for Terraform 1.x.x",
    "description": "LAMP - A fully-integrated environment for full stack PHP web development.",
-   "version": "1.0",
+   "version": "2.5",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
    "image": "tp_WAS_standalone.png",
    "type": "prebuilt",
@@ -33,7 +33,7 @@
        },
        {
          "title": "Operating systems supported",
-         "description": "<ul style=\"list-style-type: disc; margin-left: 12px;\"><li>AWS: Underlying operating system for database instance</li><li>IBM Cloud: Ubuntu 16.04</li></ul>"
+         "description": "<ul style=\"list-style-type: disc; margin-left: 12px;\"><li>AWS: Underlying operating system for database instance</li><li>IBM Cloud: Ubuntu 18.04</li></ul>"
        },
        {
          "title": "Topology",

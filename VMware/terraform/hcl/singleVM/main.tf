@@ -13,11 +13,9 @@ variable "allow_unverified_ssl" {
 ##############################################################
 provider "vsphere" {
   allow_unverified_ssl = var.allow_unverified_ssl
-  version              = "~> 1.3"
 }
 
 provider "camc" {
-  version = "~> 0.2"
 }
 
 ##############################################################
@@ -97,11 +95,13 @@ variable "vm_1_resource_pool" {
 variable "vm_1_dns_suffixes" {
   type        = list(string)
   description = "Name resolution suffixes for the virtual network adapter"
+  default     = []
 }
 
 variable "vm_1_dns_servers" {
   type        = list(string)
   description = "DNS servers for the virtual network adapter"
+  default     = []
 }
 
 variable "vm_1_network_interface_label" {

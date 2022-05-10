@@ -23,7 +23,6 @@
 # Define the ibmcloud provider
 #########################################################
 provider "ibm" {
-  version = "~> 0.5"   
 }
 
 #########################################################
@@ -49,18 +48,17 @@ variable "public_ssh_key" {
 }
 
 variable "os_reference_code" {
-  type = "string"
+  type        = string
   description = "Operating system image id / template that should be used when creating the virtual image"
-  default = "CENTOS_7_64"
+  default     = "CENTOS_7_64"
 }
-
 
 ##############################################################
 # Create public key in Devices>Manage>SSH Keys in SL console
 ##############################################################
 resource "ibm_compute_ssh_key" "cam_public_key" {
   label      = "CAM Public Key"
-  public_key = "${var.public_ssh_key}"
+  public_key = var.public_ssh_key
 }
 
 ##############################################################
@@ -72,17 +70,17 @@ resource "tls_private_key" "ssh" {
 
 resource "ibm_compute_ssh_key" "temp_public_key" {
   label      = "Temp Public Key"
-  public_key = "${tls_private_key.ssh.public_key_openssh}"
+  public_key = tls_private_key.ssh.public_key_openssh
 }
 
 ##############################################################################
 # Define the module to create a server and install strongloop-single-stack
 ##############################################################################
 resource "ibm_compute_vm_instance" "softlayer_virtual_guest" {
-  hostname                 = "${var.hostname}"
-  os_reference_code        = "${var.os_reference_code}"
+  hostname                 = var.hostname
+  os_reference_code        = var.os_reference_code
   domain                   = "cam.ibm.com"
-  datacenter               = "${var.datacenter}"
+  datacenter               = var.datacenter
   network_speed            = 10
   hourly_billing           = true
   private_network_only     = false
@@ -91,22 +89,24 @@ resource "ibm_compute_vm_instance" "softlayer_virtual_guest" {
   disks                    = [25]
   dedicated_acct_host_only = false
   local_disk               = false
-  ssh_key_ids              = ["${ibm_compute_ssh_key.cam_public_key.id}", "${ibm_compute_ssh_key.temp_public_key.id}"]
-  tags                     = ["${module.camtags.tagslist}"]
+  ssh_key_ids              = [ibm_compute_ssh_key.cam_public_key.id, ibm_compute_ssh_key.temp_public_key.id]
+  tags = module.camtags.tagslist
 
   # Specify the ssh connection
+  # Specify the ssh connection
   connection {
-    user        = "root"
-    private_key = "${tls_private_key.ssh.private_key_pem}"
-    host        = "${self.ipv4_address}"
-    bastion_host        = "${var.bastion_host}"
-    bastion_user        = "${var.bastion_user}"
-    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
-    bastion_port        = "${var.bastion_port}"
-    bastion_host_key    = "${var.bastion_host_key}"
-    bastion_password    = "${var.bastion_password}"
+    user                = "root"
+    private_key         = tls_private_key.ssh.private_key_pem
+    host                = self.ipv4_address
+    bastion_host        = var.bastion_host
+    bastion_user        = var.bastion_user
+    bastion_private_key = length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key
+    bastion_port        = var.bastion_port
+    bastion_host_key    = var.bastion_host_key
+    bastion_password    = var.bastion_password
   }
 
+  # Create the installation script
   # Create the installation script
   provisioner "file" {
     content = <<EOF
@@ -463,9 +463,11 @@ echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
 
 EOF
 
+
     destination = "/tmp/installation.sh"
   }
 
+  # Execute the script remotely
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
@@ -480,3 +482,4 @@ EOF
 output "application_url" {
   value = "http://${ibm_compute_vm_instance.softlayer_virtual_guest.ipv4_address}:3000"
 }
+

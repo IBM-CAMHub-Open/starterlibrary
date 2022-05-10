@@ -1,5 +1,4 @@
 provider "ibm" {
-  version = ">= 0.19.0, < 1.15.0"
 }
 
 module "camtags" {
@@ -29,9 +28,9 @@ variable "domain" {
 }
 
 variable "os_reference_code_debian" {
-  type = "string"
+  type        = string
   description = "Operating system image id / template that should be used when creating the virtual image"
-  default = "DEBIAN_9_64"
+  default     = "DEBIAN_9_64"
 }
 
 #data "ibm_compute_image_template" "debian_8_6_64" {
@@ -42,16 +41,17 @@ variable "os_reference_code_debian" {
 # Devices>Manage>SSH Keys in the SoftLayer console.
 resource "ibm_compute_ssh_key" "orpheus_public_key" {
   label      = "Orpheus Public Key"
-  public_key = "${var.public_ssh_key}"
+  public_key = var.public_ssh_key
 }
 
 # Create a new virtual guest using image "Debian"
 resource "ibm_compute_vm_instance" "debian_small_virtual_guest" {
-  hostname                 = "${var.first_hostname}"
+  hostname = var.first_hostname
+
   #image_id                 = "${data.ibm_compute_image_template.debian_8_6_64.id}"
-  os_reference_code        = "${var.os_reference_code_debian}"
-  domain                   = "${var.domain}"
-  datacenter               = "${var.datacenter}"
+  os_reference_code        = var.os_reference_code_debian
+  domain                   = var.domain
+  datacenter               = var.datacenter
   network_speed            = 10
   hourly_billing           = true
   private_network_only     = false
@@ -60,17 +60,18 @@ resource "ibm_compute_vm_instance" "debian_small_virtual_guest" {
   user_metadata            = "{\"value\":\"newvalue\"}"
   dedicated_acct_host_only = false
   local_disk               = false
-  ssh_key_ids              = ["${ibm_compute_ssh_key.orpheus_public_key.id}"]
-  tags                     = ["${module.camtags.tagslist}"]
+  ssh_key_ids              = [ibm_compute_ssh_key.orpheus_public_key.id]
+  tags = module.camtags.tagslist
 }
 
 # Create a new virtual guest using image "Debian"
 resource "ibm_compute_vm_instance" "debian_medium_virtual_guest" {
-  hostname                 = "${var.second_hostname}"
+  hostname = var.second_hostname
+
   #image_id                 = "${data.ibm_compute_image_template.debian_8_6_64.id}"
-  os_reference_code        = "${var.os_reference_code_debian}"  
-  domain                   = "${var.domain}"
-  datacenter               = "${var.datacenter}"
+  os_reference_code        = var.os_reference_code_debian
+  domain                   = var.domain
+  datacenter               = var.datacenter
   network_speed            = 10
   hourly_billing           = true
   private_network_only     = true
@@ -79,8 +80,8 @@ resource "ibm_compute_vm_instance" "debian_medium_virtual_guest" {
   user_metadata            = "{\"value\":\"newvalue\"}"
   dedicated_acct_host_only = false
   local_disk               = false
-  ssh_key_ids              = ["${ibm_compute_ssh_key.orpheus_public_key.id}"]
-  tags                     = ["${module.camtags.tagslist}"]
+  ssh_key_ids              = [ibm_compute_ssh_key.orpheus_public_key.id]
+  tags = module.camtags.tagslist
 }
 
 output "debian_small_vm_ip" {
@@ -90,3 +91,4 @@ output "debian_small_vm_ip" {
 output "debian_medium_vm_ip" {
   value = "Public : ${ibm_compute_vm_instance.debian_medium_virtual_guest.ipv4_address}"
 }
+

@@ -1,7 +1,7 @@
 {
-   "name": "Google Cloud LAMP stack deployment",
+   "name": "Google Cloud LAMP stack deployment for Terraform 1.x.x",
    "description": "LAMP - A fully-integrated environment for full stack PHP web development.",
-   "version": "1.0",
+   "version": "2.5",
    "type": "prebuilt",
    "manifest": {
      "template_type": "Terraform",

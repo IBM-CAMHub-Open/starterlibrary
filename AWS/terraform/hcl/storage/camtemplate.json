@@ -1,7 +1,7 @@
 {
-	"name": "Amazon S3 Storage",
+	"name": "Amazon S3 Storage for Terraform 1.x.x",
 	"description": "Create a Amazon S3 Storage Bucket",
-	"version": "2.4",
+	"version": "2.5",
 	"imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
 	"image": "tp_WAS_standalone.png",
 	"type": "prebuilt",

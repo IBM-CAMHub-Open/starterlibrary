@@ -1,7 +1,7 @@
 {
-	"name": "Amazon Relational Database Service Snapshot",
+	"name": "Amazon Relational Database Service Snapshot for Terraform 1.x.x",
 	"description": "Creates a Amazon Relational Database Service snapshot for existing database.",
-	"version": "2.4",
+	"version": "2.5",
 	"imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
 	"image": "tp_WAS_standalone.png",
 	"type": "prebuilt",

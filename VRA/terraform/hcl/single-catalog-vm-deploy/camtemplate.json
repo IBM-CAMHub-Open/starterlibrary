@@ -1,7 +1,7 @@
 {
     "name": "VMware vRealize Automation single node catalog deployment",
     "description": "This template will deploy a vRA catalog containing a single server component.",
-    "version": "1.0",
+    "version": "2.5",
     "imageUrl": "",
     "image": "",
     "type": "prebuilt",

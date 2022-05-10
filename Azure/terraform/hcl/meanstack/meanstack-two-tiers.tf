@@ -21,8 +21,9 @@
 #########################################################
 # Define the Azure provider
 #########################################################
-provider "azurerm" { version = "~> 1.0" }
-
+provider "azurerm" {
+  features {}
+}
 
 #########################################################
 # Helper module for tagging
@@ -58,7 +59,6 @@ variable "user_public_key" {
   default     = "None"
 }
 
-
 #########################################################
 # Deploy the network resources
 #########################################################
@@ -68,52 +68,52 @@ resource "random_id" "default" {
 
 resource "azurerm_resource_group" "default" {
   name     = "${var.name_prefix}-${random_id.default.hex}-rg"
-  location = "${var.azure_region}"
-  tags     = "${module.camtags.tagsmap}"
+  location = var.azure_region
+  tags     = module.camtags.tagsmap
 }
 
 resource "azurerm_virtual_network" "default" {
   name                = "${var.name_prefix}-${random_id.default.hex}-vnet"
   address_space       = ["10.0.0.0/16"]
-  location            = "${var.azure_region}"
-  resource_group_name = "${azurerm_resource_group.default.name}"
+  location            = var.azure_region
+  resource_group_name = azurerm_resource_group.default.name
 }
 
 resource "azurerm_subnet" "db" {
   name                 = "${var.name_prefix}-${random_id.default.hex}-subnet-db"
-  resource_group_name  = "${azurerm_resource_group.default.name}"
-  virtual_network_name = "${azurerm_virtual_network.default.name}"
-  address_prefix       = "10.0.1.0/24"
+  resource_group_name  = azurerm_resource_group.default.name
+  virtual_network_name = azurerm_virtual_network.default.name
+  address_prefixes     = ["10.0.1.0/24"]
 }
 
 resource "azurerm_subnet" "web" {
   name                 = "${var.name_prefix}-${random_id.default.hex}-subnet-web"
-  resource_group_name  = "${azurerm_resource_group.default.name}"
-  virtual_network_name = "${azurerm_virtual_network.default.name}"
-  address_prefix       = "10.0.2.0/24"
+  resource_group_name  = azurerm_resource_group.default.name
+  virtual_network_name = azurerm_virtual_network.default.name
+  address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_public_ip" "db" {
-  name                         = "${var.name_prefix}-${random_id.default.hex}-db-pip"
-  location                     = "${var.azure_region}"
-  resource_group_name          = "${azurerm_resource_group.default.name}"
-  allocation_method 		   = "Static"
-  tags                         = "${module.camtags.tagsmap}"
+  name                = "${var.name_prefix}-${random_id.default.hex}-db-pip"
+  location            = var.azure_region
+  resource_group_name = azurerm_resource_group.default.name
+  allocation_method   = "Static"
+  tags                = module.camtags.tagsmap
 }
 
 resource "azurerm_public_ip" "web" {
-  name                         = "${var.name_prefix}-${random_id.default.hex}-web-pip"
-  location                     = "${var.azure_region}"
-  resource_group_name          = "${azurerm_resource_group.default.name}"
-  allocation_method 		   = "Static"
-  tags                         = "${module.camtags.tagsmap}"
+  name                = "${var.name_prefix}-${random_id.default.hex}-web-pip"
+  location            = var.azure_region
+  resource_group_name = azurerm_resource_group.default.name
+  allocation_method   = "Static"
+  tags                = module.camtags.tagsmap
 }
 
 resource "azurerm_network_security_group" "db" {
   name                = "${var.name_prefix}-${random_id.default.hex}-db-nsg"
-  location            = "${var.azure_region}"
-  resource_group_name = "${azurerm_resource_group.default.name}"
-  tags                = "${module.camtags.tagsmap}"
+  location            = var.azure_region
+  resource_group_name = azurerm_resource_group.default.name
+  tags                = module.camtags.tagsmap
 
   security_rule {
     name                       = "ssh-allow"
@@ -135,16 +135,16 @@ resource "azurerm_network_security_group" "db" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "27017"
-    source_address_prefix      = "${azurerm_subnet.web.address_prefix}"
+    source_address_prefix      = azurerm_subnet.web.address_prefixes[0]
     destination_address_prefix = "*"
   }
 }
 
 resource "azurerm_network_security_group" "web" {
   name                = "${var.name_prefix}-${random_id.default.hex}-web-nsg"
-  location            = "${var.azure_region}"
-  resource_group_name = "${azurerm_resource_group.default.name}"
-  tags                = "${module.camtags.tagsmap}"
+  location            = var.azure_region
+  resource_group_name = azurerm_resource_group.default.name
+  tags                = module.camtags.tagsmap
 
   security_rule {
     name                       = "ssh-allow"
@@ -173,31 +173,31 @@ resource "azurerm_network_security_group" "web" {
 
 resource "azurerm_network_interface" "db" {
   name                      = "${var.name_prefix}-${random_id.default.hex}-db-nic1"
-  location                  = "${var.azure_region}"
-  resource_group_name       = "${azurerm_resource_group.default.name}"
-  network_security_group_id = "${azurerm_network_security_group.db.id}"
-  tags                      = "${module.camtags.tagsmap}"
+  location                  = var.azure_region
+  resource_group_name       = azurerm_resource_group.default.name
+#  network_security_group_id = azurerm_network_security_group.db.id
+  tags                      = module.camtags.tagsmap
 
   ip_configuration {
     name                          = "${var.name_prefix}-${random_id.default.hex}-db-nic1-ipc"
-    subnet_id                     = "${azurerm_subnet.db.id}"
-    private_ip_address_allocation = "dynamic"
-    public_ip_address_id          = "${azurerm_public_ip.db.id}"
+    subnet_id                     = azurerm_subnet.db.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.db.id
   }
 }
 
 resource "azurerm_network_interface" "web" {
   name                      = "${var.name_prefix}-${random_id.default.hex}-web-nic1"
-  location                  = "${var.azure_region}"
-  resource_group_name       = "${azurerm_resource_group.default.name}"
-  network_security_group_id = "${azurerm_network_security_group.web.id}"
-  tags                      = "${module.camtags.tagsmap}"
+  location                  = var.azure_region
+  resource_group_name       = azurerm_resource_group.default.name
+#  network_security_group_id = azurerm_network_security_group.web.id
+  tags                      = module.camtags.tagsmap
 
   ip_configuration {
     name                          = "${var.name_prefix}-${random_id.default.hex}-web-nic1-ipc"
-    subnet_id                     = "${azurerm_subnet.web.id}"
-    private_ip_address_allocation = "dynamic"
-    public_ip_address_id          = "${azurerm_public_ip.web.id}"
+    subnet_id                     = azurerm_subnet.web.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.web.id
   }
 }
 
@@ -205,20 +205,19 @@ resource "azurerm_network_interface" "web" {
 # Deploy the storage resources
 #########################################################
 resource "azurerm_storage_account" "default" {
-  name                		= "${format("st%s",random_id.default.hex)}"
-  resource_group_name 		= "${azurerm_resource_group.default.name}"
-  location           	 	= "${var.azure_region}"
-  account_tier        		= "Standard"  
-  account_replication_type  = "LRS"
-  
-  tags                = "${module.camtags.tagsmap}"
-  
+  name                     = format("st%s", random_id.default.hex)
+  resource_group_name      = azurerm_resource_group.default.name
+  location                 = var.azure_region
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  tags = module.camtags.tagsmap
 }
 
 resource "azurerm_storage_container" "default" {
   name                  = "default-container"
-  resource_group_name   = "${azurerm_resource_group.default.name}"
-  storage_account_name  = "${azurerm_storage_account.default.name}"
+#  resource_group_name   = azurerm_resource_group.default.name
+  storage_account_name  = azurerm_storage_account.default.name
   container_access_type = "private"
 }
 
@@ -226,14 +225,17 @@ resource "azurerm_storage_container" "default" {
 # Deploy the virtual machine resources
 #########################################################
 resource "azurerm_virtual_machine" "web" {
-  depends_on = ["azurerm_network_security_group.web", "azurerm_network_interface.web"]
-  count                 = "${var.user_public_key != "None" ? 1 : 0}"
+  depends_on = [
+    azurerm_network_security_group.web,
+    azurerm_network_interface.web,
+  ]
+  count                 = var.user_public_key != "None" ? 1 : 0
   name                  = "${var.name_prefix}-${random_id.default.hex}-web-vm"
-  location              = "${var.azure_region}"
-  resource_group_name   = "${azurerm_resource_group.default.name}"
-  network_interface_ids = ["${azurerm_network_interface.web.id}"]
+  location              = var.azure_region
+  resource_group_name   = azurerm_resource_group.default.name
+  network_interface_ids = [azurerm_network_interface.web.id]
   vm_size               = "Standard_A2"
-  tags                  = "${module.camtags.tagsmap}"
+  tags                  = module.camtags.tagsmap
 
   storage_image_reference {
     publisher = "Canonical"
@@ -251,8 +253,8 @@ resource "azurerm_virtual_machine" "web" {
 
   os_profile {
     computer_name  = "${var.name_prefix}-${random_id.default.hex}-web"
-    admin_username = "${var.admin_user}"
-    admin_password = "${var.admin_user_password}"
+    admin_username = var.admin_user
+    admin_password = var.admin_user_password
   }
 
   os_profile_linux_config {
@@ -260,20 +262,23 @@ resource "azurerm_virtual_machine" "web" {
 
     ssh_keys {
       path     = "/home/${var.admin_user}/.ssh/authorized_keys"
-      key_data = "${var.user_public_key}"
+      key_data = var.user_public_key
     }
   }
 }
 
 resource "azurerm_virtual_machine" "web-alternative" {
-  depends_on = ["azurerm_network_security_group.web", "azurerm_network_interface.web"]
-  count                 = "${var.user_public_key == "None" ? 1 : 0}"
+  depends_on = [
+    azurerm_network_security_group.web,
+    azurerm_network_interface.web,
+  ]
+  count                 = var.user_public_key == "None" ? 1 : 0
   name                  = "${var.name_prefix}-${random_id.default.hex}-web-vm"
-  location              = "${var.azure_region}"
-  resource_group_name   = "${azurerm_resource_group.default.name}"
-  network_interface_ids = ["${azurerm_network_interface.web.id}"]
+  location              = var.azure_region
+  resource_group_name   = azurerm_resource_group.default.name
+  network_interface_ids = [azurerm_network_interface.web.id]
   vm_size               = "Standard_A2"
-  tags                  = "${module.camtags.tagsmap}"
+  tags                  = module.camtags.tagsmap
 
   storage_image_reference {
     publisher = "Canonical"
@@ -291,8 +296,8 @@ resource "azurerm_virtual_machine" "web-alternative" {
 
   os_profile {
     computer_name  = "${var.name_prefix}-${random_id.default.hex}-web"
-    admin_username = "${var.admin_user}"
-    admin_password = "${var.admin_user_password}"
+    admin_username = var.admin_user
+    admin_password = var.admin_user_password
   }
 
   os_profile_linux_config {
@@ -301,14 +306,17 @@ resource "azurerm_virtual_machine" "web-alternative" {
 }
 
 resource "azurerm_virtual_machine" "db" {
-  depends_on = ["azurerm_network_security_group.db", "azurerm_network_interface.db"]
-  count                 = "${var.user_public_key != "None" ? 1 : 0}"
+  depends_on = [
+    azurerm_network_security_group.db,
+    azurerm_network_interface.db,
+  ]
+  count                 = var.user_public_key != "None" ? 1 : 0
   name                  = "${var.name_prefix}-${random_id.default.hex}-db-vm"
-  location              = "${var.azure_region}"
-  resource_group_name   = "${azurerm_resource_group.default.name}"
-  network_interface_ids = ["${azurerm_network_interface.db.id}"]
+  location              = var.azure_region
+  resource_group_name   = azurerm_resource_group.default.name
+  network_interface_ids = [azurerm_network_interface.db.id]
   vm_size               = "Standard_A1"
-  tags                  = "${module.camtags.tagsmap}"
+  tags                  = module.camtags.tagsmap
 
   storage_image_reference {
     publisher = "Canonical"
@@ -326,8 +334,8 @@ resource "azurerm_virtual_machine" "db" {
 
   os_profile {
     computer_name  = "${var.name_prefix}-${random_id.default.hex}-db"
-    admin_username = "${var.admin_user}"
-    admin_password = "${var.admin_user_password}"
+    admin_username = var.admin_user
+    admin_password = var.admin_user_password
   }
 
   os_profile_linux_config {
@@ -335,20 +343,23 @@ resource "azurerm_virtual_machine" "db" {
 
     ssh_keys {
       path     = "/home/${var.admin_user}/.ssh/authorized_keys"
-      key_data = "${var.user_public_key}"
+      key_data = var.user_public_key
     }
   }
 }
 
 resource "azurerm_virtual_machine" "db-alternative" {
-  depends_on = ["azurerm_network_security_group.db", "azurerm_network_interface.db"]
-  count                 = "${var.user_public_key == "None" ? 1 : 0}"
+  depends_on = [
+    azurerm_network_security_group.db,
+    azurerm_network_interface.db,
+  ]
+  count                 = var.user_public_key == "None" ? 1 : 0
   name                  = "${var.name_prefix}-${random_id.default.hex}-db-vm"
-  location              = "${var.azure_region}"
-  resource_group_name   = "${azurerm_resource_group.default.name}"
-  network_interface_ids = ["${azurerm_network_interface.db.id}"]
+  location              = var.azure_region
+  resource_group_name   = azurerm_resource_group.default.name
+  network_interface_ids = [azurerm_network_interface.db.id]
   vm_size               = "Standard_A1"
-  tags                  = "${module.camtags.tagsmap}"
+  tags                  = module.camtags.tagsmap
 
   storage_image_reference {
     publisher = "Canonical"
@@ -366,8 +377,8 @@ resource "azurerm_virtual_machine" "db-alternative" {
 
   os_profile {
     computer_name  = "${var.name_prefix}-${random_id.default.hex}-db"
-    admin_username = "${var.admin_user}"
-    admin_password = "${var.admin_user_password}"
+    admin_username = var.admin_user
+    admin_password = var.admin_user_password
   }
 
   os_profile_linux_config {
@@ -379,21 +390,26 @@ resource "azurerm_virtual_machine" "db-alternative" {
 # Install MEAN
 ##############################################################
 resource "null_resource" "install_mongodb" {
-  depends_on = ["azurerm_virtual_machine.db", "azurerm_virtual_machine.db-alternative"]
+  depends_on = [
+    azurerm_virtual_machine.db,
+    azurerm_virtual_machine.db-alternative,
+  ]
 
   # Specify the ssh connection
+  # Specify the ssh connection
   connection {
-    user     = "${var.admin_user}"
-    password = "${var.admin_user_password}"
-    host     = "${azurerm_public_ip.db.ip_address}"
-    bastion_host        = "${var.bastion_host}"
-    bastion_user        = "${var.bastion_user}"
-    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
-    bastion_port        = "${var.bastion_port}"
-    bastion_host_key    = "${var.bastion_host_key}"
-    bastion_password    = "${var.bastion_password}"
+    user                = var.admin_user
+    password            = var.admin_user_password
+    host                = azurerm_public_ip.db.ip_address
+    bastion_host        = var.bastion_host
+    bastion_user        = var.bastion_user
+    bastion_private_key = length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key
+    bastion_port        = var.bastion_port
+    bastion_host_key    = var.bastion_host_key
+    bastion_password    = var.bastion_password
   }
 
+  # Create the installation script
   # Create the installation script
   provisioner "file" {
     content = <<EOF
@@ -419,9 +435,11 @@ echo "---Done---" | tee -a $LOGFILE 2>&1
 
 EOF
 
+
     destination = "/tmp/installation.sh"
   }
 
+  # Execute the script remotely
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
@@ -431,21 +449,27 @@ EOF
 }
 
 resource "null_resource" "install_nodejs" {
-  depends_on = ["null_resource.install_mongodb", "azurerm_virtual_machine.web", "azurerm_virtual_machine.web-alternative"]
+  depends_on = [
+    null_resource.install_mongodb,
+    azurerm_virtual_machine.web,
+    azurerm_virtual_machine.web-alternative,
+  ]
 
   # Specify the ssh connection
+  # Specify the ssh connection
   connection {
-    user     = "${var.admin_user}"
-    password = "${var.admin_user_password}"
-    host     = "${azurerm_public_ip.web.ip_address}"
-    bastion_host        = "${var.bastion_host}"
-    bastion_user        = "${var.bastion_user}"
-    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
-    bastion_port        = "${var.bastion_port}"
-    bastion_host_key    = "${var.bastion_host_key}"
-    bastion_password    = "${var.bastion_password}"
+    user                = var.admin_user
+    password            = var.admin_user_password
+    host                = azurerm_public_ip.web.ip_address
+    bastion_host        = var.bastion_host
+    bastion_user        = var.bastion_user
+    bastion_private_key = length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key
+    bastion_port        = var.bastion_port
+    bastion_host_key    = var.bastion_host_key
+    bastion_password    = var.bastion_password
   }
 
+  # Create the installation script
   # Create the installation script
   provisioner "file" {
     content = <<EOF
@@ -502,9 +526,11 @@ echo "---finish installing sample application---" | tee -a $LOGFILE 2>&1
 
 EOF
 
+
     destination = "/tmp/installation.sh"
   }
 
+  # Execute the script remotely
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
@@ -517,21 +543,23 @@ EOF
 # Check status
 ##############################################################
 resource "null_resource" "check_status" {
-  depends_on = ["null_resource.install_nodejs"]
+  depends_on = [null_resource.install_nodejs]
 
   # Specify the ssh connection
+  # Specify the ssh connection
   connection {
-    user     = "${var.admin_user}"
-    password = "${var.admin_user_password}"
-    host     = "${azurerm_public_ip.web.ip_address}"
-    bastion_host        = "${var.bastion_host}"
-    bastion_user        = "${var.bastion_user}"
-    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
-    bastion_port        = "${var.bastion_port}"
-    bastion_host_key    = "${var.bastion_host_key}"
-    bastion_password    = "${var.bastion_password}"
+    user                = var.admin_user
+    password            = var.admin_user_password
+    host                = azurerm_public_ip.web.ip_address
+    bastion_host        = var.bastion_host
+    bastion_user        = var.bastion_user
+    bastion_private_key = length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key
+    bastion_port        = var.bastion_port
+    bastion_host_key    = var.bastion_host_key
+    bastion_password    = var.bastion_password
   }
 
+  # Create the installation script
   # Create the installation script
   provisioner "file" {
     content = <<EOF
@@ -550,7 +578,7 @@ TMPFILE=`mktemp tmp.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX` && echo $TMPFILE
 StatusCheckMaxCount=120
 StatusCheckCount=0
 
-curl -k -s -o /dev/null -w "%{http_code}" -I -m 5 $APP_URL > $TMPFILE || true
+curl -k -s -o /dev/null -w "%%{http_code}" -I -m 5 $APP_URL > $TMPFILE || true
 SERVICE_STATUS=$(cat $TMPFILE)
 
 while [ "$SERVICE_STATUS" != "200" ]; do
@@ -562,7 +590,7 @@ while [ "$SERVICE_STATUS" != "200" ]; do
 		rm -f $TMPFILE
 		exit 1
 	fi
-	curl -k -s -o /dev/null -w "%{http_code}" -I -m 5 $APP_URL > $TMPFILE || true
+	curl -k -s -o /dev/null -w "%%{http_code}" -I -m 5 $APP_URL > $TMPFILE || true
 	SERVICE_STATUS=$(cat $TMPFILE)
 done
 rm -f $TMPFILE
@@ -571,9 +599,11 @@ echo "---application is up---"
 
 EOF
 
+
     destination = "/tmp/checkStatus.sh"
   }
 
+  # Execute the script remotely
   # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
@@ -586,21 +616,22 @@ EOF
 # Output
 #########################################################
 output "meanstack_web_vm_public_ip" {
-  value = "${azurerm_public_ip.web.ip_address}"
+  value = azurerm_public_ip.web.ip_address
 }
 
 output "meanstack_web_vm_private_ip" {
-  value = "${azurerm_network_interface.web.private_ip_address}"
+  value = azurerm_network_interface.web.private_ip_address
 }
 
 output "meanstack_db_vm_public_ip" {
-  value = "${azurerm_public_ip.db.ip_address}"
+  value = azurerm_public_ip.db.ip_address
 }
 
 output "meanstack_db_vm_private_ip" {
-  value = "${azurerm_network_interface.db.private_ip_address}"
+  value = azurerm_network_interface.db.private_ip_address
 }
 
 output "meanstack_sample_application_url" {
   value = "http://${azurerm_public_ip.web.ip_address}:8443"
 }
+

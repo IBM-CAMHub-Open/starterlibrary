@@ -13,7 +13,6 @@ variable "allow_unverified_ssl" {
 ##############################################################
 provider "vsphere" {
   allow_unverified_ssl = var.allow_unverified_ssl
-  version              = "~> 1.3"
 }
 
 ##############################################################
@@ -212,7 +211,7 @@ variable "mariadb_vm_image" {
 }
 
 module "provision_proxy_mariadb_vm" {
-  source              = "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git//vmware/proxy?ref=1.0"
+  source              = "./modules/proxy"
   ip                  = var.mariadb_vm_ipv4_address
   id                  = vsphere_virtual_machine.mariadb_vm.id
   ssh_user            = var.mariadb_ssh_user
@@ -365,7 +364,7 @@ variable "php_vm_image" {
 }
 
 module "provision_proxy_php_vm" {
-  source              = "git::https://github.com/IBM-CAMHub-Open/terraform-modules.git//vmware/proxy?ref=1.0"
+  source              = "./modules/proxy"
   ip                  = var.php_vm_ipv4_address
   id                  = vsphere_virtual_machine.php_vm.id
   ssh_user            = var.php_ssh_user
@@ -416,7 +415,7 @@ resource "vsphere_virtual_machine" "php_vm" {
   }
 
   disk {
-    name           = "${var.php_vm_name}.vmdk"
+    label           = "${var.php_vm_name}.vmdk"
     size           = var.php_vm_root_disk_size
     keep_on_remove = var.php_vm_root_disk_keep_on_remove
     datastore_id   = data.vsphere_datastore.php_vm_datastore.id

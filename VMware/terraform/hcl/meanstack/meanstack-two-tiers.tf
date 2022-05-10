@@ -44,7 +44,6 @@ variable "allow_unverified_ssl" {
 ##############################################################
 provider "vsphere" {
   allow_unverified_ssl = var.allow_unverified_ssl
-  version              = ">= 1.3.0, <= 1.18.3"
 }
 
 ##############################################################
@@ -250,6 +249,11 @@ variable "mongodb_vm_root_disk_size" {
   default     = "25"
 }
 
+variable "timeout" {
+  description = "Connection and clone timeout"
+  default     = "10"
+}
+
 resource "vsphere_tag_category" "ibm_terraform_automation_mongodb_vm_category" {
   count = length(module.camtags.tagslist) > 0 ? 1 : 0
   name        = format("%s %s", "IBM Terraform Automation Tags for", var.mongodb_vm_name)
@@ -282,6 +286,7 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
   scsi_type        = data.vsphere_virtual_machine.mongodb_vm_template.scsi_type
   tags = vsphere_tag.ibm_terraform_automation_mongodb_vm_tags[*].id
   clone {
+    timeout       = var.timeout
     template_uuid = data.vsphere_virtual_machine.mongodb_vm_template.id
 
     customize {
@@ -326,6 +331,7 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
     bastion_port        = var.bastion_port
     bastion_host_key    = var.bastion_host_key
     bastion_password    = var.bastion_password
+    timeout             = "${var.timeout}m"
   }
 
   provisioner "file" {
@@ -417,6 +423,7 @@ resource "null_resource" "mongodb_vm_install_mongodb" {
     bastion_port        = var.bastion_port
     bastion_host_key    = var.bastion_host_key
     bastion_password    = var.bastion_password
+    timeout             = "${var.timeout}m"
   }
 
   provisioner "file" {
@@ -610,6 +617,7 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
   scsi_type        = data.vsphere_virtual_machine.nodejs_vm_template.scsi_type
   tags = vsphere_tag.ibm_terraform_automation_nodejs_vm_tags[*].id
   clone {
+    timeout       = var.timeout
     template_uuid = data.vsphere_virtual_machine.nodejs_vm_template.id
 
     customize {
@@ -654,6 +662,7 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
     bastion_port        = var.bastion_port
     bastion_host_key    = var.bastion_host_key
     bastion_password    = var.bastion_password
+    timeout             = "${var.timeout}m"
   }
 
   provisioner "file" {
@@ -745,6 +754,7 @@ resource "null_resource" "nodejs_vm_install_nodejs" {
     bastion_port        = var.bastion_port
     bastion_host_key    = var.bastion_host_key
     bastion_password    = var.bastion_password
+    timeout             = "${var.timeout}m"
   }
 
   provisioner "file" {

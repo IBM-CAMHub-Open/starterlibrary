@@ -12,8 +12,7 @@
 #################################################################
 
 provider "aws" {
-  version = "~> 2.0"
-  region  = "${var.aws_region}"
+  region  = var.aws_region
 }
 
 module "camtags" {
@@ -43,14 +42,14 @@ data "aws_vpc" "selected" {
 
   filter {
     name   = "tag:Name"
-    values = ["${var.vpc_name_tag}"]
+    values = [var.vpc_name_tag]
   }
 }
 
 data "aws_subnet" "selected" {
   filter {
     name   = "tag:Name"
-    values = ["${var.subnet_name}"]
+    values = [var.subnet_name]
   }
 }
 
@@ -64,7 +63,7 @@ variable "public_ssh_key" {
 
 #Variable : AWS image name
 variable "aws_image" {
-  type        = "string"
+  type        = string
   description = "Operating system image id / template that should be used when creating the virtual image"
   default     = "ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"
 }
@@ -76,8 +75,8 @@ variable "aws_ami_owner_id" {
 
 #Stack name (CAM instance name) to be used as AWS name.
 variable "ibm_stack_name" {
-	type = "string"
-	default = "awssinglevm"
+  type    = string
+  default = "awssinglevm"
 }
 
 # Lookup for AMI based on image name and owner ID
@@ -89,22 +88,28 @@ data "aws_ami" "aws_ami" {
     values = ["${var.aws_image}*"]
   }
 
-  owners = ["${var.aws_ami_owner_id}"]
+  owners = [var.aws_ami_owner_id]
 }
 
 resource "aws_key_pair" "orpheus_public_key" {
-  key_name   = "${var.public_ssh_key_name}"
-  public_key = "${var.public_ssh_key}"
+  key_name   = var.public_ssh_key_name
+  public_key = var.public_ssh_key
 }
 
 resource "aws_instance" "orpheus_ubuntu_micro" {
-  instance_type = "${var.aws_image_size}"
-  ami           = "${data.aws_ami.aws_ami.id}"
-  subnet_id     = "${data.aws_subnet.selected.id}"
-  key_name      = "${aws_key_pair.orpheus_public_key.id}"
-  tags          = "${merge(module.camtags.tagsmap, map("Name", "${var.ibm_stack_name}"))}"
+  instance_type = var.aws_image_size
+  ami           = data.aws_ami.aws_ami.id
+  subnet_id     = data.aws_subnet.selected.id
+  key_name      = aws_key_pair.orpheus_public_key.id
+  tags = merge(
+    module.camtags.tagsmap,
+    {
+      "Name" = var.ibm_stack_name
+    },
+  )
 }
 
 output "ip_address" {
-  value = "${length(aws_instance.orpheus_ubuntu_micro.public_ip) > 0 ? aws_instance.orpheus_ubuntu_micro.public_ip : aws_instance.orpheus_ubuntu_micro.private_ip}"
+  value = length(aws_instance.orpheus_ubuntu_micro.public_ip) > 0 ? aws_instance.orpheus_ubuntu_micro.public_ip : aws_instance.orpheus_ubuntu_micro.private_ip
 }
+

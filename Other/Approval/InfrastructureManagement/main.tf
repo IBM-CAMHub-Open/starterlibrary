@@ -16,13 +16,6 @@
 #################################################################
 
 #########################################################
-# Define the Terraform version
-#########################################################
-terraform {
-  required_version = "~> 0.12.0"
-}
-
-#########################################################
 # Define the variables
 #########################################################
 variable "url" {
@@ -35,10 +28,6 @@ variable "username" {
 
 variable "password" {
     description = "Password to connect to Infrastructure Management"
-}
-
-variable "token" {
-    description = "Bearer token to connect to Infrastructure Management"
 }
 
 variable "curl_option" {
@@ -64,12 +53,11 @@ resource "local_file" "approval_status" {
 #########################################################
 resource "null_resource" "poll_endpoint" {
  provisioner "local-exec" {
-    command = "/bin/bash poll_endpoint.sh $URL $USERNAME $PASSWORD $TOKEN $CURL_OPTIONS $WAIT_TIME $FILE"
+    command = "/bin/bash poll_endpoint.sh $URL $USERNAME $PASSWORD $CURL_OPTIONS $WAIT_TIME $FILE"
     environment = {
       URL          = var.url
-      USERNAME     = var.username != "" ? var.username : "DEFAULT_USERNAME"
-      PASSWORD     = var.password != "" ? var.password : "DEFAULT_PASSWORD"
-      TOKEN        = var.token != "" ? var.token : "DEFAULT_TOKEN"
+      USERNAME     = var.username
+      PASSWORD     = var.password
       CURL_OPTIONS = var.curl_option
       WAIT_TIME    = var.wait_time
       FILE         = "${path.module}/approval_status"

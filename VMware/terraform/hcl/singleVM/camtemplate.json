@@ -1,8 +1,8 @@
 {
-  "name": "SingleVirtualMachine",
+  "name": "SingleVirtualMachine for Terraform 1.x.x",
   "description": "Create Virtual Machine with single vnic",
   "type": "prebuilt",
-  "version": "1.0",
+  "version": "2.5",
   "manifest": {
     "template_type": "Terraform",
     "template_format": "HCL",

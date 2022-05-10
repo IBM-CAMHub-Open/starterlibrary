@@ -1,7 +1,7 @@
 {
    "name": "Google Cloud Single Virtual Machine Example For Terraform Engine 13 and 14",
    "description": "Example template to provision a single virtual machine instance in Google Compute Engine using Terraform engine 13 and 14.",
-   "version": "1.0",
+   "version": "2.5",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
    "image": "tp_WAS_standalone.png",
    "type": "prebuilt",

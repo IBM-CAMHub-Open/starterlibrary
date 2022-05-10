@@ -3,7 +3,6 @@
 ###
 
 provider "aws" {
-  version = "~> 2.0"
   region  = var.aws_region
 }
 
@@ -28,9 +27,13 @@ variable "aws_region" {
 
 resource "aws_s3_bucket" "bucket" {
   bucket = var.name
-  acl    = var.acl
   tags   = module.camtags.tagsmap
 }
+  
+resource "aws_s3_bucket_acl" "acl" {
+  bucket = aws_s3_bucket.bucket.id
+  acl    = var.acl
+}  
 
 output "bucket_id" {
   value = aws_s3_bucket.bucket.id
@@ -43,3 +46,4 @@ output "bucket_arn" {
 output "bucket_tags" {
   value = aws_s3_bucket.bucket.tags
 }
+

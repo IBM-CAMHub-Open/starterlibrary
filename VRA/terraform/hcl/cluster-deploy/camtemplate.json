@@ -1,7 +1,7 @@
 {
 	"name": "VMware vRealize Automation vRA catalog item cluster deployment",
 	"description": "This template will deploy a vRA catalog item containing a single server component as cluster.",
-	"version": "2.4",
+	"version": "2.5",
 	"imageUrl": "",
 	"image": "",
 	"type": "prebuilt",

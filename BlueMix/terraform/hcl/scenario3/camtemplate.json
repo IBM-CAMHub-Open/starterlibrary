@@ -1,7 +1,7 @@
   {
-    "name": "2 Virtual Servers with SSH keys with one on a private network",
+    "name": "2 Virtual Servers with SSH keys with one on a private network for Terraform 1.x.x",
     "description": "A sample cloud resource template with 2 virtual servers, one on a private network.",
-    "version": "1.0",
+    "version": "2.5",
     "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
     "image": "tp_WAS_standalone.png",
     "type": "prebuilt",
@@ -33,7 +33,7 @@
        },
        {
          "title": "Operating systems supported",
-         "description": "IBM Cloud: Debian 9 x64 and Ubuntu 16.4.01 x64"
+         "description": "IBM Cloud: Debian 9 x64"
        },
        {
          "title": "Topology",
@@ -41,7 +41,7 @@
        },
        {
          "title": "Default virtual machine settings",
-         "description": "<ul><li>IBM Cloud:<ul style=\"margin-left: 20px;\"><li>Debian 9</li><ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 1, Memory = 1GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Computed</li></ul></ul><ul style=\"margin-left: 20px;\"><li>Ubuntu 16.4.01</li><ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 2, Memory = 4GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Not Available</li></ul></ul></li></ul>"
+         "description": "<ul><li>IBM Cloud:<ul style=\"margin-left: 20px;\"><li>Debian 9.x</li><ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 1, Memory = 1GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Computed</li></ul></ul><ul style=\"margin-left: 20px;\"><li>Debian 9.x</li><ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 2, Memory = 4GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Not Available</li></ul></ul></li></ul>"
        },
        {
          "title": "Usage and special notes",

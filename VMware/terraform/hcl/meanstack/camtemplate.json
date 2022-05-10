@@ -1,7 +1,7 @@
 {
-   "name": "MEAN stack deployment on VMware",
+   "name": "MEAN stack deployment on VMware for Terraform 1.x.x",
    "description": "MEAN - A simple and scalable starting point for full stack JavaScript web development.",
-   "version": "1.0",
+   "version": "2.5",
    "type": "prebuilt",
    "manifest": {
      "template_type": "Terraform",

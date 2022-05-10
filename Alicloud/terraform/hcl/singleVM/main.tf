@@ -22,7 +22,7 @@ data "alicloud_zones" "camc_zones" {
 
 resource "alicloud_vpc" "cam_vpc" {
   cidr_block = "10.1.0.0/21"
-  name       = "${var.instance_name}-cam-vpc"
+  vpc_name   = "${var.instance_name}-cam-vpc"
 }
 
 resource "alicloud_security_group" "cam_sg" {
@@ -43,13 +43,12 @@ resource "alicloud_security_group_rule" "cam_allow_ssh" {
 resource "alicloud_vswitch" "cam_vswitch" {
   vpc_id            = alicloud_vpc.cam_vpc.id
   cidr_block        = "10.1.0.0/24"
-  availability_zone = data.alicloud_zones.camc_zones.zones[0].id
-  name              = "${var.instance_name}-cam-vswitch"
+  zone_id           = data.alicloud_zones.camc_zones.zones[0].id
+  vswitch_name      = "${var.instance_name}-cam-vswitch"
 }
-
-resource "alicloud_key_pair" "cam_publickey" {
-  key_name   = "${var.instance_name}-cam-key"
-  public_key = var.public_key
+resource "alicloud_ecs_key_pair" "cam_publickey" {
+  key_pair_name = "${var.instance_name}-cam-key"
+  public_key    = var.public_key
 }
 
 resource "alicloud_instance" "ecs_instance" {

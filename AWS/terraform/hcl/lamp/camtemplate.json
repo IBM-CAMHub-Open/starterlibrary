@@ -1,7 +1,7 @@
 {
-   "name": "LAMP stack deployment on AWS",
+   "name": "LAMP stack deployment on AWS for Terraform 1.x.x",
    "description": "LAMP - A fully-integrated environment for full stack PHP web development.",
-   "version": "1.0",
+   "version": "2.5",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
    "image": "tp_WAS_standalone.png",
    "type": "prebuilt",

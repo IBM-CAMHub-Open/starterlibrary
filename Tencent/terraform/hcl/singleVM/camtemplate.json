@@ -1,7 +1,7 @@
  {
     "name": "Tencent cloud Virtual Server with SSH key",
     "description": "Tencent cloud virtual server with SSH key.",
-    "version": "2.4",
+    "version": "2.5",
     "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
     "image": "tp_WAS_standalone.png",
     "type": "prebuilt",

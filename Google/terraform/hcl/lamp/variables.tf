@@ -29,15 +29,16 @@ variable "gce_ssh_private_key" {
 
 variable "boot_disk" {
   description = "The boot disk for the instance."
-  default = "centos-cloud/centos-7"
+  default     = "centos-cloud/centos-7"
 }
 
 variable "zone" {
   description = "The zone the resource should be created in."
-  default = "us-central1-a"
+  default     = "us-central1-a"
 }
 
 variable "machine_type" {
   description = "The machine type to create."
-  default = "n1-standard-1"
+  default     = "n1-standard-1"
 }
+

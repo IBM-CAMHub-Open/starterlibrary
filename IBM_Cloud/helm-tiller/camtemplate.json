@@ -1,7 +1,7 @@
 {
   "name": "Helm Tiller",
   "description": "Helm Tiller",
-  "version": "1.0",
+  "version": "2.5",
   "type": "prebuilt",
   "manifest": {
     "template_type": "Terraform",

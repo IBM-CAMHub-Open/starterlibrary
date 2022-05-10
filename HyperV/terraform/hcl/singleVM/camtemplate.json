@@ -1,7 +1,7 @@
  {
     "name": "Hyper-V Virtual Machine from an ISO image.",
     "description": "Hyper-V Virtual Machine from an ISO image.",
-    "version": "2.4",
+    "version": "2.5",
     "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
     "image": "tp_WAS_standalone.png",
     "type": "prebuilt",

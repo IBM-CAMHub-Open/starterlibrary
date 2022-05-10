@@ -1,7 +1,7 @@
 {
    "name": "Tomcat on a Single VM",
    "description": "Tomcat - An Easy starting point for Java web development.",
-   "version": "1.0",
+   "version": "2.5",
    "type": "prebuilt",
    "manifest": {
      "template_type": "Terraform",

@@ -1,8 +1,8 @@
 {
-  "name": "Single Virtual Machine with Private SSH Key",
+  "name": "Single Virtual Machine with Private SSH Key for Terraform 1.x.x",
   "description": "Create Virtual Machine and outputs a generated private SSH key",
   "type": "prebuilt",
-  "version": "1.0",
+  "version": "2.5",
   "manifest": {
     "template_type": "Terraform",
     "template_format": "HCL",

@@ -1,24 +1,23 @@
 # This is a terraform generated template generated from twovmfinal
 
 provider "google" {
-  version = "~> 1.5"
 }
 
 data "template_file" "gce_startup_script" {
-  template = "${file("${path.module}/scripts/setkey.sh")}"
+  template = file("${path.module}/scripts/setkey.sh")
   vars = {
-    gce_ssh_public_key = "${var.gce_ssh_public_key}"
-    gce_ssh_user = "${var.gce_ssh_user}"
+    gce_ssh_public_key = var.gce_ssh_public_key
+    gce_ssh_user       = var.gce_ssh_user
   }
 }
 
 resource "google_compute_instance" "mariadb" {
-  name         = "${var.mariadb_hostname}"
-  machine_type = "${var.machine_type}"
-  zone         = "${var.zone}"
+  name         = var.mariadb_hostname
+  machine_type = var.machine_type
+  zone         = var.zone
   boot_disk {
     initialize_params {
-      image = "${var.boot_disk}"
+      image = var.boot_disk
     }
   }
   network_interface {
@@ -28,21 +27,21 @@ resource "google_compute_instance" "mariadb" {
       // Ephemeral IP
     }
   }
-  metadata {
+  metadata = {
     ssh-keys = "${var.gce_ssh_user}:${var.gce_ssh_public_key}"
   }
-  metadata_startup_script = "${data.template_file.gce_startup_script.rendered}"
+  metadata_startup_script = data.template_file.gce_startup_script.rendered
 }
 
 resource "google_compute_instance" "php" {
-  name         = "${var.php_hostname}"
-  machine_type = "${var.machine_type}"
-  zone         = "${var.zone}"
-  tags = ["http-server"]
+  name         = var.php_hostname
+  machine_type = var.machine_type
+  zone         = var.zone
+  tags         = ["http-server"]
 
   boot_disk {
     initialize_params {
-      image = "${var.boot_disk}"
+      image = var.boot_disk
     }
   }
 
@@ -53,27 +52,29 @@ resource "google_compute_instance" "php" {
       // Ephemeral IP
     }
   }
-  metadata {
+  metadata = {
     ssh-keys = "${var.gce_ssh_user}:${var.gce_ssh_public_key}"
   }
-  metadata_startup_script = "${data.template_file.gce_startup_script.rendered}"
+  metadata_startup_script = data.template_file.gce_startup_script.rendered
 }
 
-resource "null_resource" "install_mariadb" {	
+resource "null_resource" "install_mariadb" {
+  # Specify the ssh connection
   # Specify the ssh connection
   connection {
-    user     = "${var.gce_ssh_user}"
-    private_key = "${base64decode(var.gce_ssh_private_key)}"
+    user        = var.gce_ssh_user
+    private_key = base64decode(var.gce_ssh_private_key)
 
-    host     = "${google_compute_instance.mariadb.network_interface.0.access_config.0.assigned_nat_ip}"
-    bastion_host        = "${var.bastion_host}"
-    bastion_user        = "${var.bastion_user}"
-    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
-    bastion_port        = "${var.bastion_port}"
-    bastion_host_key    = "${var.bastion_host_key}"
-    bastion_password    = "${var.bastion_password}"
+    host                = google_compute_instance.mariadb.network_interface.0.access_config.0.nat_ip
+    bastion_host        = var.bastion_host
+    bastion_user        = var.bastion_user
+    bastion_private_key = length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key
+    bastion_port        = var.bastion_port
+    bastion_host_key    = var.bastion_host_key
+    bastion_password    = var.bastion_password
   }
 
+  # Create the installation script
   # Create the installation script
   provisioner "file" {
     content = <<EOF
@@ -109,35 +110,38 @@ fi
 echo "---finish installing mariaDB---" | tee -a $LOGFILE 2>&1
 EOF
 
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
+  # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      "sudo chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh \"${var.mariadb_user}\" \"${var.mariadb_pwd}\" \"${google_compute_instance.php.network_interface.0.address}\"",
+      "sudo chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh \"${var.mariadb_user}\" \"${var.mariadb_pwd}\" \"${google_compute_instance.php.network_interface.0.network_ip}\"",
     ]
   }
 }
 
 resource "null_resource" "install_php" {
-  depends_on = ["null_resource.install_mariadb"]
+  depends_on = [null_resource.install_mariadb]
 
   # Specify the ssh connection
+  # Specify the ssh connection
   connection {
+    host        = google_compute_instance.php.network_interface.0.access_config.0.nat_ip
+    user        = var.gce_ssh_user
+    private_key = base64decode(var.gce_ssh_private_key)
 
-    host     = "${google_compute_instance.php.network_interface.0.access_config.0.assigned_nat_ip}"
-    user     = "${var.gce_ssh_user}"
-    private_key = "${base64decode(var.gce_ssh_private_key)}"
-
-    bastion_host        = "${var.bastion_host}"
-    bastion_user        = "${var.bastion_user}"
-    bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
-    bastion_port        = "${var.bastion_port}"
-    bastion_host_key    = "${var.bastion_host_key}"
-    bastion_password    = "${var.bastion_password}"
+    bastion_host        = var.bastion_host
+    bastion_user        = var.bastion_user
+    bastion_private_key = length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key
+    bastion_port        = var.bastion_port
+    bastion_host_key    = var.bastion_host_key
+    bastion_password    = var.bastion_password
   }
 
+  # Create the installation script
   # Create the installation script
   provisioner "file" {
     content = <<EOF
@@ -219,14 +223,16 @@ systemctl restart httpd                                   >> $LOGFILE 2>&1 || { 
 echo "---finish installing php---" | tee -a $LOGFILE 2>&1
 EOF
 
+
     destination = "/tmp/installation.sh"
   }
 
   # Execute the script remotely
+  # Execute the script remotely
   provisioner "remote-exec" {
     inline = [
-      #"sudo chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh \"${google_compute_instance.php.network_interface.0.access_config.0.assigned_nat_ip}\" \"${google_compute_instance.mariadb.network_interface.0.access_config.0.assigned_nat_ip}\" \"${var.mariadb_user}\" \"${var.mariadb_pwd}\"",
-      "sudo chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh \"${google_compute_instance.php.network_interface.0.address}\" \"${google_compute_instance.mariadb.network_interface.0.address}\" \"${var.mariadb_user}\" \"${var.mariadb_pwd}\"",
+      "sudo chmod +x /tmp/installation.sh; sudo bash /tmp/installation.sh \"${google_compute_instance.php.network_interface.0.network_ip}\" \"${google_compute_instance.mariadb.network_interface.0.network_ip}\" \"${var.mariadb_user}\" \"${var.mariadb_pwd}\"",
     ]
   }
 }
+

@@ -1,7 +1,7 @@
 {
    "name": "Strongloop Stack on a Single VM on VMware",
    "description": "Strongloop - An Easy starting point for full stack JavaScript web development.",
-   "version": "1.0",
+   "version": "2.5",
    "type": "prebuilt",
    "manifest": {
      "template_type": "Terraform",

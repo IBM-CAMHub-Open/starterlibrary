@@ -1,7 +1,7 @@
 {
-	"name": "VMware NSX-T Sample to create a logical switch",
+	"name": "VMware NSX-T Sample to create a logical switch for Terraform 1.x.x",
 	"description": "Creates a sample logical switch",
-	"version": "1.0",
+	"version": "2.5",
 	"imageUrl": "",
 	"image": "",
 	"type": "prebuilt",

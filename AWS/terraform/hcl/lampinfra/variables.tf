@@ -8,14 +8,14 @@ variable "aws_region" {
 
 #Variable : AWS image name
 variable "aws_image" {
-  type = "string"
+  type        = string
   description = "Operating system image id / template that should be used when creating the virtual image"
-  default = "ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"
+  default     = "ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"
 }
 
 variable "aws_ami_owner_id" {
   description = "AWS AMI Owner ID"
-  default = "099720109477"
+  default     = "099720109477"
 }
 
 variable "php_instance_name" {
@@ -45,3 +45,4 @@ variable "public_key" {
 variable "private_key" {
   description = "Private SSH key used to connect to the servers"
 }
+

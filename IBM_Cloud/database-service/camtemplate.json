@@ -1,7 +1,7 @@
 {
-  "name": "IBM Database Service",
+  "name": "IBM Database Service for Terraform 1.x.x",
   "description": "Creates a ready to use IBM Database Service.",
-  "version": "2.4",
+  "version": "2.5",
   "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
   "image": "tp_WAS_standalone.png",
   "type": "prebuilt",

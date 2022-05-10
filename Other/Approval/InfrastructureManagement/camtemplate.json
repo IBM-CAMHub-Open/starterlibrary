@@ -1,7 +1,7 @@
 {
-    "name": "Poll Infrastructure Management for Approval",
+    "name": "Poll Infrastructure Management for Approval for Terraform 1.x.x",
     "description": "Polls Infrastructure Management for Approval before provisioning resources",
-    "version": "1.0",
+    "version": "2.5",
     "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
     "image": "tp_WAS_standalone.png",
     "type": "prebuilt",

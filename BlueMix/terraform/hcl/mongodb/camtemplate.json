@@ -1,7 +1,7 @@
 {
    "name": "MongoDB on a Single VM on IBM Cloud",
    "description": "MongoDB - An open-source cross-platform document-oriented database.",
-   "version": "1.0",
+   "version": "2.5",
    "imageUrl": "./assets/svg/IBM_WebSphere_Standalone.svg",
    "image": "tp_WAS_standalone.png",
    "type": "prebuilt",

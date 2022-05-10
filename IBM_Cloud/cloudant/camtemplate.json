@@ -1,7 +1,7 @@
 {
   "name": "Cloudant NoSQL Database",
   "description": "Cloudant NoSQL Database in IBM Cloud",
-  "version": "1.0",
+  "version": "2.5",
   "type": "prebuilt",
   "manifest": {
     "template_type": "Terraform",

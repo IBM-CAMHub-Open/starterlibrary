@@ -1,5 +1,5 @@
 {
-  "terraform_version": "~> 0.12.0",
+  "terraform_version": ">= 1.0.0",
   "input_datatypes": [
   ],
   "output_datatype": "content_template_output",

@@ -1,8 +1,8 @@
 {
-  "name": "Single Virtual Machine using predefined tags",
+  "name": "Single Virtual Machine using predefined tags for Terraform 1.x.x",
   "description": "Creates a virtual machine, associates predefined tags on created virtual machine and outputs a generated private SSH key",
   "type": "prebuilt",
-  "version": "1.0",
+  "version": "2.5",
   "manifest": {
     "template_type": "Terraform",
     "template_format": "HCL",

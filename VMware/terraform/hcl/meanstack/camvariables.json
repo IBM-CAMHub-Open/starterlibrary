@@ -1,5 +1,5 @@
 {
-  "terraform_version": "~> 0.12.0",
+  "terraform_version": ">= 1.0.0",
   "input_datatypes": [
     {
       "name": "bastionhost",
@@ -788,7 +788,19 @@
       "label": "Bastion host key",
       "secured": false,
       "required": false
-    }
+    },
+    {
+      "name": "timeout",
+      "type": "string",
+      "description": "Connection and clone timeout for vSphere VM",
+      "hidden": false,
+      "label": "Connection timeout (in minutes)",
+      "secured": false,
+      "required": false,
+      "immutable": false,
+      "group_name": "virtualmachine",
+      "default": "10"
+    }    
   ],
   "template_output_params": [
     {
