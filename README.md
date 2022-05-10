@@ -3,6 +3,6 @@
 [//]: # (US Government Users Restricted Rights - Use, duplication or)
 [//]: # (disclosure restricted by GSA ADP Schedule Contract with IBM Corp.)
 # starterlibrary
-Starter library templates for various cloud providers.
+Starter library templates for various cloud providers. 
 
-Starting from version 2.4, VMware vSphere templates are migrated to terrafrom 0.12.x syntax.
+Starting from version 2.5, all the 0.11.x and 0.12.x (except for tencent sample) have been migrated to 1.x.x.
