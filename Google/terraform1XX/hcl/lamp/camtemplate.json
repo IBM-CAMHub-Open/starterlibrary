@@ -15,7 +15,7 @@
      "template_source": {
        "githubRepoUrl": "",
        "githubAccessToken": "",
-       "relativePathToTemplateFolder": "Google/terraform/hcl/lamp",
+       "relativePathToTemplateFolder": "Google/terraform1XX/hcl/lamp",
        "templateFileName": "lamp-two-tiers.tf"
      }
    },

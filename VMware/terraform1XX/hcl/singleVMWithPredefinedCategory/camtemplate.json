@@ -15,7 +15,7 @@
     "template_source": {
       "githubRepoUrl": "",
       "githubAccessToken": "",
-      "relativePathToTemplateFolder": "VMware/terraform/hcl/singleVMWithPredefinedCategory",
+      "relativePathToTemplateFolder": "VMware/terraform1XX/hcl/singleVMWithPredefinedCategory",
       "templateFileName": "main.tf"
     }
   },

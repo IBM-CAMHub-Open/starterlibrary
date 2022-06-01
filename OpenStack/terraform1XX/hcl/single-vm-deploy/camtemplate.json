@@ -18,7 +18,7 @@
      "template_source": {
      "githubRepoUrl": "",
      "githubAccessToken": "",
-     "relativePathToTemplateFolder": "OpenStack/terraform/hcl/single-vm-deploy",
+     "relativePathToTemplateFolder": "OpenStack/terraform1XX/hcl/single-vm-deploy",
      "templateFileName": "main.tf"
       }
    },

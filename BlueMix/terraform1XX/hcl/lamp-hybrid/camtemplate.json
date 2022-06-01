@@ -18,7 +18,7 @@
      "template_source": {
        "githubRepoUrl": "",
        "githubAccessToken": "",
-       "relativePathToTemplateFolder": "BlueMix/terraform/hcl/lamp-hybrid",
+       "relativePathToTemplateFolder": "BlueMix/terraform1XX/hcl/lamp-hybrid",
        "templateFileName": "mainHybrid.tf"
      }
    },

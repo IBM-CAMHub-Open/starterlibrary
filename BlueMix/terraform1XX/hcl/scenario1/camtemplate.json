@@ -18,7 +18,7 @@
       "template_source": {
         "githubRepoUrl": "",
         "githubAccessToken": "",
-        "relativePathToTemplateFolder": "BlueMix/terraform/hcl/scenario1",
+        "relativePathToTemplateFolder": "BlueMix/terraform1XX/hcl/scenario1",
         "templateFileName": "scenario1.tf"
       }
     },

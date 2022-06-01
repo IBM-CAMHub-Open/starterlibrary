@@ -15,7 +15,7 @@
      "template_source": {
        "githubRepoUrl": "",
        "githubAccessToken": "",
-       "relativePathToTemplateFolder": "Azure/terraform/hcl/meanstack",
+       "relativePathToTemplateFolder": "Azure/terraform1XX/hcl/meanstack",
        "templateFileName": "meanstack-two-tiers.tf"
      }
    },

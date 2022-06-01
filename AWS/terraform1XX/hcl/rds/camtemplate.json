@@ -18,7 +18,7 @@
 		"template_source": {
 			"githubRepoUrl": "",
 			"githubAccessToken": "",
-			"relativePathToTemplateFolder": "AWS/terraform/hcl/rds",
+			"relativePathToTemplateFolder": "AWS/terraform1XX/hcl/rds",
 			"templateFileName": "main.tf"
 		}
 	},

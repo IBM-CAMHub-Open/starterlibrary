@@ -18,7 +18,7 @@
       "template_source": {
         "githubRepoUrl": "",
         "githubAccessToken": "",
-        "relativePathToTemplateFolder": "AWS/terraform/singlefile/hcl",
+        "relativePathToTemplateFolder": "AWS/terraform1XX/singlefile/hcl",
         "templateFileName": "scenario1.tf"
       }
     },

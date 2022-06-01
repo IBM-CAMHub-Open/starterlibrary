@@ -18,7 +18,7 @@
       "template_source": {
         "githubRepoUrl": "",
         "githubAccessToken": "",
-        "relativePathToTemplateFolder": "Other/Approval/InfrastructureManagement",
+        "relativePathToTemplateFolder": "Other/Approval-1XX/InfrastructureManagement",
         "templateFileName": "main.tf"
       }
     },

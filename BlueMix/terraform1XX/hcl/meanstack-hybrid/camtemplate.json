@@ -18,7 +18,7 @@
      "template_source": {
        "githubRepoUrl": "",
        "githubAccessToken": "",
-       "relativePathToTemplateFolder": "BlueMix/terraform/hcl/meanstack-hybrid",
+       "relativePathToTemplateFolder": "BlueMix/terraform1XX/hcl/meanstack-hybrid",
        "templateFileName": "cross_cloud_meanstack_two_tiers.tf"
      }
    },

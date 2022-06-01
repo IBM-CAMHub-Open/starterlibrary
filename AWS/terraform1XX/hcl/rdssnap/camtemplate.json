@@ -18,7 +18,7 @@
 		"template_source": {
 			"githubRepoUrl": "",
 			"githubAccessToken": "",
-			"relativePathToTemplateFolder": "AWS/terraform/hcl/rdssnap",
+			"relativePathToTemplateFolder": "AWS/terraform1XX/hcl/rdssnap",
 			"templateFileName": "main.tf"
 		}
 	},

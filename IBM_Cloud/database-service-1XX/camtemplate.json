@@ -18,7 +18,7 @@
     "template_source": {
       "githubRepoUrl": "",
       "githubAccessToken": "",
-      "relativePathToTemplateFolder": "IBM_Cloud/database-service",
+      "relativePathToTemplateFolder": "IBM_Cloud/database-service-1XX",
       "templateFileName": "main.tf"
     }
   },

@@ -18,7 +18,7 @@
       "template_source": {
         "githubRepoUrl": "",
         "githubAccessToken": "",
-        "relativePathToTemplateFolder": "Alicloud/terraform/hcl/singleVM",
+        "relativePathToTemplateFolder": "Alicloud/terraform1XX/hcl/singleVM",
         "templateFileName": "main.tf"
       }
     },

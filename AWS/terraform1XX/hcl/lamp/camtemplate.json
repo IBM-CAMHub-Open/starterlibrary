@@ -18,7 +18,7 @@
      "template_source": {
        "githubRepoUrl": "",
        "githubAccessToken": "",
-       "relativePathToTemplateFolder": "AWS/terraform/hcl/lamp",
+       "relativePathToTemplateFolder": "AWS/terraform1XX/hcl/lamp",
        "templateFileName": "main.tf"
      }
    },
