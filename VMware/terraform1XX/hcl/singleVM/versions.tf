@@ -4,7 +4,7 @@ terraform {
   required_providers {
     camc = {
       source  = "registry.ibm.com/cam/camc"
-      version = "0.2.5"
+      version = "~> 0.2.6"
     }
     vsphere = {
       source = "hashicorp/vsphere"
