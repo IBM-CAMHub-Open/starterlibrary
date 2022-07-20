@@ -30,6 +30,10 @@ variable "password" {
     description = "Password to connect to Infrastructure Management"
 }
 
+variable "token" {
+    description = "Bearer token to connect to Infrastructure Management"
+}
+
 variable "curl_option" {
     default = ""
     description = "Options for curl command used to retrieve status from Infrastructure Management e.g. --insecure"
@@ -53,14 +57,15 @@ resource "local_file" "approval_status" {
 #########################################################
 resource "null_resource" "poll_endpoint" {
  provisioner "local-exec" {
-    command = "/bin/bash poll_endpoint.sh $URL $USERNAME $PASSWORD $CURL_OPTIONS $WAIT_TIME $FILE"
+    command = "/bin/bash poll_endpoint.sh $URL $USERNAME $PASSWORD $TOKEN $CURL_OPTIONS $WAIT_TIME $FILE"
     environment = {
       URL          = var.url
-      USERNAME     = var.username
-      PASSWORD     = var.password
+      USERNAME     = var.username != "" ? var.username : "DEFAULT_USERNAME"
+      PASSWORD     = var.password != "" ? var.password : "DEFAULT_PASSWORD"
+      TOKEN        = var.token != "" ? var.token : "DEFAULT_TOKEN"
       CURL_OPTIONS = var.curl_option
       WAIT_TIME    = var.wait_time
-      FILE         = "${path.module}/approval_status"
+      FILE         = local_file.approval_status.filename
     }
   }
   depends_on = [
@@ -69,11 +74,23 @@ resource "null_resource" "poll_endpoint" {
 }
 
 #########################################################
+# Data
+#########################################################
+data "local_file" "approval_status" {
+    filename = local_file.approval_status.filename
+
+    depends_on = [
+    null_resource.poll_endpoint,
+  ] 
+}
+
+#########################################################
 # Output
 #########################################################
 output "approval_status" {
-  value = "${fileexists("${local_file.approval_status.filename}") ? file("${local_file.approval_status.filename}") : ""}"
+  value = data.local_file.approval_status.content
+
   depends_on = [
-    null_resource.poll_endpoint
+    null_resource.poll_endpoint,
   ] 
 }

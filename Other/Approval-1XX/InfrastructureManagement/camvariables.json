@@ -22,7 +22,7 @@
 		"description": "Username to connect to Infrastructure Management",
 		"hidden": false,
 		"immutable": false,
-		"required": true,
+		"required": false,
 		"secured": false,
 		"type": "string"
 	},{
@@ -32,7 +32,17 @@
 		"description": "Password to connect to Infrastructure Management",
 		"hidden": false,
 		"immutable": false,
-		"required": true,
+		"required": false,
+		"secured": true,
+		"type": "string"
+	},{
+		"name": "token",
+		"label": "Bearer token",
+		"default":"${im_auth.token}",
+		"description": "Bearer token to connect to Infrastructure Management",
+		"hidden": false,
+		"immutable": false,
+		"required": false,
 		"secured": true,
 		"type": "string"
 	},{

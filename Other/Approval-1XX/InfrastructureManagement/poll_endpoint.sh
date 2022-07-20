@@ -19,10 +19,24 @@
 
 SetParams() {
    URL=$1
-   AUTH=$(printf $2:$3 | base64)
-   OPTIONS=$4
-   WAIT_TIME=$5
-   FILE=$6
+   OPTIONS=$5
+   WAIT_TIME=$6
+   FILE=$7
+
+   AUTH=""
+   USERNAME=$2
+   PASSWORD=$3
+   TOKEN=$4
+
+   if [ "$TOKEN" == "DEFAULT_TOKEN" ]; then
+      AUTH="Basic "
+      AUTH+=$(printf $USERNAME:$PASSWORD | base64)
+      echo "Token is empty, So using Username/Password for authentication."
+   else
+      AUTH="Bearer "
+      AUTH+=$TOKEN
+      echo "Token is not empty, So using Bearer token for authentication."
+   fi
 
    # Log params
    printf "URL: %s\n" $URL
@@ -33,20 +47,18 @@ SetParams() {
 
 PollInfrastructureManagement() {
    # Set params
-   SetParams $1 $2 $3 $4 $5 $6
+   SetParams $1 $2 $3 $4 $5 $6 $7
 
-   result=$(curl -X GET $OPTIONS "$1" --header "Authorization: Basic $AUTH" | jq -r '.approval_state')
+   result=$(curl -X GET $OPTIONS "$1" --header "Authorization: $AUTH" | jq -r '.approval_state')
    printf "Approval Status: %s\n" $result
-   while [ "$result" = "pending_approval" ]
-   do
+   while [ "$result" = "pending_approval" ]; do
       printf "Approval Status: %s\n" $result
-      result=$(curl -X GET $OPTIONS "$1" --header "Authorization: Basic $AUTH" | jq -r '.approval_state')
-      sleep $WAIT_TIME 
+      result=$(curl -X GET $OPTIONS "$1" --header "Authorization: $AUTH" | jq -r '.approval_state')
+      sleep $WAIT_TIME
    done
 
    printf "Approval Status: %s\n" $result
-   printf $result > $FILE
+   printf $result >$FILE
 }
 
-PollInfrastructureManagement $1 $2 $3 $4 $5 $6
-
+PollInfrastructureManagement $1 $2 $3 $4 $5 $6 $7

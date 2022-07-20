@@ -9,20 +9,24 @@ More details on Managed services can be found [here](https://www.ibm.com/support
 
 ### Prerequisites
 
-- Navigate to `Manage` -> `Shared parameters` -> `Create data type` -> Enter Name as `Infrastructure Management Authentication Details`, Data type as `im_auth` and Description as `Authentication details such as username and password to connect to Infrastructure Management` -> `Create` -> `Add Attributes`. Fill the following attributes:
+- Navigate to `Manage` -> `Shared parameters` -> `Create data type` -> Enter Name as `Infrastructure Management Authentication Details`, Data type as `im_auth` and Description as `Authentication details such as Username, Password or Bearer token to connect to Infrastructure Management` -> `Create` -> `Add Attributes`. Fill the following attributes:
 
-| Parameter name                  | End-user permission   | Parameter type             | Display name   |
-| :---                            | :---                  | :---                       | :---           |
-| username                        | Read & Write                  | string                     | Username       |
-| password                        | Read & Write                  | password                   | Password       |
+| Parameter name                  | End-user permission   | Parameter type             | Display name   | Required    |
+| :---                            | :---                  | :---                       | :---           | :---        |
+| username                        | Read & Write          |string                      | Username       | false       |
+| password                        | Read & Write          |password                    | Password       | false       |
+| token                           | Read & Write          |password                    | Bearer token   | false       |
 
 - Navigate to `Manage` -> `Shared parameters` -> In `Search data types`, Enter "Infrastructure Management Authentication Details" -> Verify Data type is present
-- Go to `Create data object` -> Select data type "im_auth" -> Enter Data Object Name for e.g. "im_auth". Fill the following paramaters.
+- Go to `Create data object` -> Select data type "im_auth" -> Enter Data Object Name for e.g. "im_auth". Fill the following parameters.
 
-| Parameter name                  | Type            | Parameter description
-| :---                            | :---            | :---
-| Username                        | string          | Username to connect to  Infrastructure Management
-| Password                        | password        | Password to connect to Infrastructure Management
+| Parameter name                  | Type            | Parameter description                                  |
+| :---                            | :---            | :---                                                   |
+| Username                        | string          | Username to connect to  Infrastructure Management      |
+| Password                        | password        | Password to connect to  Infrastructure Management      |
+| Token                           | password        | Bearer token to connect to  Infrastructure Management  |
+
+**Note:** It is not mandatory to provide values of all three. It depends on type of authentication method you want to use. If you want to use `Basic Authentication` then provide values of both `Username` and `Password` and If you want to use `Bearer Token` based authentication method then provide value of `Token`. Basic Authentication using `Username` and `Password` is no longer supported, so it is recommended to use `Bearer Token` based authentication method to connect to Infrastructure Management.
 
 To deploy this template from Managed services, navigate to `Library` -> `Terraform templates` -> Poll Infrastructure Management for Approval. Fill the following parameters and deploy the template.
 
