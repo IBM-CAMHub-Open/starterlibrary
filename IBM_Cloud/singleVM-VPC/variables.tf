@@ -9,7 +9,7 @@ variable "public_ssh_key" {
 
 variable "image_name" {
   type    = string
-  default = "ibm-debian-9-0-64-minimal-for-vsi"
+  default = "ibm-debian-10-0-64-minimal-for-vsi"
 }
 
 variable "profile" {

@@ -25,7 +25,7 @@
     "metadata": {
       "displayName": "2 Virtual Servers with SSH keys with one on a private network",
       "providerDisplayName": "IBM",
-      "longDescription": "Use this cloud resource template to quickly provision two Debian 9 64 bit virtual servers with ssh keys in a datacenter of your choice.  The first Debian Virtual Servers is connected to both private and public networks, the second virtual system is connected to the private network only.",
+      "longDescription": "Use this cloud resource template to quickly provision two Debian 10 64 bit virtual servers with ssh keys in a datacenter of your choice.  The first Debian Virtual Servers is connected to both private and public networks, the second virtual system is connected to the private network only.",
       "bullets": [
        {
          "title": "Clouds",
@@ -33,7 +33,7 @@
        },
        {
          "title": "Operating systems supported",
-         "description": "IBM Cloud: Debian 9 x64"
+         "description": "IBM Cloud: Debian 10 x64"
        },
        {
          "title": "Topology",
@@ -41,7 +41,7 @@
        },
        {
          "title": "Default virtual machine settings",
-         "description": "<ul><li>IBM Cloud:<ul style=\"margin-left: 20px;\"><li>Debian 9.x</li><ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 1, Memory = 1GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Computed</li></ul></ul><ul style=\"margin-left: 20px;\"><li>Debian 9.x</li><ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 2, Memory = 4GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Not Available</li></ul></ul></li></ul>"
+         "description": "<ul><li>IBM Cloud:<ul style=\"margin-left: 20px;\"><li>Debian 10.x</li><ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 1, Memory = 1GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Computed</li></ul></ul><ul style=\"margin-left: 20px;\"><li>Debian 10.x</li><ul style=\"margin-left: 20px;\"><li>Flavor: Cores = 2, Memory = 4GB, Storage = 25GB SAN</li><li>Network: Private IP - Computed, Public IP - Not Available</li></ul></ul></li></ul>"
        },
        {
          "title": "Usage and special notes",

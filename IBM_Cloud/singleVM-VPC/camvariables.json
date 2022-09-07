@@ -20,7 +20,7 @@
         "label": "OS Image Name",
         "description": "The name of the IBM Cloud OS image from which the Virtual Servers for Virtual Private Cloud will be created. See IBM Cloud documentation for more details on valid values for this attribute.",
         "type": "string",
-        "default": "ibm-debian-9-0-64-minimal-for-vsi",
+        "default": "ibm-debian-10-0-64-minimal-for-vsi",
         "required": true,
         "secured": false,
         "hidden": false,

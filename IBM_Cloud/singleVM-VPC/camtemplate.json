@@ -41,7 +41,7 @@
        },
        {
          "title": "Default virtual machine settings",
-         "description": "<ul><li>IBM Cloud:<ul style=\"margin-left: 20px;\"><li>Flavor: bx2-2x8</li><li>OS: Debian 9</li><li>Network: Private IP - Computed, Public IP - Computed</li></ul></li></ul>"
+         "description": "<ul><li>IBM Cloud:<ul style=\"margin-left: 20px;\"><li>Flavor: bx2-2x8</li><li>OS: Debian 10</li><li>Network: Private IP - Computed, Public IP - Computed</li></ul></li></ul>"
        },
        {
          "title": "Usage and special notes",

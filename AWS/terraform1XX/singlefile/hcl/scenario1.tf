@@ -65,7 +65,7 @@ variable "public_ssh_key" {
 variable "aws_image" {
   type        = string
   description = "Operating system image id / template that should be used when creating the virtual image"
-  default     = "ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"
+  default     = "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"
 }
 
 variable "aws_ami_owner_id" {

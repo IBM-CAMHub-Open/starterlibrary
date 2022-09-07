@@ -36,7 +36,7 @@ variable "os_reference_code" {
 variable "os_reference_code_debian" {
   type        = string
   description = "Operating system image id / template that should be used when creating the virtual image"
-  default     = "DEBIAN_9_64"
+  default     = "DEBIAN_10_64"
 }
 
 #data "ibm_compute_image_template" "debian_8_6_64" {

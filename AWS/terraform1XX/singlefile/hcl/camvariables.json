@@ -62,7 +62,7 @@
 			"name": "aws_image",
 			"type": "string",
 			"description": "Operating system image id / template that should be used when creating the virtual image",
-			"default": "ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*",
+			"default": "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*",
 			"hidden": false,
 			"label": "Operating System ID",
 			"secured": false,

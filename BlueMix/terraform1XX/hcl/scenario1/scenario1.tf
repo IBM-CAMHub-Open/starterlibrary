@@ -21,7 +21,7 @@ variable "hostname" {
 variable "os_reference_code" {
   type        = string
   description = "Operating system image id / template that should be used when creating the virtual image"
-  default     = "DEBIAN_9_64"
+  default     = "DEBIAN_10_64"
 }
 
 # This will create a new SSH key that will show up under the \
