@@ -116,18 +116,6 @@
 			"immutable": false,
 			"options": [
 				{
-					"label": "MYSQL",
-					"value": "mysql"
-				}, {
-					"label": "Maria DB",
-					"value": "mariadb"
-				}, {
-					"label": "MS SQL",
-					"value": "sqlserver-ex"
-				}, {
-					"label": "Postgres",
-					"value": "postgres"
-				}, {
 					"label": "Oracle",
 					"value": "oracle-se"
 				}
