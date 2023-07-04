@@ -103,21 +103,23 @@
 			"secured": false,
 			"hidden": false,
 			"immutable": false,
-			"default": 10
+			"default": 20
 		}, {
 			"group_name": "new",
 			"name": "db_engine",
 			"label": "Database engine (required unless a snapshot identifier is provided)",
 			"type": "string",
 			"description": "The database engine to use. Required unless a snapshot identifier is provided. If provided with snaphsot identifier, then this value must match the snapshot engine name.",
-			"required": false,
+			"required": true,
 			"secured": false,
 			"hidden": false,
 			"immutable": false,
+			"default": "oracle-ee",
 			"options": [
 				{
 					"label": "Oracle",
-					"value": "oracle-se"
+					"value": "oracle-ee",
+					"default": true
 				}
 			]
 		}, {
@@ -126,9 +128,10 @@
 			"label": "Database engine version",
 			"type": "string",
 			"description": "The database engine version to use.",
-			"required": false,
+			"required": true,
 			"secured": false,
 			"hidden": false,
+			"default": "19",
 			"immutable": false
 		}, {
 			"group_name": "common",
@@ -140,24 +143,24 @@
 			"secured": false,
 			"hidden": false,
 			"immutable": false,
-			"default": "db.t2.micro",
+			"default": "db.t3.large",
 			"options": [
 				{
-					"label": "db.t2.micro",
-					"value": "db.t2.micro",
+					"label": "Micro",
+					"value": "db.t3.micro",
+					"default": false
+				}, {
+					"label": "Small",
+					"value": "db.t3.small",
+					"default": false
+				}, {
+					"label": "Medium",
+					"value": "db.t3.medium",
+					"default": false
+				}, {
+					"label": "Large",
+					"value": "db.t3.large",
 					"default": true
-				}, {
-					"label": "db.t2.small",
-					"value": "db.t2.small",
-					"default": false
-				}, {
-					"label": "db.t2.medium",
-					"value": "db.t2.medium",
-					"default": false
-				}, {
-					"label": "db.t2.large",
-					"value": "db.t2.large",
-					"default": false
 				}
 			]
 		}, {
@@ -179,10 +182,11 @@
 			"label": "Master DB user name (required unless a snapshot identifier is provided)",
 			"type": "string",
 			"description": "User name for the master DB. Required unless a snapshot identifier is provided.",
-			"required": false,
+			"required": true,
 			"secured": false,
 			"hidden": false,
 			"immutable": false,
+			"default": "dbadmin",
 			"regex": "^[A-Za-z][A-Za-z0-9]{0,15}$",
 			"regexdesc": "Must begin with a letter and contain only alphanumeric characters. Maximum length is 16 characters."
 		}, {
@@ -191,7 +195,7 @@
 			"label": "Master DB user password (required unless a snapshot identifier is provided)",
 			"type": "password",
 			"description": "Password for the master DB user. Required unless a snapshot identifier is provided.",
-			"required": false,
+			"required": true,
 			"secured": true,
 			"hidden": false,
 			"immutable": false,
@@ -268,7 +272,8 @@
 					"value": "license-included"
 				}, {
 					"label": "bring-your-own-license",
-					"value": "bring-your-own-license"
+					"value": "bring-your-own-license",
+					"default": true
 				}, {
 					"label": "general-public-license",
 					"value": "general-public-license"

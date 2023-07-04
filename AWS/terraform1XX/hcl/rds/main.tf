@@ -80,7 +80,7 @@ variable "final_snapshot_identifier" {
 
 
 resource "aws_db_instance" "db_instance" {
-  name                   	= var.instance_name
+  db_name                   	= var.instance_name
   identifier_prefix      	= var.instance_name != "" ? lower(var.instance_name) : null
   allocated_storage      	= var.allocated_storage != "" ? tonumber(var.allocated_storage) : null
   engine                 	= var.db_engine

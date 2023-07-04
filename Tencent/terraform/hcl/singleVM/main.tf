@@ -1,5 +1,5 @@
 provider "tencentcloud" {
-  version    = "~> 1.39.0"
+  version = ">= 1.39.0, < 2.0.0"
 }
 
 module "camtags" {
