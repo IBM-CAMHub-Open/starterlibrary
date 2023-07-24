@@ -138,7 +138,7 @@ resource "azurerm_network_interface" "vm" {
   ip_configuration {
     name                          = "${var.name_prefix}-${random_id.default.hex}-vm-nic1-ipc"
     subnet_id                     = azurerm_subnet.vm.id
-    private_ip_address_allocation = "dynamic"
+    private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.vm.id
   }
   tags                = module.camtags.tagsmap
