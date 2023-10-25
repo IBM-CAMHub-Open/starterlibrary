@@ -20,6 +20,10 @@ provider "camc" {
   version = "~> 0.2"
 }
 
+module "camtags" {
+  source = "../Modules/camtags"
+}
+  
 ##############################################################
 # Define pattern variables 
 ##############################################################
@@ -155,6 +159,36 @@ variable "vm_1_root_disk_size" {
 variable "vm_1-image" {
   description = "Operating system image id / template that should be used when creating the virtual image"
 }
+#List of tags that will be added from service
+variable "service_tag_includes" {
+  type = list
+  default = ["environment"]
+}
+
+#Filter tags passed by service.
+locals {
+
+ taglist = [
+   for cat in var.service_tag_includes : {
+      for k, v in module.camtags.tagsmap : k => v
+      if k  == cat
+  }
+ ]
+
+tagmap = length(module.camtags.tagslist)==0 ? {} : {for v in local.taglist : keys(v)[0] => values(v)[0]}
+}
+
+
+data "vsphere_tag_category" "category" {
+  count = length(local.tagmap) > 0 ? 1 : 0
+  name  = keys(local.tagmap)[count.index]
+}
+
+data "vsphere_tag" "tag" {
+  count = length(local.tagmap) > 0 ? 1 : 0
+  name = values(local.tagmap)[count.index]
+  category_id = data.vsphere_tag_category.category[count.index].id
+}
 
 # vsphere vm
 resource "vsphere_virtual_machine" "vm_1" {
@@ -166,6 +200,7 @@ resource "vsphere_virtual_machine" "vm_1" {
   datastore_id     = data.vsphere_datastore.vm_1_datastore.id
   guest_id         = data.vsphere_virtual_machine.vm_1_template.guest_id
   scsi_type        = data.vsphere_virtual_machine.vm_1_template.scsi_type
+  tags             = data.vsphere_tag.tag.*.id
 
   clone {
     template_uuid = data.vsphere_virtual_machine.vm_1_template.id
