@@ -56,6 +56,15 @@ PollInfrastructureManagement() {
       result=$(curl -X GET $OPTIONS "$1" --header "Authorization: $AUTH" | jq -r '.approval_state')
       sleep $WAIT_TIME
    done
+   result=null
+   n=0
+   while [ "$n" -lt 10 ] && [ -z "$result" ]
+   do
+     n=$(( n + 1 ))
+     printf "Empty result, rechecking... Approval Status: %s\n" $result
+     result=$(curl -X GET $OPTIONS "$1" --header "Authorization: Basic $AUTH" | jq -r '.approval_state')
+     sleep $WAIT_TIME
+   done
 
    printf "Approval Status: %s\n" $result
    printf $result >$FILE
